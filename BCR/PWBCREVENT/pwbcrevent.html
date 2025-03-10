@@ -54,7 +54,7 @@ function checkhideall() {
    checkhide(f.event_topic,"num_inc_knowledge","Question; Persuade; Refer (QPR),Mental Health First Aid (MHFA),Trauma Awareness,Sharing Hope");
    checkhide(f.event_topic,"num_new_attendees","Mental Health First Aid (MHFA)");
 
-    // Dynamically apply the yellow background for num_completed_screens
+    // Apply the conditional required styling
     validateScreeningFields();
 }
 
@@ -299,8 +299,8 @@ function validateScreeningFields() {
     const numCompletedScreens = document.forms[0].elements["num_completed_screens"];
 
     if (eventType === "Screening") {
-        // Add yellow background to indicate the field is required
-        numCompletedScreens.style.backgroundColor = "yellow";
+        // Add the required class to apply the existing yellow background
+        numCompletedScreens.classList.add("required");
 
         if (numCompletedScreens.value.trim() === "") {
             alert("The 'Number of Completed Screenings' field is required when the Event Type is 'Screening'.");
@@ -311,8 +311,8 @@ function validateScreeningFields() {
             numCompletedScreens.classList.remove("missing");
         }
     } else {
-        // Remove yellow background when the field is not required
-        numCompletedScreens.style.backgroundColor = "";
+        // Remove the required class and any missing indication
+        numCompletedScreens.classList.remove("required");
         numCompletedScreens.classList.remove("missing");
     }
     return true;
@@ -363,22 +363,6 @@ function hiddenfield(g) {
 }
 
 function submitit() {
-    // Add a function to validate the 'num_completed_screens' field
-    function validateScreeningFields() {
-        const eventType = document.forms[0].elements["event_type"].value;
-        const numCompletedScreens = document.forms[0].elements["num_completed_screens"];
-
-        if (eventType === "Screening" && numCompletedScreens.value.trim() === "") {
-            alert("The 'Number of Completed Screenings' field is required when the Event Type is 'Screening'.");
-            numCompletedScreens.classList.add("missing");
-            numCompletedScreens.focus();
-            return false;
-        } else {
-            numCompletedScreens.classList.remove("missing");
-        }
-        return true;
-    }
-
     // Validate the screening-specific field
     if (!validateScreeningFields()) return;
 
@@ -399,7 +383,6 @@ function submitit() {
     f._B2.style.display = "none";
     f._B3.style.display = "none";
 }
-
 
 function deleteit() {
 	var functionreturnvalue = null;

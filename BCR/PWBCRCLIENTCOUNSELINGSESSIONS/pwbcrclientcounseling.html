@@ -278,8 +278,8 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('session_date') && gvtfieldvalue('session_date')=='') {edesc=edesc+`Must specify a value for Date of Counseling Session One\n`; seterror("session_date");}
-  if (!hiddenfield('session_agency') && gvtfieldvalue('session_agency')=='') {edesc=edesc+`Must specify a value for Session One Agency\n`; seterror("session_agency");}
+  if (!hiddenfield('session_date') && gvtfieldvalue('session_date')=='') {edesc=edesc+`Must specify a value for Counseling Session Date\n`; seterror("session_date");}
+  if (!hiddenfield('session_agency') && gvtfieldvalue('session_agency')=='') {edesc=edesc+`Must specify a value for Session Agency\n`; seterror("session_agency");}
   if (!hiddenfield('session_format') && gvtfieldvalue('session_format')=='') {edesc=edesc+`Must specify a value for Session Format\n`; seterror("session_format");}
   if (!hiddenfield('session_grant') && gvtfieldvalue('session_grant')=='') {edesc=edesc+`Must specify a value for Session Grant\n`; seterror("session_grant");}
 
@@ -522,11 +522,11 @@ function updatesignatures(){
     <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col3 qsession_date"><span class="qsession_date required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_date required-field-label"><label class="label-right">||FIELDTAG session_date||Date of Counseling Session One||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col3 qsession_date"><span class="qsession_date required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_date required-field-label"><label class="label-right">||FIELDTAG session_date||Counseling Session Date||ENDFIELDTAG||&nbsp;</label></span></div>
     <div class="col9 qsession_date"><span class="qsession_date"><input type="text" name="session_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col3 qsession_agency"><span class="qsession_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_agency required-field-label"><label class="label-right">Session One Agency&nbsp;</label></span></div>
+    <div class="col3 qsession_agency"><span class="qsession_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_agency required-field-label"><label class="label-right">Session Agency&nbsp;</label></span></div>
     <div class="col9 qsession_agency"><span class="qsession_agency"><select size="1" name="session_agency" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||

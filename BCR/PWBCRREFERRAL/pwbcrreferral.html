@@ -62,7 +62,7 @@ function checkhideall() {
    checkhide(f.how_hear_about_bcr,"if_other_please_specify","Other");
    checkhide(f.pregnant_at_ref,"preg_or_child_last_ninety","No");
    checkhide(f.bcr_prog_participation,"bcr_reason_ineligible_ref","002");
-   checkhide(f.bcr_reasons_inelgible,"other_reason_ineligible","006");
+   checkhide(f.bcr_reason_ineligible_ref,"other_reason_ineligible","Other");
 
 }
 
@@ -597,15 +597,16 @@ function updatesignatures(){
     <div class="col12 fldhow_hear_about_bcr qhow_hear_about_bcr">
     <div class="col12 fldhow_hear_about_bcr qhow_hear_about_bcr"><span class="qhow_hear_about_bcr required-label">||PWRequiredFieldRequiredText||</span><span class="qhow_hear_about_bcr required-field-label"><label class="label-top">||FIELDTAG how_hear_about_bcr||How did client hear about Bridges to Care & Recovery?||ENDFIELDTAG||</label></span><span class="qhow_hear_about_bcr"><select size="1"  name="how_hear_about_bcr" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Pastor">Pastor</option>
-<option value="Wellness Champion">Wellness Champion</option>
+<option value="BCR Staff">BCR Staff</option>
 <option value="Church Member">Church Member</option>
+<option value="Community Event">Community Event</option>
 <option value="Family">Family</option>
 <option value="Friend">Friend</option>
-<option value="BCR Staff">BCR Staff</option>
-<option value="Social Media">Social Media</option>
-<option value="Community Event">Community Event</option>
 <option value="Other">Other</option>
+<option value="Pastor">Pastor</option>
+<option value="Social Media">Social Media</option>
+<option value="Unknown">Unknown</option>
+<option value="Wellness Champion">Wellness Champion</option>
 
 </select></span></div>
      </div>

@@ -54,6 +54,8 @@ function checkhideall() {
    checkhide(f.event_topic,"num_inc_knowledge","Question; Persuade; Refer (QPR),Mental Health First Aid (MHFA),Trauma Awareness,Sharing Hope");
    checkhide(f.event_topic,"num_new_attendees","Mental Health First Aid (MHFA)");
 
+    // Dynamically apply the yellow background for num_completed_screens
+    validateScreeningFields();
 }
 
 function addEventListeners(){
@@ -296,17 +298,25 @@ function validateScreeningFields() {
     const eventType = document.forms[0].elements["event_type"].value;
     const numCompletedScreens = document.forms[0].elements["num_completed_screens"];
 
-    if (eventType === "Screening" && numCompletedScreens.value.trim() === "") {
-        alert("The 'Number of Completed Screenings' field is required when the Event Type is 'Screening'.");
-        numCompletedScreens.classList.add("missing");
-        numCompletedScreens.focus();
-        return false;
+    if (eventType === "Screening") {
+        // Add yellow background to indicate the field is required
+        numCompletedScreens.style.backgroundColor = "yellow";
+
+        if (numCompletedScreens.value.trim() === "") {
+            alert("The 'Number of Completed Screenings' field is required when the Event Type is 'Screening'.");
+            numCompletedScreens.classList.add("missing");
+            numCompletedScreens.focus();
+            return false;
+        } else {
+            numCompletedScreens.classList.remove("missing");
+        }
     } else {
+        // Remove yellow background when the field is not required
+        numCompletedScreens.style.backgroundColor = "";
         numCompletedScreens.classList.remove("missing");
     }
     return true;
 }
-
 
 function gvtfieldvalue(fldname) {
      var og=document.forms[0].elements[fldname];

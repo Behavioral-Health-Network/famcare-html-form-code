@@ -531,21 +531,23 @@ function updatesignatures(){
 <div class="col12 term">BCR Event</div>
 </div>
  <div class="entire">
-    <div class="col3 qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-right">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qevent_type"><span class="qevent_type required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_type required-field-label"><label class="label-right">||FIELDTAG event_type||Event Type ||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qevent_type"><span class="qevent_type"><input type="radio" name="event_type" value="Screening" onclick="checkhideall()" >Screening&nbsp;&nbsp;<input type="radio" name="event_type" value="Training" onclick="checkhideall()" >Training&nbsp;&nbsp;<input type="radio" name="event_type" value="Other" onclick="checkhideall()" >Other&nbsp;&nbsp;</span></div>
+    <div class="col12 fldevent_type qevent_type">
+    <div class="col12 fldevent_type qevent_type"><span class="qevent_type required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_type required-field-label"><label class="label-top">||FIELDTAG event_type||Event Type ||ENDFIELDTAG||</label></span><span class="qevent_type"><input type="radio" name="event_type" value="Screening" onclick="checkhideall()" >Screening&nbsp;&nbsp;<input type="radio" name="event_type" value="Training" onclick="checkhideall()" >Training&nbsp;&nbsp;<input type="radio" name="event_type" value="Other" onclick="checkhideall()" >Other&nbsp;&nbsp;</span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qevent_name"><span class="qevent_name"><label class="label-right">||FIELDTAG event_name||Event Name ||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qevent_name"><span class="qevent_name"><input type="text" name="event_name" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldevent_name qevent_name">
+    <div class="col12 fldevent_name qevent_name"><span class="qevent_name"><label class="label-top">||FIELDTAG event_name||Event Name ||ENDFIELDTAG||</label></span><span class="qevent_name"><input type="text" name="event_name" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12 fldevent_topic qevent_topic">
-    <div class="col3 qevent_topic"><span class="qevent_topic required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_topic required-field-label"><label class="label-right">||FIELDTAG event_topic||Event Topic||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qevent_topic"><span class="qevent_topic"><select size="1"  name="event_topic" onchange="checkhideall()" >
+    <div class="col12 fldevent_topic qevent_topic"><span class="qevent_topic required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_topic required-field-label"><label class="label-top">||FIELDTAG event_topic||Event Topic||ENDFIELDTAG||</label></span><span class="qevent_topic"><select size="1"  name="event_topic" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Medicaid">Medicaid</option>
 <option value="Adult Mental Health First Aid (MHFA)">Adult Mental Health First Aid (MHFA)</option>
@@ -561,64 +563,70 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldif_other_explain qif_other_explain">
-    <div class="col3 qif_other_explain"><span class="qif_other_explain"><label class="label-right">||FIELDTAG if_other_explain||If "Other", Explain ||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qif_other_explain"><span class="qif_other_explain"><textarea name="if_other_explain" class="autoexpand"></textarea></span></div>
-    </div>
+    <div class="col12 fldif_other_explain qif_other_explain"><span class="qif_other_explain"><label class="label-top">||FIELDTAG if_other_explain||If "Other", Explain ||ENDFIELDTAG||</label></span><span class="qif_other_explain"><textarea name="if_other_explain" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qevent_format"><span class="qevent_format required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_format required-field-label"><label class="label-right">||FIELDTAG event_format||Event Format ||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qevent_format"><span class="qevent_format"><input type="radio" name="event_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="event_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;<input type="radio" name="event_format" value="Hybrid" onclick="checkhideall()" >Hybrid&nbsp;&nbsp;</span></div>
+    <div class="col12 fldevent_format qevent_format">
+    <div class="col12 fldevent_format qevent_format"><span class="qevent_format required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_format required-field-label"><label class="label-top">||FIELDTAG event_format||Event Format ||ENDFIELDTAG||</label></span><span class="qevent_format"><input type="radio" name="event_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="event_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;<input type="radio" name="event_format" value="Hybrid" onclick="checkhideall()" >Hybrid&nbsp;&nbsp;</span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qevent_location"><span class="qevent_location"><label class="label-right">||FIELDTAG event_location||Event Location ||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qevent_location"><span class="qevent_location"><input type="text" name="event_location" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldevent_location qevent_location">
+    <div class="col12 fldevent_location qevent_location"><span class="qevent_location"><label class="label-top">||FIELDTAG event_location||Event Location ||ENDFIELDTAG||</label></span><span class="qevent_location"><input type="text" name="event_location" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qtotal_num_attendees"><span class="qtotal_num_attendees required-label">||PWRequiredFieldRequiredText||</span><span class="qtotal_num_attendees required-field-label"><label class="label-right">||FIELDTAG total_num_attendees||Total Number of Attendees||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qtotal_num_attendees"><span class="qtotal_num_attendees"><input type="text" name="total_num_attendees" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldtotal_num_attendees qtotal_num_attendees">
+    <div class="col12 fldtotal_num_attendees qtotal_num_attendees"><span class="qtotal_num_attendees required-label">||PWRequiredFieldRequiredText||</span><span class="qtotal_num_attendees required-field-label"><label class="label-top">||FIELDTAG total_num_attendees||Total Number of Attendees||ENDFIELDTAG||</label></span><span class="qtotal_num_attendees"><input type="text" name="total_num_attendees" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qnum_adults"><span class="qnum_adults"><label class="label-right">||FIELDTAG num_adults||Number of Adults||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_adults"><span class="qnum_adults"><input type="text" name="num_adults" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_adults qnum_adults">
+    <div class="col12 fldnum_adults qnum_adults"><span class="qnum_adults"><label class="label-top">||FIELDTAG num_adults||Number of Adults||ENDFIELDTAG||</label></span><span class="qnum_adults"><input type="text" name="num_adults" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qnum_youth"><span class="qnum_youth"><label class="label-right">||FIELDTAG num_youth||Number of Youth||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_youth"><span class="qnum_youth"><input type="text" name="num_youth" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_youth qnum_youth">
+    <div class="col12 fldnum_youth qnum_youth"><span class="qnum_youth"><label class="label-top">||FIELDTAG num_youth||Number of Youth||ENDFIELDTAG||</label></span><span class="qnum_youth"><input type="text" name="num_youth" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qnum_pastors"><span class="qnum_pastors"><label class="label-right">||FIELDTAG num_pastors||Number of Pastors||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_pastors"><span class="qnum_pastors"><input type="text" name="num_pastors" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_pastors qnum_pastors">
+    <div class="col12 fldnum_pastors qnum_pastors"><span class="qnum_pastors"><label class="label-top">||FIELDTAG num_pastors||Number of Pastors||ENDFIELDTAG||</label></span><span class="qnum_pastors"><input type="text" name="num_pastors" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qnum_requested_fu"><span class="qnum_requested_fu"><label class="label-right">||FIELDTAG num_requested_fu||Number of Attendees who requested follow-up||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_requested_fu"><span class="qnum_requested_fu"><input type="text" name="num_requested_fu" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_requested_fu qnum_requested_fu">
+    <div class="col12 fldnum_requested_fu qnum_requested_fu"><span class="qnum_requested_fu"><label class="label-top">||FIELDTAG num_requested_fu||Number of Attendees who requested follow-up||ENDFIELDTAG||</label></span><span class="qnum_requested_fu"><input type="text" name="num_requested_fu" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qnum_completed_screens"><span class="qnum_completed_screens"><label class="label-right">||FIELDTAG num_completed_screens||Number of Completed screenings||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_completed_screens"><span class="qnum_completed_screens"><input type="text" name="num_completed_screens" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_completed_screens qnum_completed_screens">
+    <div class="col12 fldnum_completed_screens qnum_completed_screens"><span class="qnum_completed_screens"><label class="label-top">||FIELDTAG num_completed_screens||Number of Completed screenings||ENDFIELDTAG||</label></span><span class="qnum_completed_screens"><input type="text" name="num_completed_screens" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12 fldnum_inc_knowledge qnum_inc_knowledge">
-    <div class="col3 qnum_inc_knowledge"><span class="qnum_inc_knowledge"><label class="label-right">||FIELDTAG num_inc_knowledge||Number Demonstrating Increased Knowledge||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_inc_knowledge"><span class="qnum_inc_knowledge"><input type="text" name="num_inc_knowledge" size="20" onchange="checkhideall()"></span></div>
-    </div>
+    <div class="col12 fldnum_inc_knowledge qnum_inc_knowledge"><span class="qnum_inc_knowledge"><label class="label-top">||FIELDTAG num_inc_knowledge||Number Demonstrating Increased Knowledge||ENDFIELDTAG||</label></span><span class="qnum_inc_knowledge"><input type="text" name="num_inc_knowledge" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12 fldnum_new_attendees qnum_new_attendees">
-    <div class="col3 qnum_new_attendees"><span class="qnum_new_attendees"><label class="label-right">||FIELDTAG num_new_attendees||Number of New Attendees||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnum_new_attendees"><span class="qnum_new_attendees"><input type="text" name="num_new_attendees" size="20" onchange="checkhideall()"></span></div>
-    </div>
+    <div class="col12 fldnum_new_attendees qnum_new_attendees"><span class="qnum_new_attendees"><label class="label-top">||FIELDTAG num_new_attendees||Number of New Attendees||ENDFIELDTAG||</label></span><span class="qnum_new_attendees"><input type="text" name="num_new_attendees" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qbcr_grant"><span class="qbcr_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_grant required-field-label"><label class="label-right">Grant Name&nbsp;</label></span></div>
-    <div class="col9 qbcr_grant"><span class="qbcr_grant"><select size="1" name="bcr_grant" onchange="checkhideall()">
+    <div class="col12 fldbcr_grant qbcr_grant">
+    <div class="col12 fldbcr_grant qbcr_grant"><span class="qbcr_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_grant required-field-label"><label class="label-top">Grant Name</label></span><span class="qbcr_grant"><select size="1" name="bcr_grant" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_grant] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_grant^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_grant||
 </span></div>
   </div>
  <div class="entire">
-    <div class="col3 qaddtl_notes_event"><span class="qaddtl_notes_event"><label class="label-right">||FIELDTAG addtl_notes_event||Additional Notes||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qaddtl_notes_event"><span class="qaddtl_notes_event"><textarea name="addtl_notes_event" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldaddtl_notes_event qaddtl_notes_event">
+    <div class="col12 fldaddtl_notes_event qaddtl_notes_event"><span class="qaddtl_notes_event"><label class="label-top">||FIELDTAG addtl_notes_event||Additional Notes||ENDFIELDTAG||</label></span><span class="qaddtl_notes_event"><textarea name="addtl_notes_event" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
 
 </div>

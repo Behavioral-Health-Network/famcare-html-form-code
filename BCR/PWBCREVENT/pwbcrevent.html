@@ -292,6 +292,22 @@ function validateform(scope='all') {
     return edesc;
 }
 
+function validateScreeningFields() {
+    const eventType = document.forms[0].elements["event_type"].value;
+    const numCompletedScreens = document.forms[0].elements["num_completed_screens"];
+
+    if (eventType === "Screening" && numCompletedScreens.value.trim() === "") {
+        alert("The 'Number of Completed Screenings' field is required when the Event Type is 'Screening'.");
+        numCompletedScreens.classList.add("missing");
+        numCompletedScreens.focus();
+        return false;
+    } else {
+        numCompletedScreens.classList.remove("missing");
+    }
+    return true;
+}
+
+
 function gvtfieldvalue(fldname) {
      var og=document.forms[0].elements[fldname];
      var olen=og.length;
@@ -337,45 +353,43 @@ function hiddenfield(g) {
 }
 
 function submitit() {
-	
- 
-  // use alert to display error messages
-  let errdesc = validateform();     
-  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
-    alert(errdesc); 
-    return;
-  }
-  
-  // use inline div to display error messages
-  let signatureErrors="";
-  // signature verification
-  try {signatureErrors=verifysignatures()
-    } catch(e) {}  
-  
-  errdesc = validateform('signature errors separate');
-  if ( errdesc !== "" || signatureErrors !== "" ) {
-    if (signatureErrors !== "") {
-      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
-      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
-    } else {
-      document.querySelector("#divSignatureErrors").classList.add("d-none");
-    }    
-    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
-    // set focus to error message at the top of the screen
-    document.querySelector('#divMissingMessageRow').scrollIntoView();
-    return;
-  }
+    // Add a function to validate the 'num_completed_screens' field
+    function validateScreeningFields() {
+        const eventType = document.forms[0].elements["event_type"].value;
+        const numCompletedScreens = document.forms[0].elements["num_completed_screens"];
 
-	const f = document.forms[0];
-   //***Error checking should be done here before a quick save
-	f.target="fvalidate";
-	if (genpdf) {buildhtmlclean()}
-	f.submit();
-  $(':button').prop('disabled',true);
-	f._B1.style.display = "none";
-	f._B2.style.display = "none";
-	f._B3.style.display = "none";
+        if (eventType === "Screening" && numCompletedScreens.value.trim() === "") {
+            alert("The 'Number of Completed Screenings' field is required when the Event Type is 'Screening'.");
+            numCompletedScreens.classList.add("missing");
+            numCompletedScreens.focus();
+            return false;
+        } else {
+            numCompletedScreens.classList.remove("missing");
+        }
+        return true;
+    }
+
+    // Validate the screening-specific field
+    if (!validateScreeningFields()) return;
+
+    // Existing form validation logic
+    let errdesc = validateform();
+    if (errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "") {
+        alert(errdesc);
+        return;
+    }
+
+    const f = document.forms[0];
+    if (genpdf) {
+        buildhtmlclean();
+    }
+    f.submit();
+    $(':button').prop('disabled', true);
+    f._B1.style.display = "none";
+    f._B2.style.display = "none";
+    f._B3.style.display = "none";
 }
+
 
 function deleteit() {
 	var functionreturnvalue = null;

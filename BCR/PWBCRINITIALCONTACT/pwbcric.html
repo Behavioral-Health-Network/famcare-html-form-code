@@ -545,10 +545,6 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
-<div class="deflist">
-<div class="entire">
-<div class="col12 term">Section I</div>
-</div>
  <div class="entire">
     <div class="col12"><div align="Left"><img src="images/custom"></div></div>
   </div>
@@ -567,6 +563,30 @@ function updatesignatures(){
     <div class="col12 fldzip_of_initial_contact qzip_of_initial_contact"><span class="qzip_of_initial_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qzip_of_initial_contact required-field-label"><label class="label-top">||FIELDTAG zip_of_initial_contact||ZIP Code of Initial Contact||ENDFIELDTAG||</label></span><span class="qzip_of_initial_contact"><input type="text" name="zip_of_initial_contact" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
+     <div class="entire">
+        <div class="col12 fldchurch_home qchurch_home">
+        <div class="col12 fldchurch_home qchurch_home"><span class="qchurch_home"><label class="label-top">||FIELDTAG church_home||Does the client have a "Church Home?"||ENDFIELDTAG||</label></span><span class="qchurch_home"><input type="radio" name="church_home" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="church_home" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+         </div>
+      </div>
+     <div class="entire">
+        <div class="col12 fldbcr_churches qbcr_churches">
+        <div class="col12 fldbcr_churches qbcr_churches"><span class="qbcr_churches required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_churches required-field-label"><label class="label-top">Church Name</label></span><span class="qbcr_churches"><select size="1" name="bcr_churches" onchange="checkhideall()">
+    <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_churches] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_churches^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    </select>||CONFIGURE bcr_churches||
+    </span></div>
+         </div>
+      </div>
+     <div class="entire">
+        <div class="col12 fldEMPLOYMENTSTATUS qEMPLOYMENTSTATUS">
+        <div class="col12 fldEMPLOYMENTSTATUS qEMPLOYMENTSTATUS"><span class="qEMPLOYMENTSTATUS required-label">||PWRequiredFieldRequiredText||</span><span class="qEMPLOYMENTSTATUS required-field-label"><label class="label-top">Client's Employment Status</label></span><span class="qEMPLOYMENTSTATUS"><select size="1" name="EMPLOYMENTSTATUS" onchange="checkhideall()">
+    <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [EMPLOYMENTSTATUS] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE EMPLOYMENTSTATUS^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    </select>||CONFIGURE EMPLOYMENTSTATUS||
+    </span></div>
+         </div>
+      </div>
+     <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -574,10 +594,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section II: Presenting Concerns</div>
+<div class="col12 term">Presenting Concerns</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Verify the client’s presenting concerns below. If needed, click View/Edit and edit the client concerns. Note that there should only be ONE row that lists all client concerns.</label></div>
+    <div class="col12"><label class="label-top"><i>Verify the client’s presenting concerns below. If needed, click "View/Edit" and edit the client concerns. Note that there should only be ONE entry that lists all client concerns per enrollment to BCR.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWBCRPresentingConcerns||</div>
@@ -586,37 +606,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section III</div>
+<div class="col12 term">Housing Status</div>
 </div>
  <div class="entire">
-    <div class="col12 fldchurch_home qchurch_home">
-    <div class="col12 fldchurch_home qchurch_home"><span class="qchurch_home"><label class="label-top">||FIELDTAG church_home||Does the client have a "Church Home?"||ENDFIELDTAG||</label></span><span class="qchurch_home"><input type="radio" name="church_home" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="church_home" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldbcr_churches qbcr_churches">
-    <div class="col12 fldbcr_churches qbcr_churches"><span class="qbcr_churches required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_churches required-field-label"><label class="label-top">Church Name</label></span><span class="qbcr_churches"><select size="1" name="bcr_churches" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_churches] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_churches^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_churches||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldEMPLOYMENTSTATUS qEMPLOYMENTSTATUS">
-    <div class="col12 fldEMPLOYMENTSTATUS qEMPLOYMENTSTATUS"><span class="qEMPLOYMENTSTATUS required-label">||PWRequiredFieldRequiredText||</span><span class="qEMPLOYMENTSTATUS required-field-label"><label class="label-top">Client's Employment Status</label></span><span class="qEMPLOYMENTSTATUS"><select size="1" name="EMPLOYMENTSTATUS" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [EMPLOYMENTSTATUS] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE EMPLOYMENTSTATUS^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE EMPLOYMENTSTATUS||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Section IV: Housing</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Verify the client's current housing status listed below. If there has been a change, you must do TWO things: 1) Click "Edit" and add an End Date to client's previous status. 2) Click "Add" to enter a new housing status.</label></div>
+    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
@@ -625,10 +618,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section V: Insurance</div>
+<div class="col12 term">Payor Source</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Verify the client's current insurance information listed below. If there has been a change, you must do TWO things: 1) Click "Edit" and add an End Date to client's previous status. 2) Click "Add" to enter a new payor status.</label></div>
+    <div class="col12"><label class="label-top"><i>If client's payor source hasn't changed, leave as is. If client's payor source has changed, click "View/Edit", add an "End Date" to the current entry, select "No" for "Payor is Current", then add a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
@@ -637,7 +630,7 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">   Section VI</div>
+<div class="col12 term"></div>
 </div>
  <div class="entire">
     <div class="col12 fldclient_pcp_ic qclient_pcp_ic">
@@ -723,7 +716,7 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Section VII: Program Participation</div>
+<div class="col12 term">Program Participation</div>
 </div>
  <div class="entire">
     <div class="col12 fldbcr_prog_participation qbcr_prog_participation">

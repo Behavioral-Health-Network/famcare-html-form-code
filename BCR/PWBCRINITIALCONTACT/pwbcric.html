@@ -2,7 +2,7 @@
 
 <head>
 <title>BCR Initial Contact</title>
-<link rel="stylesheet" href="../css/PWstyles.css">
+<link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
@@ -35,9 +35,9 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('date_ic');
     setrequire('method_of_ic');
     setrequire('zip_of_initial_contact');
+    setrequire('bcr_churches');
     setrequire('EMPLOYMENTSTATUS');
     setrequire('client_pcp_ic');
     setrequire('psychiatrist_ic');
@@ -59,7 +59,8 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.client_pcp_ic,"agreeable_pcp_ref","No");
+      checkhide(f.church_home,"bcr_churches","Yes");
+   checkhide(f.client_pcp_ic,"agreeable_pcp_ref","No");
    checkhide(f.phq9_completed,"phq9_score","Yes");
    checkhide(f.cage_aid_administered,"cage_aid_score_ic","Yes");
    checkhide(f.dass_administered,"dass_score_ic","Yes");
@@ -296,16 +297,16 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('date_ic') && gvtfieldvalue('date_ic')=='') {edesc=edesc+`Must specify a value for Date of Initial Contact\n`; seterror("date_ic");}
   if (!hiddenfield('method_of_ic') && gvtfieldvalue('method_of_ic')=='') {edesc=edesc+`Must specify a value for Method of Initial Contact\n`; seterror("method_of_ic");}
   if (!hiddenfield('zip_of_initial_contact') && gvtfieldvalue('zip_of_initial_contact')=='') {edesc=edesc+`Must specify a value for ZIP Code of Initial Contact\n`; seterror("zip_of_initial_contact");}
+  if (!hiddenfield('bcr_churches') && gvtfieldvalue('bcr_churches')=='') {edesc=edesc+`Must specify a value for Church Name\n`; seterror("bcr_churches");}
   if (!hiddenfield('EMPLOYMENTSTATUS') && gvtfieldvalue('EMPLOYMENTSTATUS')=='') {edesc=edesc+`Must specify a value for Client's Employment Status\n`; seterror("EMPLOYMENTSTATUS");}
   if (!hiddenfield('client_pcp_ic') && gvtfieldvalue('client_pcp_ic')=='') {edesc=edesc+`Must specify a value for Does the client have a primary care physician?\n`; seterror("client_pcp_ic");}
   if (!hiddenfield('psychiatrist_ic') && gvtfieldvalue('psychiatrist_ic')=='') {edesc=edesc+`Must specify a value for Does the client have a psychiatrist?\n`; seterror("psychiatrist_ic");}
   if (!hiddenfield('pregnant_ic') && gvtfieldvalue('pregnant_ic')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant?\n`; seterror("pregnant_ic");}
   if (!hiddenfield('preg_child_last_90_ic') && gvtfieldvalue('preg_child_last_90_ic')=='') {edesc=edesc+`Must specify a value for If not currently pregnant, has client been pregnant or delivered a child within the past 90 days? \n`; seterror("preg_child_last_90_ic");}
   if (!hiddenfield('phq9_completed') && gvtfieldvalue('phq9_completed')=='') {edesc=edesc+`Must specify a value for Was PHQ-9 questionnaire completed? \n`; seterror("phq9_completed");}
-  if (!hiddenfield('cage_aid_administered') && gvtfieldvalue('cage_aid_administered')=='') {edesc=edesc+`Must specify a value for Was CAGE-AID Administered?\n`; seterror("cage_aid_administered");}
+  if (!hiddenfield('cage_aid_administered') && gvtfieldvalue('cage_aid_administered')=='') {edesc=edesc+`Must specify a value for Was CAGE-AID administered?\n`; seterror("cage_aid_administered");}
   if (!hiddenfield('dass_administered') && gvtfieldvalue('dass_administered')=='') {edesc=edesc+`Must specify a value for Was DASS Administered?\n`; seterror("dass_administered");}
   if (!hiddenfield('crim_justice_involvement') && gvtfieldvalue('crim_justice_involvement')=='') {edesc=edesc+`Must specify a value for Has client ever had involvement with the criminal justice system?\n`; seterror("crim_justice_involvement");}
   if (!hiddenfield('EDUCATIONLEVEL') && gvtfieldvalue('EDUCATIONLEVEL')=='') {edesc=edesc+`Must specify a value for Highest Level of Education\n`; seterror("EDUCATIONLEVEL");}
@@ -514,7 +515,7 @@ function updatesignatures(){
 <body onLoad="startup()">
 <!-- Field Override Area -->
 
-<form action="../genfunc.exe" method="post" enctype="multipart/form-data">
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
     <input type="hidden" name="FUNCTION" value="SAVE" />
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
@@ -547,16 +548,11 @@ function updatesignatures(){
 <div class="col12 term">BCR Initial Contact</div>
 </div>
  <div class="entire">
-    <div class="col12"><div align="Left"><img src="../images/custom"></div></div>
+    <div class="col12"><div align="Left"><img src="images/custom"></div></div>
   </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 flddate_ic qdate_ic">
-    <div class="col12 flddate_ic qdate_ic"><span class="qdate_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_ic required-field-label"><label class="label-top">||FIELDTAG date_ic||Date of Initial Contact||ENDFIELDTAG||</label></span><span class="qdate_ic"><input type="text" name="date_ic" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -584,9 +580,9 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldchurch_name qchurch_name">
-    <div class="col12 fldchurch_name qchurch_name"><span class="qchurch_name"><label class="label-top">||FIELDTAG church_name||Church Name||ENDFIELDTAG||</label></span><span class="qchurch_name"><select size="1" name="church_name" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_churches] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE church_name^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldbcr_churches qbcr_churches">
+    <div class="col12 fldbcr_churches qbcr_churches"><span class="qbcr_churches required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_churches required-field-label"><label class="label-top">Church Name</label></span><span class="qbcr_churches"><select size="1" name="bcr_churches" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_churches] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_churches^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_churches||
 </span></div>
      </div>
@@ -651,7 +647,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldcage_aid_administered qcage_aid_administered">
-    <div class="col12 fldcage_aid_administered qcage_aid_administered"><span class="qcage_aid_administered required-label">||PWRequiredFieldRequiredText||</span><span class="qcage_aid_administered required-field-label"><label class="label-top">||FIELDTAG cage_aid_administered||Was CAGE-AID Administered?||ENDFIELDTAG||</label></span><span class="qcage_aid_administered"><input type="radio" name="cage_aid_administered" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="cage_aid_administered" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldcage_aid_administered qcage_aid_administered"><span class="qcage_aid_administered required-label">||PWRequiredFieldRequiredText||</span><span class="qcage_aid_administered required-field-label"><label class="label-top">||FIELDTAG cage_aid_administered||Was CAGE-AID administered?||ENDFIELDTAG||</label></span><span class="qcage_aid_administered"><input type="radio" name="cage_aid_administered" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="cage_aid_administered" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -709,8 +705,8 @@ function updatesignatures(){
     <div class="col12 fldreason_if_ineligible_ic qreason_if_ineligible_ic">
     <div class="col12 fldreason_if_ineligible_ic qreason_if_ineligible_ic"><span class="qreason_if_ineligible_ic"><label class="label-top">||FIELDTAG reason_if_ineligible_ic||Reason for Ineligibility||ENDFIELDTAG||</label></span><span class="qreason_if_ineligible_ic"><select size="1"  name="reason_if_ineligible_ic" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Residency Out of Service Area">Residency Out of Service Area</option>
-<option value="Need Out of BCR Scope">Need Out of BCR Scope</option>
+<option value="Need/Primary Concern Out Of BCR Scope">Need/Primary Concern Out Of BCR Scope</option>
+<option value="Residency Out Of Service Area">Residency Out Of Service Area</option>
 <option value="Other">Other</option>
 
 </select></span></div>

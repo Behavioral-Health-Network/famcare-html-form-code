@@ -35,13 +35,12 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('date_session_one');
-    setrequire('session_one_agency');
-    setrequire('session_one_format');
-    setrequire('session_one_grant');
+    setrequire('session_date');
+    setrequire('session_agency');
+    setrequire('session_format');
+    setrequire('session_grant');
 
-	checkhideall(); // Existing field visibility checks
-  checkDateFields(); // Initialize visibility for counseling session fields
+	checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
@@ -49,8 +48,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.date_session_two,"session_two_agency","");
-
+   
 }
 
 function addEventListeners(){
@@ -280,10 +278,10 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('date_session_one') && gvtfieldvalue('date_session_one')=='') {edesc=edesc+`Must specify a value for Date of Counseling Session One\n`; seterror("date_session_one");}
-  if (!hiddenfield('session_one_agency') && gvtfieldvalue('session_one_agency')=='') {edesc=edesc+`Must specify a value for Session One Agency\n`; seterror("session_one_agency");}
-  if (!hiddenfield('session_one_format') && gvtfieldvalue('session_one_format')=='') {edesc=edesc+`Must specify a value for Session One Format\n`; seterror("session_one_format");}
-  if (!hiddenfield('session_one_grant') && gvtfieldvalue('session_one_grant')=='') {edesc=edesc+`Must specify a value for Session One Grant\n`; seterror("session_one_grant");}
+  if (!hiddenfield('session_date') && gvtfieldvalue('session_date')=='') {edesc=edesc+`Must specify a value for Date of Counseling Session One\n`; seterror("session_date");}
+  if (!hiddenfield('session_agency') && gvtfieldvalue('session_agency')=='') {edesc=edesc+`Must specify a value for Session One Agency\n`; seterror("session_agency");}
+  if (!hiddenfield('session_format') && gvtfieldvalue('session_format')=='') {edesc=edesc+`Must specify a value for Session Format\n`; seterror("session_format");}
+  if (!hiddenfield('session_grant') && gvtfieldvalue('session_grant')=='') {edesc=edesc+`Must specify a value for Session Grant\n`; seterror("session_grant");}
 
     return edesc;
 }
@@ -477,77 +475,6 @@ function updatesignatures(){
    return;
 }
 
-/**
- * checkDateFields
- * 
- * Purpose:
- * This function dynamically controls the visibility of specific session-related fields 
- * (e.g., agency, format, grant) based on whether a corresponding date field has a value. 
- * When a date is entered, the related fields are shown. If the date is cleared, 
- * the related fields are hidden.
- * 
- * How It Works:
- * - The function iterates through a predefined list of date fields and their associated fields.
- * - It checks the value of each date field.
- * - If the date field contains a value, the related fields are displayed. Otherwise, they are hidden.
- * 
- * Parameters:
- * None. This function operates on globally available form elements.
- * 
- * Assumptions:
- * - The HTML structure uses a specific naming convention for related fields (e.g., 
- *   'date_session_one' for the date field, 'session_one_agency' for a related field).
- * - Each related field is wrapped in a container with a class prefixed by 'q' 
- *   (or another appropriate prefix if modified).
- * 
- * Dependencies:
- * - Assumes the function is called during page initialization (via startup()) and on 
- *   change events for the date fields.
- * - Relies on standard DOM manipulation methods (querySelectorAll, style.display).
- * 
- * Usage:
- * - Call this function from the `onchange` event of the date fields.
- * - Ensure the `startup()` function also calls this to initialize field visibility on page load.
- * 
- * Maintenance Notes:
- * - If additional session fields are added, update the `dateFields` array to include their 
- *   mappings.
- * - Ensure any prefix changes (e.g., from 'q' to 'fld') are consistently applied in the HTML 
- *   and JavaScript.
- */
- function checkDateFields() {
-    // Define the mappings between date fields and their associated session fields
-    const dateFields = [
-        { dateField: 'date_session_one', fields: ['qsession_one_agency', 'qsession_one_format', 'qsession_one_grant'] },
-        { dateField: 'date_session_two', fields: ['qsession_two_agency', 'qsession_two_format', 'qsession_two_grant'] },
-        { dateField: 'date_session_three', fields: ['qsession_three_agency', 'qsession_three_format', 'qsession_three_grant'] },
-        { dateField: 'date_session_four', fields: ['qsession_four_agency', 'qsession_four_format', 'qsession_four_grant'] },
-        { dateField: 'date_session_five', fields: ['qsession_five_agency', 'qsession_five_format', 'qsession_five_grant'] },
-        { dateField: 'date_session_six', fields: ['qsession_six_agency', 'qsession_six_format', 'qsession_six_grant'] },
-        { dateField: 'date_session_seven', fields: ['qsession_seven_agency', 'qsession_seven_format', 'qsession_seven_grant'] }
-    ];
-
-    // Access the form element (assumes only one form on the page)
-    const form = document.forms[0];
-
-    // Iterate through each date field mapping
-    dateFields.forEach(({ dateField, fields }) => {
-        // Get the value of the date field, trimming whitespace
-        const dateValue = form[dateField].value.trim();
-
-        // Determine visibility based on whether the date field has a value
-        const isVisible = dateValue !== '';
-
-        // Show or hide the associated fields based on the visibility state
-        fields.forEach(field => {
-            const fieldElements = document.querySelectorAll(`.${field}`);
-            fieldElements.forEach(el => {
-                el.style.display = isVisible ? '' : 'none';
-            });
-        });
-    });
-}
-
 </script>
 
 <script language="VBScript">
@@ -595,139 +522,23 @@ function updatesignatures(){
     <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col3 qdate_session_one"><span class="qdate_session_one required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_session_one required-field-label"><label class="label-right">||FIELDTAG date_session_one||Date of Counseling Session One||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_one"><span class="qdate_session_one"><input type="text" name="date_session_one" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
+    <div class="col3 qsession_date"><span class="qsession_date required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_date required-field-label"><label class="label-right">||FIELDTAG session_date||Date of Counseling Session One||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qsession_date"><span class="qsession_date"><input type="text" name="session_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col3 qsession_one_agency"><span class="qsession_one_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_one_agency required-field-label"><label class="label-right">Session One Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_one_agency"><span class="qsession_one_agency"><select size="1" name="session_one_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_one_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col3 qsession_agency"><span class="qsession_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_agency required-field-label"><label class="label-right">Session One Agency&nbsp;</label></span></div>
+    <div class="col9 qsession_agency"><span class="qsession_agency"><select size="1" name="session_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
   </div>
  <div class="entire">
-    <div class="col3 qsession_one_format"><span class="qsession_one_format required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_one_format required-field-label"><label class="label-right">||FIELDTAG session_one_format||Session One Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_one_format"><span class="qsession_one_format"><input type="radio" name="session_one_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_one_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
+    <div class="col3 qsession_format"><span class="qsession_format required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_format required-field-label"><label class="label-right">||FIELDTAG session_format||Session Format||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qsession_format"><span class="qsession_format"><input type="radio" name="session_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
   </div>
  <div class="entire">
-    <div class="col3 qsession_one_grant"><span class="qsession_one_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_one_grant required-field-label"><label class="label-right">||FIELDTAG session_one_grant||Session One Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_one_grant"><span class="qsession_one_grant"><input type="radio" name="session_one_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_one_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qdate_session_two"><span class="qdate_session_two"><label class="label-right">||FIELDTAG date_session_two||Date of Counseling Session Two||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_two"><span class="qdate_session_two"><input type="text" name="date_session_two" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldsession_two_agency qsession_two_agency">
-    <div class="col3 qsession_two_agency"><span class="qsession_two_agency"><label class="label-right">Session Two Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_two_agency"><span class="qsession_two_agency"><select size="1" name="session_two_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_two_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_ref_placed_agencies||
-</span></div>
-    </div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_two_format"><span class="qsession_two_format"><label class="label-right">||FIELDTAG session_two_format||Session Two Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_two_format"><span class="qsession_two_format"><input type="radio" name="session_two_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_two_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_two_grant"><span class="qsession_two_grant"><label class="label-right">||FIELDTAG session_two_grant||Session Two Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_two_grant"><span class="qsession_two_grant"><input type="radio" name="session_two_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_two_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qdate_session_three"><span class="qdate_session_three"><label class="label-right">||FIELDTAG date_session_three||Date of Counseling Session Three||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_three"><span class="qdate_session_three"><input type="text" name="date_session_three" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_three_agency"><span class="qsession_three_agency"><label class="label-right">Session Three Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_three_agency"><span class="qsession_three_agency"><select size="1" name="session_three_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_three_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_ref_placed_agencies||
-</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_three_format"><span class="qsession_three_format"><label class="label-right">||FIELDTAG session_three_format||Session Three Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_three_format"><span class="qsession_three_format"><input type="radio" name="session_three_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_three_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_three_grant"><span class="qsession_three_grant"><label class="label-right">||FIELDTAG session_three_grant||Session Three Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_three_grant"><span class="qsession_three_grant"><input type="radio" name="session_three_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_three_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qdate_session_four"><span class="qdate_session_four"><label class="label-right">||FIELDTAG date_session_four||Date of Counseling Session Four||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_four"><span class="qdate_session_four"><input type="text" name="date_session_four" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_four_agency"><span class="qsession_four_agency"><label class="label-right">Session Four Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_four_agency"><span class="qsession_four_agency"><select size="1" name="session_four_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_four_agency^^')  AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_ref_placed_agencies||
-</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_four_format"><span class="qsession_four_format"><label class="label-right">||FIELDTAG session_four_format||Session Four Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_four_format"><span class="qsession_four_format"><input type="radio" name="session_four_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_four_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_four_grant"><span class="qsession_four_grant"><label class="label-right">||FIELDTAG session_four_grant||Session Four Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_four_grant"><span class="qsession_four_grant"><input type="radio" name="session_four_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_four_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qdate_session_five"><span class="qdate_session_five"><label class="label-right">||FIELDTAG date_session_five||Date of Counseling Session Five||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_five"><span class="qdate_session_five"><input type="text" name="date_session_five" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_five_agency"><span class="qsession_five_agency"><label class="label-right">Session Five Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_five_agency"><span class="qsession_five_agency"><select size="1" name="session_five_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_five_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_ref_placed_agencies||
-</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_five_format"><span class="qsession_five_format"><label class="label-right">||FIELDTAG session_five_format||Session Five Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_five_format"><span class="qsession_five_format"><input type="radio" name="session_five_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_five_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_five_grant"><span class="qsession_five_grant"><label class="label-right">||FIELDTAG session_five_grant||Session Five Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_five_grant"><span class="qsession_five_grant"><input type="radio" name="session_five_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_five_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qdate_session_six"><span class="qdate_session_six"><label class="label-right">||FIELDTAG date_session_six||Date of Counseling Session Six||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_six"><span class="qdate_session_six"><input type="text" name="date_session_six" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_six_agency"><span class="qsession_six_agency"><label class="label-right">Session Six Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_six_agency"><span class="qsession_six_agency"><select size="1" name="session_six_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_six_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_ref_placed_agencies||
-</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_six_format"><span class="qsession_six_format"><label class="label-right">||FIELDTAG session_six_format||Session Six Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_six_format"><span class="qsession_six_format"><input type="radio" name="session_six_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_six_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_six_grant"><span class="qsession_six_grant"><label class="label-right">||FIELDTAG session_six_grant||Session Six Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_six_grant"><span class="qsession_six_grant"><input type="radio" name="session_six_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_six_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qdate_session_seven"><span class="qdate_session_seven"><label class="label-right">||FIELDTAG date_session_seven||Date of Counseling Session Seven||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdate_session_seven"><span class="qdate_session_seven"><input type="text" name="date_session_seven" size="20" onchange="checkhideall(); checkDateFields();" class="jdatepicker"></span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_seven_agency"><span class="qsession_seven_agency"><label class="label-right">Session Seven Agency&nbsp;</label></span></div>
-    <div class="col9 qsession_seven_agency"><span class="qsession_seven_agency"><select size="1" name="session_seven_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE session_seven_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_ref_placed_agencies||
-</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_seven_format"><span class="qsession_seven_format"><label class="label-right">||FIELDTAG session_seven_format||Session Seven Format||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_seven_format"><span class="qsession_seven_format"><input type="radio" name="session_seven_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_seven_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qsession_seven_grant"><span class="qsession_seven_grant"><label class="label-right">||FIELDTAG session_seven_grant||Session Seven Grant||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qsession_seven_grant"><span class="qsession_seven_grant"><input type="radio" name="session_seven_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_seven_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
+    <div class="col3 qsession_grant"><span class="qsession_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_grant required-field-label"><label class="label-right">||FIELDTAG session_grant||Session Grant||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qsession_grant"><span class="qsession_grant"><input type="radio" name="session_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
   </div>
  <div class="entire">
     <div class="col3 qaddtl_notes_counseling"><span class="qaddtl_notes_counseling"><label class="label-right">||FIELDTAG addtl_notes_counseling||Additional Notes||ENDFIELDTAG||&nbsp;</label></span></div>

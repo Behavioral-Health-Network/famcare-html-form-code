@@ -39,7 +39,7 @@ function startup() {
     setrequire('event_topic');
     setrequire('event_format');
     setrequire('total_num_attendees');
-    setrequire('bcr_grant');
+    setrequire('event_grant');
 
 	checkhideall();
 
@@ -289,7 +289,7 @@ function validateform(scope='all') {
   if (!hiddenfield('event_topic') && gvtfieldvalue('event_topic')=='') {edesc=edesc+`Must specify a value for Event Topic\n`; seterror("event_topic");}
   if (!hiddenfield('event_format') && gvtfieldvalue('event_format')=='') {edesc=edesc+`Must specify a value for Event Format \n`; seterror("event_format");}
   if (!hiddenfield('total_num_attendees') && gvtfieldvalue('total_num_attendees')=='') {edesc=edesc+`Must specify a value for Total Number of Attendees\n`; seterror("total_num_attendees");}
-  if (!hiddenfield('bcr_grant') && gvtfieldvalue('bcr_grant')=='') {edesc=edesc+`Must specify a value for Grant Name\n`; seterror("bcr_grant");}
+  if (!hiddenfield('event_grant') && gvtfieldvalue('event_grant')=='') {edesc=edesc+`Must specify a value for Grant Name\n`; seterror("event_grant");}
 
     return edesc;
 }
@@ -617,9 +617,9 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldbcr_grant qbcr_grant">
-    <div class="col12 fldbcr_grant qbcr_grant"><span class="qbcr_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_grant required-field-label"><label class="label-top">Grant Name</label></span><span class="qbcr_grant"><select size="1" name="bcr_grant" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_grant] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_grant^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldevent_grant qevent_grant">
+    <div class="col12 fldevent_grant qevent_grant"><span class="qevent_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_grant required-field-label"><label class="label-top">Grant Name</label></span><span class="qevent_grant"><select size="1" name="event_grant" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_grant] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE event_grant^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_grant||
 </span></div>
   </div>

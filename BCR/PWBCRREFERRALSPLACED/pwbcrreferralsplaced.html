@@ -841,7 +841,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col3 qbcr_presenting_concern"><span class="qbcr_presenting_concern required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_presenting_concern required-field-label"><label class="label-right">Type of Referrals Placed&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_presenting_concern"><span class="qbcr_presenting_concern"><select size="8" name="bcr_presenting_concern" onchange="checkhideall()" multiple>
+    <div class="col9 qbcr_presenting_concern"><span class="qbcr_presenting_concern"><select size="8" name="bcr_presenting_concern" onchange="updateReportFields(['bcr_presenting_concern']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_presenting_concern^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_presenting_concerns||
 
@@ -851,7 +851,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldbcr_ref_placed_bh_subtype qbcr_ref_placed_bh_subtype">
     <div class="col3 qbcr_ref_placed_bh_subtype"><span class="qbcr_ref_placed_bh_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_bh_subtype required-field-label"><label class="label-right">Type of Behavioral Health Referral&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_ref_placed_bh_subtype"><span class="qbcr_ref_placed_bh_subtype"><select size="8" name="bcr_ref_placed_bh_subtype" onchange="checkhideall()" multiple>
+    <div class="col9 qbcr_ref_placed_bh_subtype"><span class="qbcr_ref_placed_bh_subtype"><select size="8" name="bcr_ref_placed_bh_subtype" onchange="updateReportFields(['bcr_ref_placed_bh_subtype']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_bh_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_bh_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_bh_subtype||
 
@@ -937,7 +937,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldbcr_ref_placed_housing_subtype qbcr_ref_placed_housing_subtype">
     <div class="col3 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_housing_subtype required-field-label"><label class="label-right">Housing Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype"><select size="8" name="bcr_ref_placed_housing_subtype" onchange="checkhideall()" multiple>
+    <div class="col9 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype"><select size="8" name="bcr_ref_placed_housing_subtype" onchange="updateReportFields(['bcr_ref_placed_housing_subtype']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_housing_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_housing_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_housing_subtype||
 
@@ -1065,7 +1065,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldbcr_ref_placed_phys_health_subtype qbcr_ref_placed_phys_health_subtype">
     <div class="col3 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_phys_health_subtype required-field-label"><label class="label-right">Physical Health Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype"><select size="4" name="bcr_ref_placed_phys_health_subtype" onchange="checkhideall()" multiple>
+    <div class="col9 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype"><select size="4" name="bcr_ref_placed_phys_health_subtype" onchange="updateReportFields(['bcr_presenting_concern']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_phys_health_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_phys_health_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_phys_health_subtype||
 
@@ -1106,7 +1106,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldbcr_ref_placed_social_subtype qbcr_ref_placed_social_subtype">
     <div class="col3 qbcr_ref_placed_social_subtype"><span class="qbcr_ref_placed_social_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_social_subtype required-field-label"><label class="label-right">Social Service Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_ref_placed_social_subtype"><span class="qbcr_ref_placed_social_subtype"><select size="8" name="bcr_ref_placed_social_subtype" onchange="checkhideall()" multiple>
+    <div class="col9 qbcr_ref_placed_social_subtype"><span class="qbcr_ref_placed_social_subtype"><select size="8" name="bcr_ref_placed_social_subtype" onchange="updateReportFields(['bcr_ref_placed_social_service_subtype']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_social_service_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_social_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_social_service_subtype||
 

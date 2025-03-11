@@ -24,19 +24,28 @@
 // updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
 // if the function is run via startup() too early and does not run again dynamically upon change.
 const observer = new MutationObserver(() => {
-  const dropdown = document.querySelector('#epicc_opioids_of_use');
-  if (dropdown) {
-    console.log('Dropdown detected. Adding event listener.');
+  // Use querySelectorAll to find all relevant dropdowns
+  const dropdowns = document.querySelectorAll('#epicc_opioids_of_use, #table2, #table3'); // Add more IDs as needed
 
-    // Add the onchange event listener
-    dropdown.addEventListener('change', () => {
-      updateReportFields(['epicc_opioids_of_use']);
-    });
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
 
-    // Run updateReportFields once to initialize hidden fields
-    updateReportFields(['epicc_opioids_of_use']);
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID to updateReportFields
+      });
 
-    // Disconnect the observer as its job is done
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+
+  if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
     observer.disconnect();
   }
 });
@@ -108,19 +117,24 @@ $("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelector('#epicc_opioids_of_use');
-  if (dropdown) {
-    dropdown.addEventListener('change', () => {
-      updateReportFields(['epicc_opioids_of_use']);
-    });
-  } else {
-    console.error('Dropdown with ID #epicc_opioids_of_use not found.');
-  }
-/* 
-  // Optionally, run updateReportFields once during startup to initialize hidden fields
-  setTimeout(() => {
-    updateReportFields(['epicc_opioids_of_use']);
-  }, 500); */
+  const dropdown = document.querySelectorAll('#epicc_opioids_of_use'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
 }
 
 function checkhideall() {

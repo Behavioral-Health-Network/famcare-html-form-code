@@ -711,10 +711,6 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
-<div class="deflist">
-<div class="entire">
-<div class="col12 term">Section I</div>
-</div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -746,7 +742,7 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Section II: Program Participation</div>
+<div class="col12 term">Program Participation</div>
 </div>
  <div class="entire">
     <div class="col12 fldprogram_participation_ic qprogram_participation_ic">
@@ -796,10 +792,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section III: Treatment Agency</div>
+<div class="col12 term">Active Treatment Agency</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Click "Add" below to enter the Referred Agency. </label></div>
+    <div class="col12"><label class="label-top"><i>If client is actively attending a substance use treatment agency click "Add" below to enter the treatment agency they are attending. If client chose to attend a different agency click "View/Edit" to add an "End Date" to the active treatment agency and then create a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWSUBroadTreatmentAgency||</div>
@@ -808,7 +804,7 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section IV</div>
+<div class="col12 term"></div>
 </div>
  <div class="entire">
     <div class="col12 fldwho_initiated_referral qwho_initiated_referral">
@@ -843,12 +839,24 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
-  </div>
+</div>
 <div class="entire">
-<div class="col12 term">Section V: Payor Source</div>
+<div class="col12 term">Housing Status</div>
+</div>
+    <div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter client's current housing status.</i></label></div>
+    </div>
+    <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+    </div>
+    <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+    </div>
+<div class="entire">
+<div class="col12 term">Payor Source</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Select "Add" below to enter the client's payor status.</label></div>
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current insurance status, including Start Date(s) if covered by one (or more) payors. When payor source is current, select "Yes" for "Payor is Current". Edit the End Date when payor source is no longer current.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
@@ -859,6 +867,9 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
+  <div class="entire">
+    <div class="col12 term"></div>
+    </div>
  <div class="entire">
     <div class="col12 fldconsent_crc_referral_ic qconsent_crc_referral_ic">
     <div class="col12 fldconsent_crc_referral_ic qconsent_crc_referral_ic"><span class="qconsent_crc_referral_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qconsent_crc_referral_ic required-field-label"><label class="label-top">||FIELDTAG consent_crc_referral_ic||Does client consent to CRC referral?||ENDFIELDTAG||</label></span><span class="qconsent_crc_referral_ic"><input type="radio" name="consent_crc_referral_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="consent_crc_referral_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="consent_crc_referral_ic" value="Not Applicable" onclick="checkhideall()" >Not Applicable&nbsp;&nbsp;</span></div>
@@ -869,9 +880,6 @@ function updatesignatures(){
     <div class="col12 fldreason_consent_refused_crc_ic qreason_consent_refused_crc_ic"><span class="qreason_consent_refused_crc_ic"><label class="label-top">||FIELDTAG reason_consent_refused_crc_ic||If client did not consent, why?||ENDFIELDTAG||</label></span><span class="qreason_consent_refused_crc_ic"><textarea name="reason_consent_refused_crc_ic" class="autoexpand"></textarea></span></div>
      </div>
   </div>
-<div class="entire">
-<div class="col12 term">Section VI</div>
-</div>
  <div class="entire">
     <div class="col12 fldepicc_opioids_of_use qepicc_opioids_of_use">
     <div class="col12 fldepicc_opioids_of_use qepicc_opioids_of_use"><span class="qepicc_opioids_of_use required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_opioids_of_use required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qepicc_opioids_of_use"><select size="8" name="epicc_opioids_of_use" id="epicc_opioids_of_use" onchange="checkhideall()" multiple>
@@ -1042,21 +1050,6 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
-<div class="entire">
-<div class="col12 term">Section VII: Housing</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Click "Add" below to enter client's current housing status.</label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Section VIII</div>
-</div>
  <div class="entire">
     <div class="col12 fldpresenting_notes_ic qpresenting_notes_ic">
     <div class="col12 fldpresenting_notes_ic qpresenting_notes_ic"><span class="qpresenting_notes_ic"><label class="label-top">||FIELDTAG presenting_notes_ic||Presenting Notes||ENDFIELDTAG||</label></span><span class="qpresenting_notes_ic"><textarea name="presenting_notes_ic" class="autoexpand"></textarea></span></div>

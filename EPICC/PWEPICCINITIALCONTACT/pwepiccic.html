@@ -649,7 +649,7 @@ function updateReportFields(tableIds) {
 
 // Call the function with the names of the tables you want to process.
 // The table names are passed as an array.
-updateReportFields(['epicc_opioids_of_use']);
+updateReportFields(['opioids_of_use_ic']);
 
 </script>
 
@@ -677,11 +677,11 @@ updateReportFields(['epicc_opioids_of_use']);
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
     <!-- used by updateReportFields -->
-    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001" data-source="epicc_opioids_of_use">
-    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002" data-source="epicc_opioids_of_use">
-    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003" data-source="epicc_opioids_of_use">
-    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004" data-source="epicc_opioids_of_use">
-    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001" data-source="opioids_of_use_ic">
+    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002" data-source="opioids_of_use_ic">
+    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003" data-source="opioids_of_use_ic">
+    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004" data-source="opioids_of_use_ic">
+    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006" data-source="opioids_of_use_ic">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>EPICC Initial Contact</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
@@ -857,7 +857,7 @@ updateReportFields(['epicc_opioids_of_use']);
 </div>
  <div class="entire">
     <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic">
-    <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic"><span class="qopioids_of_use_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qopioids_of_use_ic required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qopioids_of_use_ic"><select size="8" name="opioids_of_use_ic" id="epicc_opioids_of_use" onchange="checkhideall()" multiple>
+    <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic"><span class="qopioids_of_use_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qopioids_of_use_ic required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qopioids_of_use_ic"><select size="8" name="opioids_of_use_ic" id="opioids_of_use_ic" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_opioids_of_use] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE opioids_of_use_ic^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_opioids_of_use||
 

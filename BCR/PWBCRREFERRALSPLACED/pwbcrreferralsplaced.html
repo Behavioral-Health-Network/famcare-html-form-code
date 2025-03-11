@@ -854,7 +854,7 @@ function updatesignatures(){
     <div class="col12 fldmat_health_agency_ref_placed qmat_health_agency_ref_placed">
     <div class="col3 qmat_health_agency_ref_placed"><span class="qmat_health_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_health_agency_ref_placed required-field-label"><label class="label-right">Maternal Health Agency&nbsp;</label></span></div>
     <div class="col9 qmat_health_agency_ref_placed"><span class="qmat_health_agency_ref_placed"><select size="1" name="mat_health_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mat_health_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mat_health_agency_ref_placed^^') AND TYPE='Maternal Health' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>

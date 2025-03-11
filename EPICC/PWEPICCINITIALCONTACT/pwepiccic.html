@@ -808,24 +808,14 @@ function updatesignatures(){
     <div class="col12 fldwho_initiated_referral qwho_initiated_referral"><span class="qwho_initiated_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qwho_initiated_referral required-field-label"><label class="label-top">||FIELDTAG who_initiated_referral||Who initiated the referral?||ENDFIELDTAG||</label></span><span class="qwho_initiated_referral"><input type="radio" name="who_initiated_referral" value="Community " onclick="checkhideall()" >Community &nbsp;&nbsp;<input type="radio" name="who_initiated_referral" value="EMS" onclick="checkhideall()" >EMS&nbsp;&nbsp;<input type="radio" name="who_initiated_referral" value="Hospital" onclick="checkhideall()" >Hospital&nbsp;&nbsp;</span></div>
      </div>
   </div>
- <div class="entire">
-    <div class="col12 fldcommunity_referral_source_ic qcommunity_referral_source_ic">
-    <div class="col12 fldcommunity_referral_source_ic qcommunity_referral_source_ic"><span class="qcommunity_referral_source_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_referral_source_ic required-field-label"><label class="label-top">||FIELDTAG community_referral_source_ic||If Community Referral, Select One||ENDFIELDTAG||</label></span><span class="qcommunity_referral_source_ic"><select size="1"  name="community_referral_source_ic" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Adapt">Adapt</option>
-<option value="Americorp">Americorp</option>
-<option value="Barnes Care Clinic">Barnes Care Clinic</option>
-<option value="Biddle House Shelter">Biddle House Shelter</option>
-<option value="Bridge of Hope">Bridge of Hope</option>
-<option value="CBHL">CBHL</option>
-<option value="Compass Jefferson">Compass Jefferson</option>
-<option value="Empowerment Center">Empowerment Center</option>
-<option value="Gateway Housing First">Gateway Housing First</option>
-<option value="Gateway Re-Entry">Gateway Re-Entry</option>
-
-</select></span></div>
-     </div>
-  </div>
+  <div class="entire">
+   <div class="col12 fldcommunity_referral_source_ic qcommunity_referral_source_ic">
+   <div class="col12 fldcommunity_referral_source_ic qcommunity_referral_source_ic"><span class="qcommunity_referral_source_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_referral_source_ic required-field-label"><label class="label-top">If Community Referral, Select One</label></span><span class="qcommunity_referral_source_ic"><select size="1" name="community_referral_source_ic" onchange="checkhideall()">
+<option value="||SELECT CODE, DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [community_referral_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE community_referral_source_ic^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE community_referral_source||
+</span></div>
+    </div>
+ </div>
  <div class="entire">
     <div class="col12 fldtype_contact_ic qtype_contact_ic">
     <div class="col12 fldtype_contact_ic qtype_contact_ic"><span class="qtype_contact_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_contact_ic required-field-label"><label class="label-top">||FIELDTAG type_contact_ic||Type of Contact||ENDFIELDTAG||</label></span><span class="qtype_contact_ic"><input type="radio" name="type_contact_ic" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="type_contact_ic" value="Phone" onclick="checkhideall()" >Phone&nbsp;&nbsp;</span></div>

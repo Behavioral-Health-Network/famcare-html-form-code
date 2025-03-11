@@ -581,7 +581,7 @@ function updatesignatures(){
     <div class="col12 fldref_through_event qref_through_event"><span class="qref_through_event required-label">||PWRequiredFieldRequiredText||</span><span class="qref_through_event required-field-label"><label class="label-top">||FIELDTAG ref_through_event||Was referral through a planned event?||ENDFIELDTAG||</label></span><span class="qref_through_event"><input type="radio" name="ref_through_event" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ref_through_event" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="ref_through_event" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
-  <div class="entire">
+ <div class="entire">
     <div class="col12 fldbcr_ref_event qbcr_ref_event">
     <div class="col12 fldbcr_ref_event qbcr_ref_event"><span class="qbcr_ref_event required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_event required-field-label"><label class="label-top">||FIELDTAG bcr_ref_event||Which Event ||ENDFIELDTAG||</label></span><span class="qbcr_ref_event"><select size="1"  name="bcr_ref_event" onchange="checkhideall()" >
 <option value="">(please select)</option>
@@ -629,13 +629,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldprev_mh_bh_services qprev_mh_bh_services">
-    <div class="col12 fldprev_mh_bh_services qprev_mh_bh_services"><span class="qprev_mh_bh_services required-label">||PWRequiredFieldRequiredText||</span><span class="qprev_mh_bh_services required-field-label"><label class="label-top">||FIELDTAG prev_mh_bh_services||Has client previously received any form of mental or behavioral health service?||ENDFIELDTAG||</label></span><span class="qprev_mh_bh_services"><select size="1"  name="prev_mh_bh_services" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
-<option value="Unknown">Unknown</option>
-
-</select></span></div>
+    <div class="col12 fldprev_mh_bh_services qprev_mh_bh_services"><span class="qprev_mh_bh_services required-label">||PWRequiredFieldRequiredText||</span><span class="qprev_mh_bh_services required-field-label"><label class="label-top">||FIELDTAG prev_mh_bh_services||Has client previously received any form of mental or behavioral health service?||ENDFIELDTAG||</label></span><span class="qprev_mh_bh_services"><input type="radio" name="prev_mh_bh_services" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="prev_mh_bh_services" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="prev_mh_bh_services" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -662,8 +656,14 @@ function updatesignatures(){
 </select></span></div>
      </div>
   </div>
+<div class="entire">
+<div class="col12 term">Presenting Concerns</div>
+</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Click "Add" to select the client's presenting concerns.</label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWBCRPresentingConcerns||</div>
@@ -671,8 +671,14 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
+<div class="entire">
+<div class="col12 term">Housing Status</div>
+</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Click "Add" to enter a new housing status.</label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
@@ -680,6 +686,9 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
+<div class="entire">
+<div class="col12 term">Program Participation</div>
+</div>
  <div class="entire">
     <div class="col12 fldreside_in_stl_city qreside_in_stl_city">
     <div class="col12 fldreside_in_stl_city qreside_in_stl_city"><span class="qreside_in_stl_city required-label">||PWRequiredFieldRequiredText||</span><span class="qreside_in_stl_city required-field-label"><label class="label-top">||FIELDTAG reside_in_stl_city||Does client reside in St. Louis City?||ENDFIELDTAG||</label></span><span class="qreside_in_stl_city"><input type="radio" name="reside_in_stl_city" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="reside_in_stl_city" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="reside_in_stl_city" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>

@@ -764,7 +764,7 @@ function updatesignatures(){
     <div class="col12 fldrent_assist_agency_ref_place qrent_assist_agency_ref_place">
     <div class="col3 qrent_assist_agency_ref_place"><span class="qrent_assist_agency_ref_place required-label">||PWRequiredFieldRequiredText||</span><span class="qrent_assist_agency_ref_place required-field-label"><label class="label-right">Rent/Mortgage Assistance Agency&nbsp;</label></span></div>
     <div class="col9 qrent_assist_agency_ref_place"><span class="qrent_assist_agency_ref_place"><select size="1" name="rent_assist_agency_ref_place" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE rent_assist_agency_ref_place^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE rent_assist_agency_ref_place^^') AND SUBTYPE='Rent/Mortgage Assistance' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -779,7 +779,7 @@ function updatesignatures(){
     <div class="col12 fldutility_assist_agency_ref_placed qutility_assist_agency_ref_placed">
     <div class="col3 qutility_assist_agency_ref_placed"><span class="qutility_assist_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qutility_assist_agency_ref_placed required-field-label"><label class="label-right">Utility Assistance Agency&nbsp;</label></span></div>
     <div class="col9 qutility_assist_agency_ref_placed"><span class="qutility_assist_agency_ref_placed"><select size="1" name="utility_assist_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE utility_assist_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE utility_assist_agency_ref_placed^^') AND SUBTYPE='Utility Assistance' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -794,7 +794,7 @@ function updatesignatures(){
     <div class="col12 fldfurniture_agency_ref_placed qfurniture_agency_ref_placed">
     <div class="col3 qfurniture_agency_ref_placed"><span class="qfurniture_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qfurniture_agency_ref_placed required-field-label"><label class="label-right">Furniture Agency&nbsp;</label></span></div>
     <div class="col9 qfurniture_agency_ref_placed"><span class="qfurniture_agency_ref_placed"><select size="1" name="furniture_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE furniture_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE furniture_agency_ref_placed^^') AND SUBTYPE='Furniture' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -809,7 +809,7 @@ function updatesignatures(){
     <div class="col12 fldhome_repair_agency_ref_placed qhome_repair_agency_ref_placed">
     <div class="col3 qhome_repair_agency_ref_placed"><span class="qhome_repair_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qhome_repair_agency_ref_placed required-field-label"><label class="label-right">Home Repair Agency&nbsp;</label></span></div>
     <div class="col9 qhome_repair_agency_ref_placed"><span class="qhome_repair_agency_ref_placed"><select size="1" name="home_repair_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE home_repair_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE home_repair_agency_ref_placed^^') AND SUBTYPE='Home Repairs' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -824,7 +824,7 @@ function updatesignatures(){
     <div class="col12 fldlandlord_med_agency_ref_placed qlandlord_med_agency_ref_placed">
     <div class="col3 qlandlord_med_agency_ref_placed"><span class="qlandlord_med_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qlandlord_med_agency_ref_placed required-field-label"><label class="label-right">Landlord-Tenant Mediation Agency&nbsp;</label></span></div>
     <div class="col9 qlandlord_med_agency_ref_placed"><span class="qlandlord_med_agency_ref_placed"><select size="1" name="landlord_med_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE landlord_med_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE landlord_med_agency_ref_placed^^') AND SUBTYPE='Landlord-Tenant Mediation' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -839,7 +839,7 @@ function updatesignatures(){
     <div class="col12 fldhomeless_services_agency_ref_placed qhomeless_services_agency_ref_placed">
     <div class="col3 qhomeless_services_agency_ref_placed"><span class="qhomeless_services_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_services_agency_ref_placed required-field-label"><label class="label-right">Homeless Services Agency&nbsp;</label></span></div>
     <div class="col9 qhomeless_services_agency_ref_placed"><span class="qhomeless_services_agency_ref_placed"><select size="1" name="homeless_services_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE homeless_services_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE homeless_services_agency_ref_placed^^') AND SUBTYPE='Homeless Services' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>

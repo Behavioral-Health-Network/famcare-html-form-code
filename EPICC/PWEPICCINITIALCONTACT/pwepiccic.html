@@ -89,15 +89,15 @@ $("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault
     setrequire('community_referral_source_ic');
     setrequire('type_contact_ic');
     setrequire('consent_crc_referral_ic');
-    setrequire('overdose_event_referral');
     setrequire('opioids_of_use_ic');
+    setrequire('overdose_event_referral');
     setrequire('overdose_location');
     setrequire('first_overdose');
     setrequire('num_past_overdoses');
     setrequire('most_recent_past_overdose_date');
     setrequire('su_treatment_past_twelve_mos');
     setrequire('current_su_treatment');
-    setrequire('current_opioid_prescription');
+    setrequire('opioid_prescription_long_term_pain_mgmt');
     setrequire('ever_prescription_mat_not_referral');
     setrequire('current_script_mat_type');
     setrequire('mat_initiated_hospital');
@@ -143,7 +143,7 @@ function checkhideall() {
    checkhide(f.program_participation_ic,"if_transfer_what_region_ic","Regional Transfer");
    checkhide(f.program_participation_ic,"if_transfer_contact_transfer_region_success_ic","Regional Transfer");
    checkhide(f.program_participation_ic,"status_unable_contact_transfer","Unable To Contact,Regional Transfer");
-   checkhide(f.program_participation_ic,"why_not_meet_prog_eligibility_ic","Ineligible; Does Not Meet Program Criteria");
+   checkhide(f.program_participation_ic,"why_not_meet_prog_eligibility_ic","002");
    checkhide(f.why_not_meet_prog_eligibility_ic,"non_opioid_substance","Non-Opioid User");
    checkhide(f.program_participation_ic,"treatment_path_ic","Eligible For Services");
    checkhide(f.who_initiated_referral,"community_referral_source_ic","Community ");
@@ -402,15 +402,15 @@ function validateform(scope='all') {
   if (!hiddenfield('community_referral_source_ic') && gvtfieldvalue('community_referral_source_ic')=='') {edesc=edesc+`Must specify a value for If Community Referral, Select One\n`; seterror("community_referral_source_ic");}
   if (!hiddenfield('type_contact_ic') && gvtfieldvalue('type_contact_ic')=='') {edesc=edesc+`Must specify a value for Type of Contact\n`; seterror("type_contact_ic");}
   if (!hiddenfield('consent_crc_referral_ic') && gvtfieldvalue('consent_crc_referral_ic')=='') {edesc=edesc+`Must specify a value for Does client consent to CRC referral?\n`; seterror("consent_crc_referral_ic");}
-  if (!hiddenfield('overdose_event_referral') && gvtfieldvalue('overdose_event_referral')=='') {edesc=edesc+`Must specify a value for Was the referral placed due to an overdose event (Not soley a severe use disorder or withdrawal?)\n`; seterror("overdose_event_referral");}
   if (!hiddenfield('opioids_of_use_ic') && gvtfieldvalue('opioids_of_use_ic')=='') {edesc=edesc+`Must specify a value for Opioid(s) of Use\n`; seterror("opioids_of_use_ic");}
+  if (!hiddenfield('overdose_event_referral') && gvtfieldvalue('overdose_event_referral')=='') {edesc=edesc+`Must specify a value for Was the referral placed due to an overdose event (Not soley a severe use disorder or withdrawal?)\n`; seterror("overdose_event_referral");}
   if (!hiddenfield('overdose_location') && gvtfieldvalue('overdose_location')=='') {edesc=edesc+`Must specify a value for Location of Overdose\n`; seterror("overdose_location");}
   if (!hiddenfield('first_overdose') && gvtfieldvalue('first_overdose')=='') {edesc=edesc+`Must specify a value for Was this the client's first overdose?\n`; seterror("first_overdose");}
   if (!hiddenfield('num_past_overdoses') && gvtfieldvalue('num_past_overdoses')=='') {edesc=edesc+`Must specify a value for Number of Past Overdoses\n`; seterror("num_past_overdoses");}
   if (!hiddenfield('most_recent_past_overdose_date') && gvtfieldvalue('most_recent_past_overdose_date')=='') {edesc=edesc+`Must specify a value for When was most recent past overdose? Do not include referral overdose\n`; seterror("most_recent_past_overdose_date");}
   if (!hiddenfield('su_treatment_past_twelve_mos') && gvtfieldvalue('su_treatment_past_twelve_mos')=='') {edesc=edesc+`Must specify a value for Has client been in substance use treatment within the past 12 months?\n`; seterror("su_treatment_past_twelve_mos");}
   if (!hiddenfield('current_su_treatment') && gvtfieldvalue('current_su_treatment')=='') {edesc=edesc+`Must specify a value for Is client currently receiving substance use treatment?\n`; seterror("current_su_treatment");}
-  if (!hiddenfield('current_opioid_prescription') && gvtfieldvalue('current_opioid_prescription')=='') {edesc=edesc+`Must specify a value for Does client have a current prescription for opioids?\n`; seterror("current_opioid_prescription");}
+  if (!hiddenfield('opioid_prescription_long_term_pain_mgmt') && gvtfieldvalue('opioid_prescription_long_term_pain_mgmt')=='') {edesc=edesc+`Must specify a value for Does client have an opioid prescription/is client being treated for long term pain management?\n`; seterror("opioid_prescription_long_term_pain_mgmt");}
   if (!hiddenfield('ever_prescription_mat_not_referral') && gvtfieldvalue('ever_prescription_mat_not_referral')=='') {edesc=edesc+`Must specify a value for Has client ever had a prescription for MAT?\n`; seterror("ever_prescription_mat_not_referral");}
   if (!hiddenfield('current_script_mat_type') && gvtfieldvalue('current_script_mat_type')=='') {edesc=edesc+`Must specify a value for Type of MAT Prescribed\n`; seterror("current_script_mat_type");}
   if (!hiddenfield('mat_initiated_hospital') && gvtfieldvalue('mat_initiated_hospital')=='') {edesc=edesc+`Must specify a value for Was MAT initiated in the hospital?\n`; seterror("mat_initiated_hospital");}
@@ -747,23 +747,10 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldprogram_participation_ic qprogram_participation_ic">
-    <div class="col12 fldprogram_participation_ic qprogram_participation_ic"><span class="qprogram_participation_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_ic required-field-label"><label class="label-top">||FIELDTAG program_participation_ic||Program Participation||ENDFIELDTAG||</label></span><span class="qprogram_participation_ic"><select size="1"  name="program_participation_ic" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Eligible For Services">Eligible For Services</option>
-<option value="Ineligible; Does Not Meet Program Criteria">Ineligible; Does Not Meet Program Criteria</option>
-<option value="Client Declined Services">Client Declined Services</option>
-<option value="Unable To Contact">Unable To Contact</option>
-<option value="Outreaching For 30 Days">Outreaching For 30 Days</option>
-<option value="Client In Jail/Incarcerated">Client In Jail/Incarcerated</option>
-<option value="New Referral Received">New Referral Received</option>
-<option value="Client Deceased">Client Deceased</option>
-<option value="Regional Transfer">Regional Transfer</option>
-<option value="Services Transferred To LINCS IO">Services Transferred To LINCS IO</option>
-<option value="Already Enrolled In SUD Services">Already Enrolled In SUD Services</option>
-<option value="Referral Received Within 30 Days">Referral Received Within 30 Days</option>
-<option value="Services Transferred To Youth ERE Program">Services Transferred To Youth ERE Program</option>
-
-</select></span></div>
+    <div class="col12 fldprogram_participation_ic qprogram_participation_ic"><span class="qprogram_participation_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_ic required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_ic"><select size="1" name="program_participation_ic" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_ic^^') and initial_contact = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_program_participation||
+</span></div>
      </div>
   </div>
  <div class="entire">
@@ -883,11 +870,6 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldoverdose_event_referral qoverdose_event_referral">
-    <div class="col12 fldoverdose_event_referral qoverdose_event_referral"><span class="qoverdose_event_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_event_referral required-field-label"><label class="label-top">||FIELDTAG overdose_event_referral||Was the referral placed due to an overdose event (Not soley a severe use disorder or withdrawal?)||ENDFIELDTAG||</label></span><span class="qoverdose_event_referral"><input type="radio" name="overdose_event_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="overdose_event_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="overdose_event_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
     <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic">
     <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic"><span class="qopioids_of_use_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qopioids_of_use_ic required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qopioids_of_use_ic"><select size="8" name="opioids_of_use_ic" id="epicc_opioids_of_use" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_opioids_of_use] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE opioids_of_use_ic^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
@@ -900,6 +882,11 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldother_opioid_ic qother_opioid_ic">
     <div class="col12 fldother_opioid_ic qother_opioid_ic"><span class="qother_opioid_ic"><label class="label-top">||FIELDTAG other_opioid_ic||Other Opioids||ENDFIELDTAG||</label></span><span class="qother_opioid_ic"><input type="text" name="other_opioid_ic" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoverdose_event_referral qoverdose_event_referral">
+    <div class="col12 fldoverdose_event_referral qoverdose_event_referral"><span class="qoverdose_event_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_event_referral required-field-label"><label class="label-top">||FIELDTAG overdose_event_referral||Was the referral placed due to an overdose event (Not soley a severe use disorder or withdrawal?)||ENDFIELDTAG||</label></span><span class="qoverdose_event_referral"><input type="radio" name="overdose_event_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="overdose_event_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="overdose_event_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -952,8 +939,8 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldcurrent_opioid_prescription qcurrent_opioid_prescription">
-    <div class="col12 fldcurrent_opioid_prescription qcurrent_opioid_prescription"><span class="qcurrent_opioid_prescription required-label">||PWRequiredFieldRequiredText||</span><span class="qcurrent_opioid_prescription required-field-label"><label class="label-top">||FIELDTAG current_opioid_prescription||Does client have a current prescription for opioids?||ENDFIELDTAG||</label></span><span class="qcurrent_opioid_prescription"><input type="radio" name="current_opioid_prescription" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="current_opioid_prescription" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="current_opioid_prescription" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldopioid_prescription_long_term_pain_mgmt qopioid_prescription_long_term_pain_mgmt">
+    <div class="col12 fldopioid_prescription_long_term_pain_mgmt qopioid_prescription_long_term_pain_mgmt"><span class="qopioid_prescription_long_term_pain_mgmt required-label">||PWRequiredFieldRequiredText||</span><span class="qopioid_prescription_long_term_pain_mgmt required-field-label"><label class="label-top">||FIELDTAG opioid_prescription_long_term_pain_mgmt||Does client have an opioid prescription/is client being treated for long term pain management?||ENDFIELDTAG||</label></span><span class="qopioid_prescription_long_term_pain_mgmt"><input type="radio" name="opioid_prescription_long_term_pain_mgmt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="opioid_prescription_long_term_pain_mgmt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="opioid_prescription_long_term_pain_mgmt" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

@@ -46,7 +46,7 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('ems_involved_ref');
     setrequire('leo_involved_referral');
     setrequire('agreeable_ed_outreach');
-    setrequire('program_participation_referral');
+    setrequire('epicc_program_participation_referral');
 
 	checkhideall();
 
@@ -62,7 +62,7 @@ function checkhideall() {
    checkhide(f.community_referral_source,"shelter","030");
    checkhide(f.ems_fire_district_place_referral_in_transit,"ems_fire_district","Yes");
    checkhide(f.client_age_14_17,"parent_caregiver_present_ref_or_notified","Yes");
-   checkhide(f.program_participation_referral,"ineligible_reason","002");
+   checkhide(f.epicc_program_participation_referral,"ineligible_reason","002");
    checkhide(f.client_enrolled_su_before,"list_all_ada","Yes");
 
 }
@@ -304,7 +304,7 @@ function validateform(scope='all') {
   if (!hiddenfield('ems_involved_ref') && gvtfieldvalue('ems_involved_ref')=='') {edesc=edesc+`Must specify a value for Was EMS involved with this referral?\n`; seterror("ems_involved_ref");}
   if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
   if (!hiddenfield('agreeable_ed_outreach') && gvtfieldvalue('agreeable_ed_outreach')=='') {edesc=edesc+`Must specify a value for Are the client and hospital agreeable to outreach in ED/Unit? \n`; seterror("agreeable_ed_outreach");}
-  if (!hiddenfield('program_participation_referral') && gvtfieldvalue('program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_referral");}
+  if (!hiddenfield('epicc_program_participation_referral') && gvtfieldvalue('epicc_program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("epicc_program_participation_referral");}
 
     return edesc;
 }
@@ -647,17 +647,34 @@ function updatesignatures(){
     <div class="col4 qems_fire_district">
     <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district"><label class="label-top">||FIELDTAG ems_fire_district||What EMS/Fire District?||ENDFIELDTAG||</label></span><span class="qems_fire_district"><select size="1"  name="ems_fire_district" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Afton">Afton</option>
-<option value="Berkley Fire">Berkley Fire</option>
-<option value="Big River Ambulance">Big River Ambulance</option>
-<option value="Cedar Hill">Cedar Hill</option>
-<option value="Christian">Christian</option>
-<option value="City Of St. Charles Fire">City Of St. Charles Fire</option>
-<option value="Crestwood">Crestwood</option>
-<option value="DeSoto EMS">DeSoto EMS</option>
-<option value="Gerald-Rosebud Fire">Gerald-Rosebud Fire</option>
-<option value="Hazelwood ">Hazelwood </option>
-
+<option value="Affton Fire Protection District">Affton Fire Protection District</option>
+<option value="Berkeley Fire Department">Berkeley Fire Department</option>
+<option value="Big River Ambulance District">Big River Ambulance District</option>
+<option value="Cedar Hill Fire Protection District">Cedar Hill Fire Protection District</option>
+<option value="Christian Hospital EMS">Christian Hospital EMS</option>
+<option value="City Of St. Charles Fire and EMS">City Of St. Charles Fire and EMS</option>
+<option value="Crestwood Fire Department">Crestwood Fire Department</option>
+<option value="Gerald-Rosebud Fire Protection District">Gerald-Rosebud Fire Fire Protection District</option>
+<option value="Hazelwood Fire Department">Hazelwood Fire Department</option>
+<option value="High Ridge Fire District">High Ridge Fire District</option>
+<option value="Joachim Plattin Ambulance District">Joachim Plattin Ambulance District</option>
+<option value="Lemay Fire Protection District">Lemay Fire Protection District</option>
+<option value="Lincoln County Ambulance District">Lincoln County Ambulance District</option>
+<option value="Maryland Heights Fire Protection District">Maryland Heights Fire Protection District</option>
+<option value="Mehlville Fire Protection District">Mehlville Fire Protection District</option>
+<option value="Metro North Fire Protection District">Metro North Fire Protection District</option>
+<option value="North County Fire and Rescue Protection District">North County Fire and Rescue Protection District</option>
+<option value="North Jefferson County Ambulance District">North Jefferson County Ambulance District</option>
+<option value="Other EMS/Ambulance/Fire Protection District">Other EMS/Ambulance/Fire Protection District</option>
+<option value="Pattonville Fire Protection District">Pattonville Fire Protection District</option>
+<option value="Robertson Fire Protection District">Robertson Fire Protection District</option>
+<option value="Rock Community Fire Protection District">Rock Community Fire Protection District</option>
+<option value="Rock Township Ambulance District">Rock Township Ambulance District</option>
+<option value="St. Louis City Ambulance and Emergency Services">St. Louis City Ambulance and Emergency Services</option>
+<option value="Valle Ambulance District (De Soto)">Valle Ambulance District (De Soto)</option>
+<option value="Warren County Ambulance District">Warren Ambulance District</option>
+<option value="Webster Groves Fire Departement">Webster Groves Fire Department</option>
+<option value="West Overland EMS and Fire Protection District">West Overland EMS and Fire Protection District</option>
 </select></span></div>
      </div>
   </div>
@@ -713,9 +730,9 @@ function updatesignatures(){
 <div class="col12 term">Section V: Program Participation</div>
 </div>
  <div class="entire">
-    <div class="col12 fldprogram_participation_referral qprogram_participation_referral">
-    <div class="col12 fldprogram_participation_referral qprogram_participation_referral"><span class="qprogram_participation_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_referral required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_referral"><select size="1" name="program_participation_referral" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_referral^^') and referral = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldepicc_program_participation_referral qepicc_program_participation_referral">
+    <div class="col12 fldepicc_program_participation_referral qepicc_program_participation_referral"><span class="qepicc_program_participation_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_program_participation_referral required-field-label"><label class="label-top">Program Participation</label></span><span class="qepicc_program_participation_referral"><select size="1" name="epicc_program_participation_referral" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_program_participation_referral^^') and referral = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_program_participation||
 </span></div>
      </div>
@@ -725,7 +742,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldineligible_reason qineligible_reason">
-    <div class="col12 fldineligible_reason qineligible_reason"><span class="qineligible_reason"><label class="label-top">||FIELDTAG ineligible_reason||Criteria not met for eligibility||ENDFIELDTAG||</label></span><span class="qineligible_reason"><select size="1"  name="ineligible_reason" onchange="checkhideall()" >
+    <div class="col12 fldineligible_reason qineligible_reason"><span class="qineligible_reason"><label class="label-top">||FIELDTAG ineligible_reason||Criteria Not Met For Eligibility||ENDFIELDTAG||</label></span><span class="qineligible_reason"><select size="1"  name="ineligible_reason" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Not Age 18+">Not Age 18+</option>
 <option value="Not Opioid Overdose">Not Opioid Overdose</option>

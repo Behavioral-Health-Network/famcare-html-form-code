@@ -890,7 +890,7 @@ function updatesignatures(){
     <div class="col12 fldprimary_care_agency_ref_placed qprimary_care_agency_ref_placed">
     <div class="col3 qprimary_care_agency_ref_placed"><span class="qprimary_care_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qprimary_care_agency_ref_placed required-field-label"><label class="label-right">Primary Care Agency&nbsp;</label></span></div>
     <div class="col9 qprimary_care_agency_ref_placed"><span class="qprimary_care_agency_ref_placed"><select size="1" name="primary_care_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE primary_care_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE primary_care_agency_ref_placed^^') AND SUBTYPE='Primary Care' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -905,7 +905,7 @@ function updatesignatures(){
     <div class="col12 flddental_agency_ref_placed qdental_agency_ref_placed">
     <div class="col3 qdental_agency_ref_placed"><span class="qdental_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qdental_agency_ref_placed required-field-label"><label class="label-right">Dental Agency&nbsp;</label></span></div>
     <div class="col9 qdental_agency_ref_placed"><span class="qdental_agency_ref_placed"><select size="1" name="dental_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dental_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dental_agency_ref_placed^^') AND SUBTYPE='Dental' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>

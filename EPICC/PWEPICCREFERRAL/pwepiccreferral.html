@@ -45,7 +45,6 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('client_age_14_17');
     setrequire('ems_involved_ref');
     setrequire('leo_involved_referral');
-    setrequire('agreeable_ed_outreach');
     setrequire('epicc_program_participation_referral');
 
 	checkhideall();
@@ -303,7 +302,6 @@ function validateform(scope='all') {
   if (!hiddenfield('client_age_14_17') && gvtfieldvalue('client_age_14_17')=='') {edesc=edesc+`Must specify a value for Is client age 14-17?\n`; seterror("client_age_14_17");}
   if (!hiddenfield('ems_involved_ref') && gvtfieldvalue('ems_involved_ref')=='') {edesc=edesc+`Must specify a value for Was EMS involved with this referral?\n`; seterror("ems_involved_ref");}
   if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
-  if (!hiddenfield('agreeable_ed_outreach') && gvtfieldvalue('agreeable_ed_outreach')=='') {edesc=edesc+`Must specify a value for Are the client and hospital agreeable to outreach in ED/Unit? \n`; seterror("agreeable_ed_outreach");}
   if (!hiddenfield('epicc_program_participation_referral') && gvtfieldvalue('epicc_program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("epicc_program_participation_referral");}
 
     return edesc;
@@ -685,11 +683,6 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col4 qagreeable_ed_outreach">
-    <div class="col4 fldagreeable_ed_outreach qagreeable_ed_outreach"><span class="qagreeable_ed_outreach required-label">||PWRequiredFieldRequiredText||</span><span class="qagreeable_ed_outreach required-field-label"><label class="label-top">||FIELDTAG agreeable_ed_outreach||Are the client and hospital agreeable to outreach in ED/Unit? ||ENDFIELDTAG||</label></span><span class="qagreeable_ed_outreach"><input type="radio" name="agreeable_ed_outreach" value="Yes" onclick="checkhideall()" >Yes<br><input type="radio" name="agreeable_ed_outreach" value="No" onclick="checkhideall()" >No<br><input type="radio" name="agreeable_ed_outreach" value="Unknown Because EMS Referral" onclick="checkhideall()" >Unknown Because EMS Referral</span></div>
-     </div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>

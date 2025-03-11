@@ -105,7 +105,7 @@ $("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault
     setrequire('what_mat_script_discharge');
     setrequire('overdose_ed_provided');
     setrequire('reason_oe_not_provided');
-    setrequire('If_other_specify');
+    setrequire('if_other_specify');
     setrequire('narcan_distributed');
     setrequire('preg_post_part_ic');
     setrequire('veteran_status');
@@ -159,7 +159,7 @@ function checkhideall() {
    checkhide(f.mat_initiated_hospital,"what_mat_initiated_hospital","Yes");
    checkhide(f.mat_script_discharge,"what_mat_script_discharge","Yes");
    checkhide(f.overdose_ed_provided,"reason_oe_not_provided","No");
-   checkhide(f.reason_oe_not_provided,"If_other_specify","Other");
+   checkhide(f.reason_oe_not_provided,"if_other_specify","Other");
    checkhide(f.narcan_distributed,"reason_narcan_not_distributed","No");
    checkhide(f.reason_narcan_not_distributed,"no_narcan_exp","Other ");
 
@@ -418,7 +418,7 @@ function validateform(scope='all') {
   if (!hiddenfield('what_mat_script_discharge') && gvtfieldvalue('what_mat_script_discharge')=='') {edesc=edesc+`Must specify a value for Type of MAT Prescribed\n`; seterror("what_mat_script_discharge");}
   if (!hiddenfield('overdose_ed_provided') && gvtfieldvalue('overdose_ed_provided')=='') {edesc=edesc+`Must specify a value for Was Overdose Education Provided\n`; seterror("overdose_ed_provided");}
   if (!hiddenfield('reason_oe_not_provided') && gvtfieldvalue('reason_oe_not_provided')=='') {edesc=edesc+`Must specify a value for If "No", why?\n`; seterror("reason_oe_not_provided");}
-  if (!hiddenfield('If_other_specify') && gvtfieldvalue('If_other_specify')=='') {edesc=edesc+`Must specify a value for If "Other", specify\n`; seterror("If_other_specify");}
+  if (!hiddenfield('if_other_specify') && gvtfieldvalue('if_other_specify')=='') {edesc=edesc+`Must specify a value for If "Other", specify\n`; seterror("if_other_specify");}
   if (!hiddenfield('narcan_distributed') && gvtfieldvalue('narcan_distributed')=='') {edesc=edesc+`Must specify a value for Was Narcan Distributed?\n`; seterror("narcan_distributed");}
   if (!hiddenfield('preg_post_part_ic') && gvtfieldvalue('preg_post_part_ic')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant or postpartum?\n`; seterror("preg_post_part_ic");}
   if (!hiddenfield('veteran_status') && gvtfieldvalue('veteran_status')=='') {edesc=edesc+`Must specify a value for Is client a veteran?\n`; seterror("veteran_status");}
@@ -895,7 +895,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldoverdose_location qoverdose_location">
-    <div class="col12 fldoverdose_location qoverdose_location"><span class="qoverdose_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_location required-field-label"><label class="label-top">||FIELDTAG overdose_location||Location of Overdose||ENDFIELDTAG||</label></span><span class="qoverdose_location"><input type="radio" name="overdose_location" value="Home/Residence " onclick="checkhideall()" >Home/Residence &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Treatment Facility " onclick="checkhideall()" >Treatment Facility &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Public Place (i.e.; Parking Lot; Gas station; etc.) " onclick="checkhideall()" >Public Place (i.e.; Parking Lot; Gas station; etc.) &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Other " onclick="checkhideall()" >Other &nbsp;&nbsp;
+    <div class="col12 fldoverdose_location qoverdose_location"><span class="qoverdose_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_location required-field-label"><label class="label-top">||FIELDTAG overdose_location||Location of Overdose||ENDFIELDTAG||</label></span><span class="qoverdose_location"><input type="radio" name="overdose_location" value="Home/Residence " onclick="checkhideall()" >Home/Residence &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Treatment Facility " onclick="checkhideall()" >Treatment Facility &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Public Place (i.e., Parking Lot, Gas station, etc.)" onclick="checkhideall()" >Public Place (i.e., Parking Lot, Gas station, etc.) &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Other " onclick="checkhideall()" >Other &nbsp;&nbsp;
 <!-- FIELDOVERRIDE(overdose_location,10,52) -->
 </span></div>
      </div>
@@ -1011,8 +1011,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldIf_other_specify qIf_other_specify">
-    <div class="col12 fldIf_other_specify qIf_other_specify"><span class="qIf_other_specify required-label">||PWRequiredFieldRequiredText||</span><span class="qIf_other_specify required-field-label"><label class="label-top">||FIELDTAG If_other_specify||If "Other", specify||ENDFIELDTAG||</label></span><span class="qIf_other_specify"><textarea name="If_other_specify" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldif_other_specify qif_other_specify">
+    <div class="col12 fldif_other_specify qif_other_specify"><span class="qif_other_specify required-label">||PWRequiredFieldRequiredText||</span><span class="qif_other_specify required-field-label"><label class="label-top">||FIELDTAG if_other_specify||If "Other", specify||ENDFIELDTAG||</label></span><span class="qif_other_specify"><textarea name="if_other_specify" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">

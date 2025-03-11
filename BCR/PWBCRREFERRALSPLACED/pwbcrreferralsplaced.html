@@ -13,6 +13,11 @@
 <!-- FIELDOVERRIDE(MATERNAL_HEALTH,10,10) -->
 <!-- FIELDOVERRIDE(SOCIAL_SERVICES,10,10) -->
 <!-- FIELDOVERRIDE(OTHER,10,10) -->
+<!-- FIELDOVERRIDE(CMHC,10,10) -->
+<!-- FIELDOVERRIDE(COUNSELING,10,10) -->
+<!-- FIELDOVERRIDE(GROUP_PEER_SUPPORT,10,10) -->
+<!-- FIELDOVERRIDE(INDIVIDUAL_PEER_SUPPORT,10,10) -->
+<!-- FIELDOVERRIDE(SUBSTANCE_USE,10,10) -->
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
@@ -654,7 +659,7 @@ function updateReportFields(tableNames) {
 
 // Call the function with the names of the tables you want to process.
 // The table names are passed as an array.
-updateReportFields(['bcr_presenting_concern']);
+updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
 
 </script>
 
@@ -689,6 +694,11 @@ updateReportFields(['bcr_presenting_concern']);
     <input type="hidden" name="maternal_health_ref_placed" value="||FIELDVALUE maternal_health_ref_placed||" class="report-field value-006">
     <input type="hidden" name="social_services_ref_placed" value="||FIELDVALUE social_services_ref_placed||" class="report-field value-009">
     <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010">
+    <input type="hidden" name="cmhc_ref_placed" value="||FIELDVALUE cmhc_ref_placed||" class="report-field value-004">
+    <input type="hidden" name="counseling_ref_placed" value="||FIELDVALUE counseling_ref_placed||" class="report-field value-001">
+    <input type="hidden" name="group_peer_support_ref_placed" value="||FIELDVALUE group_peer_support_ref_placed||" class="report-field value-003">
+    <input type="hidden" name="individual_peer_support_ref_placed" value="||FIELDVALUE individual_peer_support_ref_placed||" class="report-field value-002">
+    <input type="hidden" name="su_ref_placed" value="||FIELDVALUE su_ref_placed||" class="report-field value-005">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>BCR Referrals Placed</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>

@@ -100,7 +100,7 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('bcr_presenting_concern');
+    setrequire('bcr_type_ref_placed');
     setrequire('bcr_ref_placed_bh_subtype');
     setrequire('cmhc_agency');
     setrequire('date_cmhc_ref_placed');
@@ -188,7 +188,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.bcr_presenting_concern,"bcr_ref_placed_bh_subtype","001");
+      checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_bh_subtype","001");
    checkhide(f.bcr_ref_placed_bh_subtype,"cmhc_agency","004");
    checkhide(f.bcr_ref_placed_bh_subtype,"date_cmhc_ref_placed","004");
    checkhide(f.bcr_ref_placed_bh_subtype,"counseling_agency","001");
@@ -199,7 +199,7 @@ function checkhideall() {
    checkhide(f.bcr_ref_placed_bh_subtype,"date_indiv_peer_support_ref","002");
    checkhide(f.bcr_ref_placed_bh_subtype,"su_agency","005");
    checkhide(f.bcr_ref_placed_bh_subtype,"date_su_ref","005");
-   checkhide(f.bcr_presenting_concern,"bcr_ref_placed_housing_subtype","003");
+   checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_housing_subtype","003");
    checkhide(f.bcr_ref_placed_housing_subtype,"rent_assist_agency","005");
    checkhide(f.bcr_ref_placed_housing_subtype,"date_rent_assist_ref","005");
    checkhide(f.bcr_ref_placed_housing_subtype,"utility_assist_agency","006");
@@ -212,16 +212,16 @@ function checkhideall() {
    checkhide(f.bcr_ref_placed_housing_subtype,"date_landlord_mediation_ref","004");
    checkhide(f.bcr_ref_placed_housing_subtype,"homeless_services_agency","003");
    checkhide(f.bcr_ref_placed_housing_subtype,"date_homeless_services_ref","003");
-   checkhide(f.bcr_presenting_concern,"mat_health_agency","006");
-   checkhide(f.bcr_presenting_concern,"date_mat_health_ref_placed","006");
-   checkhide(f.bcr_presenting_concern,"date_other_ref","010");
-   checkhide(f.bcr_presenting_concern,"other_agency","010");
-   checkhide(f.bcr_presenting_concern,"bcr_ref_placed_phys_health_subtype","002");
+   checkhide(f.bcr_type_ref_placed,"mat_health_agency","006");
+   checkhide(f.bcr_type_ref_placed,"date_mat_health_ref_placed","006");
+   checkhide(f.bcr_type_ref_placed,"date_other_ref","010");
+   checkhide(f.bcr_type_ref_placed,"other_agency","010");
+   checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_phys_health_subtype","002");
    checkhide(f.bcr_ref_placed_phys_health_subtype,"primary_care_agency","001");
    checkhide(f.bcr_ref_placed_phys_health_subtype,"date_primary_care_ref_placed","001");
    checkhide(f.bcr_ref_placed_phys_health_subtype,"dental_agency","002");
    checkhide(f.bcr_ref_placed_phys_health_subtype,"date_dental_ref_placed","002");
-   checkhide(f.bcr_presenting_concern,"bcr_ref_placed_social_subtype","009");
+   checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_social_subtype","009");
    checkhide(f.bcr_ref_placed_social_subtype,"child_care_agency","002");
    checkhide(f.bcr_ref_placed_social_subtype,"date_child_care_ref_placed","002");
    checkhide(f.bcr_ref_placed_social_subtype,"clothing_agency","001");
@@ -242,8 +242,8 @@ function checkhideall() {
    checkhide(f.bcr_ref_placed_social_subtype,"date_lgbtq_ref_placed","008");
    checkhide(f.bcr_ref_placed_social_subtype,"transport_agency","009");
    checkhide(f.bcr_ref_placed_social_subtype,"date_transport_ref_placed","009");
-   checkhide(f.bcr_presenting_concern,"spiritual_agency","004");
-   checkhide(f.bcr_presenting_concern,"date_spiritual_ref_placed","004");
+   checkhide(f.bcr_type_ref_placed,"spiritual_agency","004");
+   checkhide(f.bcr_type_ref_placed,"date_spiritual_ref_placed","004");
    checkhide(f.unmet_needs,"unmet_needs_exp","Yes");
 
 }
@@ -475,7 +475,7 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('bcr_presenting_concern') && gvtfieldvalue('bcr_presenting_concern')=='') {edesc=edesc+`Must specify a value for Type of Referrals Placed\n`; seterror("bcr_presenting_concern");}
+  if (!hiddenfield('bcr_type_ref_placed') && gvtfieldvalue('bcr_type_ref_placed')=='') {edesc=edesc+`Must specify a value for Type of Referrals Placed\n`; seterror("bcr_type_ref_placed");}
   if (!hiddenfield('bcr_ref_placed_bh_subtype') && gvtfieldvalue('bcr_ref_placed_bh_subtype')=='') {edesc=edesc+`Must specify a value for Type of Behavioral Health Referral\n`; seterror("bcr_ref_placed_bh_subtype");}
   if (!hiddenfield('cmhc_agency') && gvtfieldvalue('cmhc_agency')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_agency");}
   if (!hiddenfield('date_cmhc_ref_placed') && gvtfieldvalue('date_cmhc_ref_placed')=='') {edesc=edesc+`Must specify a value for Date of CMHC Referral\n`; seterror("date_cmhc_ref_placed");}
@@ -720,7 +720,7 @@ function updatesignatures(){
  * `value` attributes and `data-source` attributes.
  * 
  * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
- *                           Example: ['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype', 'table3'].
+ *                           Example: ['bcr_type_ref_placed', 'bcr_ref_placed_bh_subtype', 'table3'].
  */
  function updateReportFields(tableIds) {
   // Iterate over each table ID provided
@@ -841,12 +841,12 @@ function updatesignatures(){
     <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col3 qbcr_presenting_concern"><span class="qbcr_presenting_concern required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_presenting_concern required-field-label"><label class="label-right">Type of Referrals Placed&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_presenting_concern"><span class="qbcr_presenting_concern"><select size="8" name="bcr_presenting_concern" id="bcr_presenting_concerns" onchange="updateReportFields(['bcr_presenting_concerns']); checkhideall();" multiple>
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_presenting_concern^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col3 qbcr_type_ref_placed"><span class="qbcr_type_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_type_ref_placed required-field-label"><label class="label-right">Type of Referrals Placed&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_type_ref_placed"><span class="qbcr_type_ref_placed"><select size="8" name="bcr_type_ref_placed" id="bcr_presenting_concerns" onchange="updateReportFields(['bcr_presenting_concerns']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_type_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_presenting_concerns||
 
-<!-- FIELDOVERRIDE(bcr_presenting_concern,10,200) -->
+<!-- FIELDOVERRIDE(bcr_type_ref_placed,10,200) -->
 </span></div>
   </div>
  <div class="entire">

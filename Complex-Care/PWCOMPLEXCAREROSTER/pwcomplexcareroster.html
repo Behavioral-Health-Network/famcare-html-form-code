@@ -283,7 +283,7 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('program_assigned') && gvtfieldvalue('program_assigned')=='') {edesc=edesc+`Must specify a value for Program Assigned\n`; seterror("program_assigned");}
   if (!hiddenfield('cmhc_status') && gvtfieldvalue('cmhc_status')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_status");}
-  if (!hiddenfield('ada_su_status') && gvtfieldvalue('ada_su_status')=='') {edesc=edesc+`Must specify a value for ADA SU\n`; seterror("ada_su_status");}
+  if (!hiddenfield('ada_su_status') && gvtfieldvalue('ada_su_status')=='') {edesc=edesc+`Must specify a value for ADA/SU\n`; seterror("ada_su_status");}
 
     return edesc;
 }
@@ -534,9 +534,9 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">CIMOR Status At Referral</label></div>
-  </div>
+  <div class="entire">
+    <div class="col12 term">CIMOR Status at Referral</div>
+    </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -563,7 +563,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldada_su_status qada_su_status">
-    <div class="col12 fldada_su_status qada_su_status"><span class="qada_su_status required-label">||PWRequiredFieldRequiredText||</span><span class="qada_su_status required-field-label"><label class="label-top">ADA SU</label></span><span class="qada_su_status"><select size="1" name="ada_su_status" onchange="checkhideall()">
+    <div class="col12 fldada_su_status qada_su_status"><span class="qada_su_status required-label">||PWRequiredFieldRequiredText||</span><span class="qada_su_status required-field-label"><label class="label-top">ADA/SU</label></span><span class="qada_su_status"><select size="1" name="ada_su_status" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cimor_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_status^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cimor_status||
 </span></div>

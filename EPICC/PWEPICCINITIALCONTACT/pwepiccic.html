@@ -20,6 +20,30 @@
 
 <script language="JavaScript">
 
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+const observer = new MutationObserver(() => {
+  const dropdown = document.querySelector('#epicc_opioids_of_use');
+  if (dropdown) {
+    console.log('Dropdown detected. Adding event listener.');
+
+    // Add the onchange event listener
+    dropdown.addEventListener('change', () => {
+      updateReportFields(['epicc_opioids_of_use']);
+    });
+
+    // Run updateReportFields once to initialize hidden fields
+    updateReportFields(['epicc_opioids_of_use']);
+
+    // Disconnect the observer as its job is done
+    observer.disconnect();
+  }
+});
+
+// Start observing the document body for changes
+observer.observe(document.body, { childList: true, subtree: true });
+
 var genpdf='true';
 
 function startup() {

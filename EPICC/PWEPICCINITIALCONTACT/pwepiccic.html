@@ -25,7 +25,7 @@
 // if the function is run via startup() too early and does not run again dynamically upon change.
 const observer = new MutationObserver(() => {
   // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#epicc_opioids_of_use, #table2, #table3'); // Add more IDs as needed
+  const dropdowns = document.querySelectorAll('#epicc_opioids_of_use'); // Add more IDs as needed
 
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -615,91 +615,58 @@ function updatesignatures(){
    return;
 }
 
-/* // This is an amended version of the function updateReportFields() that will allow us to pass an array of table names
-// to the function when the form includes multiple master tables with values that must be separated and pivoted wider 
-// into columns for each DESCRIPTION and assigned a value of 0 or 1.
-function updateReportFields(tableNames) {
-  // Loop through each table name provided in the array `tableNames`.
-  tableNames.forEach(name => {
-    // Use querySelector to find the first element with the given name attribute.
-    const tableElement = document.querySelector(`[name=${name}]`);
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['epicc_opioids_of_use', 'table2', 'table3'].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
     
-    // Check if the table element was found on the page.
-    if (tableElement) {
-      // Select all <option> elements within the current table element.
-      tableElement.querySelectorAll('option').forEach(option => {
-        
-        // Skip the '(Please select)' option if the value is an empty string.
-        if (option.value === '') {
-          // No action needed for this placeholder option.
-          
-        } else {
-          // Construct the selector for the corresponding report field
-          // `option.value` is used to find the field with a class like "value-001", etc.
-          const reportField = tableElement.querySelector(`.report-field.value-${option.value}`);
-          
-          // Check if the report field exists to avoid errors if it's missing.
-          if (reportField) {
-            // Set the value of the report field to '1' if the option is selected, or '0' if not.
-            reportField.value = option.selected ? '1' : '0';
-          }
-        }
-      });
-    }
-  });
-} */
-
-/* function updateReportFields(tableIds) {
-  tableIds.forEach(id => {
-    // Select the dropdown by its id
-    const dropdown = document.querySelector(`#${id}`);
-
+    // Ensure the dropdown exists before proceeding
     if (dropdown) {
-      // Loop through all <option> elements in the dropdown
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
       dropdown.querySelectorAll('option').forEach(option => {
-        if (option.value === '') return; // Skip placeholder option
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
 
-        // Find the corresponding hidden field with data-source
-        const reportField = document.querySelector(`.report-field.value-${option.value}[data-source="${id}"]`);
-
-        if (reportField) {
-          // Update hidden field: 1 if selected, 0 otherwise
-          reportField.value = option.selected ? '1' : '0';
-        }
-      });
-    }
-  });
-} */
-
-function updateReportFields(tableIds) {
-  tableIds.forEach(id => {
-    // Select the dropdown by its id
-    const dropdown = document.querySelector(`#${id}`);
-
-    if (dropdown) {
-      console.log(`Updating fields for dropdown ID: ${id}`);
-      dropdown.querySelectorAll('option').forEach(option => {
-        if (option.value === '') return; // Skip placeholder options
-
-        // Find the corresponding hidden field
+        // Locate the hidden field linked to this option using its value and data-source attribute
         const reportField = document.querySelector(
           `.report-field.value-${option.value}[data-source="${id}"]`
         );
 
+        // Log the mapping for debugging purposes
         console.log(`Option value: ${option.value}, selected: ${option.selected}`);
-        console.log(`Report field:`, reportField);
+        console.log(`Hidden field found:`, reportField);
 
+        // If the corresponding hidden field exists, update its value
         if (reportField) {
-          // Update hidden field
-          reportField.value = dropdown.value.includes(option.value) ? '1' : '0';
-          console.log(`Set value of ${reportField.name} to ${reportField.value}`);
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
         }
       });
     } else {
-      console.error(`Dropdown with ID ${id} not found.`);
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
     }
   });
 }
+
 
 </script>
 
@@ -991,13 +958,7 @@ function updateReportFields(tableIds) {
   </div>
  <div class="entire">
     <div class="col12 fldever_prescription_mat_not_referral qever_prescription_mat_not_referral">
-    <div class="col12 fldever_prescription_mat_not_referral qever_prescription_mat_not_referral"><span class="qever_prescription_mat_not_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qever_prescription_mat_not_referral required-field-label"><label class="label-top">||FIELDTAG ever_prescription_mat_not_referral||Has client ever had a prescription for MAT?||ENDFIELDTAG||</label></span><span class="qever_prescription_mat_not_referral"><select size="1"  name="ever_prescription_mat_not_referral" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
-<option value="Unknown">Unknown</option>
-
-</select></span></div>
+    <div class="col12 fldever_prescription_mat_not_referral qever_prescription_mat_not_referral"><span class="qever_prescription_mat_not_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qever_prescription_mat_not_referral required-field-label"><label class="label-top">||FIELDTAG ever_prescription_mat_not_referral||Has client ever had a prescription for MAT?||ENDFIELDTAG||</label></span><span class="qever_prescription_mat_not_referral"><input type="radio" name="ever_prescription_mat_not_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ever_prescription_mat_not_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="ever_prescription_mat_not_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

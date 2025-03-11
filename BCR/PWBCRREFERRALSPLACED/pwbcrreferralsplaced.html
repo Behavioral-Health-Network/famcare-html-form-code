@@ -1081,7 +1081,7 @@ function updatesignatures(){
     <div class="col12 fldspiritual_agency_ref_placed qspiritual_agency_ref_placed">
     <div class="col3 qspiritual_agency_ref_placed"><span class="qspiritual_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qspiritual_agency_ref_placed required-field-label"><label class="label-right">Spiritual Care Agency&nbsp;</label></span></div>
     <div class="col9 qspiritual_agency_ref_placed"><span class="qspiritual_agency_ref_placed"><select size="1" name="spiritual_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE spiritual_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE spiritual_agency_ref_placed^^') AND TYPE='Spiritual Care' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>

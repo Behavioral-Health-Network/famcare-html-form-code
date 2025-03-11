@@ -1,0 +1,565 @@
+<html>
+
+<head>
+<title>BCR Client Counseling Sessions</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+          f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+    setrequire('session_date');
+    setrequire('counseling_agency');
+    setrequire('session_format');
+    setrequire('session_grant');
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+}
+
+function checkhideall() {
+   f=document.forms[0];
+   
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('session_date') && gvtfieldvalue('session_date')=='') {edesc=edesc+`Must specify a value for Counseling Session Date\n`; seterror("session_date");}
+  if (!hiddenfield('counseling_agency') && gvtfieldvalue('counseling_agency')=='') {edesc=edesc+`Must specify a value for Session Agency\n`; seterror("counseling_agency");}
+  if (!hiddenfield('session_format') && gvtfieldvalue('session_format')=='') {edesc=edesc+`Must specify a value for Session Format\n`; seterror("session_format");}
+  if (!hiddenfield('session_grant') && gvtfieldvalue('session_grant')=='') {edesc=edesc+`Must specify a value for Session Grant\n`; seterror("session_grant");}
+
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+	f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+
+function quicksubmitit() {
+//	errdesc=validateform();
+//	if (errdesc!="") {alert(errdesc); return;}
+	var f=document.forms[0];
+	//***Error checking should be done here before a quick save
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+	f._B3.style.display = "none";
+	document.getElementById("SaveButtons").style.display = "";
+	f.target = "fvalidate";
+	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+	if (genpdf) {buildhtmlclean()}
+    // restore signature options after buildhtmlclean
+    document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+	f.submit();
+        $(':button').prop('disabled',true);
+	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+	return;
+}
+
+function QuickSubmitReturn() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	updatesignatures();
+	alert("Record Saved");
+	return functionreturnvalue;
+}
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWBCRClientCounselingSessions" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>BCR Client Counseling Sessions</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+<div class="col12 term">BCR Client Counseling Sessions</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsession_date qsession_date">
+    <div class="col12 fldsession_date qsession_date"><span class="qsession_date required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_date required-field-label"><label class="label-top">||FIELDTAG session_date||Counseling Session Date||ENDFIELDTAG||</label></span><span class="qsession_date"><input type="text" name="session_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcounseling_agency qcounseling_agency">
+    <div class="col12 fldcounseling_agency qcounseling_agency"><span class="qcounseling_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qcounseling_agency required-field-label"><label class="label-top">Session Agency</label></span><span class="qcounseling_agency"><select size="1" name="counseling_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE counseling_agency^^') AND subtype='Counseling' AND Description!='Other Counseling Agency' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsession_format qsession_format">
+    <div class="col12 fldsession_format qsession_format"><span class="qsession_format required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_format required-field-label"><label class="label-top">||FIELDTAG session_format||Session Format||ENDFIELDTAG||</label></span><span class="qsession_format"><input type="radio" name="session_format" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="session_format" value="Virtual" onclick="checkhideall()" >Virtual&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsession_grant qsession_grant">
+    <div class="col12 fldsession_grant qsession_grant"><span class="qsession_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qsession_grant required-field-label"><label class="label-top">||FIELDTAG session_grant||Session Grant||ENDFIELDTAG||</label></span><span class="qsession_grant"><input type="radio" name="session_grant" value="ARPA" onclick="checkhideall()" >ARPA&nbsp;&nbsp;<input type="radio" name="session_grant" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldaddtl_notes_counseling qaddtl_notes_counseling">
+    <div class="col12 fldaddtl_notes_counseling qaddtl_notes_counseling"><span class="qaddtl_notes_counseling"><label class="label-top">||FIELDTAG addtl_notes_counseling||Additional Notes||ENDFIELDTAG||</label></span><span class="qaddtl_notes_counseling"><textarea name="addtl_notes_counseling" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
+    <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div>
+||ENDSTRIP||
+</form>
+</body>
+</html>

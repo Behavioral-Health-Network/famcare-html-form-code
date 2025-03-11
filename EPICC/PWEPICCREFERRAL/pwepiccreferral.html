@@ -643,41 +643,13 @@ function updatesignatures(){
     <div class="col4 fldems_fire_district_place_referral_in_transit qems_fire_district_place_referral_in_transit"><span class="qems_fire_district_place_referral_in_transit required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district_place_referral_in_transit required-field-label"><label class="label-top">||FIELDTAG ems_fire_district_place_referral_in_transit||Did EMS/Fire District place referral while in transit? ||ENDFIELDTAG||</label></span><span class="qems_fire_district_place_referral_in_transit"><input type="radio" name="ems_fire_district_place_referral_in_transit" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_fire_district_place_referral_in_transit" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
- <div class="entire">
+  <div class="entire">
     <div class="col4 qems_fire_district">
-    <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district"><label class="label-top">||FIELDTAG ems_fire_district||What EMS/Fire District?||ENDFIELDTAG||</label></span><span class="qems_fire_district"><select size="1"  name="ems_fire_district" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Affton Fire Protection District">Affton Fire Protection District</option>
-<option value="Berkeley Fire Department">Berkeley Fire Department</option>
-<option value="Big River Ambulance District">Big River Ambulance District</option>
-<option value="Cedar Hill Fire Protection District">Cedar Hill Fire Protection District</option>
-<option value="Christian Hospital EMS">Christian Hospital EMS</option>
-<option value="City Of St. Charles Fire and EMS">City Of St. Charles Fire and EMS</option>
-<option value="Crestwood Fire Department">Crestwood Fire Department</option>
-<option value="Gerald-Rosebud Fire Protection District">Gerald-Rosebud Fire Fire Protection District</option>
-<option value="Hazelwood Fire Department">Hazelwood Fire Department</option>
-<option value="High Ridge Fire District">High Ridge Fire District</option>
-<option value="Joachim Plattin Ambulance District">Joachim Plattin Ambulance District</option>
-<option value="Lemay Fire Protection District">Lemay Fire Protection District</option>
-<option value="Lincoln County Ambulance District">Lincoln County Ambulance District</option>
-<option value="Maryland Heights Fire Protection District">Maryland Heights Fire Protection District</option>
-<option value="Mehlville Fire Protection District">Mehlville Fire Protection District</option>
-<option value="Metro North Fire Protection District">Metro North Fire Protection District</option>
-<option value="North County Fire and Rescue Protection District">North County Fire and Rescue Protection District</option>
-<option value="North Jefferson County Ambulance District">North Jefferson County Ambulance District</option>
-<option value="Other EMS/Ambulance/Fire Protection District">Other EMS/Ambulance/Fire Protection District</option>
-<option value="Pattonville Fire Protection District">Pattonville Fire Protection District</option>
-<option value="Robertson Fire Protection District">Robertson Fire Protection District</option>
-<option value="Rock Community Fire Protection District">Rock Community Fire Protection District</option>
-<option value="Rock Township Ambulance District">Rock Township Ambulance District</option>
-<option value="St. Louis City Ambulance and Emergency Services">St. Louis City Ambulance and Emergency Services</option>
-<option value="Valle Ambulance District (De Soto)">Valle Ambulance District (De Soto)</option>
-<option value="Warren County Ambulance District">Warren Ambulance District</option>
-<option value="Webster Groves Fire Departement">Webster Groves Fire Department</option>
-<option value="West Overland EMS and Fire Protection District">West Overland EMS and Fire Protection District</option>
-</select></span></div>
+    <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district required-field-label"><label class="label-top">Referring Agency</label></span><span class="qems_fire_district"><select size="1" name="ems_fire_district" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_ems_fire_district^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_ems_fire_district||
+</span></div>
      </div>
-  </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>

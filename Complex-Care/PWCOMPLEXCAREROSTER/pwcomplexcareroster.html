@@ -551,7 +551,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldcmhc_agency qcmhc_agency">
     <div class="col12 fldcmhc_agency qcmhc_agency"><span class="qcmhc_agency"><label class="label-top">CMHC Agency</label></span><span class="qcmhc_agency"><select size="1" name="cmhc_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency^^') and program_name='LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
@@ -572,7 +572,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldada_su_agency qada_su_agency">
     <div class="col12 fldada_su_agency qada_su_agency"><span class="qada_su_agency"><label class="label-top">ADA/SU Agency</label></span><span class="qada_su_agency"><select size="1" name="ada_su_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency^^') and program_name='LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ada_su_agency||
 </span></div>
      </div>

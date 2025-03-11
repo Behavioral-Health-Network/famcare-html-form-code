@@ -931,7 +931,7 @@ function updatesignatures(){
     <div class="col12 fldchild_care_agency_ref_placed qchild_care_agency_ref_placed">
     <div class="col3 qchild_care_agency_ref_placed"><span class="qchild_care_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qchild_care_agency_ref_placed required-field-label"><label class="label-right">Child Care Agency&nbsp;</label></span></div>
     <div class="col9 qchild_care_agency_ref_placed"><span class="qchild_care_agency_ref_placed"><select size="1" name="child_care_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE child_care_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE child_care_agency_ref_placed^^') AND SUBTYPE='Child Care Assistance' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -946,7 +946,7 @@ function updatesignatures(){
     <div class="col12 fldclothing_agency_ref_placed qclothing_agency_ref_placed">
     <div class="col3 qclothing_agency_ref_placed"><span class="qclothing_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qclothing_agency_ref_placed required-field-label"><label class="label-right">Clothing Agency&nbsp;</label></span></div>
     <div class="col9 qclothing_agency_ref_placed"><span class="qclothing_agency_ref_placed"><select size="1" name="clothing_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE clothing_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE clothing_agency_ref_placed^^') AND SUBTYPE='Clothing' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -961,7 +961,7 @@ function updatesignatures(){
     <div class="col12 flddd_agency_ref_placed qdd_agency_ref_placed">
     <div class="col3 qdd_agency_ref_placed"><span class="qdd_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qdd_agency_ref_placed required-field-label"><label class="label-right">Developmental Disability Agency&nbsp;</label></span></div>
     <div class="col9 qdd_agency_ref_placed"><span class="qdd_agency_ref_placed"><select size="1" name="dd_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dd_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dd_agency_ref_placed^^') AND SUBTYPE='Developmental Disabilities' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -976,7 +976,7 @@ function updatesignatures(){
     <div class="col12 flddv_agency_ref_placed qdv_agency_ref_placed">
     <div class="col3 qdv_agency_ref_placed"><span class="qdv_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qdv_agency_ref_placed required-field-label"><label class="label-right">Domestic Violence Agency&nbsp;</label></span></div>
     <div class="col9 qdv_agency_ref_placed"><span class="qdv_agency_ref_placed"><select size="1" name="dv_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dv_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dv_agency_ref_placed^^') AND SUBTYPE='Domestic Violence' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -991,7 +991,7 @@ function updatesignatures(){
     <div class="col12 fldfood_agency_ref_placed qfood_agency_ref_placed">
     <div class="col3 qfood_agency_ref_placed"><span class="qfood_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qfood_agency_ref_placed required-field-label"><label class="label-right">Food Assistance Agency&nbsp;</label></span></div>
     <div class="col9 qfood_agency_ref_placed"><span class="qfood_agency_ref_placed"><select size="1" name="food_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE food_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE food_agency_ref_placed^^') AND SUBTYPE='Food' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -1006,7 +1006,7 @@ function updatesignatures(){
     <div class="col12 fldemployment_agency_ref_placed qemployment_agency_ref_placed">
     <div class="col3 qemployment_agency_ref_placed"><span class="qemployment_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qemployment_agency_ref_placed required-field-label"><label class="label-right">Employment Agency&nbsp;</label></span></div>
     <div class="col9 qemployment_agency_ref_placed"><span class="qemployment_agency_ref_placed"><select size="1" name="employment_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE employment_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE employment_agency_ref_placed^^') AND SUBTYPE='Employment' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -1021,7 +1021,7 @@ function updatesignatures(){
     <div class="col12 fldinsurance_agency_ref_placed qinsurance_agency_ref_placed">
     <div class="col3 qinsurance_agency_ref_placed"><span class="qinsurance_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qinsurance_agency_ref_placed required-field-label"><label class="label-right">Insurance Access Agency&nbsp;</label></span></div>
     <div class="col9 qinsurance_agency_ref_placed"><span class="qinsurance_agency_ref_placed"><select size="1" name="insurance_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE insurance_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE insurance_agency_ref_placed^^') AND SUBTYPE='Insurance Access' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -1036,7 +1036,7 @@ function updatesignatures(){
     <div class="col12 fldlegal_agency_ref_placed qlegal_agency_ref_placed">
     <div class="col3 qlegal_agency_ref_placed"><span class="qlegal_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qlegal_agency_ref_placed required-field-label"><label class="label-right">Legal Aid Agency&nbsp;</label></span></div>
     <div class="col9 qlegal_agency_ref_placed"><span class="qlegal_agency_ref_placed"><select size="1" name="legal_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE legal_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE legal_agency_ref_placed^^') AND SUBTYPE='Legal Aid' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -1051,7 +1051,7 @@ function updatesignatures(){
     <div class="col12 fldlgbtq_agency_ref_placed qlgbtq_agency_ref_placed">
     <div class="col3 qlgbtq_agency_ref_placed"><span class="qlgbtq_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qlgbtq_agency_ref_placed required-field-label"><label class="label-right">LGBTQ Services Agency&nbsp;</label></span></div>
     <div class="col9 qlgbtq_agency_ref_placed"><span class="qlgbtq_agency_ref_placed"><select size="1" name="lgbtq_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE lgbtq_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE lgbtq_agency_ref_placed^^') AND SUBTYPE='LGBTQ Services' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>
@@ -1066,7 +1066,7 @@ function updatesignatures(){
     <div class="col12 fldtransport_agency_ref_placed qtransport_agency_ref_placed">
     <div class="col3 qtransport_agency_ref_placed"><span class="qtransport_agency_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qtransport_agency_ref_placed required-field-label"><label class="label-right">Transportation Agency&nbsp;</label></span></div>
     <div class="col9 qtransport_agency_ref_placed"><span class="qtransport_agency_ref_placed"><select size="1" name="transport_agency_ref_placed" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE transport_agency_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE transport_agency_ref_placed^^') AND SUBTYPE='Transportation' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_agencies||
 </span></div>
     </div>

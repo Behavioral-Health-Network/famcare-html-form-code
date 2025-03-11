@@ -26,6 +26,16 @@
 <!-- FIELDOVERRIDE(UTILITY_ASSISTANCE,10,10) -->
 <!-- FIELDOVERRIDE(PRIMARY_CARE,10,10) -->
 <!-- FIELDOVERRIDE(DENTAL,10,10) -->
+<!-- FIELDOVERRIDE(CLOTHING,10,10) -->
+<!-- FIELDOVERRIDE(CHILD_CARE_ASSISTANCE,10,10) -->
+<!-- FIELDOVERRIDE(DEVELOPMENTAL_DISABILITIES,10,10) -->
+<!-- FIELDOVERRIDE(DOMESTIC_VIOLENCE,10,10) -->
+<!-- FIELDOVERRIDE(INSURANCE_ACCESS,10,10) -->
+<!-- FIELDOVERRIDE(FOOD,10,10) -->
+<!-- FIELDOVERRIDE(LEGAL_AID,10,10) -->
+<!-- FIELDOVERRIDE(LGBTQ_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(TRANSPORTATION,10,10) -->
+<!-- FIELDOVERRIDE(EMPLOYMENT,10,10) -->
 
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
@@ -33,6 +43,39 @@
 <PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
 
 <script language="JavaScript">
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+const observer = new MutationObserver(() => {
+  // Use querySelectorAll to find all relevant dropdowns
+  const dropdowns = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype'); // Add more IDs as needed
+
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID to updateReportFields
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+
+  if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
+    observer.disconnect();
+  }
+});
+
+// Start observing the document body for changes
+observer.observe(document.body, { childList: true, subtree: true });
 
 var genpdf='true';
 
@@ -105,6 +148,27 @@ function startup() {
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
 }
 
 function checkhideall() {
@@ -632,43 +696,58 @@ function updatesignatures(){
    return;
 }
 
-// This is an amended version of the function updateReportFields() that will allow us to pass an array of table names
-// to the function when the form includes multiple master tables with values that must be separated and pivoted wider 
-// into columns for each DESCRIPTION and assigned a value of 0 or 1.
-function updateReportFields(tableNames) {
-  // Loop through each table name provided in the array `tableNames`.
-  tableNames.forEach(name => {
-    // Use querySelector to find the first element with the given name attribute.
-    const tableElement = document.querySelector(`[name=${name}]`);
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype', 'table3'].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
     
-    // Check if the table element was found on the page.
-    if (tableElement) {
-      // Select all <option> elements within the current table element.
-      tableElement.querySelectorAll('option').forEach(option => {
-        
-        // Skip the '(Please select)' option if the value is an empty string.
-        if (option.value === '') {
-          // No action needed for this placeholder option.
-          
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
         } else {
-          // Construct the selector for the corresponding report field
-          // `option.value` is used to find the field with a class like "value-001", etc.
-          const reportField = document.querySelector(`.report-field.value-${option.value}`);
-          
-          // Check if the report field exists to avoid errors if it's missing.
-          if (reportField) {
-            // Set the value of the report field to '1' if the option is selected, or '0' if not.
-            reportField.value = option.selected ? '1' : '0';
-          }
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
         }
       });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
     }
   });
 }
 
-// Call the function with the names of the tables you want to process.
-// The table names are passed as an array.
-updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
 
 </script>
 
@@ -696,26 +775,36 @@ updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
     <!-- used by updateReportFields -->
-    <input type="hidden" name="behavioral_health_ref_placed" value="||FIELDVALUE behavioral_health_ref_placed||" class="report-field value-001">
-    <input type="hidden" name="physical_health_ref_placed" value="||FIELDVALUE physical_health_ref_placed||" class="report-field value-002">
-    <input type="hidden" name="housing_ref_placed" value="||FIELDVALUE housing_ref_placed||" class="report-field value-003">
-    <input type="hidden" name="spiritual_care_ref_placed" value="||FIELDVALUE spiritual_care_ref_placed||" class="report-field value-004">
-    <input type="hidden" name="maternal_health_ref_placed" value="||FIELDVALUE maternal_health_ref_placed||" class="report-field value-006">
-    <input type="hidden" name="social_services_ref_placed" value="||FIELDVALUE social_services_ref_placed||" class="report-field value-009">
-    <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010">
-    <input type="hidden" name="counseling_ref_placed" value="||FIELDVALUE counseling_ref_placed||" class="report-field value-001">
-    <input type="hidden" name="individual_peer_support_ref_placed" value="||FIELDVALUE individual_peer_support_ref_placed||" class="report-field value-002">
-    <input type="hidden" name="group_peer_support_ref_placed" value="||FIELDVALUE group_peer_support_ref_placed||" class="report-field value-003">
-    <input type="hidden" name="cmhc_ref_placed" value="||FIELDVALUE cmhc_ref_placed||" class="report-field value-004">
-    <input type="hidden" name="su_ref_placed" value="||FIELDVALUE su_ref_placed||" class="report-field value-005">
-    <input type="hidden" name="furniture_ref_placed" value="||FIELDVALUE furniture_ref_placed||" class="report-field value-001">
-    <input type="hidden" name="home_repair_ref_placed" value="||FIELDVALUE home_repair_ref_placed||" class="report-field value-002">
-    <input type="hidden" name="homeless_services_ref_placed" value="||FIELDVALUE homeless_services_ref_placed||" class="report-field value-003">
-    <input type="hidden" name="landlord_med_ref_placed" value="||FIELDVALUE landlord_med_ref_placed||" class="report-field value-004">
-    <input type="hidden" name="rent_assist_ref_placed" value="||FIELDVALUE rent_assist_ref_placed||" class="report-field value-005">
-    <input type="hidden" name="utility_assist_ref_placed" value="||FIELDVALUE utility_assist_ref_placed||" class="report-field value-006">
-    <input type="hidden" name="primary_care_ref_placed" value="||FIELDVALUE primary_care_ref_placed||" class="report-field value-001">
-    <input type="hidden" name="dental_ref_placed" value="||FIELDVALUE dental_ref_placed||" class="report-field value-002">
+    <input type="hidden" name="bh_ref_placed" value="||FIELDVALUE bh_ref_placed||" class="report-field value-001" data-source="bcr_presenting_concern">
+    <input type="hidden" name="physical_health_ref_placed" value="||FIELDVALUE physical_health_ref_placed||" class="report-field value-002" data-source="bcr_presenting_concern">
+    <input type="hidden" name="housing_ref_placed" value="||FIELDVALUE housing_ref_placed||" class="report-field value-003" data-source="bcr_presenting_concern">
+    <input type="hidden" name="spiritual_care_ref_placed" value="||FIELDVALUE spiritual_care_ref_placed||" class="report-field value-004" data-source="bcr_presenting_concern">
+    <input type="hidden" name="mat_health_ref_placed" value="||FIELDVALUE mat_health_ref_placed||" class="report-field value-006" data-source="bcr_presenting_concern">
+    <input type="hidden" name="soc_services_ref_placed" value="||FIELDVALUE soc_services_ref_placed||" class="report-field value-009" data-source="bcr_presenting_concern">
+    <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010" data-source="bcr_presenting_concern">
+    <input type="hidden" name="counseling_ref_placed" value="||FIELDVALUE counseling_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="individual_peer_support_ref_placed" value="||FIELDVALUE individual_peer_support_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="group_peer_support_ref_placed" value="||FIELDVALUE group_peer_support_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="cmhc_ref_placed" value="||FIELDVALUE cmhc_ref_placed||" class="report-field value-004" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="su_ref_placed" value="||FIELDVALUE su_ref_placed||" class="report-field value-005" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="furniture_ref_placed" value="||FIELDVALUE furniture_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="home_repair_ref_placed" value="||FIELDVALUE home_repair_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="homeless_services_ref_placed" value="||FIELDVALUE homeless_services_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="landlord_med_ref_placed" value="||FIELDVALUE landlord_med_ref_placed||" class="report-field value-004" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="rent_assist_ref_placed" value="||FIELDVALUE rent_assist_ref_placed||" class="report-field value-005" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="utility_assist_ref_placed" value="||FIELDVALUE utility_assist_ref_placed||" class="report-field value-006" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="primary_care_ref_placed" value="||FIELDVALUE primary_care_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_phys_health_subtype">
+    <input type="hidden" name="dental_ref_placed" value="||FIELDVALUE dental_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_phys_health_subtype">
+    <input type="hidden" name="clothing_ref_placed" value="||FIELDVALUE clothing_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="child_care_ref_placed" value="||FIELDVALUE child_care_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="dd_ref_placed" value="||FIELDVALUE dd_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="dv_ref_placed" value="||FIELDVALUE dv_ref_placed||" class="report-field value-004" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="insurance_ref_placed" value="||FIELDVALUE insurance_ref_placed||" class="report-field value-005" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="food_ref_placed" value="||FIELDVALUE food_ref_placed||" class="report-field value-006" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="legal_ref_placed" value="||FIELDVALUE legal_ref_placed||" class="report-field value-007" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="lgbtq_ref_placed" value="||FIELDVALUE lgbtq_ref_placed||" class="report-field value-008" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="transport_ref_placed" value="||FIELDVALUE transport_ref_placed||" class="report-field value-009" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="employment_ref_placed" value="||FIELDVALUE employment_ref_placed||" class="report-field value-010" data-source="bcr_ref_placed_social_service_subtype">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>BCR Referrals Placed</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
@@ -833,10 +922,12 @@ updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
   </div>
  <div class="entire">
     <div class="col12 fldbcr_ref_placed_housing_subtype qbcr_ref_placed_housing_subtype">
-    <div class="col3 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_housing_subtype required-field-label"><label class="label-right">Housing Subtype&nbsp;</label></span></div>
-    <div class="col9 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype"><select size="1" name="bcr_ref_placed_housing_subtype" onchange="checkhideall()">
+    <div class="col3 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_housing_subtype required-field-label"><label class="label-right">Housing Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype"><select size="8" name="bcr_ref_placed_housing_subtype" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_housing_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_housing_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_housing_subtype||
+
+<!-- FIELDOVERRIDE(bcr_ref_placed_housing_subtype,10,200) -->
 </span></div>
     </div>
   </div>
@@ -959,10 +1050,12 @@ updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
   </div>
  <div class="entire">
     <div class="col12 fldbcr_ref_placed_phys_health_subtype qbcr_ref_placed_phys_health_subtype">
-    <div class="col3 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_phys_health_subtype required-field-label"><label class="label-right">Physical Health Subtype&nbsp;</label></span></div>
-    <div class="col9 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype"><select size="1" name="bcr_ref_placed_phys_health_subtype" onchange="checkhideall()">
+    <div class="col3 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_phys_health_subtype required-field-label"><label class="label-right">Physical Health Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype"><select size="4" name="bcr_ref_placed_phys_health_subtype" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_phys_health_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_phys_health_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_ref_placed_phys_health_subtype||
+
+<!-- FIELDOVERRIDE(bcr_ref_placed_phys_health_subtype,10,200) -->
 </span></div>
     </div>
   </div>
@@ -1185,6 +1278,10 @@ updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
     <div class="col3 qunmet_needs_exp"><span class="qunmet_needs_exp required-label">||PWRequiredFieldRequiredText||</span><span class="qunmet_needs_exp required-field-label"><label class="label-right">||FIELDTAG unmet_needs_exp||If "Yes," please list additional client needs||ENDFIELDTAG||&nbsp;</label></span></div>
     <div class="col9 qunmet_needs_exp"><span class="qunmet_needs_exp"><textarea name="unmet_needs_exp" class="autoexpand"></textarea></span></div>
     </div>
+  </div>
+ <div class="entire">
+    <div class="col3 qnotes_rp"><span class="qnotes_rp"><label class="label-right">||FIELDTAG notes_rp||Notes||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qnotes_rp"><span class="qnotes_rp"><textarea name="notes_rp" class="autoexpand"></textarea></span></div>
   </div>
 
 </div>

@@ -35,20 +35,19 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-$("#gvttimetime_call_received_24_hour_1").timepicker({  'step':1, 'scrollDefault': 'now'});
+$("#gvttimetime_call_received_24_hour").timepicker({  'step':1, 'scrollDefault': 'now'});
     setrequire('referrer_name');
     setrequire('epicc_referring_agency');
     setrequire('community_referral_source');
     setrequire('specify_other_referring_agency');
-    setrequire('hospital_system');
     setrequire('client_on_outreach_list');
-    setrequire('ems_fire_district_place_referral_in_transit_1');
     setrequire('ems_fire_district_place_referral_in_transit');
     setrequire('client_age_14_17');
     setrequire('referral_for_overdose');
     setrequire('overdose_date');
     setrequire('overdose_due_opioid_use');
     setrequire('narcan_administered');
+    setrequire('ems_involved_ref');
     setrequire('leo_involved_referral');
     setrequire('agreeable_ed_outreach');
     setrequire('program_participation_referral');
@@ -61,17 +60,17 @@ $("#gvttimetime_call_received_24_hour_1").timepicker({  'step':1, 'scrollDefault
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.epicc_referring_agency,"community_referral_source","014");
+      checkhide(f.community_referral_source,"significant_other","031");
+   checkhide(f.epicc_referring_agency,"community_referral_source","014");
    checkhide(f.community_referral_source,"specify_other_referring_agency","020");
    checkhide(f.community_referral_source,"shelter","030");
-   checkhide(f.community_referral_source,"significant_other","031");
    checkhide(f.ems_fire_district_place_referral_in_transit,"ems_fire_district","Yes");
+   checkhide(f.opioid_leading_overdose,"other_opioid_leading_overdose","Other ");
    checkhide(f.client_age_14_17,"parent_caregiver_present_ref_or_notified","Yes");
    checkhide(f.referral_for_overdose,"overdose_date","Yes");
    checkhide(f.referral_for_overdose,"overdose_due_opioid_use","Yes");
-   checkhide(f.overdose_due_opioid_use,"primary_substance_used","No");
    checkhide(f.overdose_due_opioid_use,"opioid_leading_overdose","Yes");
-   checkhide(f.opioid_leading_overdose,"other_opioid_leading_overdose","Other ");
+   checkhide(f.overdose_due_opioid_use,"primary_substance_used","No");
    checkhide(f.overdose_due_opioid_use,"method_use_leading_overdose","Yes");
    checkhide(f.method_use_leading_overdose,"other_method_use","Other");
    checkhide(f.referral_for_overdose,"narcan_administered","Yes");
@@ -312,15 +311,14 @@ function validateform(scope='all') {
   if (!hiddenfield('epicc_referring_agency') && gvtfieldvalue('epicc_referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Agency\n`; seterror("epicc_referring_agency");}
   if (!hiddenfield('community_referral_source') && gvtfieldvalue('community_referral_source')=='') {edesc=edesc+`Must specify a value for Select Community Referral Source\n`; seterror("community_referral_source");}
   if (!hiddenfield('specify_other_referring_agency') && gvtfieldvalue('specify_other_referring_agency')=='') {edesc=edesc+`Must specify a value for If Other, Specify Agency\n`; seterror("specify_other_referring_agency");}
-  if (!hiddenfield('hospital_system') && gvtfieldvalue('hospital_system')=='') {edesc=edesc+`Must specify a value for Select Hospital System\n`; seterror("hospital_system");}
   if (!hiddenfield('client_on_outreach_list') && gvtfieldvalue('client_on_outreach_list')=='') {edesc=edesc+`Must specify a value for Is client on the outreach list?\n`; seterror("client_on_outreach_list");}
-  if (!hiddenfield('ems_fire_district_place_referral_in_transit_1') && gvtfieldvalue('ems_fire_district_place_referral_in_transit_1')=='') {edesc=edesc+`Must specify a value for Was EMS/Fire District involved with this referral?\n`; seterror("ems_fire_district_place_referral_in_transit_1");}
   if (!hiddenfield('ems_fire_district_place_referral_in_transit') && gvtfieldvalue('ems_fire_district_place_referral_in_transit')=='') {edesc=edesc+`Must specify a value for Did EMS/Fire District place referral while in transit? \n`; seterror("ems_fire_district_place_referral_in_transit");}
   if (!hiddenfield('client_age_14_17') && gvtfieldvalue('client_age_14_17')=='') {edesc=edesc+`Must specify a value for Is client age 14-17?\n`; seterror("client_age_14_17");}
   if (!hiddenfield('referral_for_overdose') && gvtfieldvalue('referral_for_overdose')=='') {edesc=edesc+`Must specify a value for Was this a referral for an overdose? \n`; seterror("referral_for_overdose");}
   if (!hiddenfield('overdose_date') && gvtfieldvalue('overdose_date')=='') {edesc=edesc+`Must specify a value for Date of Overdose\n`; seterror("overdose_date");}
   if (!hiddenfield('overdose_due_opioid_use') && gvtfieldvalue('overdose_due_opioid_use')=='') {edesc=edesc+`Must specify a value for Was overdose due to opioid use? \n`; seterror("overdose_due_opioid_use");}
   if (!hiddenfield('narcan_administered') && gvtfieldvalue('narcan_administered')=='') {edesc=edesc+`Must specify a value for Was Narcan administered for the overdose? \n`; seterror("narcan_administered");}
+  if (!hiddenfield('ems_involved_ref') && gvtfieldvalue('ems_involved_ref')=='') {edesc=edesc+`Must specify a value for Was EMS involved with this referral?\n`; seterror("ems_involved_ref");}
   if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
   if (!hiddenfield('agreeable_ed_outreach') && gvtfieldvalue('agreeable_ed_outreach')=='') {edesc=edesc+`Must specify a value for Are the client and hospital agreeable to outreach in ED/Unit? \n`; seterror("agreeable_ed_outreach");}
   if (!hiddenfield('program_participation_referral') && gvtfieldvalue('program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_referral");}
@@ -562,8 +560,11 @@ function updatesignatures(){
     <div class="col4 qPathway_Date">
     <div class="col4 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
-    <div class="col4 qtime_call_received_24_hour_1">
-    <div class="col4 fldtime_call_received_24_hour_1 qtime_call_received_24_hour_1"><span class="qtime_call_received_24_hour_1"><label class="label-top">||FIELDTAG time_call_received_24_hour_1||Call Time||ENDFIELDTAG||</label></span><span class="qtime_call_received_24_hour_1"><input type="text" name="time_call_received_24_hour_1" size="20" id="gvttimetime_call_received_24_hour_1" onchange="checkhideall()"></span></div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qtime_call_received_24_hour">
+    <div class="col4 fldtime_call_received_24_hour qtime_call_received_24_hour"><span class="qtime_call_received_24_hour"><label class="label-top">||FIELDTAG time_call_received_24_hour||Call Time||ENDFIELDTAG||</label></span><span class="qtime_call_received_24_hour"><input type="text" name="time_call_received_24_hour" size="20" id="gvttimetime_call_received_24_hour" onchange="checkhideall()"></span></div>
      </div>
     <div class="col4"><label class="label-top"></label></div>
   </div>
@@ -571,32 +572,11 @@ function updatesignatures(){
     <div class="col4 qreferrer_name">
     <div class="col4 fldreferrer_name qreferrer_name"><span class="qreferrer_name required-label">||PWRequiredFieldRequiredText||</span><span class="qreferrer_name required-field-label"><label class="label-top">||FIELDTAG referrer_name||Referrer's Name||ENDFIELDTAG||</label></span><span class="qreferrer_name"><input type="text" name="referrer_name" size="20" onchange="checkhideall()"></span></div>
      </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
     <div class="col4 qreferrer_phone">
     <div class="col4 fldreferrer_phone qreferrer_phone"><span class="qreferrer_phone"><label class="label-top">||FIELDTAG referrer_phone||Referrer's Phone||ENDFIELDTAG||</label></span><span class="qreferrer_phone"><input type="text" name="referrer_phone" size="20" onchange="checkhideall()"></span></div>
-     </div>
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col4 qepicc_referring_agency">
-    <div class="col4 fldepicc_referring_agency qepicc_referring_agency"><span class="qepicc_referring_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_referring_agency required-field-label"><label class="label-top">Referring Agency</label></span><span class="qepicc_referring_agency"><select size="1" name="epicc_referring_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_referring_agency^^') AND bhn_program='EPICC' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE program_referral_sources||
-</span></div>
-     </div>
-    <div class="col4 qcommunity_referral_source">
-    <div class="col4 fldcommunity_referral_source qcommunity_referral_source"><span class="qcommunity_referral_source required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_referral_source required-field-label"><label class="label-top">Select Community Referral Source</label></span><span class="qcommunity_referral_source"><select size="1" name="community_referral_source" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [community_referral_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE community_referral_source^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE community_referral_source||
-</span></div>
-     </div>
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col4 qspecify_other_referring_agency">
-    <div class="col4 fldspecify_other_referring_agency qspecify_other_referring_agency"><span class="qspecify_other_referring_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qspecify_other_referring_agency required-field-label"><label class="label-top">||FIELDTAG specify_other_referring_agency||If Other, Specify Agency||ENDFIELDTAG||</label></span><span class="qspecify_other_referring_agency"><input type="text" name="specify_other_referring_agency" size="20" onchange="checkhideall()"></span></div>
-     </div>
-    <div class="col4 qshelter">
-    <div class="col4 fldshelter qshelter"><span class="qshelter"><label class="label-top">||FIELDTAG shelter||Shelter||ENDFIELDTAG||</label></span><span class="qshelter"><input type="text" name="shelter" size="20" onchange="checkhideall()"></span></div>
      </div>
     <div class="col4 qsignificant_other">
     <div class="col4 fldsignificant_other qsignificant_other"><span class="qsignificant_other"><label class="label-top">||FIELDTAG significant_other||Family/Friend||ENDFIELDTAG||</label></span><span class="qsignificant_other"><select size="1"  name="significant_other" onchange="checkhideall()" >
@@ -608,6 +588,32 @@ function updatesignatures(){
 <option value="Relative">Relative</option>
 
 </select></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qepicc_referring_agency">
+    <div class="col4 fldepicc_referring_agency qepicc_referring_agency"><span class="qepicc_referring_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_referring_agency required-field-label"><label class="label-top">Referring Agency</label></span><span class="qepicc_referring_agency"><select size="1" name="epicc_referring_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_referring_agency^^') AND bhn_program='EPICC' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE program_referral_sources||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qcommunity_referral_source">
+    <div class="col4 fldcommunity_referral_source qcommunity_referral_source"><span class="qcommunity_referral_source required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_referral_source required-field-label"><label class="label-top">Select Community Referral Source</label></span><span class="qcommunity_referral_source"><select size="1" name="community_referral_source" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [community_referral_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE community_referral_source^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE community_referral_source||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qspecify_other_referring_agency">
+    <div class="col4 fldspecify_other_referring_agency qspecify_other_referring_agency"><span class="qspecify_other_referring_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qspecify_other_referring_agency required-field-label"><label class="label-top">||FIELDTAG specify_other_referring_agency||If Other, Specify Agency||ENDFIELDTAG||</label></span><span class="qspecify_other_referring_agency"><input type="text" name="specify_other_referring_agency" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qshelter">
+    <div class="col4 fldshelter qshelter"><span class="qshelter"><label class="label-top">||FIELDTAG shelter||Shelter||ENDFIELDTAG||</label></span><span class="qshelter"><input type="text" name="shelter" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">
@@ -639,43 +645,20 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col4 qhospital_system">
-    <div class="col4 fldhospital_system qhospital_system"><span class="qhospital_system required-label">||PWRequiredFieldRequiredText||</span><span class="qhospital_system required-field-label"><label class="label-top">Select Hospital System</label></span><span class="qhospital_system"><select size="1" name="hospital_system" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [select_hospital_system] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE hospital_system^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE select_hospital_system||
-</span></div>
-     </div>
-    <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col4 qmrn">
-    <div class="col4 fldmrn qmrn"><span class="qmrn"><label class="label-top">||FIELDTAG mrn||Provide Medical Record Number||ENDFIELDTAG||</label></span><span class="qmrn"><input type="text" name="mrn" size="20" onchange="checkhideall()"></span></div>
-     </div>
-    <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
     <div class="col4 qclient_on_outreach_list">
     <div class="col4 fldclient_on_outreach_list qclient_on_outreach_list"><span class="qclient_on_outreach_list required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_on_outreach_list required-field-label"><label class="label-top">||FIELDTAG client_on_outreach_list||Is client on the outreach list?||ENDFIELDTAG||</label></span><span class="qclient_on_outreach_list"><input type="radio" name="client_on_outreach_list" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_on_outreach_list" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qems_fire_district_place_referral_in_transit_1">
-    <div class="col4 fldems_fire_district_place_referral_in_transit_1 qems_fire_district_place_referral_in_transit_1"><span class="qems_fire_district_place_referral_in_transit_1 required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district_place_referral_in_transit_1 required-field-label"><label class="label-top">||FIELDTAG ems_fire_district_place_referral_in_transit_1||Was EMS/Fire District involved with this referral?||ENDFIELDTAG||</label></span><span class="qems_fire_district_place_referral_in_transit_1"><input type="radio" name="ems_fire_district_place_referral_in_transit_1" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_fire_district_place_referral_in_transit_1" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-    <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
   </div>
@@ -683,6 +666,9 @@ function updatesignatures(){
     <div class="col4 qems_fire_district_place_referral_in_transit">
     <div class="col4 fldems_fire_district_place_referral_in_transit qems_fire_district_place_referral_in_transit"><span class="qems_fire_district_place_referral_in_transit required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district_place_referral_in_transit required-field-label"><label class="label-top">||FIELDTAG ems_fire_district_place_referral_in_transit||Did EMS/Fire District place referral while in transit? ||ENDFIELDTAG||</label></span><span class="qems_fire_district_place_referral_in_transit"><input type="radio" name="ems_fire_district_place_referral_in_transit" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_fire_district_place_referral_in_transit" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
     <div class="col4 qems_fire_district">
     <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district"><label class="label-top">||FIELDTAG ems_fire_district||What EMS/Fire District?||ENDFIELDTAG||</label></span><span class="qems_fire_district"><select size="1"  name="ems_fire_district" onchange="checkhideall()" >
 <option value="">(please select)</option>
@@ -704,12 +690,20 @@ function updatesignatures(){
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4 qclient_age_14_17">
     <div class="col4 fldclient_age_14_17 qclient_age_14_17"><span class="qclient_age_14_17 required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_age_14_17 required-field-label"><label class="label-top">||FIELDTAG client_age_14_17||Is client age 14-17?||ENDFIELDTAG||</label></span><span class="qclient_age_14_17"><input type="radio" name="client_age_14_17" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_age_14_17" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+    <div class="col4 qother_opioid_leading_overdose">
+    <div class="col4 fldother_opioid_leading_overdose qother_opioid_leading_overdose"><span class="qother_opioid_leading_overdose"><label class="label-top">||FIELDTAG other_opioid_leading_overdose||Specify Other Opioid||ENDFIELDTAG||</label></span><span class="qother_opioid_leading_overdose"><input type="text" name="other_opioid_leading_overdose" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
     <div class="col4 qparent_caregiver_present_ref_or_notified">
     <div class="col4 fldparent_caregiver_present_ref_or_notified qparent_caregiver_present_ref_or_notified"><span class="qparent_caregiver_present_ref_or_notified"><label class="label-top">||FIELDTAG parent_caregiver_present_ref_or_notified||Was parent/caregiver notified about the referral and/or present at time of referral?||ENDFIELDTAG||</label></span><span class="qparent_caregiver_present_ref_or_notified"><input type="radio" name="parent_caregiver_present_ref_or_notified" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="parent_caregiver_present_ref_or_notified" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
@@ -718,32 +712,49 @@ function updatesignatures(){
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4 qreferral_for_overdose">
     <div class="col4 fldreferral_for_overdose qreferral_for_overdose"><span class="qreferral_for_overdose required-label">||PWRequiredFieldRequiredText||</span><span class="qreferral_for_overdose required-field-label"><label class="label-top">||FIELDTAG referral_for_overdose||Was this a referral for an overdose? ||ENDFIELDTAG||</label></span><span class="qreferral_for_overdose"><input type="radio" name="referral_for_overdose" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referral_for_overdose" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+ <div class="entire">
     <div class="col4 qoverdose_date">
     <div class="col4 fldoverdose_date qoverdose_date"><span class="qoverdose_date required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_date required-field-label"><label class="label-top">||FIELDTAG overdose_date||Date of Overdose||ENDFIELDTAG||</label></span><span class="qoverdose_date"><input type="text" name="overdose_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
-    <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4 qoverdose_due_opioid_use">
     <div class="col4 fldoverdose_due_opioid_use qoverdose_due_opioid_use"><span class="qoverdose_due_opioid_use required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_due_opioid_use required-field-label"><label class="label-top">||FIELDTAG overdose_due_opioid_use||Was overdose due to opioid use? ||ENDFIELDTAG||</label></span><span class="qoverdose_due_opioid_use"><input type="radio" name="overdose_due_opioid_use" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="overdose_due_opioid_use" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qopioid_leading_overdose">
+    <div class="col4 fldopioid_leading_overdose qopioid_leading_overdose"><span class="qopioid_leading_overdose"><label class="label-top">||FIELDTAG opioid_leading_overdose||Opioid Leading to Overdose||ENDFIELDTAG||</label></span><span class="qopioid_leading_overdose"><select size="1"  name="opioid_leading_overdose" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Fentanyl">Fentanyl</option>
+<option value="Heroin">Heroin</option>
+<option value="Prescription Opiates">Prescription Opiates</option>
+<option value="Suboxone/MAT">Suboxone/MAT</option>
+<option value="Other ">Other </option>
+
+</select></span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
-    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
@@ -764,23 +775,14 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
-    <div class="col4 qopioid_leading_overdose">
-    <div class="col4 fldopioid_leading_overdose qopioid_leading_overdose"><span class="qopioid_leading_overdose"><label class="label-top">||FIELDTAG opioid_leading_overdose||Opioid Leading to Overdose||ENDFIELDTAG||</label></span><span class="qopioid_leading_overdose"><select size="1"  name="opioid_leading_overdose" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Fentanyl">Fentanyl</option>
-<option value="Heroin">Heroin</option>
-<option value="Prescription Opiates">Prescription Opiates</option>
-<option value="Suboxone/MAT">Suboxone/MAT</option>
-<option value="Other ">Other </option>
-
-</select></span></div>
-     </div>
-    <div class="col4 qother_opioid_leading_overdose">
-    <div class="col4 fldother_opioid_leading_overdose qother_opioid_leading_overdose"><span class="qother_opioid_leading_overdose"><label class="label-top">||FIELDTAG other_opioid_leading_overdose||Specify Other Opioid||ENDFIELDTAG||</label></span><span class="qother_opioid_leading_overdose"><input type="text" name="other_opioid_leading_overdose" size="20" onchange="checkhideall()"></span></div>
-     </div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
@@ -794,18 +796,24 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
+  </div>
+ <div class="entire">
     <div class="col4 qother_method_use">
     <div class="col4 fldother_method_use qother_method_use"><span class="qother_method_use"><label class="label-top">||FIELDTAG other_method_use||Other Method of Use||ENDFIELDTAG||</label></span><span class="qother_method_use"><input type="text" name="other_method_use" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4 qnarcan_administered">
     <div class="col4 fldnarcan_administered qnarcan_administered"><span class="qnarcan_administered required-label">||PWRequiredFieldRequiredText||</span><span class="qnarcan_administered required-field-label"><label class="label-top">||FIELDTAG narcan_administered||Was Narcan administered for the overdose? ||ENDFIELDTAG||</label></span><span class="qnarcan_administered"><input type="radio" name="narcan_administered" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="narcan_administered" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+ <div class="entire">
     <div class="col4 qparty_administering_narcan">
     <div class="col4 fldparty_administering_narcan qparty_administering_narcan"><span class="qparty_administering_narcan"><label class="label-top">||FIELDTAG party_administering_narcan||If yes, by whom ||ENDFIELDTAG||</label></span><span class="qparty_administering_narcan"><select size="1"  name="party_administering_narcan" onchange="checkhideall()" >
 <option value="">(please select)</option>
@@ -817,6 +825,14 @@ function updatesignatures(){
 <option value="Community Treatment Provider ">Community Treatment Provider </option>
 
 </select></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qems_involved_ref">
+    <div class="col4 fldems_involved_ref qems_involved_ref"><span class="qems_involved_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qems_involved_ref required-field-label"><label class="label-top">||FIELDTAG ems_involved_ref||Was EMS involved with this referral?||ENDFIELDTAG||</label></span><span class="qems_involved_ref"><input type="radio" name="ems_involved_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_involved_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -857,8 +873,8 @@ function updatesignatures(){
  <div class="entire">
     <div class="col4 qprogram_participation_referral">
     <div class="col4 fldprogram_participation_referral qprogram_participation_referral"><span class="qprogram_participation_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_referral required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_referral"><select size="1" name="program_participation_referral" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation_referral] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_referral^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_program_participation_referral||
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_referral^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_program_participation||
 </span></div>
      </div>
   </div>
@@ -880,15 +896,6 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
-  </div>
- <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col4"><label class="label-top">Click "Add" below to enter the Recovery Coach </label></div>
-  </div>
- <div class="entire">
-    <div class="col4">||INCLUDESUMMATION SummationFLBodyPWEPICCRecoveryCoach||</div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>

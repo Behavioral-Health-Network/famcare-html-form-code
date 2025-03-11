@@ -5,6 +5,14 @@
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(BEHAVIORAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(PHYSICAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(HOUSING,10,10) -->
+<!-- FIELDOVERRIDE(SPIRITUAL_CARE,10,10) -->
+<!-- FIELDOVERRIDE(MATERNAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(SOCIAL_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
@@ -610,12 +618,48 @@ function updatesignatures(){
    return;
 }
 
+// This is an amended version of the function updateReportFields() that will allow us to pass an array of table names
+// to the function when the form includes multiple master tables with values that must be separated and pivoted wider 
+// into columns for each DESCRIPTION and assigned a value of 0 or 1.
+function updateReportFields(tableNames) {
+  // Loop through each table name provided in the array `tableNames`.
+  tableNames.forEach(name => {
+    // Use querySelector to find the first element with the given name attribute.
+    const tableElement = document.querySelector(`[name=${name}]`);
+    
+    // Check if the table element was found on the page.
+    if (tableElement) {
+      // Select all <option> elements within the current table element.
+      tableElement.querySelectorAll('option').forEach(option => {
+        
+        // Skip the '(Please select)' option if the value is an empty string.
+        if (option.value === '') {
+          // No action needed for this placeholder option.
+          
+        } else {
+          // Construct the selector for the corresponding report field
+          // `option.value` is used to find the field with a class like "value-001", etc.
+          const reportField = document.querySelector(`.report-field.value-${option.value}`);
+          
+          // Check if the report field exists to avoid errors if it's missing.
+          if (reportField) {
+            // Set the value of the report field to '1' if the option is selected, or '0' if not.
+            reportField.value = option.selected ? '1' : '0';
+          }
+        }
+      });
+    }
+  });
+}
+
+// Call the function with the names of the tables you want to process.
+// The table names are passed as an array.
+updateReportFields(['bcr_presenting_concern']);
+
 </script>
 
 <script language="VBScript">
 </script>
-
-||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
 
 <body onLoad="startup()">
 <!-- Field Override Area -->
@@ -637,6 +681,15 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields -->
+    <input type="hidden" name="behavioral_health_ref_placed" value="||FIELDVALUE behavioral_health_ref_placed||" class="report-field value-001">
+    <input type="hidden" name="physical_health_ref_placed" value="||FIELDVALUE physical_health_ref_placed||" class="report-field value-002">
+    <input type="hidden" name="housing_ref_placed" value="||FIELDVALUE housing_ref_placed||" class="report-field value-003">
+    <input type="hidden" name="spiritual_care_ref_placed" value="||FIELDVALUE spiritual_care_ref_placed||" class="report-field value-004">
+    <input type="hidden" name="maternal_health_ref_placed" value="||FIELDVALUE maternal_health_ref_placed||" class="report-field value-006">
+    <input type="hidden" name="social_services_ref_placed" value="||FIELDVALUE social_services_ref_placed||" class="report-field value-009">
+    <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010">
+
 <!--STARTOFPROVIDERFORM -->
     <h1><span>BCR Referrals Placed</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 

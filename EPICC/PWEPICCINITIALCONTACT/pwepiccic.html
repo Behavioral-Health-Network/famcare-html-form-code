@@ -582,7 +582,7 @@ function updateReportFields(tableNames) {
         } else {
           // Construct the selector for the corresponding report field
           // `option.value` is used to find the field with a class like "value-001", etc.
-          const reportField = document.querySelector(`.report-field.value-${option.value}`);
+          const reportField = tableElement.querySelector(`.report-field.value-${option.value}`);
           
           // Check if the report field exists to avoid errors if it's missing.
           if (reportField) {
@@ -820,7 +820,7 @@ updateReportFields(['epicc_opioids_of_use']);
   </div>
  <div class="entire">
     <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic">
-    <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic"><span class="qopioids_of_use_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qopioids_of_use_ic required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qopioids_of_use_ic"><select size="8" name="opioids_of_use_ic" onchange="checkhideall()" multiple>
+    <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic"><span class="qopioids_of_use_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qopioids_of_use_ic required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qopioids_of_use_ic"><select size="8" name="opioids_of_use_ic" id="epicc_opioids_of_use" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_opioids_of_use] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE opioids_of_use_ic^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_opioids_of_use||
 

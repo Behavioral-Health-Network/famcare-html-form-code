@@ -561,7 +561,7 @@ function updatesignatures(){
    return;
 }
 
-// This is an amended version of the function updateReportFields() that will allow us to pass an array of table names
+/* // This is an amended version of the function updateReportFields() that will allow us to pass an array of table names
 // to the function when the form includes multiple master tables with values that must be separated and pivoted wider 
 // into columns for each DESCRIPTION and assigned a value of 0 or 1.
 function updateReportFields(tableNames) {
@@ -591,6 +591,58 @@ function updateReportFields(tableNames) {
           }
         }
       });
+    }
+  });
+} */
+
+/* function updateReportFields(tableIds) {
+  tableIds.forEach(id => {
+    // Select the dropdown by its id
+    const dropdown = document.querySelector(`#${id}`);
+
+    if (dropdown) {
+      // Loop through all <option> elements in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        if (option.value === '') return; // Skip placeholder option
+
+        // Find the corresponding hidden field with data-source
+        const reportField = document.querySelector(`.report-field.value-${option.value}[data-source="${id}"]`);
+
+        if (reportField) {
+          // Update hidden field: 1 if selected, 0 otherwise
+          reportField.value = option.selected ? '1' : '0';
+        }
+      });
+    }
+  });
+} */
+
+function updateReportFields(tableIds) {
+  tableIds.forEach(id => {
+    // Select the dropdown by its id
+    const dropdown = document.querySelector(`#${id}`);
+
+    if (dropdown) {
+      console.log(`Updating fields for dropdown ID: ${id}`);
+      dropdown.querySelectorAll('option').forEach(option => {
+        if (option.value === '') return; // Skip placeholder options
+
+        // Find the corresponding hidden field
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Report field:`, reportField);
+
+        if (reportField) {
+          // Update hidden field
+          reportField.value = dropdown.value.includes(option.value) ? '1' : '0';
+          console.log(`Set value of ${reportField.name} to ${reportField.value}`);
+        }
+      });
+    } else {
+      console.error(`Dropdown with ID ${id} not found.`);
     }
   });
 }
@@ -625,12 +677,12 @@ updateReportFields(['epicc_opioids_of_use']);
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
     <!-- used by updateReportFields -->
-    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001">
-    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002">
-    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003">
-    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004">
-    <input type="hidden" name="opioid_of_use_multiple_opiates" value="||FIELDVALUE opioid_of_use_multiple_opiates||" class="report-field value-005">
-    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006">
+    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_multiple_opiates" value="||FIELDVALUE opioid_of_use_multiple_opiates||" class="report-field value-005" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006" data-source="epicc_opioids_of_use">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>EPICC Initial Contact</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>

@@ -5,6 +5,14 @@
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(FENTANYL,10,10) -->
+<!-- FIELDOVERRIDE(HEROIN,10,10) -->
+<!-- FIELDOVERRIDE(PRESCRIPTION_OPIATES,10,10) -->
+<!-- FIELDOVERRIDE(SUBOXONE/MAT,10,10) -->
+<!-- FIELDOVERRIDE(MULTIPLE_OPIATES,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
@@ -553,12 +561,48 @@ function updatesignatures(){
    return;
 }
 
+// This is an amended version of the function updateReportFields() that will allow us to pass an array of table names
+// to the function when the form includes multiple master tables with values that must be separated and pivoted wider 
+// into columns for each DESCRIPTION and assigned a value of 0 or 1.
+function updateReportFields(tableNames) {
+  // Loop through each table name provided in the array `tableNames`.
+  tableNames.forEach(name => {
+    // Use querySelector to find the first element with the given name attribute.
+    const tableElement = document.querySelector(`[name=${name}]`);
+    
+    // Check if the table element was found on the page.
+    if (tableElement) {
+      // Select all <option> elements within the current table element.
+      tableElement.querySelectorAll('option').forEach(option => {
+        
+        // Skip the '(Please select)' option if the value is an empty string.
+        if (option.value === '') {
+          // No action needed for this placeholder option.
+          
+        } else {
+          // Construct the selector for the corresponding report field
+          // `option.value` is used to find the field with a class like "value-001", etc.
+          const reportField = document.querySelector(`.report-field.value-${option.value}`);
+          
+          // Check if the report field exists to avoid errors if it's missing.
+          if (reportField) {
+            // Set the value of the report field to '1' if the option is selected, or '0' if not.
+            reportField.value = option.selected ? '1' : '0';
+          }
+        }
+      });
+    }
+  });
+}
+
+// Call the function with the names of the tables you want to process.
+// The table names are passed as an array.
+updateReportFields(['epicc_opioids_of_use']);
+
 </script>
 
 <script language="VBScript">
 </script>
-
-||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
 
 <body onLoad="startup()">
 <!-- Field Override Area -->
@@ -580,6 +624,14 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields -->
+    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001">
+    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002">
+    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003">
+    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004">
+    <input type="hidden" name="opioid_of_use_multiple_opiates" value="||FIELDVALUE opioid_of_use_multiple_opiates||" class="report-field value-005">
+    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006">
+
 <!--STARTOFPROVIDERFORM -->
     <h1><span>EPICC Initial Contact</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 

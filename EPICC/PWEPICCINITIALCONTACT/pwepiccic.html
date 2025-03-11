@@ -56,7 +56,7 @@ $("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault
     setrequire('community_referral_source_ic');
     setrequire('type_contact_ic');
     setrequire('consent_crc_referral_ic');
-    setrequire('opioids_of_use_ic');
+    setrequire('epicc_opioids_of_use');
     setrequire('overdose_event_referral');
     setrequire('overdose_location');
     setrequire('first_overdose');
@@ -95,7 +95,7 @@ function checkhideall() {
    checkhide(f.who_initiated_referral,"community_referral_source_ic","Community ");
    checkhide(f.program_participation_ic,"reason_ic_not_success","002,003,004,005,006,007,011");
    checkhide(f.consent_crc_referral_ic,"reason_consent_refused_crc_ic","No");
-   checkhide(f.opioids_of_use_ic,"other_opioid_ic","006");
+   checkhide(f.epicc_opioids_of_use,"other_opioid_ic","006");
    checkhide(f.overdose_event_referral,"overdose_location","Yes");
    checkhide(f.overdose_location,"specify_other_location","Other ");
    checkhide(f.overdose_event_referral,"first_overdose","Yes");
@@ -348,7 +348,7 @@ function validateform(scope='all') {
   if (!hiddenfield('community_referral_source_ic') && gvtfieldvalue('community_referral_source_ic')=='') {edesc=edesc+`Must specify a value for If Community Referral, Select One\n`; seterror("community_referral_source_ic");}
   if (!hiddenfield('type_contact_ic') && gvtfieldvalue('type_contact_ic')=='') {edesc=edesc+`Must specify a value for Type of Contact\n`; seterror("type_contact_ic");}
   if (!hiddenfield('consent_crc_referral_ic') && gvtfieldvalue('consent_crc_referral_ic')=='') {edesc=edesc+`Must specify a value for Does client consent to CRC referral?\n`; seterror("consent_crc_referral_ic");}
-  if (!hiddenfield('opioids_of_use_ic') && gvtfieldvalue('opioids_of_use_ic')=='') {edesc=edesc+`Must specify a value for Opioid(s) of Use\n`; seterror("opioids_of_use_ic");}
+  if (!hiddenfield('epicc_opioids_of_use') && gvtfieldvalue('epicc_opioids_of_use')=='') {edesc=edesc+`Must specify a value for Opioid(s) of Use\n`; seterror("epicc_opioids_of_use");}
   if (!hiddenfield('overdose_event_referral') && gvtfieldvalue('overdose_event_referral')=='') {edesc=edesc+`Must specify a value for Was the referral placed due to an overdose event (Not soley a severe use disorder or withdrawal?)\n`; seterror("overdose_event_referral");}
   if (!hiddenfield('overdose_location') && gvtfieldvalue('overdose_location')=='') {edesc=edesc+`Must specify a value for Location of Overdose\n`; seterror("overdose_location");}
   if (!hiddenfield('first_overdose') && gvtfieldvalue('first_overdose')=='') {edesc=edesc+`Must specify a value for Was this the client's first overdose?\n`; seterror("first_overdose");}
@@ -649,7 +649,7 @@ function updateReportFields(tableIds) {
 
 // Call the function with the names of the tables you want to process.
 // The table names are passed as an array.
-updateReportFields(['opioids_of_use_ic']);
+updateReportFields(['#epicc_opioids_of_use']);
 
 </script>
 
@@ -677,11 +677,11 @@ updateReportFields(['opioids_of_use_ic']);
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
     <!-- used by updateReportFields -->
-    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001" data-source="opioids_of_use_ic">
-    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002" data-source="opioids_of_use_ic">
-    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003" data-source="opioids_of_use_ic">
-    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004" data-source="opioids_of_use_ic">
-    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006" data-source="opioids_of_use_ic">
+    <input type="hidden" name="opioid_of_use_fentanyl" value="||FIELDVALUE opioid_of_use_fentanyl||" class="report-field value-001" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_heroin" value="||FIELDVALUE opioid_of_use_heroin||" class="report-field value-002" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_prescription_opiates" value="||FIELDVALUE opioid_of_use_prescription_opiates||" class="report-field value-003" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_suboxone_mat" value="||FIELDVALUE opioid_of_use_suboxone_mat||" class="report-field value-004" data-source="epicc_opioids_of_use">
+    <input type="hidden" name="opioid_of_use_other" value="||FIELDVALUE opioid_of_use_other||" class="report-field value-006" data-source="epicc_opioids_of_use">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>EPICC Initial Contact</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
@@ -856,12 +856,12 @@ updateReportFields(['opioids_of_use_ic']);
 <div class="col12 term">Section VI</div>
 </div>
  <div class="entire">
-    <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic">
-    <div class="col12 fldopioids_of_use_ic qopioids_of_use_ic"><span class="qopioids_of_use_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qopioids_of_use_ic required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qopioids_of_use_ic"><select size="8" name="opioids_of_use_ic" id="opioids_of_use_ic" onchange="checkhideall()" multiple>
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_opioids_of_use] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE opioids_of_use_ic^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldepicc_opioids_of_use qepicc_opioids_of_use">
+    <div class="col12 fldepicc_opioids_of_use qepicc_opioids_of_use"><span class="qepicc_opioids_of_use required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_opioids_of_use required-field-label"><label class="label-top">Opioid(s) of Use<br>(Hold down Ctrl to select multiple)</label></span><span class="qepicc_opioids_of_use"><select size="8" name="epicc_opioids_of_use" id="epicc_opioids_of_use" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_opioids_of_use] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_opioids_of_use^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_opioids_of_use||
 
-<!-- FIELDOVERRIDE(opioids_of_use_ic,10,200) -->
+<!-- FIELDOVERRIDE(epicc_opioids_of_use,10,200) -->
 </span></div>
      </div>
   </div>

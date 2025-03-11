@@ -24,6 +24,8 @@
 <!-- FIELDOVERRIDE(LANDLORD-TENANT_MEDIATION,10,10) -->
 <!-- FIELDOVERRIDE(RENT/MORTGAGE_ASSISTANCE,10,10) -->
 <!-- FIELDOVERRIDE(UTILITY_ASSISTANCE,10,10) -->
+<!-- FIELDOVERRIDE(PRIMARY_CARE,10,10) -->
+<!-- FIELDOVERRIDE(DENTAL,10,10) -->
 
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
@@ -712,6 +714,8 @@ updateReportFields(['bcr_presenting_concern', 'bcr_ref_placed_bh_subtype']);
     <input type="hidden" name="landlord_med_ref_placed" value="||FIELDVALUE landlord_med_ref_placed||" class="report-field value-004">
     <input type="hidden" name="rent_assist_ref_placed" value="||FIELDVALUE rent_assist_ref_placed||" class="report-field value-005">
     <input type="hidden" name="utility_assist_ref_placed" value="||FIELDVALUE utility_assist_ref_placed||" class="report-field value-006">
+    <input type="hidden" name="primary_care_ref_placed" value="||FIELDVALUE primary_care_ref_placed||" class="report-field value-001">
+    <input type="hidden" name="dental_ref_placed" value="||FIELDVALUE dental_ref_placed||" class="report-field value-002">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>BCR Referrals Placed</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>

@@ -49,7 +49,7 @@
 // if the function is run via startup() too early and does not run again dynamically upon change.
 const observer = new MutationObserver(() => {
   // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
+  const dropdowns = document.querySelectorAll('#bcr_presenting_concerns, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
 
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -129,6 +129,7 @@ function startup() {
     setrequire('date_mat_health_ref_placed');
     setrequire('bcr_ref_placed_phys_health_subtype');
     setrequire('primary_care_agency_ref_placed');
+    setrequire('date_primary_care_ref_placed');
     setrequire('dental_agency_ref_placed');
     setrequire('date_dental_ref_placed');
     setrequire('bcr_ref_placed_social_subtype');
@@ -165,7 +166,7 @@ function startup() {
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
+  const dropdown = document.querySelectorAll('#bcr_presenting_concerns, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
   
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -789,13 +790,13 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
     <!-- used by updateReportFields -->
-    <input type="hidden" name="bh_ref_placed" value="||FIELDVALUE bh_ref_placed||" class="report-field value-001" data-source="bcr_presenting_concern">
-    <input type="hidden" name="physical_health_ref_placed" value="||FIELDVALUE physical_health_ref_placed||" class="report-field value-002" data-source="bcr_presenting_concern">
-    <input type="hidden" name="housing_ref_placed" value="||FIELDVALUE housing_ref_placed||" class="report-field value-003" data-source="bcr_presenting_concern">
-    <input type="hidden" name="spiritual_care_ref_placed" value="||FIELDVALUE spiritual_care_ref_placed||" class="report-field value-004" data-source="bcr_presenting_concern">
-    <input type="hidden" name="mat_health_ref_placed" value="||FIELDVALUE mat_health_ref_placed||" class="report-field value-006" data-source="bcr_presenting_concern">
-    <input type="hidden" name="soc_services_ref_placed" value="||FIELDVALUE soc_services_ref_placed||" class="report-field value-009" data-source="bcr_presenting_concern">
-    <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010" data-source="bcr_presenting_concern">
+    <input type="hidden" name="bh_ref_placed" value="||FIELDVALUE bh_ref_placed||" class="report-field value-001" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="physical_health_ref_placed" value="||FIELDVALUE physical_health_ref_placed||" class="report-field value-002" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="housing_ref_placed" value="||FIELDVALUE housing_ref_placed||" class="report-field value-003" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="spiritual_care_ref_placed" value="||FIELDVALUE spiritual_care_ref_placed||" class="report-field value-004" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="mat_health_ref_placed" value="||FIELDVALUE mat_health_ref_placed||" class="report-field value-006" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="soc_services_ref_placed" value="||FIELDVALUE soc_services_ref_placed||" class="report-field value-009" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010" data-source="bcr_presenting_concerns">
     <input type="hidden" name="counseling_ref_placed" value="||FIELDVALUE counseling_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_bh_subtype">
     <input type="hidden" name="individual_peer_support_ref_placed" value="||FIELDVALUE individual_peer_support_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_bh_subtype">
     <input type="hidden" name="group_peer_support_ref_placed" value="||FIELDVALUE group_peer_support_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_bh_subtype">
@@ -841,7 +842,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col3 qbcr_presenting_concern"><span class="qbcr_presenting_concern required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_presenting_concern required-field-label"><label class="label-right">Type of Referrals Placed&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_presenting_concern"><span class="qbcr_presenting_concern"><select size="8" name="bcr_presenting_concern" onchange="updateReportFields(['bcr_presenting_concern']); checkhideall();" multiple>
+    <div class="col9 qbcr_presenting_concern"><span class="qbcr_presenting_concern"><select size="8" name="bcr_presenting_concern" onchange="updateReportFields(['bcr_presenting_concerns']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_presenting_concern^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_presenting_concerns||
 

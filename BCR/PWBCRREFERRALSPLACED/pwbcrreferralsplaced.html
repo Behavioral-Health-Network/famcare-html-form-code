@@ -49,7 +49,7 @@
 // if the function is run via startup() too early and does not run again dynamically upon change.
 const observer = new MutationObserver(() => {
   // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype'); // Add more IDs as needed
+  const dropdowns = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
 
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -152,7 +152,7 @@ function startup() {
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype'); // Add more IDs as needed
+  const dropdown = document.querySelectorAll('#bcr_presenting_concern, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
   
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners

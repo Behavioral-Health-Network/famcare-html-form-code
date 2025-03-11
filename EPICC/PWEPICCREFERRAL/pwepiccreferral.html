@@ -538,6 +538,7 @@ function updatesignatures(){
     </div>
 <div class="deflist">
 <div class="entire">
+<div class="col12 term">Section I</div>
 </div>
  <div class="entire">
     <div class="col4 qPathway_Date">
@@ -603,6 +604,7 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
+<div class="col12 term">Section II: Housing</div>
 </div>
  <div class="entire">
     <div class="col12"><label class="label-top">Click "Add" below to enter the client's current housing status. </label></div>
@@ -610,6 +612,9 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
   </div>
+<div class="entire">
+<div class="col12 term">Section III: Payor Source</div>
+</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -623,6 +628,7 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
+<div class="col12 term">Section IV</div>
 </div>
  <div class="entire">
     <div class="col4 qclient_on_outreach_list">
@@ -703,20 +709,23 @@ function updatesignatures(){
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
+<div class="entire">
+<div class="col12 term">Section V: Program Participation</div>
+</div>
  <div class="entire">
-    <div class="col4 qprogram_participation_referral">
-    <div class="col4 fldprogram_participation_referral qprogram_participation_referral"><span class="qprogram_participation_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_referral required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_referral"><select size="1" name="program_participation_referral" onchange="checkhideall()">
+    <div class="col12 fldprogram_participation_referral qprogram_participation_referral">
+    <div class="col12 fldprogram_participation_referral qprogram_participation_referral"><span class="qprogram_participation_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_referral required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_referral"><select size="1" name="program_participation_referral" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_referral^^') and referral = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_program_participation||
 </span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qineligible_reason">
-    <div class="col4 fldineligible_reason qineligible_reason"><span class="qineligible_reason"><label class="label-top">||FIELDTAG ineligible_reason||Criteria not met for eligibility||ENDFIELDTAG||</label></span><span class="qineligible_reason"><select size="1"  name="ineligible_reason" onchange="checkhideall()" >
+    <div class="col12 fldineligible_reason qineligible_reason">
+    <div class="col12 fldineligible_reason qineligible_reason"><span class="qineligible_reason"><label class="label-top">||FIELDTAG ineligible_reason||Criteria not met for eligibility||ENDFIELDTAG||</label></span><span class="qineligible_reason"><select size="1"  name="ineligible_reason" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Not Age 18+">Not Age 18+</option>
 <option value="Not Opioid Overdose">Not Opioid Overdose</option>
@@ -731,42 +740,42 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qdm3700_status">
-    <div class="col4 flddm3700_status qdm3700_status"><span class="qdm3700_status"><label class="label-top">||FIELDTAG dm3700_status||DM3700/ADA-DM Status||ENDFIELDTAG||</label></span><span class="qdm3700_status"><input type="radio" name="dm3700_status" value="Found (DM3700)" onclick="checkhideall()" >Found (DM3700)<br><input type="radio" name="dm3700_status" value="Found (ADA-DM)" onclick="checkhideall()" >Found (ADA-DM)<br><input type="radio" name="dm3700_status" value="Not Found" onclick="checkhideall()" >Not Found</span></div>
+    <div class="col12 flddm3700_status qdm3700_status">
+    <div class="col12 flddm3700_status qdm3700_status"><span class="qdm3700_status"><label class="label-top">||FIELDTAG dm3700_status||DM3700/ADA-DM Status||ENDFIELDTAG||</label></span><span class="qdm3700_status"><input type="radio" name="dm3700_status" value="Found (DM3700)" onclick="checkhideall()" >Found (DM3700)<br><input type="radio" name="dm3700_status" value="Found (ADA-DM)" onclick="checkhideall()" >Found (ADA-DM)<br><input type="radio" name="dm3700_status" value="Not Found" onclick="checkhideall()" >Not Found</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qclient_enrolled_su_before">
-    <div class="col4 fldclient_enrolled_su_before qclient_enrolled_su_before"><span class="qclient_enrolled_su_before"><label class="label-top">||FIELDTAG client_enrolled_su_before||Has client been enrolled in substance use services before?||ENDFIELDTAG||</label></span><span class="qclient_enrolled_su_before"><input type="radio" name="client_enrolled_su_before" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_enrolled_su_before" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldclient_enrolled_su_before qclient_enrolled_su_before">
+    <div class="col12 fldclient_enrolled_su_before qclient_enrolled_su_before"><span class="qclient_enrolled_su_before"><label class="label-top">||FIELDTAG client_enrolled_su_before||Has client been enrolled in substance use services before?||ENDFIELDTAG||</label></span><span class="qclient_enrolled_su_before"><input type="radio" name="client_enrolled_su_before" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_enrolled_su_before" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qlist_all_ada">
-    <div class="col4 fldlist_all_ada qlist_all_ada"><span class="qlist_all_ada"><label class="label-top">||FIELDTAG list_all_ada||List all ADA (Substance Use) providers with whom client has been admitted to services and dates.||ENDFIELDTAG||</label></span><span class="qlist_all_ada"><textarea name="list_all_ada" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldlist_all_ada qlist_all_ada">
+    <div class="col12 fldlist_all_ada qlist_all_ada"><span class="qlist_all_ada"><label class="label-top">||FIELDTAG list_all_ada||List all ADA (Substance Use) providers with whom client has been admitted to services and dates.||ENDFIELDTAG||</label></span><span class="qlist_all_ada"><textarea name="list_all_ada" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qpresenting_notes">
-    <div class="col4 fldpresenting_notes qpresenting_notes"><span class="qpresenting_notes"><label class="label-top">||FIELDTAG presenting_notes||Presenting Notes||ENDFIELDTAG||</label></span><span class="qpresenting_notes"><textarea name="presenting_notes" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldpresenting_notes qpresenting_notes">
+    <div class="col12 fldpresenting_notes qpresenting_notes"><span class="qpresenting_notes"><label class="label-top">||FIELDTAG presenting_notes||Presenting Notes||ENDFIELDTAG||</label></span><span class="qpresenting_notes"><textarea name="presenting_notes" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4"><div align="Left"><img src="images/custom/EPICC  Logo Vector.png" width="250px"></div></div>
+    <div class="col12"><div align="Left"><img src="images/custom/EPICC  Logo Vector.png" width="250px"></div></div>
   </div>
 
 </div>

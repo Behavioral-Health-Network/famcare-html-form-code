@@ -81,6 +81,22 @@ $("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelector('#epicc_opioids_of_use');
+  if (dropdown) {
+    dropdown.addEventListener('change', () => {
+      updateReportFields(['epicc_opioids_of_use']);
+    });
+  } else {
+    console.error('Dropdown with ID #epicc_opioids_of_use not found.');
+  }
+
+  // Optionally, run updateReportFields once during startup to initialize hidden fields
+  setTimeout(() => {
+    updateReportFields(['epicc_opioids_of_use']);
+  }, 500);
 }
 
 function checkhideall() {
@@ -646,10 +662,6 @@ function updateReportFields(tableIds) {
     }
   });
 }
-
-// Call the function with the names of the tables you want to process.
-// The table names are passed as an array.
-updateReportFields(['epicc_opioids_of_use']);
 
 </script>
 

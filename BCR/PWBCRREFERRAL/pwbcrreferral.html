@@ -680,7 +680,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldbcr_prog_participation qbcr_prog_participation">
     <div class="col12 fldbcr_prog_participation qbcr_prog_participation"><span class="qbcr_prog_participation required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_prog_participation required-field-label"><label class="label-top">Program Participation:</label></span><span class="qbcr_prog_participation"><select size="1" name="bcr_prog_participation" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_prog_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_prog_participation^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_prog_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_prog_participation^^') and referral=1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_prog_participation||
 </span></div>
      </div>

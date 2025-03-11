@@ -645,7 +645,7 @@ function updatesignatures(){
   </div>
   <div class="entire">
     <div class="col4 qems_fire_district">
-    <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district required-field-label"><label class="label-top">Referring Agency</label></span><span class="qems_fire_district"><select size="1" name="ems_fire_district" onchange="checkhideall()">
+    <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district required-field-label"><label class="label-top">Which EMS/Fire District?</label></span><span class="qems_fire_district"><select size="1" name="ems_fire_district" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_ems_fire_district^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_ems_fire_district||
 </span></div>

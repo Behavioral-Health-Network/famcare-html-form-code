@@ -515,11 +515,11 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
- <div class="entire">
+  <div class="entire">
     <div class="col12 fldreengagement_specialist qreengagement_specialist">
-    <div class="col12 fldreengagement_specialist qreengagement_specialist"><span class="qreengagement_specialist required-label">||PWRequiredFieldRequiredText||</span><span class="qreengagement_specialist required-field-label"><label class="label-top">Re-Engagement Specialist Name</label></span><span class="qreengagement_specialist"><select size="1" name="reengagement_specialist" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_engagement_worker] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE reengagement_specialist^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_engagement_worker||
+    <div class="col12 fldreengagement_specialist qreengagement_specialist"><span class="qreengagement_specialist"><label class="label-top">||FIELDTAG reengagement_specialist||Re-Engagement Coordinator||ENDFIELDTAG||</label></span><span class="qreengagement_specialist"><select size="1" name="reengagement_specialist" onchange="checkhideall()">
+<option value="||SELECT EMPLOYEENUMBER, [LASTNAME] & ', ' & [FIRSTNAME] & ' (' & EMPLOYEENUMBER & ')' FROM Q_HRFORM WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND  EMPSTATUS='Active' AND DDEPICC='ON' AND DDREENGAGE='ON' ORDER BY LASTNAME,FIRSTNAME||">||CHOICETABLESQLD||</option>
+</select>
 </span></div>
      </div>
   </div>

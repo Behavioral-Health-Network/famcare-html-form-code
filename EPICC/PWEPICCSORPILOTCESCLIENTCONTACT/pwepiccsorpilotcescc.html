@@ -36,7 +36,7 @@ function startup() {
 	}
             setrequire('Pathway_Date');
     setrequire('epicc_engagement_worker');
-    setrequire('type_appt');
+    setrequire('type_appt_sor_pilot_client_contact');
     setrequire('did_client_attend');
     setrequire('outcome_intake_appt_sor_pilot_client_contact');
     setrequire('contact_with_sor_pilot_contact');
@@ -281,7 +281,7 @@ function validateform(scope='all') {
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('epicc_engagement_worker') && gvtfieldvalue('epicc_engagement_worker')=='') {edesc=edesc+`Must specify a value for EPICC Engagement Worker\n`; seterror("epicc_engagement_worker");}
-  if (!hiddenfield('type_appt') && gvtfieldvalue('type_appt')=='') {edesc=edesc+`Must specify a value for Type of Appointment\n`; seterror("type_appt");}
+  if (!hiddenfield('type_appt_sor_pilot_client_contact') && gvtfieldvalue('type_appt_sor_pilot_client_contact')=='') {edesc=edesc+`Must specify a value for Type of Appointment\n`; seterror("type_appt_sor_pilot_client_contact");}
   if (!hiddenfield('did_client_attend') && gvtfieldvalue('did_client_attend')=='') {edesc=edesc+`Must specify a value for Did Client Attend?\n`; seterror("did_client_attend");}
   if (!hiddenfield('outcome_intake_appt_sor_pilot_client_contact') && gvtfieldvalue('outcome_intake_appt_sor_pilot_client_contact')=='') {edesc=edesc+`Must specify a value for Outcome of Intake Appointment\n`; seterror("outcome_intake_appt_sor_pilot_client_contact");}
   if (!hiddenfield('contact_with_sor_pilot_contact') && gvtfieldvalue('contact_with_sor_pilot_contact')=='') {edesc=edesc+`Must specify a value for CES Contact With\n`; seterror("contact_with_sor_pilot_contact");}
@@ -534,13 +534,13 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 flddate_most_recent_sched_appt qdate_most_recent_sched_appt">
-    <div class="col12 flddate_most_recent_sched_appt qdate_most_recent_sched_appt"><span class="qdate_most_recent_sched_appt"><label class="label-top">||FIELDTAG date_most_recent_sched_appt||Date of Most Recent or Scheduled Appointment||ENDFIELDTAG||</label></span><span class="qdate_most_recent_sched_appt"><input type="text" name="date_most_recent_sched_appt" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 flddate_most_recent_appt_sor_pilot_client_contact qdate_most_recent_appt_sor_pilot_client_contact">
+    <div class="col12 flddate_most_recent_appt_sor_pilot_client_contact qdate_most_recent_appt_sor_pilot_client_contact"><span class="qdate_most_recent_appt_sor_pilot_client_contact"><label class="label-top">||FIELDTAG date_most_recent_appt_sor_pilot_client_contact||Date of Most Recent or Scheduled Appointment||ENDFIELDTAG||</label></span><span class="qdate_most_recent_appt_sor_pilot_client_contact"><input type="text" name="date_most_recent_appt_sor_pilot_client_contact" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldtype_appt qtype_appt">
-    <div class="col12 fldtype_appt qtype_appt"><span class="qtype_appt required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_appt required-field-label"><label class="label-top">||FIELDTAG type_appt||Type of Appointment||ENDFIELDTAG||</label></span><span class="qtype_appt"><input type="radio" name="type_appt" value="Intake" onclick="checkhideall()" >Intake&nbsp;&nbsp;<input type="radio" name="type_appt" value="Follow-Up" onclick="checkhideall()" >Follow-Up&nbsp;&nbsp;</span></div>
+    <div class="col12 fldtype_appt_sor_pilot_client_contact qtype_appt_sor_pilot_client_contact">
+    <div class="col12 fldtype_appt_sor_pilot_client_contact qtype_appt_sor_pilot_client_contact"><span class="qtype_appt_sor_pilot_client_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_appt_sor_pilot_client_contact required-field-label"><label class="label-top">||FIELDTAG type_appt_sor_pilot_client_contact||Type of Appointment||ENDFIELDTAG||</label></span><span class="qtype_appt_sor_pilot_client_contact"><input type="radio" name="type_appt_sor_pilot_client_contact" value="Intake" onclick="checkhideall()" >Intake&nbsp;&nbsp;<input type="radio" name="type_appt_sor_pilot_client_contact" value="Follow-Up" onclick="checkhideall()" >Follow-Up&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

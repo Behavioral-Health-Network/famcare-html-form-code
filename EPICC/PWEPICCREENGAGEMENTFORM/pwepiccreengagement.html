@@ -511,35 +511,42 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col3 qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-right">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qreengagement_specialist"><span class="qreengagement_specialist required-label">||PWRequiredFieldRequiredText||</span><span class="qreengagement_specialist required-field-label"><label class="label-right">Re-Engagement Specialist Name&nbsp;</label></span></div>
-    <div class="col9 qreengagement_specialist"><span class="qreengagement_specialist"><select size="1" name="reengagement_specialist" onchange="checkhideall()">
+    <div class="col12 fldreengagement_specialist qreengagement_specialist">
+    <div class="col12 fldreengagement_specialist qreengagement_specialist"><span class="qreengagement_specialist required-label">||PWRequiredFieldRequiredText||</span><span class="qreengagement_specialist required-field-label"><label class="label-top">Re-Engagement Specialist Name</label></span><span class="qreengagement_specialist"><select size="1" name="reengagement_specialist" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_engagement_worker] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE reengagement_specialist^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_engagement_worker||
 </span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qfollow_up_form_reengagement"><span class="qfollow_up_form_reengagement"><label class="label-right">||FIELDTAG follow_up_form_reengagement||Follow-Up Forms||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qfollow_up_form_reengagement"><span class="qfollow_up_form_reengagement"><input type="radio" name="follow_up_form_reengagement" value="Two Week" onclick="checkhideall()" >Two Week&nbsp;&nbsp;<input type="radio" name="follow_up_form_reengagement" value="Thirty Day" onclick="checkhideall()" >Thirty Day&nbsp;&nbsp;</span></div>
+    <div class="col12 fldfollow_up_form_reengagement qfollow_up_form_reengagement">
+    <div class="col12 fldfollow_up_form_reengagement qfollow_up_form_reengagement"><span class="qfollow_up_form_reengagement"><label class="label-top">||FIELDTAG follow_up_form_reengagement||Follow-Up Forms||ENDFIELDTAG||</label></span><span class="qfollow_up_form_reengagement"><input type="radio" name="follow_up_form_reengagement" value="Two Week" onclick="checkhideall()" >Two Week&nbsp;&nbsp;<input type="radio" name="follow_up_form_reengagement" value="Thirty Day" onclick="checkhideall()" >Thirty Day&nbsp;&nbsp;</span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qdid_client_reengage"><span class="qdid_client_reengage"><label class="label-right">||FIELDTAG did_client_reengage||Did Client Re-Engage?||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdid_client_reengage"><span class="qdid_client_reengage"><input type="radio" name="did_client_reengage" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="did_client_reengage" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 flddid_client_reengage qdid_client_reengage">
+    <div class="col12 flddid_client_reengage qdid_client_reengage"><span class="qdid_client_reengage"><label class="label-top">||FIELDTAG did_client_reengage||Did Client Re-Engage?||ENDFIELDTAG||</label></span><span class="qdid_client_reengage"><input type="radio" name="did_client_reengage" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="did_client_reengage" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qefforts_to_engage"><span class="qefforts_to_engage"><label class="label-right">||FIELDTAG efforts_to_engage||Efforts to Engage||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qefforts_to_engage"><span class="qefforts_to_engage"><input type="checkbox" name="efforts_to_engage_agency_visit" value="ON" onclick="checkhideall()">Agency Visit&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_community_visit" value="ON" onclick="checkhideall()">Community Visit&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_letter" value="ON" onclick="checkhideall()">Letter Sent&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_phone" value="ON" onclick="checkhideall()">Phone Communication&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_other" value="ON" onclick="checkhideall()">Other&nbsp;&nbsp;</span></div>
+    <div class="col12 fldefforts_to_engage qefforts_to_engage">
+    <div class="col12 fldefforts_to_engage qefforts_to_engage"><span class="qefforts_to_engage"><label class="label-top">||FIELDTAG efforts_to_engage||Efforts to Engage||ENDFIELDTAG||</label></span><span class="qefforts_to_engage"><input type="checkbox" name="efforts_to_engage_1_AgencyVisit" value="ON" onclick="checkhideall()">Agency Visit&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_2_CommunityVisit" value="ON" onclick="checkhideall()">Community Visit&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_3_LetterSent" value="ON" onclick="checkhideall()">Letter Sent&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_4_PhoneCommunication" value="ON" onclick="checkhideall()">Phone Communication&nbsp;&nbsp;<input type="checkbox" name="efforts_to_engage_5_Other" value="ON" onclick="checkhideall()">Other&nbsp;&nbsp;</span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qnotes_reengagement"><span class="qnotes_reengagement"><label class="label-right">||FIELDTAG notes_reengagement||Notes||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qnotes_reengagement"><span class="qnotes_reengagement"><textarea name="notes_reengagement" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldnotes_reengagement qnotes_reengagement">
+    <div class="col12 fldnotes_reengagement qnotes_reengagement"><span class="qnotes_reengagement"><label class="label-top">||FIELDTAG notes_reengagement||Notes||ENDFIELDTAG||</label></span><span class="qnotes_reengagement"><textarea name="notes_reengagement" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
  <div class="entire">
-    <div class="col3 qstatus_reengagement"><span class="qstatus_reengagement"><label class="label-right">||FIELDTAG status_reengagement||Status||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qstatus_reengagement"><span class="qstatus_reengagement"><input type="radio" name="status_reengagement" value="Continue Re-Engagement" onclick="checkhideall()" >Continue Re-Engagement&nbsp;&nbsp;<input type="radio" name="status_reengagement" value="Client Terminated" onclick="checkhideall()" >Client Terminated&nbsp;&nbsp;</span></div>
+    <div class="col12 fldstatus_reengagement qstatus_reengagement">
+    <div class="col12 fldstatus_reengagement qstatus_reengagement"><span class="qstatus_reengagement"><label class="label-top">||FIELDTAG status_reengagement||Status||ENDFIELDTAG||</label></span><span class="qstatus_reengagement"><input type="radio" name="status_reengagement" value="Continue Re-Engagement" onclick="checkhideall()" >Continue Re-Engagement&nbsp;&nbsp;<input type="radio" name="status_reengagement" value="Client Terminated" onclick="checkhideall()" >Client Terminated&nbsp;&nbsp;</span></div>
+     </div>
   </div>
 
 </div>

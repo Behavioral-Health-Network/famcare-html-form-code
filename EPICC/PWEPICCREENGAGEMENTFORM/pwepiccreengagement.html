@@ -34,9 +34,8 @@ function startup() {
 
 		}
 	}
-            setrequire('Question9');
-    setrequire('epicc_coach_name');
-    setrequire('epicc_coach_agency');
+            setrequire('Pathway_Date');
+    setrequire('reengagement_specialist');
 
 	checkhideall();
 
@@ -275,9 +274,8 @@ function validateform(scope='all') {
        f.TESTRIGHTANSWERS.value=cstrjis(right);
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
-     if (!hiddenfield('Question9') && gvtfieldvalue('Question9')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Question9");}
-  if (!hiddenfield('epicc_coach_name') && gvtfieldvalue('epicc_coach_name')=='') {edesc=edesc+`Must specify a value for Re-Engagement Specialist Name\n`; seterror("epicc_coach_name");}
-  if (!hiddenfield('epicc_coach_agency') && gvtfieldvalue('epicc_coach_agency')=='') {edesc=edesc+`Must specify a value for Re-Engagement Specialist Agency\n`; seterror("epicc_coach_agency");}
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('reengagement_specialist') && gvtfieldvalue('reengagement_specialist')=='') {edesc=edesc+`Must specify a value for Re-Engagement Specialist Name\n`; seterror("reengagement_specialist");}
 
     return edesc;
 }
@@ -513,21 +511,14 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col3 qQuestion9"><span class="qQuestion9 required-label">||PWRequiredFieldRequiredText||</span><span class="qQuestion9 required-field-label"><label class="label-right">||FIELDTAG Question9||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qQuestion9"><span class="qQuestion9"><input type="text" name="Question9" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+    <div class="col3 qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-right">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col3 qepicc_coach_name"><span class="qepicc_coach_name required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_coach_name required-field-label"><label class="label-right">Re-Engagement Specialist Name&nbsp;</label></span></div>
-    <div class="col9 qepicc_coach_name"><span class="qepicc_coach_name"><select size="1" name="epicc_coach_name" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_coach_name] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_coach_name^^') AND PROGRAM="LINCS NAV" ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_coach_name||
-</span></div>
-  </div>
- <div class="entire">
-    <div class="col3 qepicc_coach_agency"><span class="qepicc_coach_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_coach_agency required-field-label"><label class="label-right">Re-Engagement Specialist Agency&nbsp;</label></span></div>
-    <div class="col9 qepicc_coach_agency"><span class="qepicc_coach_agency"><select size="1" name="epicc_coach_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_coach_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_coach_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_coach_agency||
+    <div class="col3 qreengagement_specialist"><span class="qreengagement_specialist required-label">||PWRequiredFieldRequiredText||</span><span class="qreengagement_specialist required-field-label"><label class="label-right">Re-Engagement Specialist Name&nbsp;</label></span></div>
+    <div class="col9 qreengagement_specialist"><span class="qreengagement_specialist"><select size="1" name="reengagement_specialist" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_engagement_worker] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE reengagement_specialist^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_engagement_worker||
 </span></div>
   </div>
  <div class="entire">

@@ -544,10 +544,6 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
-<div class="deflist">
-<div class="entire">
-<div class="col12 term">Section I</div>
-</div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -587,10 +583,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section II: Treatment Agency</div>
+<div class="col12 term">Active Treatment Agency</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">If client is attending a Substance Use Treatment Agency, please verify the agency below. Click "Add" to add a new agency if needed. </label></div>
+    <div class="col12"><label class="label-top"><i>If client is still actively attending the same substance use treatment agency, leave as is. If client chose to attend a different agency click "View/Edit" to add an "End Date" to the active treatment agency and then create a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWSUBroadTreatmentAgency||</div>
@@ -612,7 +608,7 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Section III: Program Participation</div>
+<div class="col12 term">Program Participation</div>
 </div>
  <div class="entire">
     <div class="col12 fldprogram_participation_two_week qprogram_participation_two_week">
@@ -656,12 +652,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section IV: Housing</div>
+<div class="col12 term">Housing Status</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Verify the client's current housing status listed below. If there has been a change, you must do TWO things: 
-1) Click "Edit" and add an End Date to client's previous status.
-2) Click "Add" to enter a new housing status. </label></div>
+    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
@@ -673,12 +667,10 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Section V: Payor Source</div>
+<div class="col12 term">Payor Source</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Verify the client's current insurance information listed below. If there has been a change, you must do TWO things: 
-1) Click "Edit" and add an End Date to client's previous status.
-2) Click "Add" to enter a new payor status. </label></div>
+    <div class="col12"><label class="label-top"><i>If client's payor source hasn't changed, leave as is. If client's payor source has changed, click "View/Edit", add an "End Date" to the current entry, select "No" for "Payor is Current", then add a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>

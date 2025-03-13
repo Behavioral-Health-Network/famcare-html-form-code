@@ -38,8 +38,8 @@ function startup() {
     setrequire('treatment_path_two_week');
     setrequire('rc_only_client_attend_first_appt_coach_two_week');
     setrequire('rc_only_last_date_communication_two_week');
-    setrequire('client_attend_intake_appt_two_week');
-    setrequire('intake_appt_date_two_week');
+    // setrequire('client_attend_intake_appt_two_week');
+    // setrequire('intake_appt_date_two_week');
     setrequire('intake_conducted_appt_date_two_week');
     setrequire('mat_prescribed_physician_appt_two_week');
     setrequire('what_mat_physician_appt_two_week');
@@ -60,8 +60,8 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.treatment_path_two_week,"rc_only_client_attend_first_appt_coach_two_week","Recovery Coach Only");
    checkhide(f.treatment_path_two_week,"rc_only_last_date_communication_two_week","Recovery Coach Only");
-   checkhide(f.treatment_path_two_week,"client_attend_intake_appt_two_week","MAT,Non-MAT Treatment");
-   checkhide(f.client_attend_intake_appt_two_week,"intake_appt_date_two_week","Yes");
+//    checkhide(f.treatment_path_two_week,"client_attend_intake_appt_two_week","MAT,Non-MAT Treatment");
+//    checkhide(f.client_attend_intake_appt_two_week,"intake_appt_date_two_week","Yes");
    checkhide(f.treatment_path_two_week,"intake_conducted_appt_date_two_week","MAT,Non-MAT Treatment");
    checkhide(f.treatment_path_two_week,"mat_prescribed_physician_appt_two_week","MAT");
    checkhide(f.mat_prescribed_physician_appt_two_week,"what_mat_physician_appt_two_week","Yes");
@@ -303,8 +303,8 @@ function validateform(scope='all') {
   if (!hiddenfield('treatment_path_two_week') && gvtfieldvalue('treatment_path_two_week')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_two_week");}
   if (!hiddenfield('rc_only_client_attend_first_appt_coach_two_week') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_two_week')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_two_week");}
   if (!hiddenfield('rc_only_last_date_communication_two_week') && gvtfieldvalue('rc_only_last_date_communication_two_week')=='') {edesc=edesc+`Must specify a value for Date of Last Communication\n`; seterror("rc_only_last_date_communication_two_week");}
-  if (!hiddenfield('client_attend_intake_appt_two_week') && gvtfieldvalue('client_attend_intake_appt_two_week')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment? (NOTE: Regardless of if intake was actually conducted.)\n`; seterror("client_attend_intake_appt_two_week");}
-  if (!hiddenfield('intake_appt_date_two_week') && gvtfieldvalue('intake_appt_date_two_week')=='') {edesc=edesc+`Must specify a value for Date of Intake Appointment\n`; seterror("intake_appt_date_two_week");}
+//   if (!hiddenfield('client_attend_intake_appt_two_week') && gvtfieldvalue('client_attend_intake_appt_two_week')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment? (NOTE: Regardless of if intake was actually conducted.)\n`; seterror("client_attend_intake_appt_two_week");}
+//   if (!hiddenfield('intake_appt_date_two_week') && gvtfieldvalue('intake_appt_date_two_week')=='') {edesc=edesc+`Must specify a value for Date of Intake Appointment\n`; seterror("intake_appt_date_two_week");}
   if (!hiddenfield('intake_conducted_appt_date_two_week') && gvtfieldvalue('intake_conducted_appt_date_two_week')=='') {edesc=edesc+`Must specify a value for Is client actively attending treatment at a SUD agency at this time?\n`; seterror("intake_conducted_appt_date_two_week");}
   if (!hiddenfield('mat_prescribed_physician_appt_two_week') && gvtfieldvalue('mat_prescribed_physician_appt_two_week')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_two_week");}
   if (!hiddenfield('what_mat_physician_appt_two_week') && gvtfieldvalue('what_mat_physician_appt_two_week')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_two_week");}
@@ -564,7 +564,7 @@ function updatesignatures(){
     <div class="col12 fldrc_only_last_date_communication_two_week qrc_only_last_date_communication_two_week"><span class="qrc_only_last_date_communication_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_last_date_communication_two_week required-field-label"><label class="label-top">||FIELDTAG rc_only_last_date_communication_two_week||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_two_week"><input type="text" name="rc_only_last_date_communication_two_week" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col12 fldclient_attend_intake_appt_two_week qclient_attend_intake_appt_two_week">
     <div class="col12 fldclient_attend_intake_appt_two_week qclient_attend_intake_appt_two_week"><span class="qclient_attend_intake_appt_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_two_week required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_two_week||Did client attend an intake appointment? (NOTE: Regardless of if intake was actually conducted.)||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_two_week"><input type="radio" name="client_attend_intake_appt_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_attend_intake_appt_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
@@ -573,7 +573,7 @@ function updatesignatures(){
     <div class="col12 fldintake_appt_date_two_week qintake_appt_date_two_week">
     <div class="col12 fldintake_appt_date_two_week qintake_appt_date_two_week"><span class="qintake_appt_date_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_appt_date_two_week required-field-label"><label class="label-top">||FIELDTAG intake_appt_date_two_week||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_two_week"><input type="text" name="intake_appt_date_two_week" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col12 fldintake_conducted_appt_date_two_week qintake_conducted_appt_date_two_week">
     <div class="col12 fldintake_conducted_appt_date_two_week qintake_conducted_appt_date_two_week"><span class="qintake_conducted_appt_date_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_conducted_appt_date_two_week required-field-label"><label class="label-top">||FIELDTAG intake_conducted_appt_date_two_week||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_two_week"><input type="radio" name="intake_conducted_appt_date_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -613,7 +613,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldprogram_participation_two_week qprogram_participation_two_week">
     <div class="col12 fldprogram_participation_two_week qprogram_participation_two_week"><span class="qprogram_participation_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_two_week required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_two_week"><select size="1" name="program_participation_two_week" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_two_week^^') and follow_ups = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_two_week^^') and two_week_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_program_participation||
 </span></div>
      </div>

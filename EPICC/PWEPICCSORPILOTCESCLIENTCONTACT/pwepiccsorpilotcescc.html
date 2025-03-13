@@ -528,11 +528,11 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
- <div class="entire">
+<div class="entire">
     <div class="col12 fldepicc_engagement_worker qepicc_engagement_worker">
-    <div class="col12 fldepicc_engagement_worker qepicc_engagement_worker"><span class="qepicc_engagement_worker required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_engagement_worker required-field-label"><label class="label-top">EPICC Engagement Worker</label></span><span class="qepicc_engagement_worker"><select size="1" name="epicc_engagement_worker" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_engagement_worker] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_engagement_worker^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_engagement_worker||
+    <div class="col12 fldepicc_engagement_worker qepicc_engagement_worker"><span class="qepicc_engagement_worker"><label class="label-top">||FIELDTAG epicc_engagement_worker||Re-Engagement Coordinator||ENDFIELDTAG||</label></span><span class="qepicc_engagement_worker"><select size="1" name="epicc_engagement_worker" onchange="checkhideall()">
+<option value="||SELECT EMPLOYEENUMBER, [LASTNAME] & ', ' & [FIRSTNAME] & ' (' & EMPLOYEENUMBER & ')' FROM Q_HRFORM WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND  EMPSTATUS='Active' AND DDEPICC='ON' AND DDCES='ON' ORDER BY LASTNAME,FIRSTNAME||">||CHOICETABLESQLD||</option>
+</select>
 </span></div>
      </div>
   </div>

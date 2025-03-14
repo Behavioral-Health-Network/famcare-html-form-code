@@ -58,6 +58,7 @@ function checkhideall() {
    checkhide(f.treatment_path_three_month,"rc_only_last_date_communication_three_month","Recovery Coach Only");
    checkhide(f.treatment_path_three_month,"client_attend_intake_appt_three_month","MAT,Non-MAT Treatment");
    checkhide(f.client_attend_intake_appt_three_month,"intake_appt_date_three_month","Yes");
+   checkhide(f.program_participation_three_month,"preg_post_part_three_month","015");
    checkhide(f.program_participation_three_month,"if_transfer_what_region_three_month","Regional Transfer");
    checkhide(f.program_participation_three_month,"if_transfer_contact_transfer_region_success_three_month","Regional Transfer");
    checkhide(f.program_participation_three_month,"client_status_three_month","Ineligible; Does Not Meet Project Criteria,Ineligible; Not Clinically Appropriate,Client Declined Services,Not Engaged,Client Incarcerated,Client Deceased,Regional Transfer,New Referral Received");
@@ -609,6 +610,11 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
+    <div class="col12 fldpreg_post_part_three_month qpreg_post_part_three_month">
+    <div class="col12 fldpreg_post_part_three_month qpreg_post_part_three_month"><span class="qpreg_post_part_three_month"><label class="label-top">||FIELDTAG preg_post_part_three_month||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_three_month"><input type="radio" name="preg_post_part_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
     <div class="col12 fldif_transfer_what_region_three_month qif_transfer_what_region_three_month">
     <div class="col12 fldif_transfer_what_region_three_month qif_transfer_what_region_three_month"><span class="qif_transfer_what_region_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_three_month required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_three_month||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_three_month"><input type="radio" name="if_transfer_what_region_three_month" value="Southwest " onclick="checkhideall()" >Southwest &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Central " onclick="checkhideall()" >Central &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="West " onclick="checkhideall()" >West &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Lake " onclick="checkhideall()" >Lake &nbsp;&nbsp;</span></div>
      </div>
@@ -632,6 +638,24 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Verify the client's current housing status listed below. If there has been a change, you must do TWO things: 1) Click "Edit" and add an End Date to client's previous status. 2) Click "Add" to enter a new housing status.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Verify the client's current insurance information listed below. If there has been a change, you must do TWO things: 1) Click "Edit" and add an End Date to client's previous status. 2) Click "Add" to enter a new payor status.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
   </div>
 
 </div>

@@ -48,6 +48,7 @@ function checkhideall() {
    checkhide(f.client_consent_dob,"dob","Full Date");
    checkhide(f.type_of_contact,"in_person_location","In-Person");
    checkhide(f.od_report_completed,"reason_od_report_not_completed","No");
+   checkhide(f.rescue_kit_given,"why_rescue_kit_not_given","No");
 
 }
 
@@ -583,8 +584,10 @@ function updatesignatures(){
     <div class="col9 qrescue_kit_given"><span class="qrescue_kit_given"><input type="radio" name="rescue_kit_given" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="rescue_kit_given" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
   </div>
  <div class="entire">
+    <div class="col12 fldwhy_rescue_kit_not_given qwhy_rescue_kit_not_given">
     <div class="col3 qwhy_rescue_kit_not_given"><span class="qwhy_rescue_kit_not_given"><label class="label-right">||FIELDTAG why_rescue_kit_not_given||If a rescue kit was not given, why not?||ENDFIELDTAG||&nbsp;</label></span></div>
     <div class="col9 qwhy_rescue_kit_not_given"><span class="qwhy_rescue_kit_not_given"><textarea name="why_rescue_kit_not_given" class="autoexpand"></textarea></span></div>
+    </div>
   </div>
 
 </div>

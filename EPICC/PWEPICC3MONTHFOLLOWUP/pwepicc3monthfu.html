@@ -45,6 +45,7 @@ function startup() {
     setrequire('if_transfer_contact_transfer_region_success_three_month');
     setrequire('client_status_three_month');
     setrequire('date_transferred_reengagement_specialist_three_month');
+    setrequire('preg_post_part_three_month');
 
 	checkhideall();
 
@@ -61,7 +62,8 @@ function checkhideall() {
    checkhide(f.program_participation_three_month,"preg_post_part_three_month","015");
    checkhide(f.program_participation_three_month,"if_transfer_what_region_three_month","010");
    checkhide(f.program_participation_three_month,"if_transfer_contact_transfer_region_success_three_month","010");
-   checkhide(f.program_participation_three_month,"client_status_three_month","002,003,004,016,006,07,010,009");
+   checkhide(f.program_participation_three_month,"client_status_three_month","016,010");
+   checkhide(f.client_status_three_month,"date_transferred_reengagement_specialist_three_month","Transfer to Re-Engagement Specialist");
 
 }
 

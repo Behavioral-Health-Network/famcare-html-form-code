@@ -519,7 +519,7 @@ function updatesignatures(){
 <div class="entire">
     <div class="col12 fldHR_Dropdown qHR_Dropdown">
     <div class="col12 fldHR_Dropdown qHR_Dropdown"><span class="qHR_Dropdown"><label class="label-top">||FIELDTAG HR_Dropdown||HR Dropdown||ENDFIELDTAG||</label></span><span class="qHR_Dropdown"><select size="1" name="HR_Dropdown" onchange="checkhideall()">
-<option value="||SELECT EMPLOYEENUMBER, [LASTNAME] & ', ' & [FIRSTNAME] & ' (' & EMPLOYEENUMBER & ')' FROM Q_HRFORM WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND  EMPSTATUS='Active' AND ApplicableSystemDropDowns='DDEPICC' ORDER BY LASTNAME,FIRSTNAME||">||CHOICETABLESQLD||</option>
+<option value="||SELECT EMPLOYEENUMBER, [LASTNAME] & ', ' & [FIRSTNAME] & ' (' & EMPLOYEENUMBER & ')' FROM Q_HRFORM WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND  EMPSTATUS='Active' AND DDEPICC='ON' ORDER BY LASTNAME,FIRSTNAME||">||CHOICETABLESQLD||</option>
 </select>
 </span></div>
      </div>

@@ -47,6 +47,7 @@ function checkhideall() {
       checkhide(f.client_consent_dob,"birth_year","Year Only");
    checkhide(f.client_consent_dob,"dob","Full Date");
    checkhide(f.type_of_contact,"in_person_location","In-Person");
+   checkhide(f.od_report_completed,"reason_od_report_not_completed","No");
 
 }
 
@@ -510,7 +511,6 @@ function updatesignatures(){
     </div>
 <div class="deflist">
 <div class="entire">
-<div class="col12 term">Full Width Section</div>
 </div>
  <div class="entire">
     <div class="col3 qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-right">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
@@ -573,8 +573,10 @@ function updatesignatures(){
     <div class="col9 qod_report_completed"><span class="qod_report_completed"><input type="radio" name="od_report_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="od_report_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
   </div>
  <div class="entire">
+    <div class="col12 fldreason_od_report_not_completed qreason_od_report_not_completed">
     <div class="col3 qreason_od_report_not_completed"><span class="qreason_od_report_not_completed"><label class="label-right">||FIELDTAG reason_od_report_not_completed||If an overdose report was not completed, why not?||ENDFIELDTAG||&nbsp;</label></span></div>
     <div class="col9 qreason_od_report_not_completed"><span class="qreason_od_report_not_completed"><textarea name="reason_od_report_not_completed" class="autoexpand"></textarea></span></div>
+    </div>
   </div>
  <div class="entire">
     <div class="col3 qrescue_kit_given"><span class="qrescue_kit_given"><label class="label-right">||FIELDTAG rescue_kit_given||Was a Rescue Kid given?||ENDFIELDTAG||&nbsp;</label></span></div>

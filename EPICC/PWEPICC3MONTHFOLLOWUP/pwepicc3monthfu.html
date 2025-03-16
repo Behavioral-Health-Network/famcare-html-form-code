@@ -37,8 +37,9 @@ function startup() {
             setrequire('Pathway_Date');
     setrequire('treatment_path_three_month');
     setrequire('rc_only_client_attend_first_appt_coach_three_month');
-    setrequire('client_attend_intake_appt_three_month');
-    setrequire('intake_appt_date_three_month');
+    // client_attend_intake_appt_three_month and intake_appt_date_three_month are being removed from the form since these questions are going to be answered on the PWBroadTreatmentAgency summation. We do not want the data from these questions to be deleted from the table.
+    // setrequire('client_attend_intake_appt_three_month');
+    // setrequire('intake_appt_date_three_month');
     setrequire('mat_prescribed_physician_appt_three_month');
     setrequire('what_mat_physician_appt_thirty_day');
     setrequire('program_participation_three_month');
@@ -58,8 +59,8 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.treatment_path_three_month,"rc_only_client_attend_first_appt_coach_three_month","Recovery Coach Only");
    checkhide(f.treatment_path_three_month,"rc_only_last_date_communication_three_month","Recovery Coach Only");
-   checkhide(f.treatment_path_three_month,"client_attend_intake_appt_three_month","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
+//    checkhide(f.treatment_path_three_month,"client_attend_intake_appt_three_month","MAT,Non-MAT Treatment");
+//    checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
    checkhide(f.mat_prescribed_physician_appt_three_month,"what_mat_physician_appt_thirty_day","Yes");
    checkhide(f.client_attend_intake_appt_three_month,"intake_appt_date_three_month","Yes");
    checkhide(f.program_participation_three_month,"preg_post_part_three_month","015");
@@ -558,7 +559,7 @@ function updatesignatures(){
     <div class="col12 fldrc_only_last_date_communication_three_month qrc_only_last_date_communication_three_month"><span class="qrc_only_last_date_communication_three_month"><label class="label-top">||FIELDTAG rc_only_last_date_communication_three_month||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_three_month"><input type="text" name="rc_only_last_date_communication_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col12 fldclient_attend_intake_appt_three_month qclient_attend_intake_appt_three_month">
     <div class="col12 fldclient_attend_intake_appt_three_month qclient_attend_intake_appt_three_month"><span class="qclient_attend_intake_appt_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_three_month required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_three_month||Did client attend an intake appointment?||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_three_month"><select size="1"  name="client_attend_intake_appt_three_month" onchange="checkhideall()" >
 <option value="">(please select)</option>
@@ -567,12 +568,12 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
-  </div>
- <div class="entire">
+  </div> -->
+ <!-- <div class="entire">
     <div class="col12 fldintake_appt_date_three_month qintake_appt_date_three_month">
     <div class="col12 fldintake_appt_date_three_month qintake_appt_date_three_month"><span class="qintake_appt_date_three_month"><label class="label-top">||FIELDTAG intake_appt_date_three_month||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_three_month"><input type="text" name="intake_appt_date_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col12 fldintake_conducted_appt_date_three_month qintake_conducted_appt_date_three_month">
     <div class="col12 fldintake_conducted_appt_date_three_month qintake_conducted_appt_date_three_month"><span class="qintake_conducted_appt_date_three_month"><label class="label-top">||FIELDTAG intake_conducted_appt_date_three_month||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_three_month"><input type="radio" name="intake_conducted_appt_date_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -612,7 +613,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldprogram_participation_three_month qprogram_participation_three_month">
     <div class="col12 fldprogram_participation_three_month qprogram_participation_three_month"><span class="qprogram_participation_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_three_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_three_month"><select size="1" name="program_participation_three_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_three_month^^') and follow_ups = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_three_month^^') and three_month_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_program_participation||
 </span></div>
      </div>

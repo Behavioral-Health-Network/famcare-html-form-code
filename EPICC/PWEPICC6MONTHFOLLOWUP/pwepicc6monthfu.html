@@ -44,7 +44,7 @@ function startup() {
     setrequire('program_participation_six_month_new');
     setrequire('if_transfer_contact_transfer_region_success_six_month');
     setrequire('client_status_six_month');
-    setrequire('date_transferred_reengagement_specialist_three_month');
+    setrequire('date_transferred_reengagement_specialist_six_month');
 
 	checkhideall();
 
@@ -61,8 +61,10 @@ function checkhideall() {
    checkhide(f.treatment_path_six_month,"intake_conducted_appt_date_six_month","MAT,Non-MAT Treatment");
    checkhide(f.treatment_path_six_month,"mat_prescribed_physician_appt_six_month","MAT,Non-MAT Treatment");
    checkhide(f.mat_prescribed_physician_appt_six_month,"what_mat_physician_appt_six_month","Yes");
+   checkhide(f.program_participation_six_month_new,"preg_post_part_six_month","015");
    checkhide(f.program_participation_six_month_new,"if_transfer_what_region_six_month","Regional Transfer");
    checkhide(f.program_participation_six_month_new,"if_transfer_contact_transfer_region_success_six_month","Regional Transfer");
+   checkhide(f.client_status_six_month,"date_transferred_reengagement_specialist_six_month","Transfer to Re-Engagement Specialist");
 
 }
 
@@ -302,7 +304,7 @@ function validateform(scope='all') {
   if (!hiddenfield('program_participation_six_month_new') && gvtfieldvalue('program_participation_six_month_new')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_six_month_new");}
   if (!hiddenfield('if_transfer_contact_transfer_region_success_six_month') && gvtfieldvalue('if_transfer_contact_transfer_region_success_six_month')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_six_month");}
   if (!hiddenfield('client_status_six_month') && gvtfieldvalue('client_status_six_month')=='') {edesc=edesc+`Must specify a value for Status\n`; seterror("client_status_six_month");}
-  if (!hiddenfield('date_transferred_reengagement_specialist_three_month') && gvtfieldvalue('date_transferred_reengagement_specialist_three_month')=='') {edesc=edesc+`Must specify a value for Date of Transfer to Re-Engagement Specialist\n`; seterror("date_transferred_reengagement_specialist_three_month");}
+  if (!hiddenfield('date_transferred_reengagement_specialist_six_month') && gvtfieldvalue('date_transferred_reengagement_specialist_six_month')=='') {edesc=edesc+`Must specify a value for Date of Transfer to Re-Engagement Specialist\n`; seterror("date_transferred_reengagement_specialist_six_month");}
 
     return edesc;
 }
@@ -611,6 +613,11 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
+    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month">
+    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month"><span class="qpreg_post_part_six_month"><label class="label-top">||FIELDTAG preg_post_part_six_month||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_six_month"><input type="radio" name="preg_post_part_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
     <div class="col12 fldif_transfer_what_region_six_month qif_transfer_what_region_six_month">
     <div class="col12 fldif_transfer_what_region_six_month qif_transfer_what_region_six_month"><span class="qif_transfer_what_region_six_month"><label class="label-top">||FIELDTAG if_transfer_what_region_six_month||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_six_month"><input type="radio" name="if_transfer_what_region_six_month" value="Southwest" onclick="checkhideall()" >Southwest<br><input type="radio" name="if_transfer_what_region_six_month" value="Central" onclick="checkhideall()" >Central<br><input type="radio" name="if_transfer_what_region_six_month" value="West" onclick="checkhideall()" >West<br><input type="radio" name="if_transfer_what_region_six_month" value="Lake" onclick="checkhideall()" >Lake</span></div>
      </div>
@@ -628,9 +635,15 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 flddate_transferred_reengagement_specialist_three_month qdate_transferred_reengagement_specialist_three_month">
-    <div class="col12 flddate_transferred_reengagement_specialist_three_month qdate_transferred_reengagement_specialist_three_month"><span class="qdate_transferred_reengagement_specialist_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_three_month required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_three_month||Date of Transfer to Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_three_month"><input type="text" name="date_transferred_reengagement_specialist_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 flddate_transferred_reengagement_specialist_six_month qdate_transferred_reengagement_specialist_six_month">
+    <div class="col12 flddate_transferred_reengagement_specialist_six_month qdate_transferred_reengagement_specialist_six_month"><span class="qdate_transferred_reengagement_specialist_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_six_month required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_six_month||Date of Transfer to Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_six_month"><input type="text" name="date_transferred_reengagement_specialist_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
   </div>
 
 </div>

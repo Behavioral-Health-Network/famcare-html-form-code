@@ -60,9 +60,9 @@ function checkhideall() {
       checkhide(f.treatment_path_three_month,"rc_only_client_attend_first_appt_coach_three_month","Recovery Coach Only");
    checkhide(f.treatment_path_three_month,"rc_only_last_date_communication_three_month","Recovery Coach Only");
 //    checkhide(f.treatment_path_three_month,"client_attend_intake_appt_three_month","MAT,Non-MAT Treatment");
-//    checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
+   checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
    checkhide(f.mat_prescribed_physician_appt_three_month,"what_mat_physician_appt_thirty_day","Yes");
-   checkhide(f.client_attend_intake_appt_three_month,"intake_appt_date_three_month","Yes");
+//    checkhide(f.client_attend_intake_appt_three_month,"intake_appt_date_three_month","Yes");
    checkhide(f.program_participation_three_month,"preg_post_part_three_month","015");
    checkhide(f.program_participation_three_month,"if_transfer_what_region_three_month","010");
    checkhide(f.program_participation_three_month,"if_transfer_contact_transfer_region_success_three_month","010");
@@ -300,7 +300,7 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('treatment_path_three_month') && gvtfieldvalue('treatment_path_three_month')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_three_month");}
   if (!hiddenfield('rc_only_client_attend_first_appt_coach_three_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_three_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_three_month");}
-  if (!hiddenfield('client_attend_intake_appt_three_month') && gvtfieldvalue('client_attend_intake_appt_three_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_three_month");}
+//   if (!hiddenfield('client_attend_intake_appt_three_month') && gvtfieldvalue('client_attend_intake_appt_three_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_three_month");}
   if (!hiddenfield('mat_prescribed_physician_appt_three_month') && gvtfieldvalue('mat_prescribed_physician_appt_three_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_three_month");}
   if (!hiddenfield('what_mat_physician_appt_thirty_day') && gvtfieldvalue('what_mat_physician_appt_thirty_day')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_thirty_day");}
   if (!hiddenfield('program_participation_three_month') && gvtfieldvalue('program_participation_three_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_three_month");}

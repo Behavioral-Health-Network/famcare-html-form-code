@@ -679,7 +679,7 @@ function updatesignatures(){
      </div>
     <div class="col4 qcmhc_agency_found">
     <div class="col4 fldcmhc_agency_found qcmhc_agency_found"><span class="qcmhc_agency_found required-label">||PWRequiredFieldRequiredText||</span><span class="qcmhc_agency_found required-field-label"><label class="label-top">CMHC Agency</label></span><span class="qcmhc_agency_found"><select size="1" name="cmhc_agency_found" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency_found^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency_found^^') PROGRAM_NAME='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
@@ -696,7 +696,7 @@ function updatesignatures(){
      </div>
     <div class="col4 qada_su_agency_found">
     <div class="col4 fldada_su_agency_found qada_su_agency_found"><span class="qada_su_agency_found required-label">||PWRequiredFieldRequiredText||</span><span class="qada_su_agency_found required-field-label"><label class="label-top">ADA/SU Agency</label></span><span class="qada_su_agency_found"><select size="1" name="ada_su_agency_found" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency_found^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency_found^^') AND PROGRAM_NAME='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ada_su_agency||
 </span></div>
      </div>

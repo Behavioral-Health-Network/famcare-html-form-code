@@ -627,35 +627,11 @@ function updatesignatures(){
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>
- <div class="entire">
+  <div class="entire">
     <div class="col6"><label class="label-top"></label></div>
     <div class="col6"><label class="label-top"></label></div>
   </div>
- <div class="entire">
-    <div class="col6"><label class="label-top">Insurance</label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top"></label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top">Housing</label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top"></label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
+  <div class="entire">
     <div class="col6 qreferral_method">
     <div class="col6 fldreferral_method qreferral_method"><span class="qreferral_method"><label class="label-top">||FIELDTAG referral_method||Method of Referral||ENDFIELDTAG||</label></span><span class="qreferral_method"><input type="radio" name="referral_method" value="Direct Referral To Navigator By Phone" onclick="checkhideall()" >Direct Referral To Navigator By Phone<br><input type="radio" name="referral_method" value="Direct Referral To Navigator While On Unit" onclick="checkhideall()" >Direct Referral To Navigator While On Unit<br><input type="radio" name="referral_method" value="AnswerFirst" onclick="checkhideall()" >AnswerFirst
 <!-- FIELDOVERRIDE(referral_method,10,42) -->
@@ -663,26 +639,32 @@ function updatesignatures(){
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>
- <div class="entire">
-    <div class="col6"><label class="label-top"></label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top"></label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top"></label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top"></label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col6"><label class="label-top">CIMOR Status at Referral</label></div>
-    <div class="col6"><label class="label-top"></label></div>
-  </div>
+  <div class="entire">
+    <div class="col12 term">Housing Status</div>
+    </div>
+     <div class="entire">
+        <div class="col12"><label class="label-top">Click "Add" below to enter the client's current housing status.</label></div>
+      </div>
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+      </div>
+    <div class="entire">
+    <div class="col12 term">Payor Source</div>
+    </div>
+     <div class="entire">
+        <div class="col12"><label class="label-top">Click "Add" below to enter the client's current insurance status, including Start Date(s) if covered by one (or more) payors. When payor source is current, select "Yes" for "Payor is Current". Edit the End Date when payor source is no longer current.</label></div>
+      </div>
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+      </div>
+    <div class="entire">
+    </div>
+     <div class="entire">
+        <div class="col6"><label class="label-top"></label></div>
+      </div>
+  <div class="entire">
+    <div class="col12 term">CIMOR Status at Referral</div>
+    </div>
  <div class="entire">
     <div class="col6"><label class="label-top"></label></div>
     <div class="col6"><label class="label-top"></label></div>

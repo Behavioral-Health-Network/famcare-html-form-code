@@ -36,7 +36,7 @@ function startup() {
 	}
             setrequire('Pathway_Date');
     setrequire('contact_method_at_referral');
-    setrequire('callers_name');
+    setrequire('caller_name');
     setrequire('referring_agency');
     setrequire('cmhc_status');
     setrequire('cimor_cmhc_agency');
@@ -303,7 +303,7 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('answerfirst_case_num') && gvtfieldvalue('answerfirst_case_num')=='') {edesc=edesc+`Must specify a value for AnswerFirst Case Number\n`; seterror("answerfirst_case_num");}
   if (!hiddenfield('contact_method_at_referral') && gvtfieldvalue('contact_method_at_referral')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("contact_method_at_referral");}
-  if (!hiddenfield('callers_name') && gvtfieldvalue('callers_name')=='') {edesc=edesc+`Must specify a value for Caller's First and Last Name\n`; seterror("callers_name");}
+  if (!hiddenfield('caller_name') && gvtfieldvalue('caller_name')=='') {edesc=edesc+`Must specify a value for Caller's First and Last Name\n`; seterror("caller_name");}
   if (!hiddenfield('referring_agency') && gvtfieldvalue('referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Hospital\n`; seterror("referring_agency");}
   if (!hiddenfield('cmhc_status') && gvtfieldvalue('cmhc_status')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_status");}
   if (!hiddenfield('cimor_cmhc_agency') && gvtfieldvalue('cimor_cmhc_agency')=='') {edesc=edesc+`Must specify a value for CMHC Agency\n`; seterror("cimor_cmhc_agency");}
@@ -599,8 +599,8 @@ function updatesignatures(){
     <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col6 qcallers_name">
-    <div class="col6 fldcallers_name qcallers_name"><span class="qcallers_name required-label">||PWRequiredFieldRequiredText||</span><span class="qcallers_name required-field-label"><label class="label-top">||FIELDTAG callers_name||Caller's First and Last Name||ENDFIELDTAG||</label></span><span class="qcallers_name"><input type="text" name="callers_name" size="20" onchange="checkhideall()"></span></div>
+    <div class="col6 qcaller_name">
+    <div class="col6 fldcaller_name qcaller_name"><span class="qcaller_name required-label">||PWRequiredFieldRequiredText||</span><span class="qcaller_name required-field-label"><label class="label-top">||FIELDTAG caller_name||Caller's First and Last Name||ENDFIELDTAG||</label></span><span class="qcaller_name"><input type="text" name="caller_name" size="20" onchange="checkhideall()"></span></div>
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>
@@ -762,7 +762,7 @@ function updatesignatures(){
 <option value="Not In Workforce">Not In Workforce</option>
 <option value="Part Time">Part Time</option>
 <option value="Supported Employment">Supported Employment</option>
-<option value="Unemployed; Actively Looking">Unemployed; Actively Looking</option>
+<option value="Unemployed, Actively Looking">Unemployed, Actively Looking</option>
 <option value="Unknown/Refused">Unknown/Refused</option>
 
 </select></span></div>
@@ -777,7 +777,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col6 qmilitary_status">
-    <div class="col6 fldmilitary_status qmilitary_status"><span class="qmilitary_status"><label class="label-top">||FIELDTAG military_status||Military Status||ENDFIELDTAG||</label></span><span class="qmilitary_status"><input type="radio" name="military_status" value="Currently In military" onclick="checkhideall()" >Currently In military<br><input type="radio" name="military_status" value="Never In military" onclick="checkhideall()" >Never In military<br><input type="radio" name="military_status" value="Veteran" onclick="checkhideall()" >Veteran<br><input type="radio" name="military_status" value="Unknown/Refused" onclick="checkhideall()" >Unknown/Refused</span></div>
+    <div class="col6 fldmilitary_status qmilitary_status"><span class="qmilitary_status"><label class="label-top">||FIELDTAG military_status||Military Status||ENDFIELDTAG||</label></span><span class="qmilitary_status"><input type="radio" name="military_status" value="Currently In Military" onclick="checkhideall()" >Currently In Military<br><input type="radio" name="military_status" value="Never In Military" onclick="checkhideall()" >Never In Military<br><input type="radio" name="military_status" value="Veteran" onclick="checkhideall()" >Veteran<br><input type="radio" name="military_status" value="Unknown/Refused" onclick="checkhideall()" >Unknown/Refused</span></div>
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>
@@ -791,10 +791,11 @@ function updatesignatures(){
 <option value="">(please select)</option>
 <option value="CBHL Referral">CBHL Referral</option>
 <option value="Mental Health Issue/Crisis">Mental Health Issue/Crisis</option>
-<option value="Substance Use Issue/Crisis">Substance Use Issue/Crisis</option>
-<option value="Physical Health Issue/Crisis">Physical Health Issue/Crisis</option>
-<option value="Suicide Attempt/Ideation">Suicide Attempt/Ideation</option>
 <option value="Other">Other</option>
+<option value="Physical Health Issue/Crisis">Physical Health Issue/Crisis</option>
+<option value="Substance Use Issue/Crisis">Substance Use Issue/Crisis</option>
+<option value="Suicide Attempt/Ideation">Suicide Attempt/Ideation</option>
+
 
 </select></span></div>
      </div>

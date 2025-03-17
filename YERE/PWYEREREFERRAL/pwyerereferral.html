@@ -39,7 +39,7 @@ function startup() {
 $("#gvttimetime_of_call_ref").timepicker({  'step':1, 'scrollDefault': 'now'});
     setrequire('time_of_call_ref');
     setrequire('transfer_from_epicc');
-    setrequire('referring_agency');
+    setrequire('yere_referring_hospital');
     setrequire('other_referral_source');
     setrequire('referred_from');
     setrequire('primary_reason_referral');
@@ -62,7 +62,7 @@ $("#gvttimetime_of_call_ref").timepicker({  'step':1, 'scrollDefault': 'now'});
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.referring_agency,"other_referral_source","008");
+      checkhide(f.yere_referring_hospital,"other_referral_source","030");
    checkhide(f.referred_from,"date_hospital_admission_referral","Psychiatric Inpatient,Physical Health Inpatient");
    checkhide(f.primary_reason_referral,"was_suicide_attempt","Risk Of Harm To Self");
    checkhide(f.primary_reason_referral,"other_reason_for_referral","Other");
@@ -679,7 +679,7 @@ function updatesignatures(){
      </div>
     <div class="col4 qcmhc_agency_found">
     <div class="col4 fldcmhc_agency_found qcmhc_agency_found"><span class="qcmhc_agency_found required-label">||PWRequiredFieldRequiredText||</span><span class="qcmhc_agency_found required-field-label"><label class="label-top">CMHC Agency</label></span><span class="qcmhc_agency_found"><select size="1" name="cmhc_agency_found" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency_found^^') PROGRAM_NAME='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency_found^^') AND PROGRAM_NAME='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>

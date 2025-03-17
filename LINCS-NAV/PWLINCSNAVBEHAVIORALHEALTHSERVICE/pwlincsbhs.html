@@ -68,7 +68,7 @@ function checkhideall() {
    checkhide(f.attend_bh_intake,"su_intake","Yes");
    checkhide(f.su_intake,"su_intake_agency","Yes");
    checkhide(f.su_intake_agency,"su_intake_other_agency","008");
-   checkhide(f.su_intake,"su_Intake_date","Yes");
+   checkhide(f.su_intake,"su_intake_date","Yes");
    checkhide(f.attend_bh_intake,"admitted_to_services","Yes");
    checkhide(f.admitted_to_services,"mh_admission","Yes");
    checkhide(f.mh_admission,"mh_admission_agency","Yes");
@@ -664,8 +664,8 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col6"><label class="label-top"></label></div>
-    <div class="col6 qsu_Intake_date">
-    <div class="col6 fldsu_Intake_date qsu_Intake_date"><span class="qsu_Intake_date"><label class="label-top">||FIELDTAG su_Intake_date||Substance Use Intake Date||ENDFIELDTAG||</label></span><span class="qsu_Intake_date"><input type="text" name="su_Intake_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col6 qsu_intake_date">
+    <div class="col6 fldsu_intake_date qsu_intake_date"><span class="qsu_intake_date"><label class="label-top">||FIELDTAG su_intake_date||Substance Use Intake Date||ENDFIELDTAG||</label></span><span class="qsu_intake_date"><input type="text" name="su_intake_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -721,7 +721,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col6"><label class="label-top"></label></div>
     <div class="col6 qsu_admission_date">
-    <div class="col6 fldsu_admission_date qsu_admission_date"><span class="qsu_admission_date"><label class="label-top">||FIELDTAG su_admission_date||Substance Use Admission Date||ENDFIELDTAG||</label></span><span class="qsu_admission_date"><input type="text" name="su_admission_date" size="20" onchange="checkhideall()"></span></div>
+    <div class="col6 fldsu_admission_date qsu_admission_date"><span class="qsu_admission_date"><label class="label-top">||FIELDTAG su_admission_date||Substance Use Admission Date||ENDFIELDTAG||</label></span><span class="qsu_admission_date"><input type="text" name="su_admission_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">

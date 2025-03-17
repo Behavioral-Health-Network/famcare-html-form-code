@@ -69,7 +69,7 @@ function checkhideall() {
    checkhide(f.su_intake,"su_intake_agency","Yes");
    checkhide(f.su_intake_agency,"su_intake_other_agency","008");
    checkhide(f.su_intake,"su_Intake_date","Yes");
-   checkhide(f.behavioral_health_service_path,"admitted_to_services","New Intake/Admission Path");
+   checkhide(f.attend_bh_intake,"admitted_to_services","Yes");
    checkhide(f.admitted_to_services,"mh_admission","Yes");
    checkhide(f.mh_admission,"mh_admission_agency","Yes");
    checkhide(f.mh_admission_agency,"mh_admission_other_agency","006");
@@ -84,7 +84,7 @@ function checkhideall() {
    checkhide(f.reason_not_admitted,"not_admitted_other_reason","Other");
    checkhide(f.behavioral_health_service_path,"reconnect_to_cmhc","Reconnection Path");
    checkhide(f.reconnect_to_cmhc,"mh_reconnect_agency","Yes");
-   checkhide(f.behavioral_health_service_path,"reconnected_to_dm3700","Reconnection Path");
+   checkhide(f.behavioral_health_service_path,"reconnected_to_dm3700","Transfer To DM Path");
    checkhide(f.reconnected_to_dm3700,"dm_transfer","Yes");
 
 }
@@ -596,7 +596,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col6 qbehavioral_health_service_path">
-    <div class="col6 fldbehavioral_health_service_path qbehavioral_health_service_path"><span class="qbehavioral_health_service_path required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_service_path required-field-label"><label class="label-top">||FIELDTAG behavioral_health_service_path||Which behavioral health service plan is client on?||ENDFIELDTAG||</label></span><span class="qbehavioral_health_service_path"><input type="radio" name="behavioral_health_service_path" value="New Intake/Admission Path" onclick="checkhideall()" >New Intake/Admission Path<br><input type="radio" name="behavioral_health_service_path" value="Reconnection Path" onclick="checkhideall()" >Reconnection Path<br><input type="radio" name="behavioral_health_service_path" value="Transfer To DM Path" onclick="checkhideall()" >Transfer To DM Path</span></div>
+    <div class="col6 fldbehavioral_health_service_path qbehavioral_health_service_path"><span class="qbehavioral_health_service_path required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_service_path required-field-label"><label class="label-top">||FIELDTAG behavioral_health_service_path||Which behavioral health service path is client on?||ENDFIELDTAG||</label></span><span class="qbehavioral_health_service_path"><input type="radio" name="behavioral_health_service_path" value="New Intake/Admission Path" onclick="checkhideall()" >New Intake/Admission Path<br><input type="radio" name="behavioral_health_service_path" value="Reconnection Path" onclick="checkhideall()" >Reconnection Path<br><input type="radio" name="behavioral_health_service_path" value="Transfer To DM Path" onclick="checkhideall()" >Transfer To DM Path</span></div>
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>

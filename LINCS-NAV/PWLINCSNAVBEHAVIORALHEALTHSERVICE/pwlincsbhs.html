@@ -628,7 +628,7 @@ function updatesignatures(){
      </div>
     <div class="col6 qmh_intake_agency">
     <div class="col6 fldmh_intake_agency qmh_intake_agency"><span class="qmh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_intake_agency required-field-label"><label class="label-top">Where did mental health intake take place?</label></span><span class="qmh_intake_agency"><select size="1" name="mh_intake_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_intake_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_intake_agency^^') and program_name = 'LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
@@ -651,7 +651,7 @@ function updatesignatures(){
      </div>
     <div class="col6 qsu_intake_agency">
     <div class="col6 fldsu_intake_agency qsu_intake_agency"><span class="qsu_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_intake_agency required-field-label"><label class="label-top">Where did substance use intake take place?</label></span><span class="qsu_intake_agency"><select size="1" name="su_intake_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_intake_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_intake_agency^^') and program_name = 'LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ada_su_agency||
 </span></div>
      </div>
@@ -684,7 +684,7 @@ function updatesignatures(){
      </div>
     <div class="col6 qmh_admission_agency">
     <div class="col6 fldmh_admission_agency qmh_admission_agency"><span class="qmh_admission_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_admission_agency required-field-label"><label class="label-top">Where did mental health admission take place?</label></span><span class="qmh_admission_agency"><select size="1" name="mh_admission_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_admission_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_admission_agency^^') and program_name = 'LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
@@ -707,7 +707,7 @@ function updatesignatures(){
      </div>
     <div class="col6 qsu_admission_agency">
     <div class="col6 fldsu_admission_agency qsu_admission_agency"><span class="qsu_admission_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_admission_agency required-field-label"><label class="label-top">Where did substance use admission take place?</label></span><span class="qsu_admission_agency"><select size="1" name="su_admission_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_admission_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_admission_agency^^') and program_name = 'LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ada_su_agency||
 </span></div>
      </div>
@@ -766,7 +766,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col6 qmh_reconnect_agency">
     <div class="col6 fldmh_reconnect_agency qmh_reconnect_agency"><span class="qmh_reconnect_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_reconnect_agency required-field-label"><label class="label-top">Where did mental health reconnect take place?</label></span><span class="qmh_reconnect_agency"><select size="1" name="mh_reconnect_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_reconnect_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_reconnect_agency^^') and program_name = 'LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
@@ -785,7 +785,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col6 qdm_transfer">
     <div class="col6 flddm_transfer qdm_transfer"><span class="qdm_transfer required-label">||PWRequiredFieldRequiredText||</span><span class="qdm_transfer required-field-label"><label class="label-top">Where did DM transfer take place?</label></span><span class="qdm_transfer"><select size="1" name="dm_transfer" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dm_transfer^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dm_transfer^^') and program_name = 'LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>

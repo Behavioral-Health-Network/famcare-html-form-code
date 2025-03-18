@@ -367,7 +367,7 @@ function hiddenfield(g) {
 }
 
 function submitit() {
-	
+	console.log("submitit() function triggered.");
  
   // use alert to display error messages
   let errdesc = validateform();     
@@ -380,7 +380,10 @@ function submitit() {
   let signatureErrors="";
   // signature verification
   try {signatureErrors=verifysignatures()
-    } catch(e) {}  
+    console.log("Signature Errors: ", signatureErrors);
+    } catch(e) {
+        console.error("Signature Verification Error: ", e);
+    }  
   
   errdesc = validateform('signature errors separate');
   if ( errdesc !== "" || signatureErrors !== "" ) {

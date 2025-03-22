@@ -38,6 +38,14 @@
 <!-- FIELDOVERRIDE(OTHER,10,10) -->
 <!-- FIELDOVERRIDE(UNKNOWN/REFUSED,10,10) -->
 <!-- FIELDOVERRIDE(NONE,10,10) -->
+<!-- FIELDOVERRIDE(DISRUPTED_ATTACHMENT/MULTIPLE_PLACEMENTS,10,10) -->
+<!-- FIELDOVERRIDE(WITNESS_TO_VIOLENCE,10,10) -->
+<!-- FIELDOVERRIDE(VICTIM_OF_VIOLENCE,10,10) -->
+<!-- FIELDOVERRIDE(SEXUAL_ABUSE_OR_EXPLOITATION,10,10) -->
+<!-- FIELDOVERRIDE(TRAUMATIC_GRIEF/SEPARATION,10,10) -->
+<!-- FIELDOVERRIDE(SCHOOL_VIOLENCE/BULLYING,10,10) -->
+<!-- FIELDOVERRIDE(CHILD_ABUSE/NEGLECT,10,10) -->
+<!-- FIELDOVERRIDE(HOMELESSNESS,10,10) -->
 <script language="JavaScript">
 
 // Add MutationObserver as a fallback to the inclusion of the onchange event listener for
@@ -45,7 +53,7 @@
 // if the function is run via startup() too early and does not run again dynamically upon change.
 const observer = new MutationObserver(() => {
   // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#yere_mh_concerns'); // Add more IDs as needed
+  const dropdowns = document.querySelectorAll('#yere_mh_concerns', '#yere_type_trauma_reported'); // Add more IDs as needed
 
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -132,7 +140,7 @@ function startup() {
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#yere_mh_concerns'); // Add more IDs as needed
+  const dropdown = document.querySelectorAll('#yere_mh_concerns', '#yere_type_trauma_reported'); // Add more IDs as needed
   
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -485,7 +493,7 @@ function hiddenfield(g) {
 
 function submitit() {
 // parse the multi-select list and update the report fields
-updateReportFields(['yere_mh_concerns'])
+updateReportFields(['yere_mh_concerns', 'yere_type_trauma_reported'])
  
   // use alert to display error messages
   let errdesc = validateform();     
@@ -735,6 +743,15 @@ function updatesignatures(){
     <input type="hidden" name="concern_other" value="||FIELDVALUE concern_other||" class="report-field value-025" data-source="yere_mh_concerns">
     <input type="hidden" name="concern_unknown_refused" value="||FIELDVALUE concern_unknown_refused||" class="report-field value-026" data-source="yere_mh_concerns">
     <input type="hidden" name="concern_none" value="||FIELDVALUE concern_none||" class="report-field value-027" data-source="yere_mh_concerns">
+    <input type="hidden" name="trauma_disrupted_attachment" value="||FIELDVALUE trauma_disrupted_attachment||" class="report-field value-001" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_witness_to_violence" value="||FIELDVALUE trauma_witness_to_violence||" class="report-field value-002" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_victim_of_violence" value="||FIELDVALUE trauma_victim_of_violence||" class="report-field value-003" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_sexual_abuse" value="||FIELDVALUE trauma_sexual_abuse||" class="report-field value-004" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_traumatic_grief" value="||FIELDVALUE trauma_traumatic_grief||" class="report-field value-005" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_school_violence" value="||FIELDVALUE trauma_school_violence||" class="report-field value-006" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_child_abuse_neglect" value="||FIELDVALUE trauma_child_abuse_neglect||" class="report-field value-007" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_other" value="||FIELDVALUE trauma_other||" class="report-field value-008" data-source="yere_type_trauma_reported">
+    <input type="hidden" name="trauma_homelessness" value="||FIELDVALUE trauma_homelessness||" class="report-field value-009" data-source="yere_type_trauma_reported">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>YERE Initial Assessment</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>

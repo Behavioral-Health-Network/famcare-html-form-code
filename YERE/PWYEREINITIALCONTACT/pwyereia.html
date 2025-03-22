@@ -57,6 +57,10 @@
 <!-- FIELDOVERRIDE(PRESCRIPTION_SEDATIVES,10,10) -->
 <!-- FIELDOVERRIDE(PRESCRIPTION_STIMULANTS,10,10) -->
 <!-- FIELDOVERRIDE(SYNTHETIC_DRUGS,10,10) -->
+<!-- FIELDOVERRIDE(DETENTION,10,10) -->
+<!-- FIELDOVERRIDE(IN-SCHOOL_SUSPENSION,10,10) -->
+<!-- FIELDOVERRIDE(OUT_OF_SCHOOL_SUSPENSION,10,10) -->
+
 <script language="JavaScript">
 
 // Add MutationObserver as a fallback to the inclusion of the onchange event listener for
@@ -64,7 +68,7 @@
 // if the function is run via startup() too early and does not run again dynamically upon change.
 const observer = new MutationObserver(() => {
   // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#yere_mh_concerns', '#yere_type_trauma_reported', '#yere_substance_use_history'); // Add more IDs as needed
+  const dropdowns = document.querySelectorAll('#yere_mh_concerns', '#yere_type_trauma_reported', '#yere_substance_use_history', '#yere_type_of_school_discipline'); // Add more IDs as needed
 
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -151,7 +155,7 @@ function startup() {
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#yere_mh_concerns', '#yere_type_trauma_reported', '#yere_substance_use_history'); // Add more IDs as needed
+  const dropdown = document.querySelectorAll('#yere_mh_concerns', '#yere_type_trauma_reported', '#yere_substance_use_history', '#yere_type_of_school_discipline'); // Add more IDs as needed
   
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -511,7 +515,7 @@ function hiddenfield(g) {
 
 function submitit() {
 // parse the multi-select list and update the report fields
-updateReportFields(['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_substance_use_history'])
+updateReportFields(['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_substance_use_history', 'yere_type_of_school_discipline'])
  
   // use alert to display error messages
   let errdesc = validateform();     
@@ -664,7 +668,7 @@ function updatesignatures(){
  * `value` attributes and `data-source` attributes.
  * 
  * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
- *                           Example: ['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_substance_use_history'].
+ *                           Example: ['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_substance_use_history', etc.].
  */
  function updateReportFields(tableIds) {
   // Iterate over each table ID provided
@@ -784,6 +788,10 @@ function updatesignatures(){
     <input type="hidden" name="su_history_other" value="||FIELDVALUE su_history_other||" class="report-field value-012" data-source="yere_substance_use_history">
     <input type="hidden" name="su_history_unknown_refused" value="||FIELDVALUE su_history_unknown_refused||" class="report-field value-013" data-source="yere_substance_use_history">
     <input type="hidden" name="su_history_none" value="||FIELDVALUE su_history_none||" class="report-field value-014" data-source="yere_substance_use_history">
+    <input type="hidden" name="school_discipline_detention" value="||FIELDVALUE school_discipline_detention||" class="report-field value-001" data-source="yere_type_of_school_discipline">
+    <input type="hidden" name="school_discipline_iss" value="||FIELDVALUE school_discipline_iss||" class="report-field value-002" data-source="yere_type_of_school_discipline">
+    <input type="hidden" name="school_discipline_oss" value="||FIELDVALUE school_discipline_oss||" class="report-field value-003" data-source="yere_type_of_school_discipline">
+    <input type="hidden" name="school_discipline_other" value="||FIELDVALUE school_discipline_other||" class="report-field value-004" data-source="yere_type_of_school_discipline">
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>YERE Initial Assessment</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
@@ -802,6 +810,11 @@ function updatesignatures(){
  <div class="entire">
     <div class="col6 qpathway_date">
     <div class="col6 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qdate_taken_ia">
+    <div class="col6 flddate_taken_ia qdate_taken_ia"><span class="qdate_taken_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_taken_ia required-field-label"><label class="label-top">||FIELDTAG date_taken_ia||Initial Assessment Date||ENDFIELDTAG||</label></span><span class="qdate_taken_ia"><input type="text" name="date_taken_ia" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">

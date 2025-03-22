@@ -304,7 +304,7 @@ function validateform(scope='all') {
   if (!hiddenfield('answerfirst_case_num') && gvtfieldvalue('answerfirst_case_num')=='') {edesc=edesc+`Must specify a value for AnswerFirst Case Number\n`; seterror("answerfirst_case_num");}
   if (!hiddenfield('time_of_call_ref') && gvtfieldvalue('time_of_call_ref')=='') {edesc=edesc+`Must specify a value for Time of Call \n`; seterror("time_of_call_ref");}
   if (!hiddenfield('transfer_from_epicc') && gvtfieldvalue('transfer_from_epicc')=='') {edesc=edesc+`Must specify a value for Transfer from EPICC\n`; seterror("transfer_from_epicc");}
-  if (!hiddenfield('referring_agency') && gvtfieldvalue('referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Organization\n`; seterror("referring_agency");}
+  if (!hiddenfield('yere_referring_hospital') && gvtfieldvalue('yere_referring_hospital')=='') {edesc=edesc+`Must specify a value for Referring Organization\n`; seterror("yere_referring_hospital");}
   if (!hiddenfield('other_referral_source') && gvtfieldvalue('other_referral_source')=='') {edesc=edesc+`Must specify a value for Other Youth ERE Referral Source\n`; seterror("other_referral_source");}
   if (!hiddenfield('referred_from') && gvtfieldvalue('referred_from')=='') {edesc=edesc+`Must specify a value for Referred From\n`; seterror("referred_from");}
   if (!hiddenfield('primary_reason_referral') && gvtfieldvalue('primary_reason_referral')=='') {edesc=edesc+`Must specify a value for Primary Reason for Referral\n`; seterror("primary_reason_referral");}
@@ -323,31 +323,54 @@ function validateform(scope='all') {
 }
 
 function gvtfieldvalue(fldname) {
-     var og=document.forms[0].elements[fldname];
-     var olen=og.length;
-     var oval=og.value;
-     oflen=-1;
-     try { 
-       oflen=$('[name="'+fldname+'"]')[0].files.length;
-     } catch(e) {}
-     if (oflen==undefined) {oflen=-1}
-     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
-     if (oflen==0) {return ""}  // return empty value if no file specified
-     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
-     if (oval==undefined) {oval=""}
-     if (olen==undefined) {return oval} 
-     var oval="";
-     for (x=0; x<olen; x++) {
+    var og = document.forms[0].elements[fldname];
+    if (!og) {
+        console.error(`Element with name "${fldname}" not found.`);
+        return ""; // Return a default value if the element doesn't exist
+    }
+
+    // If og is a single element, it won't have a length property
+    var olen = og.length !== undefined ? og.length : 1;
+    var oval = og.value || "";
+
+    var oflen = -1;
+    try {
+        oflen = $('[name="' + fldname + '"]')[0]?.files?.length || -1;
+    } catch (e) {
+        console.error("Error accessing file length:", e);
+    }
+
+    if (oflen === 0 && "||DOCSERNO||" !== "") {
+        return "X"; // Return a value if edited record
+    }
+    if (oflen === 0) {
+        return ""; // Return empty value if no file specified
+    }
+    if (oflen > 0) {
+        return "X"; // Return dummy value to indicate we have a file
+    }
+
+    if (olen === 1) {
+        // Handle single element (e.g., text input, select dropdown)
+        return og.value || "";
+    }
+
+    // Handle multiple elements (e.g., checkboxes, radio buttons)
+    var oval = "";
+    for (var x = 0; x < olen; x++) {
         if (og[x].checked || og[x].selected) {
-           var tval=og[x].value;
-           if (tval!="") {
-             if (oval!="") {oval=oval+","}
-             oval=oval+og[x].value;
-           }
+            var tval = og[x].value;
+            if (tval !== "") {
+                if (oval !== "") {
+                    oval += ",";
+                }
+                oval += tval;
+            }
         }
-     }
-     return oval;
+    }
+    return oval;
 }
+
 
 function hiddenfield(g) {
  h="";

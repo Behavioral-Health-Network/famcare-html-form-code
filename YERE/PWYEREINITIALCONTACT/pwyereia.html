@@ -104,33 +104,33 @@ function startup() {
 		}
 	}
             setrequire('pathway_date');
-    setrequire('yere_agency_name');
-    setrequire('date_taken_ic');
-    setrequire('program_participation_ic');
-    setrequire('ineligible_reason_ic');
+    setrequire('program_participation_ia');
+    setrequire('ineligible_reason_ia');
     setrequire('referred_from_ed_or_ip');
     setrequire('client_discharged_hospital');
     setrequire('discharge_date');
-    setrequire('method_contact_ic');
+    setrequire('method_contact_ia');
     setrequire('met_client_at_hospital');
     setrequire('reason_didnt_meet_at_hospital');
     setrequire('in_foster_care_cd_custody');
-    setrequire('num_ed_visits_past_three_months_ic');
-    setrequire('num_hosp_past_three_months_ic');
-    setrequire('num_leo_contacts_past_three_months_ic');
-    setrequire('cur_involved_jj_system_ic');
-    setrequire('attend_school_any_time_three_months_ic_1');
+    setrequire('num_ed_visits_past_three_months_ia');
+    setrequire('num_hosp_past_three_months_ia');
+    setrequire('num_leo_contacts_past_three_months_ia');
+    setrequire('cur_involved_jj_system_ia');
+    setrequire('attend_school_any_time_three_months_ia');
+    setrequire('type_of_attendance_truancy_issues');
+    setrequire('type_of_school_discipline');
     setrequire('chronic_severe_physical_health_concern');
-    setrequire('co_occurring_bh_dd_dx');
     setrequire('been_exposed_trauma');
-    setrequire('seen_pcp_past_twelve_months_ic');
     setrequire('type_trauma_reported');
+    setrequire('seen_pcp_past_twelve_months_ia');
     setrequire('have_pcp');
-    setrequire('mh_concern_referral_ic');
-    setrequire('diagnosed_dd_or_intellectual_disability_ic');
-    setrequire('dd_or_id_specify');
-    setrequire('other_dd_specify');
-    setrequire('co_occurring_substance_use');
+    setrequire('mh_concern_referral_ia');
+    setrequire('co_occurring_bh_dd_id');
+    setrequire('bh_dd_id_dx');
+    setrequire('other_bh_dd_id_dx');
+    setrequire('have_co_occurring_substance_use');
+    setrequire('substance_use_history');
     setrequire('co_occurring_mh_su_dx');
 
 	checkhideall();
@@ -162,29 +162,36 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.program_participation_ic,"ineligible_reason_ic","Ineligible");
+      checkhide(f.program_participation_ia,"ineligible_reason_ia","Ineligible");
    checkhide(f.referred_from_ed_or_ip,"client_discharged_hospital","Yes");
    checkhide(f.client_discharged_hospital,"discharge_date","Yes");
-   checkhide(f.method_contact_ic,"other_contact_method_ic","Other");
+   checkhide(f.method_contact_ia,"other_contact_method_ia","Other");
    checkhide(f.met_client_at_hospital,"reason_didnt_meet_at_hospital","No");
    checkhide(f.residency_change_prior_six_months_before_referral,"how_many_residency_changes","Yes");
    checkhide(f.in_foster_care_cd_custody,"foster_care_cd_placement","Yes");
-   checkhide(f.cur_involved_jj_system_ic,"djo_dys_sro_involvement_ic","Yes");
+   checkhide(f.cur_involved_jj_system_ia,"djo_dys_sro_involvement_ia","Yes");
+   checkhide(f.attend_school_any_time_three_months_ia,"last_grade_lvl_completed_ia","No");
    checkhide(f.attendance_truancy_issues,"type_of_attendance_truancy_issues","Yes");
+   checkhide(f.school_discipline_suspension,"type_of_school_discipline","Yes");
+   checkhide(f.type_of_school_discipline,"detention_number_duration","001");
+   checkhide(f.type_of_school_discipline,"iss_number_duration","002");
+   checkhide(f.type_of_school_discipline,"oss_number_duration","003");
+   checkhide(f.type_of_school_discipline,"other_school_discipline","004");
    checkhide(f.chronic_severe_physical_health_concern,"specify_physical_health_concern","Yes");
    checkhide(f.been_exposed_trauma,"type_trauma_reported","Yes");
    checkhide(f.type_trauma_reported,"specify_type_trauma","008");
-   checkhide(f.have_pcp,"if_pcp_what_provider_ic","Yes");
-   checkhide(f.if_pcp_what_provider_ic,"specify_other_or_private_pcp_ic","Other");
+   checkhide(f.have_pcp,"if_pcp_what_provider_ia","Yes");
+   checkhide(f.if_pcp_what_provider_ia,"specify_other_or_private_pcp_ia","Other");
    checkhide(f.has_psychiatrist_not_thru_cmhc,"psychiatric_provider_type","Yes");
-   checkhide(f.has_psychiatrist_not_thru_cmhc,"specify_psychiatric_provider","Yes");
-   checkhide(f.receiving_bh_services_not_thru_dmh_provider_1,"bh_provider_type","Yes");
-   checkhide(f.receiving_bh_services_not_thru_dmh_provider_1,"specify_bh_provider","Yes");
-   checkhide(f.mh_concern_referral_ic,"other_mh_concern_referral_ic","025");
-   checkhide(f.diagnosed_dd_or_intellectual_disability_ic,"dd_or_id_specify","Yes");
-   checkhide(f.dd_or_id_specify,"other_dd_specify","Other");
-   checkhide(f.substance_use_history,"specify_other_su_use","Other");
-   checkhide(f.used_tobacco_past_thirty_days,"used_e_cigarettes_past_thirty_days","Yes");
+   checkhide(f.psychiatric_provider_type,"specify_psychiatric_provider","Private Provider");
+   checkhide(f.receiving_bh_services_not_thru_dmh_provider,"bh_provider_type","Yes");
+   checkhide(f.bh_provider_type,"specify_bh_provider","Private Provider");
+   checkhide(f.mh_concern_referral_ia,"other_mh_concern_referral_ia","025");
+   checkhide(f.co_occurring_bh_dd_id,"bh_dd_id_dx","Yes");
+   checkhide(f.have_co_occurring_substance_use,"substance_use_history","Yes");
+   checkhide(f.substance_use_history,"specify_other_su_use","012");
+   checkhide(f.co_occurring_mh_su_dx,"type_su_treatment_recommended","Yes");
+   checkhide(f.co_occurring_mh_su_dx,"need_su_appt","Yes");
 
 }
 
@@ -415,34 +422,34 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
-  if (!hiddenfield('yere_agency_name') && gvtfieldvalue('yere_agency_name')=='') {edesc=edesc+`Must specify a value for CMHC Assigned\n`; seterror("yere_agency_name");}
-  if (!hiddenfield('date_taken_ic') && gvtfieldvalue('date_taken_ic')=='') {edesc=edesc+`Must specify a value for Initial Assessment Date\n`; seterror("date_taken_ic");}
-  if (!hiddenfield('program_participation_ic') && gvtfieldvalue('program_participation_ic')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_ic");}
-  if (!hiddenfield('ineligible_reason_ic') && gvtfieldvalue('ineligible_reason_ic')=='') {edesc=edesc+`Must specify a value for Reason Ineligible\n`; seterror("ineligible_reason_ic");}
+  if (!hiddenfield('program_participation_ia') && gvtfieldvalue('program_participation_ia')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_ia");}
+  if (!hiddenfield('ineligible_reason_ia') && gvtfieldvalue('ineligible_reason_ia')=='') {edesc=edesc+`Must specify a value for Reason Ineligible\n`; seterror("ineligible_reason_ia");}
   if (!hiddenfield('referred_from_ed_or_ip') && gvtfieldvalue('referred_from_ed_or_ip')=='') {edesc=edesc+`Must specify a value for Referred from the ED or Inpatient?\n`; seterror("referred_from_ed_or_ip");}
   if (!hiddenfield('client_discharged_hospital') && gvtfieldvalue('client_discharged_hospital')=='') {edesc=edesc+`Must specify a value for Has client been discharged from the hospital?\n`; seterror("client_discharged_hospital");}
   if (!hiddenfield('discharge_date') && gvtfieldvalue('discharge_date')=='') {edesc=edesc+`Must specify a value for Date of Discharge\n`; seterror("discharge_date");}
-  if (!hiddenfield('method_contact_ic') && gvtfieldvalue('method_contact_ic')=='') {edesc=edesc+`Must specify a value for How was the initial assessment completed?\n`; seterror("method_contact_ic");}
+  if (!hiddenfield('method_contact_ia') && gvtfieldvalue('method_contact_ia')=='') {edesc=edesc+`Must specify a value for How was the initial assessment completed?\n`; seterror("method_contact_ia");}
   if (!hiddenfield('met_client_at_hospital') && gvtfieldvalue('met_client_at_hospital')=='') {edesc=edesc+`Must specify a value for Did Outreach Team meet with client at the hospital?\n`; seterror("met_client_at_hospital");}
   if (!hiddenfield('reason_didnt_meet_at_hospital') && gvtfieldvalue('reason_didnt_meet_at_hospital')=='') {edesc=edesc+`Must specify a value for If no, specify.\n`; seterror("reason_didnt_meet_at_hospital");}
   if (!hiddenfield('in_foster_care_cd_custody') && gvtfieldvalue('in_foster_care_cd_custody')=='') {edesc=edesc+`Must specify a value for Is youth in the foster care system/Children's Division custody/is CD involved?\n`; seterror("in_foster_care_cd_custody");}
-  if (!hiddenfield('num_ed_visits_past_three_months_ic') && gvtfieldvalue('num_ed_visits_past_three_months_ic')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_ic");}
-  if (!hiddenfield('num_hosp_past_three_months_ic') && gvtfieldvalue('num_hosp_past_three_months_ic')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_ic");}
-  if (!hiddenfield('num_leo_contacts_past_three_months_ic') && gvtfieldvalue('num_leo_contacts_past_three_months_ic')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_ic");}
-  if (!hiddenfield('cur_involved_jj_system_ic') && gvtfieldvalue('cur_involved_jj_system_ic')=='') {edesc=edesc+`Must specify a value for Is youth currently involved in the juvenile justice system?\n`; seterror("cur_involved_jj_system_ic");}
-  if (!hiddenfield('attend_school_any_time_three_months_ic_1') && gvtfieldvalue('attend_school_any_time_three_months_ic_1')=='') {edesc=edesc+`Must specify a value for Has client attended school in the past three months?\n`; seterror("attend_school_any_time_three_months_ic_1");}
+  if (!hiddenfield('num_ed_visits_past_three_months_ia') && gvtfieldvalue('num_ed_visits_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_ia");}
+  if (!hiddenfield('num_hosp_past_three_months_ia') && gvtfieldvalue('num_hosp_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_ia");}
+  if (!hiddenfield('num_leo_contacts_past_three_months_ia') && gvtfieldvalue('num_leo_contacts_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_ia");}
+  if (!hiddenfield('cur_involved_jj_system_ia') && gvtfieldvalue('cur_involved_jj_system_ia')=='') {edesc=edesc+`Must specify a value for Is youth currently involved in the juvenile justice system?\n`; seterror("cur_involved_jj_system_ia");}
+  if (!hiddenfield('attend_school_any_time_three_months_ia') && gvtfieldvalue('attend_school_any_time_three_months_ia')=='') {edesc=edesc+`Must specify a value for Has youth attended school in the past three months?\n`; seterror("attend_school_any_time_three_months_ia");}
+  if (!hiddenfield('type_of_attendance_truancy_issues') && gvtfieldvalue('type_of_attendance_truancy_issues')=='') {edesc=edesc+`Must specify a value for Explain type of attendance/truancy issues?\n`; seterror("type_of_attendance_truancy_issues");}
+  if (!hiddenfield('type_of_school_discipline') && gvtfieldvalue('type_of_school_discipline')=='') {edesc=edesc+`Must specify a value for Type of School Discipline\n`; seterror("type_of_school_discipline");}
   if (!hiddenfield('chronic_severe_physical_health_concern') && gvtfieldvalue('chronic_severe_physical_health_concern')=='') {edesc=edesc+`Must specify a value for Is there a chronic or severe physical health concern?\n`; seterror("chronic_severe_physical_health_concern");}
-  if (!hiddenfield('co_occurring_bh_dd_dx') && gvtfieldvalue('co_occurring_bh_dd_dx')=='') {edesc=edesc+`Must specify a value for Has co-occurring behavioral health/development disability diagnosis?\n`; seterror("co_occurring_bh_dd_dx");}
-  if (!hiddenfield('been_exposed_trauma') && gvtfieldvalue('been_exposed_trauma')=='') {edesc=edesc+`Must specify a value for Has client been exposed to trauma?\n`; seterror("been_exposed_trauma");}
-  if (!hiddenfield('seen_pcp_past_twelve_months_ic') && gvtfieldvalue('seen_pcp_past_twelve_months_ic')=='') {edesc=edesc+`Must specify a value for Has a primary care physician been seen in the past 12 months?\n`; seterror("seen_pcp_past_twelve_months_ic");}
+  if (!hiddenfield('been_exposed_trauma') && gvtfieldvalue('been_exposed_trauma')=='') {edesc=edesc+`Must specify a value for Has youth been exposed to trauma?\n`; seterror("been_exposed_trauma");}
   if (!hiddenfield('type_trauma_reported') && gvtfieldvalue('type_trauma_reported')=='') {edesc=edesc+`Must specify a value for Type of Trauma Reported\n`; seterror("type_trauma_reported");}
-  if (!hiddenfield('have_pcp') && gvtfieldvalue('have_pcp')=='') {edesc=edesc+`Must specify a value for Does the client have a primary care physician?\n`; seterror("have_pcp");}
-  if (!hiddenfield('mh_concern_referral_ic') && gvtfieldvalue('mh_concern_referral_ic')=='') {edesc=edesc+`Must specify a value for Mental Health Concern At Referral\n`; seterror("mh_concern_referral_ic");}
-  if (!hiddenfield('diagnosed_dd_or_intellectual_disability_ic') && gvtfieldvalue('diagnosed_dd_or_intellectual_disability_ic')=='') {edesc=edesc+`Must specify a value for Has client been diagnosed with a developmental/intellectual disability?\n`; seterror("diagnosed_dd_or_intellectual_disability_ic");}
-  if (!hiddenfield('dd_or_id_specify') && gvtfieldvalue('dd_or_id_specify')=='') {edesc=edesc+`Must specify a value for If so, specify\n`; seterror("dd_or_id_specify");}
-  if (!hiddenfield('other_dd_specify') && gvtfieldvalue('other_dd_specify')=='') {edesc=edesc+`Must specify a value for If Other DD/IDD, specify\n`; seterror("other_dd_specify");}
-  if (!hiddenfield('co_occurring_substance_use') && gvtfieldvalue('co_occurring_substance_use')=='') {edesc=edesc+`Must specify a value for Has co-occurring substance use?\n`; seterror("co_occurring_substance_use");}
-  if (!hiddenfield('co_occurring_mh_su_dx') && gvtfieldvalue('co_occurring_mh_su_dx')=='') {edesc=edesc+`Must specify a value for Has co-occurring mental health/substance use diagnosis?\n`; seterror("co_occurring_mh_su_dx");}
+  if (!hiddenfield('seen_pcp_past_twelve_months_ia') && gvtfieldvalue('seen_pcp_past_twelve_months_ia')=='') {edesc=edesc+`Must specify a value for Has a primary care physician been seen in the past 12 months?\n`; seterror("seen_pcp_past_twelve_months_ia");}
+  if (!hiddenfield('have_pcp') && gvtfieldvalue('have_pcp')=='') {edesc=edesc+`Must specify a value for Does the youth have a primary care physician?\n`; seterror("have_pcp");}
+  if (!hiddenfield('mh_concern_referral_ia') && gvtfieldvalue('mh_concern_referral_ia')=='') {edesc=edesc+`Must specify a value for Mental Health Concern at Referral\n`; seterror("mh_concern_referral_ia");}
+  if (!hiddenfield('co_occurring_bh_dd_id') && gvtfieldvalue('co_occurring_bh_dd_id')=='') {edesc=edesc+`Must specify a value for Does youth have a co-occurring BH/DD/ID diagnosis?\n`; seterror("co_occurring_bh_dd_id");}
+  if (!hiddenfield('bh_dd_id_dx') && gvtfieldvalue('bh_dd_id_dx')=='') {edesc=edesc+`Must specify a value for What diagnosis?\n`; seterror("bh_dd_id_dx");}
+  if (!hiddenfield('other_bh_dd_id_dx') && gvtfieldvalue('other_bh_dd_id_dx')=='') {edesc=edesc+`Must specify a value for Other Diagnosis\n`; seterror("other_bh_dd_id_dx");}
+  if (!hiddenfield('have_co_occurring_substance_use') && gvtfieldvalue('have_co_occurring_substance_use')=='') {edesc=edesc+`Must specify a value for Is there any co-occurring substance use?\n`; seterror("have_co_occurring_substance_use");}
+  if (!hiddenfield('substance_use_history') && gvtfieldvalue('substance_use_history')=='') {edesc=edesc+`Must specify a value for Substance Use History\n`; seterror("substance_use_history");}
+  if (!hiddenfield('co_occurring_mh_su_dx') && gvtfieldvalue('co_occurring_mh_su_dx')=='') {edesc=edesc+`Must specify a value for Is there any co-occurring mental health/substance use diagnosis?\n`; seterror("co_occurring_mh_su_dx");}
 
     return edesc;
 }
@@ -646,7 +653,7 @@ function updatesignatures(){
  * `value` attributes and `data-source` attributes.
  * 
  * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
- *                           Example: ['yere_mh_concerns', 'table2', 'table3'].
+ *                           Example: ['yere_mh_concerns', 'yere_type_trauma_reported', 'table3'].
  */
  function updateReportFields(tableIds) {
   // Iterate over each table ID provided
@@ -771,29 +778,18 @@ function updatesignatures(){
     <div class="col6 qpathway_date">
     <div class="col6 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
-    <div class="col6 qyere_agency_name">
-    <div class="col6 fldyere_agency_name qyere_agency_name"><span class="qyere_agency_name required-label">||PWRequiredFieldRequiredText||</span><span class="qyere_agency_name required-field-label"><label class="label-top">CMHC Assigned</label></span><span class="qyere_agency_name"><select size="1" name="yere_agency_name" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_agency_name] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE yere_agency_name^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE yere_agency_name||
+  </div>
+ <div class="entire">
+    <div class="col6 qprogram_participation_ia">
+    <div class="col6 fldprogram_participation_ia qprogram_participation_ia"><span class="qprogram_participation_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_ia required-field-label"><label class="label-top">||FIELDTAG program_participation_ia||Program Participation||ENDFIELDTAG||</label></span><span class="qprogram_participation_ia"><input type="radio" name="program_participation_ia" value="Eligible For Youth ERE Services" onclick="checkhideall()" >Eligible For Youth ERE Services<br><input type="radio" name="program_participation_ia" value="Client Refused ERE Services" onclick="checkhideall()" >Client Refused ERE Services<br><input type="radio" name="program_participation_ia" value="Legal Guardian Refused ERE Services" onclick="checkhideall()" >Legal Guardian Refused ERE Services<br><input type="radio" name="program_participation_ia" value="Ineligible" onclick="checkhideall()" >Ineligible
+<!-- FIELDOVERRIDE(program_participation_ia,10,35) -->
 </span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qdate_taken_ic">
-    <div class="col6 flddate_taken_ic qdate_taken_ic"><span class="qdate_taken_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_taken_ic required-field-label"><label class="label-top">||FIELDTAG date_taken_ic||Initial Assessment Date||ENDFIELDTAG||</label></span><span class="qdate_taken_ic"><input type="text" name="date_taken_ic" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col6 qprogram_participation_ic">
-    <div class="col6 fldprogram_participation_ic qprogram_participation_ic"><span class="qprogram_participation_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_ic required-field-label"><label class="label-top">||FIELDTAG program_participation_ic||Program Participation||ENDFIELDTAG||</label></span><span class="qprogram_participation_ic"><input type="radio" name="program_participation_ic" value="Eligible For Youth ERE Services" onclick="checkhideall()" >Eligible For Youth ERE Services<br><input type="radio" name="program_participation_ic" value="Client Refused ERE Services" onclick="checkhideall()" >Client Refused ERE Services<br><input type="radio" name="program_participation_ic" value="Legal Guardian Refused ERE Services" onclick="checkhideall()" >Legal Guardian Refused ERE Services<br><input type="radio" name="program_participation_ic" value="Ineligible" onclick="checkhideall()" >Ineligible
-<!-- FIELDOVERRIDE(program_participation_ic,10,35) -->
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col6 qineligible_reason_ic">
-    <div class="col6 fldineligible_reason_ic qineligible_reason_ic"><span class="qineligible_reason_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qineligible_reason_ic required-field-label"><label class="label-top">||FIELDTAG ineligible_reason_ic||Reason Ineligible||ENDFIELDTAG||</label></span><span class="qineligible_reason_ic"><input type="radio" name="ineligible_reason_ic" value="Resides Outside Of Eastern Region" onclick="checkhideall()" >Resides Outside Of Eastern Region&nbsp;&nbsp;<input type="radio" name="ineligible_reason_ic" value="Age" onclick="checkhideall()" >Age&nbsp;&nbsp;
-<!-- FIELDOVERRIDE(ineligible_reason_ic,10,33) -->
+    <div class="col6 qineligible_reason_ia">
+    <div class="col6 fldineligible_reason_ia qineligible_reason_ia"><span class="qineligible_reason_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qineligible_reason_ia required-field-label"><label class="label-top">||FIELDTAG ineligible_reason_ia||Reason Ineligible||ENDFIELDTAG||</label></span><span class="qineligible_reason_ia"><input type="radio" name="ineligible_reason_ia" value="Resides Outside Of Eastern Region" onclick="checkhideall()" >Resides Outside Of Eastern Region&nbsp;&nbsp;<input type="radio" name="ineligible_reason_ia" value="Age" onclick="checkhideall()" >Age&nbsp;&nbsp;
+<!-- FIELDOVERRIDE(ineligible_reason_ia,10,33) -->
 </span></div>
      </div>
   </div>
@@ -813,11 +809,11 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col4 qmethod_contact_ic">
-    <div class="col4 fldmethod_contact_ic qmethod_contact_ic"><span class="qmethod_contact_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_ic required-field-label"><label class="label-top">||FIELDTAG method_contact_ic||How was the initial assessment completed?||ENDFIELDTAG||</label></span><span class="qmethod_contact_ic"><input type="radio" name="method_contact_ic" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_ic" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_ic" value="Other" onclick="checkhideall()" >Other</span></div>
+    <div class="col4 qmethod_contact_ia">
+    <div class="col4 fldmethod_contact_ia qmethod_contact_ia"><span class="qmethod_contact_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_ia required-field-label"><label class="label-top">||FIELDTAG method_contact_ia||How was the initial assessment completed?||ENDFIELDTAG||</label></span><span class="qmethod_contact_ia"><input type="radio" name="method_contact_ia" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_ia" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_ia" value="Other" onclick="checkhideall()" >Other</span></div>
      </div>
-    <div class="col4 qother_contact_method_ic">
-    <div class="col4 fldother_contact_method_ic qother_contact_method_ic"><span class="qother_contact_method_ic"><label class="label-top">||FIELDTAG other_contact_method_ic||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_ic"><textarea name="other_contact_method_ic" class="autoexpand"></textarea></span></div>
+    <div class="col4 qother_contact_method_ia">
+    <div class="col4 fldother_contact_method_ia qother_contact_method_ia"><span class="qother_contact_method_ia"><label class="label-top">||FIELDTAG other_contact_method_ia||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_ia"><textarea name="other_contact_method_ia" class="autoexpand"></textarea></span></div>
      </div>
     <div class="col4"><label class="label-top"></label></div>
   </div>
@@ -863,41 +859,41 @@ function updatesignatures(){
 <div class="col12 term">Hospitalizations/Law Enforcement</div>
 </div>
  <div class="entire">
-    <div class="col12 fldnum_ed_visits_past_three_months_ic qnum_ed_visits_past_three_months_ic">
-    <div class="col12 fldnum_ed_visits_past_three_months_ic qnum_ed_visits_past_three_months_ic"><span class="qnum_ed_visits_past_three_months_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_ed_visits_past_three_months_ic required-field-label"><label class="label-top">||FIELDTAG num_ed_visits_past_three_months_ic||Emergency Dept Visits in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_ed_visits_past_three_months_ic"><input type="text" name="num_ed_visits_past_three_months_ic" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_ed_visits_past_three_months_ia qnum_ed_visits_past_three_months_ia">
+    <div class="col12 fldnum_ed_visits_past_three_months_ia qnum_ed_visits_past_three_months_ia"><span class="qnum_ed_visits_past_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_ed_visits_past_three_months_ia required-field-label"><label class="label-top">||FIELDTAG num_ed_visits_past_three_months_ia||Emergency Dept Visits in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_ed_visits_past_three_months_ia"><input type="text" name="num_ed_visits_past_three_months_ia" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldnum_hosp_past_three_months_ic qnum_hosp_past_three_months_ic">
-    <div class="col12 fldnum_hosp_past_three_months_ic qnum_hosp_past_three_months_ic"><span class="qnum_hosp_past_three_months_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_hosp_past_three_months_ic required-field-label"><label class="label-top">||FIELDTAG num_hosp_past_three_months_ic||Hospitalizations in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_hosp_past_three_months_ic"><input type="text" name="num_hosp_past_three_months_ic" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_hosp_past_three_months_ia qnum_hosp_past_three_months_ia">
+    <div class="col12 fldnum_hosp_past_three_months_ia qnum_hosp_past_three_months_ia"><span class="qnum_hosp_past_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_hosp_past_three_months_ia required-field-label"><label class="label-top">||FIELDTAG num_hosp_past_three_months_ia||Hospitalizations in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_hosp_past_three_months_ia"><input type="text" name="num_hosp_past_three_months_ia" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldnum_leo_contacts_past_three_months_ic qnum_leo_contacts_past_three_months_ic">
-    <div class="col12 fldnum_leo_contacts_past_three_months_ic qnum_leo_contacts_past_three_months_ic"><span class="qnum_leo_contacts_past_three_months_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_leo_contacts_past_three_months_ic required-field-label"><label class="label-top">||FIELDTAG num_leo_contacts_past_three_months_ic||Law Enforcement Contacts in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_leo_contacts_past_three_months_ic"><input type="text" name="num_leo_contacts_past_three_months_ic" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_leo_contacts_past_three_months_ia qnum_leo_contacts_past_three_months_ia">
+    <div class="col12 fldnum_leo_contacts_past_three_months_ia qnum_leo_contacts_past_three_months_ia"><span class="qnum_leo_contacts_past_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_leo_contacts_past_three_months_ia required-field-label"><label class="label-top">||FIELDTAG num_leo_contacts_past_three_months_ia||Law Enforcement Contacts in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_leo_contacts_past_three_months_ia"><input type="text" name="num_leo_contacts_past_three_months_ia" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldcur_involved_jj_system_ic qcur_involved_jj_system_ic">
-    <div class="col12 fldcur_involved_jj_system_ic qcur_involved_jj_system_ic"><span class="qcur_involved_jj_system_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qcur_involved_jj_system_ic required-field-label"><label class="label-top">||FIELDTAG cur_involved_jj_system_ic||Is youth currently involved in the juvenile justice system?||ENDFIELDTAG||</label></span><span class="qcur_involved_jj_system_ic"><input type="radio" name="cur_involved_jj_system_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="cur_involved_jj_system_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="cur_involved_jj_system_ic" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldcur_involved_jj_system_ia qcur_involved_jj_system_ia">
+    <div class="col12 fldcur_involved_jj_system_ia qcur_involved_jj_system_ia"><span class="qcur_involved_jj_system_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qcur_involved_jj_system_ia required-field-label"><label class="label-top">||FIELDTAG cur_involved_jj_system_ia||Is youth currently involved in the juvenile justice system?||ENDFIELDTAG||</label></span><span class="qcur_involved_jj_system_ia"><input type="radio" name="cur_involved_jj_system_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="cur_involved_jj_system_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="cur_involved_jj_system_ia" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 flddjo_dys_sro_involvement_ic qdjo_dys_sro_involvement_ic">
-    <div class="col12 flddjo_dys_sro_involvement_ic qdjo_dys_sro_involvement_ic"><span class="qdjo_dys_sro_involvement_ic"><label class="label-top">||FIELDTAG djo_dys_sro_involvement_ic||Specify Type of Involvement||ENDFIELDTAG||</label></span><span class="qdjo_dys_sro_involvement_ic"><input type="checkbox" name="djo_dys_sro_involvement_ic_1_DJO" value="ON" onclick="checkhideall()">DJO&nbsp;&nbsp;<input type="checkbox" name="djo_dys_sro_involvement_ic_2_HistoryofDivisionofYouthServic" value="ON" onclick="checkhideall()">History of Division of Youth Services&nbsp;&nbsp;<input type="checkbox" name="djo_dys_sro_involvement_ic_3_ContactwithSchoolResourceOffic" value="ON" onclick="checkhideall()">Contact with School Resource Officer&nbsp;&nbsp;</span></div>
+    <div class="col12 flddjo_dys_sro_involvement_ia qdjo_dys_sro_involvement_ia">
+    <div class="col12 flddjo_dys_sro_involvement_ia qdjo_dys_sro_involvement_ia"><span class="qdjo_dys_sro_involvement_ia"><label class="label-top">||FIELDTAG djo_dys_sro_involvement_ia||Specify Type of Involvement||ENDFIELDTAG||</label></span><span class="qdjo_dys_sro_involvement_ia"><input type="checkbox" name="djo_dys_sro_involvement_ia_1_ContactwithSchoolResourceOffic" value="ON" onclick="checkhideall()">Contact with School Resource Officer&nbsp;&nbsp;<input type="checkbox" name="djo_dys_sro_involvement_ia_2_DJO" value="ON" onclick="checkhideall()">DJO&nbsp;&nbsp;<input type="checkbox" name="djo_dys_sro_involvement_ia_3_HistorywithDivisionofYouthServ" value="ON" onclick="checkhideall()">History with Division of Youth Services&nbsp;&nbsp;<input type="checkbox" name="djo_dys_sro_involvement_ia_4_SecureDetention" value="ON" onclick="checkhideall()">Secure Detention&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">
 <div class="col12 term">School</div>
 </div>
  <div class="entire">
-    <div class="col12 fldattend_school_any_time_three_months_ic_1 qattend_school_any_time_three_months_ic_1">
-    <div class="col12 fldattend_school_any_time_three_months_ic_1 qattend_school_any_time_three_months_ic_1"><span class="qattend_school_any_time_three_months_ic_1 required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_ic_1 required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_ic_1||Has client attended school in the past three months?||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_ic_1"><input type="radio" name="attend_school_any_time_three_months_ic_1" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_ic_1" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldattend_school_any_time_three_months_ia qattend_school_any_time_three_months_ia">
+    <div class="col12 fldattend_school_any_time_three_months_ia qattend_school_any_time_three_months_ia"><span class="qattend_school_any_time_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_ia required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_ia||Has youth attended school in the past three months?||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_ia"><input type="radio" name="attend_school_any_time_three_months_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldlast_grade_lvl_completed_ic qlast_grade_lvl_completed_ic">
-    <div class="col12 fldlast_grade_lvl_completed_ic qlast_grade_lvl_completed_ic"><span class="qlast_grade_lvl_completed_ic"><label class="label-top">||FIELDTAG last_grade_lvl_completed_ic||Last Grade Level Completed||ENDFIELDTAG||</label></span><span class="qlast_grade_lvl_completed_ic"><input type="text" name="last_grade_lvl_completed_ic" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldlast_grade_lvl_completed_ia qlast_grade_lvl_completed_ia">
+    <div class="col12 fldlast_grade_lvl_completed_ia qlast_grade_lvl_completed_ia"><span class="qlast_grade_lvl_completed_ia"><label class="label-top">||FIELDTAG last_grade_lvl_completed_ia||Last Grade Level Completed||ENDFIELDTAG||</label></span><span class="qlast_grade_lvl_completed_ia"><input type="text" name="last_grade_lvl_completed_ia" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -907,14 +903,42 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldtype_of_attendance_truancy_issues qtype_of_attendance_truancy_issues">
-    <div class="col12 fldtype_of_attendance_truancy_issues qtype_of_attendance_truancy_issues"><span class="qtype_of_attendance_truancy_issues"><label class="label-top">||FIELDTAG type_of_attendance_truancy_issues||Explain type of attendance/truancy issues?||ENDFIELDTAG||</label></span><span class="qtype_of_attendance_truancy_issues"><input type="text" name="type_of_attendance_truancy_issues" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldtype_of_attendance_truancy_issues qtype_of_attendance_truancy_issues"><span class="qtype_of_attendance_truancy_issues required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_attendance_truancy_issues required-field-label"><label class="label-top">||FIELDTAG type_of_attendance_truancy_issues||Explain type of attendance/truancy issues?||ENDFIELDTAG||</label></span><span class="qtype_of_attendance_truancy_issues"><input type="text" name="type_of_attendance_truancy_issues" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldschool_discipline_or_suspension qschool_discipline_or_suspension">
-    <div class="col12 fldschool_discipline_or_suspension qschool_discipline_or_suspension"><span class="qschool_discipline_or_suspension"><label class="label-top">||FIELDTAG school_discipline_or_suspension||Select/Checkbox/Radio buttons||ENDFIELDTAG||</label></span><span class="qschool_discipline_or_suspension"><input type="checkbox" name="school_discipline_or_suspension" value="Detention" onclick="checkhideall()">Detention&nbsp;&nbsp;<input type="checkbox" name="school_discipline_or_suspension" value="In-School Suspension" onclick="checkhideall()">In-School Suspension&nbsp;&nbsp;<input type="checkbox" name="school_discipline_or_suspension" value="Out of School Suspension" onclick="checkhideall()">Out of School Suspension&nbsp;&nbsp;<input type="checkbox" name="school_discipline_or_suspension" value="Other" onclick="checkhideall()">Other&nbsp;&nbsp;
-<!-- FIELDOVERRIDE(school_discipline_or_suspension,10,250) -->
+    <div class="col12 fldschool_discipline_suspension qschool_discipline_suspension">
+    <div class="col12 fldschool_discipline_suspension qschool_discipline_suspension"><span class="qschool_discipline_suspension"><label class="label-top">||FIELDTAG school_discipline_suspension||Has youth experienced any school discipline or suspensions in the past three months?||ENDFIELDTAG||</label></span><span class="qschool_discipline_suspension"><input type="radio" name="school_discipline_suspension" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_discipline_suspension" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="school_discipline_suspension" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline">
+    <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline"><span class="qtype_of_school_discipline required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline required-field-label"><label class="label-top">Type of School Discipline<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_of_school_discipline"><select size="8" name="type_of_school_discipline" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_type_of_school_discipline] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE type_of_school_discipline^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE yere_type_of_school_discipline||
+
+<!-- FIELDOVERRIDE(type_of_school_discipline,10,200) -->
 </span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddetention_number_duration qdetention_number_duration">
+    <div class="col12 flddetention_number_duration qdetention_number_duration"><span class="qdetention_number_duration"><label class="label-top">||FIELDTAG detention_number_duration||Number of Detentions and Duration||ENDFIELDTAG||</label></span><span class="qdetention_number_duration"><input type="text" name="detention_number_duration" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldiss_number_duration qiss_number_duration">
+    <div class="col12 fldiss_number_duration qiss_number_duration"><span class="qiss_number_duration"><label class="label-top">||FIELDTAG iss_number_duration||Number of In-School Suspensions and Duration||ENDFIELDTAG||</label></span><span class="qiss_number_duration"><input type="text" name="iss_number_duration" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoss_number_duration qoss_number_duration">
+    <div class="col12 fldoss_number_duration qoss_number_duration"><span class="qoss_number_duration"><label class="label-top">||FIELDTAG oss_number_duration||Number of Out of School Suspensions and Duration||ENDFIELDTAG||</label></span><span class="qoss_number_duration"><input type="text" name="oss_number_duration" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldother_school_discipline qother_school_discipline">
+    <div class="col12 fldother_school_discipline qother_school_discipline"><span class="qother_school_discipline"><label class="label-top">||FIELDTAG other_school_discipline||Other||ENDFIELDTAG||</label></span><span class="qother_school_discipline"><input type="text" name="other_school_discipline" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">
@@ -924,21 +948,13 @@ function updatesignatures(){
     <div class="col6 qchronic_severe_physical_health_concern">
     <div class="col6 fldchronic_severe_physical_health_concern qchronic_severe_physical_health_concern"><span class="qchronic_severe_physical_health_concern required-label">||PWRequiredFieldRequiredText||</span><span class="qchronic_severe_physical_health_concern required-field-label"><label class="label-top">||FIELDTAG chronic_severe_physical_health_concern||Is there a chronic or severe physical health concern?||ENDFIELDTAG||</label></span><span class="qchronic_severe_physical_health_concern"><input type="radio" name="chronic_severe_physical_health_concern" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="chronic_severe_physical_health_concern" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col6 qco_occurring_bh_dd_dx">
-    <div class="col6 fldco_occurring_bh_dd_dx qco_occurring_bh_dd_dx"><span class="qco_occurring_bh_dd_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_bh_dd_dx required-field-label"><label class="label-top">||FIELDTAG co_occurring_bh_dd_dx||Has co-occurring behavioral health/development disability diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_bh_dd_dx"><input type="radio" name="co_occurring_bh_dd_dx" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_bh_dd_dx" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qbeen_exposed_trauma">
+    <div class="col6 fldbeen_exposed_trauma qbeen_exposed_trauma"><span class="qbeen_exposed_trauma required-label">||PWRequiredFieldRequiredText||</span><span class="qbeen_exposed_trauma required-field-label"><label class="label-top">||FIELDTAG been_exposed_trauma||Has youth been exposed to trauma?||ENDFIELDTAG||</label></span><span class="qbeen_exposed_trauma"><input type="radio" name="been_exposed_trauma" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="been_exposed_trauma" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="been_exposed_trauma" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col6 qspecify_physical_health_concern">
     <div class="col6 fldspecify_physical_health_concern qspecify_physical_health_concern"><span class="qspecify_physical_health_concern"><label class="label-top">||FIELDTAG specify_physical_health_concern||Specify Physical Health Concern||ENDFIELDTAG||</label></span><span class="qspecify_physical_health_concern"><textarea name="specify_physical_health_concern" class="autoexpand"></textarea></span></div>
-     </div>
-    <div class="col6 qbeen_exposed_trauma">
-    <div class="col6 fldbeen_exposed_trauma qbeen_exposed_trauma"><span class="qbeen_exposed_trauma required-label">||PWRequiredFieldRequiredText||</span><span class="qbeen_exposed_trauma required-field-label"><label class="label-top">||FIELDTAG been_exposed_trauma||Has client been exposed to trauma?||ENDFIELDTAG||</label></span><span class="qbeen_exposed_trauma"><input type="radio" name="been_exposed_trauma" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="been_exposed_trauma" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="been_exposed_trauma" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col6 qseen_pcp_past_twelve_months_ic">
-    <div class="col6 fldseen_pcp_past_twelve_months_ic qseen_pcp_past_twelve_months_ic"><span class="qseen_pcp_past_twelve_months_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qseen_pcp_past_twelve_months_ic required-field-label"><label class="label-top">||FIELDTAG seen_pcp_past_twelve_months_ic||Has a primary care physician been seen in the past 12 months?||ENDFIELDTAG||</label></span><span class="qseen_pcp_past_twelve_months_ic"><input type="radio" name="seen_pcp_past_twelve_months_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="seen_pcp_past_twelve_months_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col6 qtype_trauma_reported">
     <div class="col6 fldtype_trauma_reported qtype_trauma_reported"><span class="qtype_trauma_reported required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_trauma_reported required-field-label"><label class="label-top">Type of Trauma Reported<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_trauma_reported"><select size="15" name="type_trauma_reported" onchange="checkhideall()" multiple>
@@ -950,16 +966,21 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qhave_pcp">
-    <div class="col6 fldhave_pcp qhave_pcp"><span class="qhave_pcp required-label">||PWRequiredFieldRequiredText||</span><span class="qhave_pcp required-field-label"><label class="label-top">||FIELDTAG have_pcp||Does the client have a primary care physician?||ENDFIELDTAG||</label></span><span class="qhave_pcp"><input type="radio" name="have_pcp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_pcp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qseen_pcp_past_twelve_months_ia">
+    <div class="col6 fldseen_pcp_past_twelve_months_ia qseen_pcp_past_twelve_months_ia"><span class="qseen_pcp_past_twelve_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qseen_pcp_past_twelve_months_ia required-field-label"><label class="label-top">||FIELDTAG seen_pcp_past_twelve_months_ia||Has a primary care physician been seen in the past 12 months?||ENDFIELDTAG||</label></span><span class="qseen_pcp_past_twelve_months_ia"><input type="radio" name="seen_pcp_past_twelve_months_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="seen_pcp_past_twelve_months_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col6 qspecify_type_trauma">
     <div class="col6 fldspecify_type_trauma qspecify_type_trauma"><span class="qspecify_type_trauma"><label class="label-top">||FIELDTAG specify_type_trauma||Other Type of Trauma||ENDFIELDTAG||</label></span><span class="qspecify_type_trauma"><textarea name="specify_type_trauma" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qif_pcp_what_provider_ic">
-    <div class="col6 fldif_pcp_what_provider_ic qif_pcp_what_provider_ic"><span class="qif_pcp_what_provider_ic"><label class="label-top">||FIELDTAG if_pcp_what_provider_ic||What provider?||ENDFIELDTAG||</label></span><span class="qif_pcp_what_provider_ic"><select size="1"  name="if_pcp_what_provider_ic" onchange="checkhideall()" >
+    <div class="col6 qhave_pcp">
+    <div class="col6 fldhave_pcp qhave_pcp"><span class="qhave_pcp required-label">||PWRequiredFieldRequiredText||</span><span class="qhave_pcp required-field-label"><label class="label-top">||FIELDTAG have_pcp||Does the youth have a primary care physician?||ENDFIELDTAG||</label></span><span class="qhave_pcp"><input type="radio" name="have_pcp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_pcp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qif_pcp_what_provider_ia">
+    <div class="col6 fldif_pcp_what_provider_ia qif_pcp_what_provider_ia"><span class="qif_pcp_what_provider_ia"><label class="label-top">||FIELDTAG if_pcp_what_provider_ia||What provider?||ENDFIELDTAG||</label></span><span class="qif_pcp_what_provider_ia"><select size="1"  name="if_pcp_what_provider_ia" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Affinia Healthcare">Affinia Healthcare</option>
 <option value="Family Health Centers">Family Health Centers</option>
@@ -972,8 +993,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qspecify_other_or_private_pcp_ic">
-    <div class="col6 fldspecify_other_or_private_pcp_ic qspecify_other_or_private_pcp_ic"><span class="qspecify_other_or_private_pcp_ic"><label class="label-top">||FIELDTAG specify_other_or_private_pcp_ic||Other Primary Care Provider||ENDFIELDTAG||</label></span><span class="qspecify_other_or_private_pcp_ic"><textarea name="specify_other_or_private_pcp_ic" class="autoexpand"></textarea></span></div>
+    <div class="col6 qspecify_other_or_private_pcp_ia">
+    <div class="col6 fldspecify_other_or_private_pcp_ia qspecify_other_or_private_pcp_ia"><span class="qspecify_other_or_private_pcp_ia"><label class="label-top">||FIELDTAG specify_other_or_private_pcp_ia||Other Primary Care Provider||ENDFIELDTAG||</label></span><span class="qspecify_other_or_private_pcp_ia"><textarea name="specify_other_or_private_pcp_ia" class="autoexpand"></textarea></span></div>
      </div>
   </div>
 <div class="entire">
@@ -981,7 +1002,7 @@ function updatesignatures(){
 </div>
  <div class="entire">
     <div class="col4 qhas_psychiatrist_not_thru_cmhc">
-    <div class="col4 fldhas_psychiatrist_not_thru_cmhc qhas_psychiatrist_not_thru_cmhc"><span class="qhas_psychiatrist_not_thru_cmhc"><label class="label-top">||FIELDTAG has_psychiatrist_not_thru_cmhc||Has a psychiatrist (not through a CMHC)?||ENDFIELDTAG||</label></span><span class="qhas_psychiatrist_not_thru_cmhc"><input type="radio" name="has_psychiatrist_not_thru_cmhc" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="has_psychiatrist_not_thru_cmhc" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="has_psychiatrist_not_thru_cmhc" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col4 fldhas_psychiatrist_not_thru_cmhc qhas_psychiatrist_not_thru_cmhc"><span class="qhas_psychiatrist_not_thru_cmhc"><label class="label-top">||FIELDTAG has_psychiatrist_not_thru_cmhc||Does youth have psychiatrist (not through a CMHC)?||ENDFIELDTAG||</label></span><span class="qhas_psychiatrist_not_thru_cmhc"><input type="radio" name="has_psychiatrist_not_thru_cmhc" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="has_psychiatrist_not_thru_cmhc" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="has_psychiatrist_not_thru_cmhc" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
     <div class="col4 qpsychiatric_provider_type">
     <div class="col4 fldpsychiatric_provider_type qpsychiatric_provider_type"><span class="qpsychiatric_provider_type"><label class="label-top">||FIELDTAG psychiatric_provider_type||Psychiatric Provider Type||ENDFIELDTAG||</label></span><span class="qpsychiatric_provider_type"><input type="radio" name="psychiatric_provider_type" value="Private Provider" onclick="checkhideall()" >Private Provider<br><input type="radio" name="psychiatric_provider_type" value="Organization" onclick="checkhideall()" >Organization</span></div>
@@ -991,8 +1012,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col4 qreceiving_bh_services_not_thru_dmh_provider_1">
-    <div class="col4 fldreceiving_bh_services_not_thru_dmh_provider_1 qreceiving_bh_services_not_thru_dmh_provider_1"><span class="qreceiving_bh_services_not_thru_dmh_provider_1"><label class="label-top">||FIELDTAG receiving_bh_services_not_thru_dmh_provider_1||Is client receiving behavioral health services (not through CMHC)?||ENDFIELDTAG||</label></span><span class="qreceiving_bh_services_not_thru_dmh_provider_1"><input type="radio" name="receiving_bh_services_not_thru_dmh_provider_1" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="receiving_bh_services_not_thru_dmh_provider_1" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col4 qreceiving_bh_services_not_thru_dmh_provider">
+    <div class="col4 fldreceiving_bh_services_not_thru_dmh_provider qreceiving_bh_services_not_thru_dmh_provider"><span class="qreceiving_bh_services_not_thru_dmh_provider"><label class="label-top">||FIELDTAG receiving_bh_services_not_thru_dmh_provider||Is youth receiving behavioral health services (not through CMHC)?||ENDFIELDTAG||</label></span><span class="qreceiving_bh_services_not_thru_dmh_provider"><input type="radio" name="receiving_bh_services_not_thru_dmh_provider" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="receiving_bh_services_not_thru_dmh_provider" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col4 qbh_provider_type">
     <div class="col4 fldbh_provider_type qbh_provider_type"><span class="qbh_provider_type"><label class="label-top">||FIELDTAG bh_provider_type||Behavioral Health Provider Type||ENDFIELDTAG||</label></span><span class="qbh_provider_type"><input type="radio" name="bh_provider_type" value="Private Provider" onclick="checkhideall()" >Private Provider<br><input type="radio" name="bh_provider_type" value="Organization" onclick="checkhideall()" >Organization</span></div>
@@ -1005,40 +1026,43 @@ function updatesignatures(){
 <div class="col12 term">Mental Health Needs</div>
 </div>
  <div class="entire">
-    <div class="col12 fldmh_concern_referral_ic qmh_concern_referral_ic">
-    <div class="col12 fldmh_concern_referral_ic qmh_concern_referral_ic"><span class="qmh_concern_referral_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ic required-field-label"><label class="label-top">Mental Health Concern At Referral<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_concern_referral_ic"><select size="15" name="mh_concern_referral_ic" onchange="checkhideall()" multiple>
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_mh_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_concern_referral_ic^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia">
+    <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia"><span class="qmh_concern_referral_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ia required-field-label"><label class="label-top">Mental Health Concern at Referral<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_concern_referral_ia"><select size="15" name="mh_concern_referral_ia" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_mh_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_concern_referral_ia^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_mh_concerns||
 
-<!-- FIELDOVERRIDE(mh_concern_referral_ic,10,200) -->
+<!-- FIELDOVERRIDE(mh_concern_referral_ia,10,200) -->
 </span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldother_mh_concern_referral_ic qother_mh_concern_referral_ic">
-    <div class="col12 fldother_mh_concern_referral_ic qother_mh_concern_referral_ic"><span class="qother_mh_concern_referral_ic"><label class="label-top">||FIELDTAG other_mh_concern_referral_ic||Other Mental Concerns||ENDFIELDTAG||</label></span><span class="qother_mh_concern_referral_ic"><textarea name="other_mh_concern_referral_ic" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldother_mh_concern_referral_ia qother_mh_concern_referral_ia">
+    <div class="col12 fldother_mh_concern_referral_ia qother_mh_concern_referral_ia"><span class="qother_mh_concern_referral_ia"><label class="label-top">||FIELDTAG other_mh_concern_referral_ia||Other Mental Concerns||ENDFIELDTAG||</label></span><span class="qother_mh_concern_referral_ia"><textarea name="other_mh_concern_referral_ia" class="autoexpand"></textarea></span></div>
      </div>
   </div>
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col4 qdiagnosed_dd_or_intellectual_disability_ic">
-    <div class="col4 flddiagnosed_dd_or_intellectual_disability_ic qdiagnosed_dd_or_intellectual_disability_ic"><span class="qdiagnosed_dd_or_intellectual_disability_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qdiagnosed_dd_or_intellectual_disability_ic required-field-label"><label class="label-top">||FIELDTAG diagnosed_dd_or_intellectual_disability_ic||Has client been diagnosed with a developmental/intellectual disability?||ENDFIELDTAG||</label></span><span class="qdiagnosed_dd_or_intellectual_disability_ic"><input type="radio" name="diagnosed_dd_or_intellectual_disability_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="diagnosed_dd_or_intellectual_disability_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="diagnosed_dd_or_intellectual_disability_ic" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col4 qco_occurring_bh_dd_id">
+    <div class="col4 fldco_occurring_bh_dd_id qco_occurring_bh_dd_id"><span class="qco_occurring_bh_dd_id required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_bh_dd_id required-field-label"><label class="label-top">||FIELDTAG co_occurring_bh_dd_id||Does youth have a co-occurring BH/DD/ID diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_bh_dd_id"><input type="radio" name="co_occurring_bh_dd_id" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_bh_dd_id" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col4 qdd_or_id_specify">
-    <div class="col4 flddd_or_id_specify qdd_or_id_specify"><span class="qdd_or_id_specify required-label">||PWRequiredFieldRequiredText||</span><span class="qdd_or_id_specify required-field-label"><label class="label-top">||FIELDTAG dd_or_id_specify||If so, specify||ENDFIELDTAG||</label></span><span class="qdd_or_id_specify"><select size="1"  name="dd_or_id_specify" onchange="checkhideall()" >
+    <div class="col4 qbh_dd_id_dx">
+    <div class="col4 fldbh_dd_id_dx qbh_dd_id_dx"><span class="qbh_dd_id_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qbh_dd_id_dx required-field-label"><label class="label-top">||FIELDTAG bh_dd_id_dx||What diagnosis?||ENDFIELDTAG||</label></span><span class="qbh_dd_id_dx"><select size="1"  name="bh_dd_id_dx" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Autism">Autism</option>
-<option value="Intellectual Disability">Intellectual Disability</option>
-<option value="Epilepsy">Epilepsy</option>
 <option value="Cerebral Palsy">Cerebral Palsy</option>
+<option value="Epilepsy">Epilepsy</option>
+<option value="Fetal Alcohol Syndrome">Fetal Alcohol Syndrome</option>
+<option value="Fragile X Syndrome">Fragile X Syndrome</option>
+<option value="Intellectual Disability">Intellectual Disability</option>
 <option value="Learning Disability">Learning Disability</option>
+<option value="Traumatic Brain Injury">Traumatic Brain Injury</option>
 <option value="Other">Other</option>
 
 </select></span></div>
      </div>
-    <div class="col4 qother_dd_specify">
-    <div class="col4 fldother_dd_specify qother_dd_specify"><span class="qother_dd_specify required-label">||PWRequiredFieldRequiredText||</span><span class="qother_dd_specify required-field-label"><label class="label-top">||FIELDTAG other_dd_specify||If Other DD/IDD, specify||ENDFIELDTAG||</label></span><span class="qother_dd_specify"><textarea name="other_dd_specify" class="autoexpand"></textarea></span></div>
+    <div class="col4 qother_bh_dd_id_dx">
+    <div class="col4 fldother_bh_dd_id_dx qother_bh_dd_id_dx"><span class="qother_bh_dd_id_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qother_bh_dd_id_dx required-field-label"><label class="label-top">||FIELDTAG other_bh_dd_id_dx||Other Diagnosis||ENDFIELDTAG||</label></span><span class="qother_bh_dd_id_dx"><input type="text" name="other_bh_dd_id_dx" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">
@@ -1051,11 +1075,16 @@ function updatesignatures(){
 <div class="col12 term">Substance Use</div>
 </div>
  <div class="entire">
-    <div class="col4 qco_occurring_substance_use">
-    <div class="col4 fldco_occurring_substance_use qco_occurring_substance_use"><span class="qco_occurring_substance_use required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_substance_use required-field-label"><label class="label-top">||FIELDTAG co_occurring_substance_use||Has co-occurring substance use?||ENDFIELDTAG||</label></span><span class="qco_occurring_substance_use"><input type="radio" name="co_occurring_substance_use" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_substance_use" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="co_occurring_substance_use" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col4 qhave_co_occurring_substance_use">
+    <div class="col4 fldhave_co_occurring_substance_use qhave_co_occurring_substance_use"><span class="qhave_co_occurring_substance_use required-label">||PWRequiredFieldRequiredText||</span><span class="qhave_co_occurring_substance_use required-field-label"><label class="label-top">||FIELDTAG have_co_occurring_substance_use||Is there any co-occurring substance use?||ENDFIELDTAG||</label></span><span class="qhave_co_occurring_substance_use"><input type="radio" name="have_co_occurring_substance_use" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
     <div class="col4 qsubstance_use_history">
-    <div class="col4 fldsubstance_use_history qsubstance_use_history"><span class="qsubstance_use_history"><label class="label-top">||FIELDTAG substance_use_history||Substance Use History||ENDFIELDTAG||</label></span><span class="qsubstance_use_history"><input type="checkbox" name="substance_use_history_1_Alcohol" value="ON" onclick="checkhideall()">Alcohol<br><input type="checkbox" name="substance_use_history_2_Cocaine" value="ON" onclick="checkhideall()">Cocaine<br><input type="checkbox" name="substance_use_history_3_Hallucinogens" value="ON" onclick="checkhideall()">Hallucinogens<br><input type="checkbox" name="substance_use_history_4_Heroin" value="ON" onclick="checkhideall()">Heroin<br><input type="checkbox" name="substance_use_history_5_Inhalants" value="ON" onclick="checkhideall()">Inhalants<br><input type="checkbox" name="substance_use_history_6_Marijuana" value="ON" onclick="checkhideall()">Marijuana<br><input type="checkbox" name="substance_use_history_7_Methamphetamine" value="ON" onclick="checkhideall()">Methamphetamine<br><input type="checkbox" name="substance_use_history_8_PrescriptionOpioids" value="ON" onclick="checkhideall()">Prescription Opioids<br><input type="checkbox" name="substance_use_history_9_PrescriptionSedatives" value="ON" onclick="checkhideall()">Prescription Sedatives<br><input type="checkbox" name="substance_use_history_10_PrescriptionStimulants" value="ON" onclick="checkhideall()">Prescription Stimulants<br><input type="checkbox" name="substance_use_history_11_SyntheticDrugs" value="ON" onclick="checkhideall()">Synthetic Drugs<br><input type="checkbox" name="substance_use_history_12_Other" value="ON" onclick="checkhideall()">Other<br><input type="checkbox" name="substance_use_history_13_UnknownRefused" value="ON" onclick="checkhideall()">Unknown/Refused<br><input type="checkbox" name="substance_use_history_14_None" value="ON" onclick="checkhideall()">None</span></div>
+    <div class="col4 fldsubstance_use_history qsubstance_use_history"><span class="qsubstance_use_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsubstance_use_history"><select size="8" name="substance_use_history" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE substance_use_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE yere_substance_use_history||
+
+<!-- FIELDOVERRIDE(substance_use_history,10,200) -->
+</span></div>
      </div>
     <div class="col4 qspecify_other_su_use">
     <div class="col4 fldspecify_other_su_use qspecify_other_su_use"><span class="qspecify_other_su_use"><label class="label-top">||FIELDTAG specify_other_su_use||Other Substance Use||ENDFIELDTAG||</label></span><span class="qspecify_other_su_use"><textarea name="specify_other_su_use" class="autoexpand"></textarea></span></div>
@@ -1063,28 +1092,25 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col4 qco_occurring_mh_su_dx">
-    <div class="col4 fldco_occurring_mh_su_dx qco_occurring_mh_su_dx"><span class="qco_occurring_mh_su_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_mh_su_dx required-field-label"><label class="label-top">||FIELDTAG co_occurring_mh_su_dx||Has co-occurring mental health/substance use diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_mh_su_dx"><input type="radio" name="co_occurring_mh_su_dx" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col4 fldco_occurring_mh_su_dx qco_occurring_mh_su_dx"><span class="qco_occurring_mh_su_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_mh_su_dx required-field-label"><label class="label-top">||FIELDTAG co_occurring_mh_su_dx||Is there any co-occurring mental health/substance use diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_mh_su_dx"><input type="radio" name="co_occurring_mh_su_dx" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
     <div class="col4 qtype_su_treatment_recommended">
     <div class="col4 fldtype_su_treatment_recommended qtype_su_treatment_recommended"><span class="qtype_su_treatment_recommended"><label class="label-top">||FIELDTAG type_su_treatment_recommended||What type of substance use treatment is being recommended?||ENDFIELDTAG||</label></span><span class="qtype_su_treatment_recommended"><input type="radio" name="type_su_treatment_recommended" value="Residential" onclick="checkhideall()" >Residential<br><input type="radio" name="type_su_treatment_recommended" value="Outpatient" onclick="checkhideall()" >Outpatient<br><input type="radio" name="type_su_treatment_recommended" value="Detox" onclick="checkhideall()" >Detox<br><input type="radio" name="type_su_treatment_recommended" value="Other" onclick="checkhideall()" >Other</span></div>
      </div>
     <div class="col4 qneed_su_appt">
-    <div class="col4 fldneed_su_appt qneed_su_appt"><span class="qneed_su_appt"><label class="label-top">||FIELDTAG need_su_appt||Does client need a substance use treatment appointment?||ENDFIELDTAG||</label></span><span class="qneed_su_appt"><input type="radio" name="need_su_appt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="need_su_appt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col4 fldneed_su_appt qneed_su_appt"><span class="qneed_su_appt"><label class="label-top">||FIELDTAG need_su_appt||Does youth need a substance use treatment appointment?||ENDFIELDTAG||</label></span><span class="qneed_su_appt"><input type="radio" name="need_su_appt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="need_su_appt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col4 qused_tobacco_past_thirty_days">
-    <div class="col4 fldused_tobacco_past_thirty_days qused_tobacco_past_thirty_days"><span class="qused_tobacco_past_thirty_days"><label class="label-top">||FIELDTAG used_tobacco_past_thirty_days||Has client used tobacco (including e-cigarettes) within the past 30 days?||ENDFIELDTAG||</label></span><span class="qused_tobacco_past_thirty_days"><input type="radio" name="used_tobacco_past_thirty_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="used_tobacco_past_thirty_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-    <div class="col4 qused_e_cigarettes_past_thirty_days">
-    <div class="col4 fldused_e_cigarettes_past_thirty_days qused_e_cigarettes_past_thirty_days"><span class="qused_e_cigarettes_past_thirty_days"><label class="label-top">||FIELDTAG used_e_cigarettes_past_thirty_days||Has client used e-cigarettes within the past 30 days?||ENDFIELDTAG||</label></span><span class="qused_e_cigarettes_past_thirty_days"><input type="radio" name="used_e_cigarettes_past_thirty_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="used_e_cigarettes_past_thirty_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col4 fldused_tobacco_past_thirty_days qused_tobacco_past_thirty_days"><span class="qused_tobacco_past_thirty_days"><label class="label-top">||FIELDTAG used_tobacco_past_thirty_days||Has youth used tobacco including (e-cigarettes/vapes) in the past 30 days?||ENDFIELDTAG||</label></span><span class="qused_tobacco_past_thirty_days"><input type="radio" name="used_tobacco_past_thirty_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="used_tobacco_past_thirty_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col12 fldyouth_dla20_score_ic qyouth_dla20_score_ic">
-    <div class="col12 fldyouth_dla20_score_ic qyouth_dla20_score_ic"><span class="qyouth_dla20_score_ic"><label class="label-top">||FIELDTAG youth_dla20_score_ic||Youth DLA-20 Score at This Appointment||ENDFIELDTAG||</label></span><span class="qyouth_dla20_score_ic"><input type="text" name="youth_dla20_score_ic" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldyouth_dla20_score_ia qyouth_dla20_score_ia">
+    <div class="col12 fldyouth_dla20_score_ia qyouth_dla20_score_ia"><span class="qyouth_dla20_score_ia"><label class="label-top">||FIELDTAG youth_dla20_score_ia||Youth DLA-20 Score at This Appointment||ENDFIELDTAG||</label></span><span class="qyouth_dla20_score_ia"><input type="text" name="youth_dla20_score_ia" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -1094,7 +1120,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist">
-    <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist"><span class="qreferred_family_support_specialist"><label class="label-top">||FIELDTAG referred_family_support_specialist||Is client being referred to a Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qreferred_family_support_specialist"><input type="radio" name="referred_family_support_specialist" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referred_family_support_specialist" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist"><span class="qreferred_family_support_specialist"><label class="label-top">||FIELDTAG referred_family_support_specialist||Is youth being referred to a Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qreferred_family_support_specialist"><input type="radio" name="referred_family_support_specialist" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referred_family_support_specialist" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">

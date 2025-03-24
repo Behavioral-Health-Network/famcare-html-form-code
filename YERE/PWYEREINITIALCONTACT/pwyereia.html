@@ -450,7 +450,7 @@ function validateform(scope='all') {
   if (!hiddenfield('num_ed_visits_past_three_months_ia') && gvtfieldvalue('num_ed_visits_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_ia");}
   if (!hiddenfield('num_hosp_past_three_months_ia') && gvtfieldvalue('num_hosp_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_ia");}
   if (!hiddenfield('num_leo_contacts_past_three_months_ia') && gvtfieldvalue('num_leo_contacts_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_ia");}
-  if (!hiddenfield('involved_jj_system_past_three_months_ia') && gvtfieldvalue('involved_jj_system_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last 3 months?\n`; seterror("involved_jj_system_past_three_months_ia");}
+  if (!hiddenfield('involved_jj_system_past_three_months_ia') && gvtfieldvalue('involved_jj_system_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last three months?\n`; seterror("involved_jj_system_past_three_months_ia");}
   if (!hiddenfield('attend_school_any_time_three_months_ia') && gvtfieldvalue('attend_school_any_time_three_months_ia')=='') {edesc=edesc+`Must specify a value for Has youth attended school in the past three months?\n`; seterror("attend_school_any_time_three_months_ia");}
   if (!hiddenfield('type_of_attendance_truancy_issues') && gvtfieldvalue('type_of_attendance_truancy_issues')=='') {edesc=edesc+`Must specify a value for Explain type of attendance/truancy issues?\n`; seterror("type_of_attendance_truancy_issues");}
   if (!hiddenfield('type_of_school_discipline') && gvtfieldvalue('type_of_school_discipline')=='') {edesc=edesc+`Must specify a value for Type of School Discipline\n`; seterror("type_of_school_discipline");}
@@ -909,7 +909,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldinvolved_jj_system_past_three_months_ia qinvolved_jj_system_past_three_months_ia">
-    <div class="col12 fldinvolved_jj_system_past_three_months_ia qinvolved_jj_system_past_three_months_ia"><span class="qinvolved_jj_system_past_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qinvolved_jj_system_past_three_months_ia required-field-label"><label class="label-top">||FIELDTAG involved_jj_system_past_three_months_ia||Has youth had any involvement in the juvenile justice system in the last 3 months?||ENDFIELDTAG||</label></span><span class="qinvolved_jj_system_past_three_months_ia"><input type="radio" name="involved_jj_system_past_three_months_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_ia" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldinvolved_jj_system_past_three_months_ia qinvolved_jj_system_past_three_months_ia"><span class="qinvolved_jj_system_past_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qinvolved_jj_system_past_three_months_ia required-field-label"><label class="label-top">||FIELDTAG involved_jj_system_past_three_months_ia||Has youth had any involvement in the juvenile justice system in the last three months?||ENDFIELDTAG||</label></span><span class="qinvolved_jj_system_past_three_months_ia"><input type="radio" name="involved_jj_system_past_three_months_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_ia" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -1154,8 +1154,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 flddate_youth_dla20_ic qdate_youth_dla20_ic">
-    <div class="col12 flddate_youth_dla20_ic qdate_youth_dla20_ic"><span class="qdate_youth_dla20_ic"><label class="label-top">||FIELDTAG date_youth_dla20_ic||Date of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_ic"><input type="text" name="date_youth_dla20_ic" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 flddate_youth_dla20_ia qdate_youth_dla20_ia">
+    <div class="col12 flddate_youth_dla20_ia qdate_youth_dla20_ia"><span class="qdate_youth_dla20_ia"><label class="label-top">||FIELDTAG date_youth_dla20_ia||Date of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_ia"><input type="text" name="date_youth_dla20_ia" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">

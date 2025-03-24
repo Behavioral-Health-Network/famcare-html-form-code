@@ -131,7 +131,7 @@ function startup() {
     setrequire('num_ed_visits_past_three_months_ia');
     setrequire('num_hosp_past_three_months_ia');
     setrequire('num_leo_contacts_past_three_months_ia');
-    setrequire('cur_involved_jj_system_ia');
+    setrequire('involved_jj_system_past_three_months_ia');
     setrequire('attend_school_any_time_three_months_ia');
     setrequire('type_of_attendance_truancy_issues');
     setrequire('type_of_school_discipline');
@@ -184,7 +184,7 @@ function checkhideall() {
    checkhide(f.met_client_at_hospital,"reason_didnt_meet_at_hospital","No");
    checkhide(f.residency_change_prior_six_months_before_referral,"how_many_residency_changes","Yes");
    checkhide(f.in_foster_care_cd_custody,"foster_care_cd_placement","Yes");
-   checkhide(f.cur_involved_jj_system_ia,"djo_dys_sro_involvement_ia","Yes");
+   checkhide(f.involved_jj_system_past_three_months_ia,"djo_dys_sro_involvement_ia","Yes");
    checkhide(f.attend_school_any_time_three_months_ia,"last_grade_lvl_completed_ia","No");
    checkhide(f.attendance_truancy_issues,"type_of_attendance_truancy_issues","Yes");
    checkhide(f.school_discipline_suspension,"type_of_school_discipline","Yes");
@@ -203,6 +203,7 @@ function checkhideall() {
    checkhide(f.bh_provider_type,"specify_bh_provider","Private Provider");
    checkhide(f.mh_concern_referral_ia,"other_mh_concern_referral_ia","025");
    checkhide(f.co_occurring_bh_dd_id,"bh_dd_id_dx","Yes");
+   checkhide(f.bh_dd_id_dx,"other_bh_dd_id_dx","Other");
    checkhide(f.have_co_occurring_substance_use,"substance_use_history","Yes");
    checkhide(f.substance_use_history,"specify_other_su_use","012");
    checkhide(f.co_occurring_mh_su_dx,"type_su_treatment_recommended","Yes");
@@ -449,7 +450,7 @@ function validateform(scope='all') {
   if (!hiddenfield('num_ed_visits_past_three_months_ia') && gvtfieldvalue('num_ed_visits_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_ia");}
   if (!hiddenfield('num_hosp_past_three_months_ia') && gvtfieldvalue('num_hosp_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_ia");}
   if (!hiddenfield('num_leo_contacts_past_three_months_ia') && gvtfieldvalue('num_leo_contacts_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_ia");}
-  if (!hiddenfield('cur_involved_jj_system_ia') && gvtfieldvalue('cur_involved_jj_system_ia')=='') {edesc=edesc+`Must specify a value for Is youth currently involved in the juvenile justice system?\n`; seterror("cur_involved_jj_system_ia");}
+  if (!hiddenfield('involved_jj_system_past_three_months_ia') && gvtfieldvalue('involved_jj_system_past_three_months_ia')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last 3 months?\n`; seterror("involved_jj_system_past_three_months_ia");}
   if (!hiddenfield('attend_school_any_time_three_months_ia') && gvtfieldvalue('attend_school_any_time_three_months_ia')=='') {edesc=edesc+`Must specify a value for Has youth attended school in the past three months?\n`; seterror("attend_school_any_time_three_months_ia");}
   if (!hiddenfield('type_of_attendance_truancy_issues') && gvtfieldvalue('type_of_attendance_truancy_issues')=='') {edesc=edesc+`Must specify a value for Explain type of attendance/truancy issues?\n`; seterror("type_of_attendance_truancy_issues");}
   if (!hiddenfield('type_of_school_discipline') && gvtfieldvalue('type_of_school_discipline')=='') {edesc=edesc+`Must specify a value for Type of School Discipline\n`; seterror("type_of_school_discipline");}
@@ -813,11 +814,6 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qdate_taken_ia">
-    <div class="col6 flddate_taken_ia qdate_taken_ia"><span class="qdate_taken_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_taken_ia required-field-label"><label class="label-top">||FIELDTAG date_taken_ia||Initial Assessment Date||ENDFIELDTAG||</label></span><span class="qdate_taken_ia"><input type="text" name="date_taken_ia" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
     <div class="col6 qprogram_participation_ia">
     <div class="col6 fldprogram_participation_ia qprogram_participation_ia"><span class="qprogram_participation_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_ia required-field-label"><label class="label-top">||FIELDTAG program_participation_ia||Program Participation||ENDFIELDTAG||</label></span><span class="qprogram_participation_ia"><input type="radio" name="program_participation_ia" value="Eligible For Youth ERE Services" onclick="checkhideall()" >Eligible For Youth ERE Services<br><input type="radio" name="program_participation_ia" value="Client Refused ERE Services" onclick="checkhideall()" >Client Refused ERE Services<br><input type="radio" name="program_participation_ia" value="Legal Guardian Refused ERE Services" onclick="checkhideall()" >Legal Guardian Refused ERE Services<br><input type="radio" name="program_participation_ia" value="Ineligible" onclick="checkhideall()" >Ineligible
 <!-- FIELDOVERRIDE(program_participation_ia,10,35) -->
@@ -912,13 +908,13 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldcur_involved_jj_system_ia qcur_involved_jj_system_ia">
-    <div class="col12 fldcur_involved_jj_system_ia qcur_involved_jj_system_ia"><span class="qcur_involved_jj_system_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qcur_involved_jj_system_ia required-field-label"><label class="label-top">||FIELDTAG cur_involved_jj_system_ia||Is youth currently involved in the juvenile justice system?||ENDFIELDTAG||</label></span><span class="qcur_involved_jj_system_ia"><input type="radio" name="cur_involved_jj_system_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="cur_involved_jj_system_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="cur_involved_jj_system_ia" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldinvolved_jj_system_past_three_months_ia qinvolved_jj_system_past_three_months_ia">
+    <div class="col12 fldinvolved_jj_system_past_three_months_ia qinvolved_jj_system_past_three_months_ia"><span class="qinvolved_jj_system_past_three_months_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qinvolved_jj_system_past_three_months_ia required-field-label"><label class="label-top">||FIELDTAG involved_jj_system_past_three_months_ia||Has youth had any involvement in the juvenile justice system in the last 3 months?||ENDFIELDTAG||</label></span><span class="qinvolved_jj_system_past_three_months_ia"><input type="radio" name="involved_jj_system_past_three_months_ia" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_ia" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_ia" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 flddjo_dys_sro_involvement_ia qdjo_dys_sro_involvement_ia">
-    <div class="col12 flddjo_dys_sro_involvement_ia qdjo_dys_sro_involvement_ia"><span class="qdjo_dys_sro_involvement_ia"><label class="label-top">||FIELDTAG djo_dys_sro_involvement_ia||Specify Type of Involvement||ENDFIELDTAG||</label></span><span class="qdjo_dys_sro_involvement_ia"><input type="checkbox" name="involvement_sro_ia" value="ON" onclick="checkhideall()">Contact with School Resource Officer&nbsp;&nbsp;<input type="checkbox" name="invovlvement_djo_ia" value="ON" onclick="checkhideall()">DJO&nbsp;&nbsp;<input type="checkbox" name="involvement_dys_ia" value="ON" onclick="checkhideall()">History with Division of Youth Services&nbsp;&nbsp;<input type="checkbox" name="involvement_secure_detention_ia" value="ON" onclick="checkhideall()">Secure Detention&nbsp;&nbsp;</span></div>
+    <div class="col12 flddjo_dys_sro_involvement_ia qdjo_dys_sro_involvement_ia"><span class="qdjo_dys_sro_involvement_ia"><label class="label-top">||FIELDTAG djo_dys_sro_involvement_ia||Specify Type of Involvement||ENDFIELDTAG||</label></span><span class="qdjo_dys_sro_involvement_ia"><input type="checkbox" name="involvement_sro_ia" value="ON" onclick="checkhideall()">Contact with School Resource Officer&nbsp;&nbsp;<input type="checkbox" name="invovlvement_djo_ia" value="ON" onclick="checkhideall()">DJO&nbsp;&nbsp;<input type="checkbox" name="involvement_dys_ia" value="ON" onclick="checkhideall()">DYS&nbsp;&nbsp;<input type="checkbox" name="involvement_secure_detention_ia" value="ON" onclick="checkhideall()">Secure Detention&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">

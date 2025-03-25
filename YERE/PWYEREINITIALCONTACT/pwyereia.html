@@ -956,7 +956,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline">
-    <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline"><span class="qtype_of_school_discipline required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline required-field-label"><label class="label-top">Type of School Discipline<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_of_school_discipline"><select size="8" name="type_of_school_discipline" onchange="checkhideall()" multiple>
+    <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline"><span class="qtype_of_school_discipline required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline required-field-label"><label class="label-top">Type of School Discipline<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_of_school_discipline"><select size="8" name="type_of_school_discipline" id="yere_type_of_school_discipline" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_type_of_school_discipline] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE type_of_school_discipline^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_type_of_school_discipline||
 
@@ -1015,7 +1015,7 @@ function updatesignatures(){
     <div class="col6 fldspecify_physical_health_concern qspecify_physical_health_concern"><span class="qspecify_physical_health_concern"><label class="label-top">||FIELDTAG specify_physical_health_concern||Specify Physical Health Concern||ENDFIELDTAG||</label></span><span class="qspecify_physical_health_concern"><textarea name="specify_physical_health_concern" class="autoexpand"></textarea></span></div>
      </div>
     <div class="col6 qtype_trauma_reported">
-    <div class="col6 fldtype_trauma_reported qtype_trauma_reported"><span class="qtype_trauma_reported required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_trauma_reported required-field-label"><label class="label-top">Type of Trauma Reported<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_trauma_reported"><select size="15" name="type_trauma_reported" onchange="checkhideall()" multiple>
+    <div class="col6 fldtype_trauma_reported qtype_trauma_reported"><span class="qtype_trauma_reported required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_trauma_reported required-field-label"><label class="label-top">Type of Trauma Reported<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_trauma_reported"><select size="15" name="type_trauma_reported" id="yere_type_trauma_reported" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_type_trauma_reported] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE type_trauma_reported^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_type_trauma_reported||
 
@@ -1085,7 +1085,7 @@ function updatesignatures(){
 </div>
  <div class="entire">
     <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia">
-    <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia"><span class="qmh_concern_referral_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ia required-field-label"><label class="label-top">Mental Health Concern at Referral<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_concern_referral_ia"><select size="15" name="mh_concern_referral_ia" onchange="checkhideall()" multiple>
+    <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia"><span class="qmh_concern_referral_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ia required-field-label"><label class="label-top">Mental Health Concern at Referral<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_concern_referral_ia"><select size="15" name="mh_concern_referral_ia" id="yere_mh_concerns" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_mh_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_concern_referral_ia^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_mh_concerns||
 
@@ -1137,7 +1137,7 @@ function updatesignatures(){
     <div class="col4 fldhave_co_occurring_substance_use qhave_co_occurring_substance_use"><span class="qhave_co_occurring_substance_use required-label">||PWRequiredFieldRequiredText||</span><span class="qhave_co_occurring_substance_use required-field-label"><label class="label-top">||FIELDTAG have_co_occurring_substance_use||Is there any co-occurring substance use?||ENDFIELDTAG||</label></span><span class="qhave_co_occurring_substance_use"><input type="radio" name="have_co_occurring_substance_use" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
     <div class="col4 qsubstance_use_history">
-    <div class="col4 fldsubstance_use_history qsubstance_use_history"><span class="qsubstance_use_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsubstance_use_history"><select size="8" name="substance_use_history" onchange="checkhideall()" multiple>
+    <div class="col4 fldsubstance_use_history qsubstance_use_history"><span class="qsubstance_use_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsubstance_use_history"><select size="8" name="substance_use_history" id="yere_substance_use_history" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE substance_use_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_substance_use_history||
 

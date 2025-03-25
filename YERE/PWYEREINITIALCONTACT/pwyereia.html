@@ -336,7 +336,9 @@ function checkhide(o,o2fld,vx) {
      } else {
         o2.value="";
      }
-   }
+   };
+   // Run updateReportFields for all relevant dropdowns after updating visibility
+  updateReportFields(['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_substance_use_history', 'yere_type_of_school_discipline']);
 }
 
 

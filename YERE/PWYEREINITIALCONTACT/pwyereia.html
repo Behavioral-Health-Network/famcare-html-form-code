@@ -867,7 +867,7 @@ function updatesignatures(){
 <div class="col12 term">Housing Status</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Click Add to complete a new housing entry. Click View/Edit to enter an End Date for the previous housing status.</label></div>
+    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
@@ -893,7 +893,7 @@ function updatesignatures(){
     </div>
   </div>
 <div class="entire">
-<div class="col12 term">Hospitalizations/Law Enforcement</div>
+<div class="col12 term">Previous Encounters</div>
 </div>
  <div class="entire">
     <div class="col12 fldnum_ed_visits_past_three_months_ia qnum_ed_visits_past_three_months_ia">
@@ -924,7 +924,7 @@ function updatesignatures(){
 <div class="col12 term">School</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Click Add if completing a new school entry. Click View/Edit to enter an End Date for the current school or to update current school information.</label></div>
+    <div class="col12"><label class="label-top"><i>Click "Add" to enter clients school information. If clients school hasn't changed, leave as is. If client has switched to a new school click "View/Edit" to add an "End Date" to the current school and then create a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
@@ -1069,6 +1069,11 @@ function updatesignatures(){
     <div class="col4 fldspecify_psychiatric_provider qspecify_psychiatric_provider"><span class="qspecify_psychiatric_provider"><label class="label-top">||FIELDTAG specify_psychiatric_provider||Specify Psychiatric Provider||ENDFIELDTAG||</label></span><span class="qspecify_psychiatric_provider"><textarea name="specify_psychiatric_provider" class="autoexpand"></textarea></span></div>
      </div>
   </div>
+  <div class="entire">
+  </div>
+   <div class="entire">
+      <div class="col6"><label class="label-top"></label></div>
+    </div>
  <div class="entire">
     <div class="col4 qreceiving_bh_services_not_thru_dmh_provider">
     <div class="col4 fldreceiving_bh_services_not_thru_dmh_provider qreceiving_bh_services_not_thru_dmh_provider"><span class="qreceiving_bh_services_not_thru_dmh_provider"><label class="label-top">||FIELDTAG receiving_bh_services_not_thru_dmh_provider||Is youth receiving behavioral health services (not through CMHC)?||ENDFIELDTAG||</label></span><span class="qreceiving_bh_services_not_thru_dmh_provider"><input type="radio" name="receiving_bh_services_not_thru_dmh_provider" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="receiving_bh_services_not_thru_dmh_provider" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -1080,9 +1085,11 @@ function updatesignatures(){
     <div class="col4 fldspecify_bh_provider qspecify_bh_provider"><span class="qspecify_bh_provider"><label class="label-top">||FIELDTAG specify_bh_provider||Specify Behavioral Health Provider||ENDFIELDTAG||</label></span><span class="qspecify_bh_provider"><textarea name="specify_bh_provider" class="autoexpand"></textarea></span></div>
      </div>
   </div>
-<div class="entire">
-<div class="col12 term">Mental Health Needs</div>
-</div>
+  <div class="entire">
+  </div>
+   <div class="entire">
+      <div class="col6"><label class="label-top"></label></div>
+    </div>
  <div class="entire">
     <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia">
     <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia"><span class="qmh_concern_referral_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ia required-field-label"><label class="label-top">Mental Health Concern at Referral<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_concern_referral_ia"><select size="15" name="mh_concern_referral_ia" id="yere_mh_concerns" onchange="checkhideall()" multiple>
@@ -1126,9 +1133,21 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">Youth Program Needs</div>
 </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+  </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
   </div>
+  <div class="entire">
+    <div class="col12 term">Caregiver Program Needs</div>
+    </div>
+    <div class="entire">
+        <div class="col12"><label class="label-top"><i>Click "Add" below to enter the caregiver's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+      </div>
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
+      </div>
 <div class="entire">
 <div class="col12 term">Substance Use</div>
 </div>
@@ -1148,6 +1167,11 @@ function updatesignatures(){
     <div class="col4 fldspecify_other_su_use qspecify_other_su_use"><span class="qspecify_other_su_use"><label class="label-top">||FIELDTAG specify_other_su_use||Other Substance Use||ENDFIELDTAG||</label></span><span class="qspecify_other_su_use"><textarea name="specify_other_su_use" class="autoexpand"></textarea></span></div>
      </div>
   </div>
+  <div class="entire">
+  </div>
+   <div class="entire">
+      <div class="col6"><label class="label-top"></label></div>
+    </div>
  <div class="entire">
     <div class="col4 qco_occurring_mh_su_dx">
     <div class="col4 fldco_occurring_mh_su_dx qco_occurring_mh_su_dx"><span class="qco_occurring_mh_su_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_mh_su_dx required-field-label"><label class="label-top">||FIELDTAG co_occurring_mh_su_dx||Is there any co-occurring mental health/substance use diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_mh_su_dx"><input type="radio" name="co_occurring_mh_su_dx" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
@@ -1159,6 +1183,11 @@ function updatesignatures(){
     <div class="col4 fldneed_su_appt qneed_su_appt"><span class="qneed_su_appt"><label class="label-top">||FIELDTAG need_su_appt||Does youth need a substance use treatment appointment?||ENDFIELDTAG||</label></span><span class="qneed_su_appt"><input type="radio" name="need_su_appt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="need_su_appt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
+  <div class="entire">
+  </div>
+   <div class="entire">
+      <div class="col6"><label class="label-top"></label></div>
+    </div>
  <div class="entire">
     <div class="col4 qused_tobacco_past_thirty_days">
     <div class="col4 fldused_tobacco_past_thirty_days qused_tobacco_past_thirty_days"><span class="qused_tobacco_past_thirty_days"><label class="label-top">||FIELDTAG used_tobacco_past_thirty_days||Has youth used tobacco including (e-cigarettes/vapes) in the past 30 days?||ENDFIELDTAG||</label></span><span class="qused_tobacco_past_thirty_days"><input type="radio" name="used_tobacco_past_thirty_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="used_tobacco_past_thirty_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -1180,12 +1209,6 @@ function updatesignatures(){
     <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist">
     <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist"><span class="qreferred_family_support_specialist"><label class="label-top">||FIELDTAG referred_family_support_specialist||Is youth being referred to a Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qreferred_family_support_specialist"><input type="radio" name="referred_family_support_specialist" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referred_family_support_specialist" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Caregiver Program Needs</div>
-</div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
   </div>
 <div class="entire">
 </div>

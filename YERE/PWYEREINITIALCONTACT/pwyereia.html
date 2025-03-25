@@ -188,9 +188,12 @@ function checkhideall() {
    checkhide(f.attend_school_any_time_three_months_ia,"last_grade_lvl_completed_ia","No");
    checkhide(f.attendance_truancy_issues,"type_of_attendance_truancy_issues","Yes");
    checkhide(f.school_discipline_suspension,"type_of_school_discipline","Yes");
-   checkhide(f.type_of_school_discipline,"detention_number_duration","001");
-   checkhide(f.type_of_school_discipline,"iss_number_duration","002");
-   checkhide(f.type_of_school_discipline,"oss_number_duration","003");
+   checkhide(f.type_of_school_discipline,"detention_number","001");
+   checkhide(f.type_of_school_discipline,"detention_duration","001");
+   checkhide(f.type_of_school_discipline,"iss_number","002");
+   checkhide(f.type_of_school_discipline,"iss_duration","002");
+   checkhide(f.type_of_school_discipline,"oss_number","003");
+   checkhide(f.type_of_school_discipline,"oss_duration","003");
    checkhide(f.type_of_school_discipline,"other_school_discipline","004");
    checkhide(f.chronic_severe_physical_health_concern,"specify_physical_health_concern","Yes");
    checkhide(f.been_exposed_trauma,"type_trauma_reported","Yes");
@@ -962,18 +965,33 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 flddetention_number_duration qdetention_number_duration">
-    <div class="col12 flddetention_number_duration qdetention_number_duration"><span class="qdetention_number_duration"><label class="label-top">||FIELDTAG detention_number_duration||Number of Detentions and Duration||ENDFIELDTAG||</label></span><span class="qdetention_number_duration"><input type="text" name="detention_number_duration" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 flddetention_number qdetention_number">
+    <div class="col12 flddetention_number qdetention_number"><span class="qdetention_number"><label class="label-top">||FIELDTAG detention_number||Number of Detentions||ENDFIELDTAG||</label></span><span class="qdetention_number"><input type="text" name="detention_number" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 flddetention_duration qdetention_duration">
+    <div class="col12 flddetention_duration qdetention_duration"><span class="qdetention_duration"><label class="label-top">||FIELDTAG detention_duration||Duration of Detentions||ENDFIELDTAG||</label></span><span class="qdetention_duration"><input type="text" name="detention_duration" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldiss_number_duration qiss_number_duration">
-    <div class="col12 fldiss_number_duration qiss_number_duration"><span class="qiss_number_duration"><label class="label-top">||FIELDTAG iss_number_duration||Number of In-School Suspensions and Duration||ENDFIELDTAG||</label></span><span class="qiss_number_duration"><input type="text" name="iss_number_duration" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldiss_number qiss_number">
+    <div class="col12 fldiss_number qiss_number"><span class="qiss_number"><label class="label-top">||FIELDTAG iss_number||Number of In-School Suspensions||ENDFIELDTAG||</label></span><span class="qiss_number"><input type="text" name="iss_number" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldoss_number_duration qoss_number_duration">
-    <div class="col12 fldoss_number_duration qoss_number_duration"><span class="qoss_number_duration"><label class="label-top">||FIELDTAG oss_number_duration||Number of Out of School Suspensions and Duration||ENDFIELDTAG||</label></span><span class="qoss_number_duration"><input type="text" name="oss_number_duration" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldiss_number qiss_duration">
+    <div class="col12 fldiss_number qiss_duration"><span class="qiss_duration"><label class="label-top">||FIELDTAG iss_duration||Duration of In-School Suspensions||ENDFIELDTAG||</label></span><span class="qiss_duration"><input type="text" name="iss_duration" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoss_number qoss_number">
+    <div class="col12 fldoss_number qoss_number"><span class="qoss_number"><label class="label-top">||FIELDTAG oss_number||Number of Out of School Suspensions||ENDFIELDTAG||</label></span><span class="qoss_number"><input type="text" name="oss_number" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldoss_duration qoss_duration">
+    <div class="col12 fldoss_duration qoss_duration"><span class="qoss_duration"><label class="label-top">||FIELDTAG oss_duration||Duration of Out of School Suspensions||ENDFIELDTAG||</label></span><span class="qoss_duration"><input type="text" name="oss_duration" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">

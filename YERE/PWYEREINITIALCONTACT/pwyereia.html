@@ -1130,6 +1130,68 @@ function updatesignatures(){
     <div class="col4 fldother_bh_dd_id_dx qother_bh_dd_id_dx"><span class="qother_bh_dd_id_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qother_bh_dd_id_dx required-field-label"><label class="label-top">||FIELDTAG other_bh_dd_id_dx||Other Diagnosis||ENDFIELDTAG||</label></span><span class="qother_bh_dd_id_dx"><input type="text" name="other_bh_dd_id_dx" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
+  <div class="entire">
+   <div class="col12 term">Substance Use</div>
+   </div>
+    <div class="entire">
+       <div class="col4 qhave_co_occurring_substance_use">
+       <div class="col4 fldhave_co_occurring_substance_use qhave_co_occurring_substance_use"><span class="qhave_co_occurring_substance_use required-label">||PWRequiredFieldRequiredText||</span><span class="qhave_co_occurring_substance_use required-field-label"><label class="label-top">||FIELDTAG have_co_occurring_substance_use||Is there any co-occurring substance use?||ENDFIELDTAG||</label></span><span class="qhave_co_occurring_substance_use"><input type="radio" name="have_co_occurring_substance_use" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+        </div>
+       <div class="col4 qsubstance_use_history">
+       <div class="col4 fldsubstance_use_history qsubstance_use_history"><span class="qsubstance_use_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsubstance_use_history"><select size="8" name="substance_use_history" id="yere_substance_use_history" onchange="updateReportFields(['yere_substance_use_history']);checkhideall()" multiple>
+   <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE substance_use_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+   </select>||CONFIGURE yere_substance_use_history||
+   
+   <!-- FIELDOVERRIDE(substance_use_history,10,200) -->
+   </span></div>
+        </div>
+       <div class="col4 qspecify_other_su_use">
+       <div class="col4 fldspecify_other_su_use qspecify_other_su_use"><span class="qspecify_other_su_use"><label class="label-top">||FIELDTAG specify_other_su_use||Other Substance Use||ENDFIELDTAG||</label></span><span class="qspecify_other_su_use"><textarea name="specify_other_su_use" class="autoexpand"></textarea></span></div>
+        </div>
+     </div>
+     <div class="entire">
+     </div>
+      <div class="entire">
+         <div class="col6"><label class="label-top"></label></div>
+       </div>
+    <div class="entire">
+       <div class="col4 qco_occurring_mh_su_dx">
+       <div class="col4 fldco_occurring_mh_su_dx qco_occurring_mh_su_dx"><span class="qco_occurring_mh_su_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_mh_su_dx required-field-label"><label class="label-top">||FIELDTAG co_occurring_mh_su_dx||Is there any co-occurring mental health/substance use diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_mh_su_dx"><input type="radio" name="co_occurring_mh_su_dx" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+        </div>
+       <div class="col4 qtype_su_treatment_recommended">
+       <div class="col4 fldtype_su_treatment_recommended qtype_su_treatment_recommended"><span class="qtype_su_treatment_recommended"><label class="label-top">||FIELDTAG type_su_treatment_recommended||What type of substance use treatment is being recommended?||ENDFIELDTAG||</label></span><span class="qtype_su_treatment_recommended"><input type="radio" name="type_su_treatment_recommended" value="Residential" onclick="checkhideall()" >Residential<br><input type="radio" name="type_su_treatment_recommended" value="Outpatient" onclick="checkhideall()" >Outpatient<br><input type="radio" name="type_su_treatment_recommended" value="Detox" onclick="checkhideall()" >Detox<br><input type="radio" name="type_su_treatment_recommended" value="Other" onclick="checkhideall()" >Other</span></div>
+        </div>
+       <div class="col4 qneed_su_appt">
+       <div class="col4 fldneed_su_appt qneed_su_appt"><span class="qneed_su_appt"><label class="label-top">||FIELDTAG need_su_appt||Does youth need a substance use treatment appointment?||ENDFIELDTAG||</label></span><span class="qneed_su_appt"><input type="radio" name="need_su_appt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="need_su_appt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+     </div>
+     <div class="entire">
+     </div>
+      <div class="entire">
+         <div class="col6"><label class="label-top"></label></div>
+       </div>
+    <div class="entire">
+       <div class="col4 qused_tobacco_past_thirty_days">
+       <div class="col4 fldused_tobacco_past_thirty_days qused_tobacco_past_thirty_days"><span class="qused_tobacco_past_thirty_days"><label class="label-top">||FIELDTAG used_tobacco_past_thirty_days||Has youth used tobacco including (e-cigarettes/vapes) in the past 30 days?||ENDFIELDTAG||</label></span><span class="qused_tobacco_past_thirty_days"><input type="radio" name="used_tobacco_past_thirty_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="used_tobacco_past_thirty_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+     </div>
+   <div class="entire">
+   </div>
+    <div class="entire">
+       <div class="col12 fldyouth_dla20_score_ia qyouth_dla20_score_ia">
+       <div class="col12 fldyouth_dla20_score_ia qyouth_dla20_score_ia"><span class="qyouth_dla20_score_ia"><label class="label-top">||FIELDTAG youth_dla20_score_ia||Youth DLA-20 Score at This Appointment||ENDFIELDTAG||</label></span><span class="qyouth_dla20_score_ia"><input type="text" name="youth_dla20_score_ia" size="10" onchange="checkhideall()"></span></div>
+        </div>
+     </div>
+    <div class="entire">
+       <div class="col12 flddate_youth_dla20_ia qdate_youth_dla20_ia">
+       <div class="col12 flddate_youth_dla20_ia qdate_youth_dla20_ia"><span class="qdate_youth_dla20_ia"><label class="label-top">||FIELDTAG date_youth_dla20_ia||Date of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_ia"><input type="text" name="date_youth_dla20_ia" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+        </div>
+     </div>
+    <div class="entire">
+       <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist">
+       <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist"><span class="qreferred_family_support_specialist"><label class="label-top">||FIELDTAG referred_family_support_specialist||Is youth being referred to a Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qreferred_family_support_specialist"><input type="radio" name="referred_family_support_specialist" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referred_family_support_specialist" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+     </div>
 <div class="entire">
 <div class="col12 term">Youth Program Needs</div>
 </div>
@@ -1148,68 +1210,6 @@ function updatesignatures(){
      <div class="entire">
         <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
       </div>
-<div class="entire">
-<div class="col12 term">Substance Use</div>
-</div>
- <div class="entire">
-    <div class="col4 qhave_co_occurring_substance_use">
-    <div class="col4 fldhave_co_occurring_substance_use qhave_co_occurring_substance_use"><span class="qhave_co_occurring_substance_use required-label">||PWRequiredFieldRequiredText||</span><span class="qhave_co_occurring_substance_use required-field-label"><label class="label-top">||FIELDTAG have_co_occurring_substance_use||Is there any co-occurring substance use?||ENDFIELDTAG||</label></span><span class="qhave_co_occurring_substance_use"><input type="radio" name="have_co_occurring_substance_use" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="have_co_occurring_substance_use" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-    <div class="col4 qsubstance_use_history">
-    <div class="col4 fldsubstance_use_history qsubstance_use_history"><span class="qsubstance_use_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsubstance_use_history"><select size="8" name="substance_use_history" id="yere_substance_use_history" onchange="updateReportFields(['yere_substance_use_history']);checkhideall()" multiple>
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE substance_use_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE yere_substance_use_history||
-
-<!-- FIELDOVERRIDE(substance_use_history,10,200) -->
-</span></div>
-     </div>
-    <div class="col4 qspecify_other_su_use">
-    <div class="col4 fldspecify_other_su_use qspecify_other_su_use"><span class="qspecify_other_su_use"><label class="label-top">||FIELDTAG specify_other_su_use||Other Substance Use||ENDFIELDTAG||</label></span><span class="qspecify_other_su_use"><textarea name="specify_other_su_use" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
-  <div class="entire">
-  </div>
-   <div class="entire">
-      <div class="col6"><label class="label-top"></label></div>
-    </div>
- <div class="entire">
-    <div class="col4 qco_occurring_mh_su_dx">
-    <div class="col4 fldco_occurring_mh_su_dx qco_occurring_mh_su_dx"><span class="qco_occurring_mh_su_dx required-label">||PWRequiredFieldRequiredText||</span><span class="qco_occurring_mh_su_dx required-field-label"><label class="label-top">||FIELDTAG co_occurring_mh_su_dx||Is there any co-occurring mental health/substance use diagnosis?||ENDFIELDTAG||</label></span><span class="qco_occurring_mh_su_dx"><input type="radio" name="co_occurring_mh_su_dx" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="co_occurring_mh_su_dx" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-    <div class="col4 qtype_su_treatment_recommended">
-    <div class="col4 fldtype_su_treatment_recommended qtype_su_treatment_recommended"><span class="qtype_su_treatment_recommended"><label class="label-top">||FIELDTAG type_su_treatment_recommended||What type of substance use treatment is being recommended?||ENDFIELDTAG||</label></span><span class="qtype_su_treatment_recommended"><input type="radio" name="type_su_treatment_recommended" value="Residential" onclick="checkhideall()" >Residential<br><input type="radio" name="type_su_treatment_recommended" value="Outpatient" onclick="checkhideall()" >Outpatient<br><input type="radio" name="type_su_treatment_recommended" value="Detox" onclick="checkhideall()" >Detox<br><input type="radio" name="type_su_treatment_recommended" value="Other" onclick="checkhideall()" >Other</span></div>
-     </div>
-    <div class="col4 qneed_su_appt">
-    <div class="col4 fldneed_su_appt qneed_su_appt"><span class="qneed_su_appt"><label class="label-top">||FIELDTAG need_su_appt||Does youth need a substance use treatment appointment?||ENDFIELDTAG||</label></span><span class="qneed_su_appt"><input type="radio" name="need_su_appt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="need_su_appt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-  <div class="entire">
-  </div>
-   <div class="entire">
-      <div class="col6"><label class="label-top"></label></div>
-    </div>
- <div class="entire">
-    <div class="col4 qused_tobacco_past_thirty_days">
-    <div class="col4 fldused_tobacco_past_thirty_days qused_tobacco_past_thirty_days"><span class="qused_tobacco_past_thirty_days"><label class="label-top">||FIELDTAG used_tobacco_past_thirty_days||Has youth used tobacco including (e-cigarettes/vapes) in the past 30 days?||ENDFIELDTAG||</label></span><span class="qused_tobacco_past_thirty_days"><input type="radio" name="used_tobacco_past_thirty_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="used_tobacco_past_thirty_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-</div>
- <div class="entire">
-    <div class="col12 fldyouth_dla20_score_ia qyouth_dla20_score_ia">
-    <div class="col12 fldyouth_dla20_score_ia qyouth_dla20_score_ia"><span class="qyouth_dla20_score_ia"><label class="label-top">||FIELDTAG youth_dla20_score_ia||Youth DLA-20 Score at This Appointment||ENDFIELDTAG||</label></span><span class="qyouth_dla20_score_ia"><input type="text" name="youth_dla20_score_ia" size="10" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 flddate_youth_dla20_ia qdate_youth_dla20_ia">
-    <div class="col12 flddate_youth_dla20_ia qdate_youth_dla20_ia"><span class="qdate_youth_dla20_ia"><label class="label-top">||FIELDTAG date_youth_dla20_ia||Date of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_ia"><input type="text" name="date_youth_dla20_ia" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist">
-    <div class="col12 fldreferred_family_support_specialist qreferred_family_support_specialist"><span class="qreferred_family_support_specialist"><label class="label-top">||FIELDTAG referred_family_support_specialist||Is youth being referred to a Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qreferred_family_support_specialist"><input type="radio" name="referred_family_support_specialist" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referred_family_support_specialist" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
 <div class="entire">
 </div>
  <div class="entire">

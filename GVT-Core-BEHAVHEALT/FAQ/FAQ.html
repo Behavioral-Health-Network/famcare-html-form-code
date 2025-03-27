@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+        }
+        .question {
+            font-weight: bold;
+            cursor: pointer;
+            color: #0056b3;
+        }
+        .answer {
+            display: none;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <h1>Frequently Asked Questions</h1>
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">What is your return policy?</div>
+            <div class="answer">We offer a 30-day return policy with a full refund.</div>
+        </div>
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">How can I track my order?</div>
+            <div class="answer">You can track your order using the tracking link sent to your email.</div>
+        </div>
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">Do you offer international shipping?</div>
+            <div class="answer">Yes, we ship to most countries worldwide. Additional fees may apply.</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(questionElement) {
+            const answer = questionElement.nextElementSibling;
+            if (answer.style.display === "none" || !answer.style.display) {
+                answer.style.display = "block";
+            } else {
+                answer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

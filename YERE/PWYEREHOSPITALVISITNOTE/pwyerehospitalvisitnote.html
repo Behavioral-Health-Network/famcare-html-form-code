@@ -83,11 +83,10 @@ function startup() {
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
-}
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-   const dropdown = document.querySelectorAll('#yere_hosp_ftf'); // Add more IDs as needed
+  const dropdown = document.querySelectorAll('#yere_hosp_ftf'); // Add more IDs as needed
   
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -105,6 +104,7 @@ function startup() {
       dropdown.dataset.initialized = true;
     }
   });
+}
 
 function checkhideall() {
    f=document.forms[0];
@@ -237,9 +237,7 @@ function checkhide(o,o2fld,vx) {
      } else {
         o2.value="";
      }
-   };
-  // Run updateReportFields for all relevant dropdowns after updating visibility
-  updateReportFields(['yere_hosp_ftf']); 
+   }
 }
 
 
@@ -399,7 +397,8 @@ function hiddenfield(g) {
 }
 
 function submitit() {
-	
+// parse the multi-select list and update the report fields
+updateReportFields(['yere_hosp_ftf'])
  
   // use alert to display error messages
   let errdesc = validateform();     
@@ -656,7 +655,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldhosp_ftf qhosp_ftf">
-    <div class="col12 fldhosp_ftf qhosp_ftf"><span class="qhosp_ftf required-label">||PWRequiredFieldRequiredText||</span><span class="qhosp_ftf required-field-label"><label class="label-top">Who did staff meet face-to-face with?<br>(Hold down Ctrl to select multiple)</label></span><span class="qhosp_ftf"><select size="8" name="hosp_ftf" id="yere_hosp_ftf" onchange="checkhideall()" multiple>
+    <div class="col12 fldhosp_ftf qhosp_ftf"><span class="qhosp_ftf required-label">||PWRequiredFieldRequiredText||</span><span class="qhosp_ftf required-field-label"><label class="label-top">Who did staff meet face-to-face with?<br>(Hold down Ctrl to select multiple)</label></span><span class="qhosp_ftf"><select size="8" name="hosp_ftf" id="yere_hosp_ftf" onchange="updateReportFields(['yere_hosp_ftf']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_hosp_ftf] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE hosp_ftf^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_hosp_ftf||
 

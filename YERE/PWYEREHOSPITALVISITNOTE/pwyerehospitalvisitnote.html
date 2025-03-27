@@ -4,13 +4,50 @@
 <title>YERE Hospital Visit Note</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
-
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(YOUTH,10,10) -->
+<!-- FIELDOVERRIDE(REFERRING_STAFF,10,10) -->
+<!-- FIELDOVERRIDE(CAREGIVER,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
 <PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
 
 <script language="JavaScript">
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+const observer = new MutationObserver(() => {
+  // Use querySelectorAll to find all relevant dropdowns
+  const dropdowns = document.querySelectorAll('#yere_hosp_ftf'); // Add more IDs as needed
+
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID to updateReportFields
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+
+  if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
+    observer.disconnect();
+  }
+});
+
+// Start observing the document body for changes
+observer.observe(document.body, { childList: true, subtree: true });
 
 var genpdf='true';
 
@@ -47,6 +84,27 @@ function startup() {
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
 }
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+   const dropdown = document.querySelectorAll('#yere_hosp_ftf'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
 
 function checkhideall() {
    f=document.forms[0];
@@ -179,7 +237,9 @@ function checkhide(o,o2fld,vx) {
      } else {
         o2.value="";
      }
-   }
+   };
+  // Run updateReportFields for all relevant dropdowns after updating visibility
+  updateReportFields(['yere_hosp_ftf']); 
 }
 
 
@@ -483,12 +543,62 @@ function updatesignatures(){
    return;
 }
 
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['yere_hosp_ftf', 'table2', 'table3'].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+
 </script>
 
 <script language="VBScript">
 </script>
-
-||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
 
 <body onLoad="startup()">
 <!-- Field Override Area -->
@@ -510,6 +620,11 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields -->
+    <input type="hidden" name="hosp_ftf_youth" value="||FIELDVALUE hosp_ftf_youth||" class="report-field value-001" data-source="yere_hosp_ftf">
+    <input type="hidden" name="hosp_ftf_referring_staff" value="||FIELDVALUE hosp_ftf_referring_staff||" class="report-field value-002" data-source="yere_hosp_ftf">
+    <input type="hidden" name="hosp_ftf_caregiver" value="||FIELDVALUE hosp_ftf_caregiver||" class="report-field value-003" data-source="yere_hosp_ftf">
+    <input type="hidden" name="hosp_ftf_other" value="||FIELDVALUE hosp_ftf_other||" class="report-field value-004" data-source="yere_hosp_ftf">
 <!--STARTOFPROVIDERFORM -->
     <h1><span>YERE Hospital Visit Note</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
@@ -541,7 +656,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldhosp_ftf qhosp_ftf">
-    <div class="col12 fldhosp_ftf qhosp_ftf"><span class="qhosp_ftf required-label">||PWRequiredFieldRequiredText||</span><span class="qhosp_ftf required-field-label"><label class="label-top">Who did staff meet face-to-face with?<br>(Hold down Ctrl to select multiple)</label></span><span class="qhosp_ftf"><select size="8" name="hosp_ftf" onchange="checkhideall()" multiple>
+    <div class="col12 fldhosp_ftf qhosp_ftf"><span class="qhosp_ftf required-label">||PWRequiredFieldRequiredText||</span><span class="qhosp_ftf required-field-label"><label class="label-top">Who did staff meet face-to-face with?<br>(Hold down Ctrl to select multiple)</label></span><span class="qhosp_ftf"><select size="8" name="hosp_ftf" id="yere_hosp_ftf" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_hosp_ftf] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE hosp_ftf^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_hosp_ftf||
 

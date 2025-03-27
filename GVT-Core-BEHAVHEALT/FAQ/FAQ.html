@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .faq-container {
+            max-width: 900px;
+            margin: auto;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #333;
+            margin-top: 20px;
+        }
+        .faq-item {
+            margin-bottom: 15px;
+        }
+        .question {
+            font-weight: bold;
+            cursor: pointer;
+            color: #0056b3;
+        }
+        .answer {
+            display: none;
+            margin-top: 10px;
+            color: #555;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #555;
+            font-style: italic;
+            border-left: 2px solid #ccc;
+            padding-left: 10px;
+            margin-top: 10px;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <h1>Frequently Asked Questions</h1>
+
+        <!-- Section: Common for Program Workers and Managers -->
+        <section>
+            <h2>Common Questions (Program Workers & Managers)</h2>
+
+            <!-- Subsection: Caseload -->
+            <h3>Caseload</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I add a client to my caseload?</div>
+                <div class="answer">Use Client Search/Add to find the client you are wanting to add to your caseload. On the search results screen, there will be a column called "Case Load Functions" and in that column, link to "Add/View Caseload"  When you click this link, the client will be added to your caseload, and you will be redirected to your caseload screen.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How can I view a list of clients with upcoming due dates?</div>
+                <div class="answer">On your main dashboard, there is a section called, "Client Workflow/To Do List" that should show all clients on your caseload with forms due in the next few days or next week. 
+
+                    There is a set number of days prior to the due date that you will be alerted. </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I remove a client from my caseload?</div>
+                <div class="answer">In the client's row on your caseload, next to the client menu icon, 
+                    there is an icon that is a red circle with an x inside of it. Click on that red x button and it will remove the client from your caseload. </div>
+            </div>
+
+            <!-- Subsection: Client Information -->
+            <h3>Client Search & Add</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I search for a client?</div>
+                <div class="answer">
+                    <p>On the top left of the screen, next to the Home Button, there is a "FAMCare" icon. Click this icon and you will see a drop down of items. Towards the bottom is a link for "Client Search/Add" Clicking this link will take you to the search screen.</p>"
+                    <p class="note">*Note: You can add the Search Page to your favorites by clicking on "Add to Favorites" at the top of the Search Page.*</p></div>
+            </div>
+
+            <!-- Add more subsections and questions here -->
+        </section>
+
+        <!-- Section: Managers -->
+        <section>
+            <h2>Manager-Specific Questions</h2>
+
+            <!-- Subsection: Pathway Forms -->
+            <h3>Pathway Forms</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I access the forms I need to complete for my clients?</div>
+                <div class="answer">Once the client has been enrolled in your Program's Pathway, you will be able to access all of the relevant forms. If the client is already on your case load, you can click on the Pathway Icon, which will take you to the Master Pathway Dashboard. From the Dashboard, you click on the bar next to the due date for each form.</div>
+            </div>
+
+            <!-- Subsection: Troubleshooting -->
+            <h3>Troubleshooting</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)"><p>I see the client on my caseload, but I do not see the Pathway Icon. How do I access their forms?</p></div>
+                <div class="answer">
+                    <p>In the caseload section, find your client and:</p></div>
+                    <ol>
+                        <li>Verify that you have a column on your dashboard called, "Pathway Workflow".</li>
+                        <li>If that column exists and you don't see the colorful icon, the client may not have been enrolled in your program yet OR this client may have already completed all of the pathway forms.</li>
+                    </ol>
+            </div>
+
+            <!-- Add more subsections and questions here -->
+        </section>
+    </div>
+
+    <script>
+        function toggleAnswer(questionElement) {
+            const answer = questionElement.nextElementSibling;
+            if (answer.style.display === "none" || !answer.style.display) {
+                answer.style.display = "block";
+            } else {
+                answer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

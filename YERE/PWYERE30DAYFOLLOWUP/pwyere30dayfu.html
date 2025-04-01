@@ -40,7 +40,7 @@ function startup() {
     setrequire('residency_change_since_referral_thirty_day');
     setrequire('residency_change_type_thirty_day');
     setrequire('residency_change_address_existing_barrier_service_plan_goal_thirty_day');
-
+    setrequire('school_change_thirty_day');
 	checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
@@ -288,7 +288,7 @@ function validateform(scope='all') {
   if (!hiddenfield('residency_change_since_referral_thirty_day') && gvtfieldvalue('residency_change_since_referral_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral?\n`; seterror("residency_change_since_referral_thirty_day");}
   if (!hiddenfield('residency_change_type_thirty_day') && gvtfieldvalue('residency_change_type_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_thirty_day");}
   if (!hiddenfield('residency_change_address_existing_barrier_service_plan_goal_thirty_day') && gvtfieldvalue('residency_change_address_existing_barrier_service_plan_goal_thirty_day')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan goal?\n`; seterror("residency_change_address_existing_barrier_service_plan_goal_thirty_day");}
-
+  if (!hiddenfield('school_change_thirty_day') && gvtfieldvalue('school_change_thirty_day')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_thirty_day");}
     return edesc;
 }
 
@@ -571,6 +571,17 @@ function updatesignatures(){
     <div class="col6"><label class="label-top"></label></div>
   </div>
 <div class="entire">
+<div class="col12 term">School</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day">
+    <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day"><span class="qschool_change_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qschool_change_thirty_day required-field-label"><label class="label-top">||FIELDTAG school_change_thirty_day||Has youth changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qschool_change_thirty_day"><input type="radio" name="school_change_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_change_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
+  </div>
+<div class="entire">
 <div class="col12 term">Youth Program Needs</div>
 </div>
  <div class="entire">
@@ -589,8 +600,8 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col6 qlegal_guardian_meet_yere_fami__support_specialist_thirty_day">
-    <div class="col6 fldlegal_guardian_meet_yere_fami__support_specialist_thirty_day qlegal_guardian_meet_yere_fami__support_specialist_thirty_day"><span class="qlegal_guardian_meet_yere_fami__support_specialist_thirty_day"><label class="label-top">||FIELDTAG legal_guardian_meet_yere_fami__support_specialist_thirty_day||Did legal guardian(s) have a meeting with a YERE Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qlegal_guardian_meet_yere_fami__support_specialist_thirty_day"><input type="radio" name="legal_guardian_meet_yere_fami__support_specialist_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="legal_guardian_meet_yere_fami__support_specialist_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qlegal_guardian_meet_yere_family_support_specialist_thirty_day">
+    <div class="col6 fldlegal_guardian_meet_yere_family_support_specialist_thirty_day qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><span class="qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><label class="label-top">||FIELDTAG legal_guardian_meet_yere_family_support_specialist_thirty_day||Did legal guardian(s) have a meeting with a YERE Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><input type="radio" name="legal_guardian_meet_yere_family_support_specialist_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="legal_guardian_meet_yere_family_support_specialist_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col6 qcase_staffed_yere_collab_staffing_thirty_day">
     <div class="col6 fldcase_staffed_yere_collab_staffing_thirty_day qcase_staffed_yere_collab_staffing_thirty_day"><span class="qcase_staffed_yere_collab_staffing_thirty_day"><label class="label-top">||FIELDTAG case_staffed_yere_collab_staffing_thirty_day||Was youth/family case staffed in a YERE collaborative staffing?||ENDFIELDTAG||</label></span><span class="qcase_staffed_yere_collab_staffing_thirty_day"><input type="radio" name="case_staffed_yere_collab_staffing_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="case_staffed_yere_collab_staffing_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>

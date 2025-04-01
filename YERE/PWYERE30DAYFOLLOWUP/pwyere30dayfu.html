@@ -543,8 +543,11 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">Housing Status</div>
 </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current housing status.</i></label></div>
+  </div>
  <div class="entire">
-    <div class="col4">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
   </div>
 <div class="entire">
 </div>
@@ -573,10 +576,25 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">School</div>
 </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current school info, including "Start Date". If client has switched to a new school click "View/Edit to add an "End Date" to the current school and then create a new entry.</i></label></div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day">
     <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day"><span class="qschool_change_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qschool_change_thirty_day required-field-label"><label class="label-top">||FIELDTAG school_change_thirty_day||Has youth changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qschool_change_thirty_day"><input type="radio" name="school_change_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_change_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
@@ -584,20 +602,38 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">Youth Program Needs</div>
 </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+  </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
   </div>
 <div class="entire">
 </div>
+<div class="entire">
+    <div class="col12 term">Caregiver Program Needs</div>
+    </div>
+    <div class="entire">
+        <div class="col12"><label class="label-top"><i>Click "Add" below to enter the caregiver's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+      </div>    
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
+      </div>
+      <div class="entire">
+        <div class="col6"><label class="label-top"></label></div>
+      </div>     
  <div class="entire">
     <div class="col12 fldattend_bh_intake_between_ia_thirty_day qattend_bh_intake_between_ia_thirty_day">
     <div class="col12 fldattend_bh_intake_between_ia_thirty_day qattend_bh_intake_between_ia_thirty_day"><span class="qattend_bh_intake_between_ia_thirty_day"><label class="label-top">||FIELDTAG attend_bh_intake_between_ia_thirty_day||Did youth attend a behavioral health intake between initial assessment and now?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake_between_ia_thirty_day"><input type="radio" name="attend_bh_intake_between_ia_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake_between_ia_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">IF YES, PLEASE COMPLETE/UPDATE BEHAVIORAL HEALTH SERVICES FORM IMMEDIATELY FOLLOWING COMPLETION OF THIS FORM.</label></div>
+    <div class="col12"><label class="label-top"><i>IF YES, PLEASE COMPLETE/UPDATE BEHAVIORAL HEALTH SERVICES FORM IMMEDIATELY FOLLOWING COMPLETION OF THIS FORM.</i></label></div>
   </div>
 <div class="entire">
+</div>
+<div class="entire">
+  <div class="col6"><label class="label-top"></label></div>
 </div>
  <div class="entire">
     <div class="col6 qlegal_guardian_meet_yere_family_support_specialist_thirty_day">
@@ -608,17 +644,17 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Caregiver Program Needs</div>
 </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
-  </div>
 <div class="entire">
+  <div class="col6"><label class="label-top"></label></div>
 </div>
  <div class="entire">
     <div class="col12 fldactively_engaged_bhs_past_thirty_days_thirty_day qactively_engaged_bhs_past_thirty_days_thirty_day">
     <div class="col12 fldactively_engaged_bhs_past_thirty_days_thirty_day qactively_engaged_bhs_past_thirty_days_thirty_day"><span class="qactively_engaged_bhs_past_thirty_days_thirty_day"><label class="label-top">||FIELDTAG actively_engaged_bhs_past_thirty_days_thirty_day||Is youth actively engaged in  behavioral services?||ENDFIELDTAG||</label></span><span class="qactively_engaged_bhs_past_thirty_days_thirty_day"><input type="radio" name="actively_engaged_bhs_past_thirty_days_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="actively_engaged_bhs_past_thirty_days_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 fldnotes_thirty_day qnotes_thirty_day">

@@ -39,7 +39,7 @@ function startup() {
     setrequire('other_contact_method_thirty_day');
     setrequire('residency_change_since_referral_thirty_day');
     setrequire('residency_change_type_thirty_day');
-    setrequire('residency_change_address_exis_r_service_plan_goal_thirty_day');
+    setrequire('residency_change_address_existing_barrier_service_plan_goal_thirty_day');
 
 	checkhideall();
 
@@ -52,7 +52,7 @@ function checkhideall() {
       checkhide(f.method_contact_thirty_day,"other_contact_method_thirty_day","Other");
    checkhide(f.residency_change_since_referral_thirty_day,"residency_change_type_thirty_day","Yes");
    checkhide(f.residency_change_type_thirty_day,"specify_other_residency_change_type_thirty_day","Other");
-   checkhide(f.residency_change_since_referral_thirty_day,"residency_change_address_exis_r_service_plan_goal_thirty_day","Yes");
+   checkhide(f.residency_change_since_referral_thirty_day,"residency_change_address_existing_barrier_service_plan_goal_thirty_day","Yes");
 
 }
 
@@ -287,7 +287,7 @@ function validateform(scope='all') {
   if (!hiddenfield('other_contact_method_thirty_day') && gvtfieldvalue('other_contact_method_thirty_day')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_thirty_day");}
   if (!hiddenfield('residency_change_since_referral_thirty_day') && gvtfieldvalue('residency_change_since_referral_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral?\n`; seterror("residency_change_since_referral_thirty_day");}
   if (!hiddenfield('residency_change_type_thirty_day') && gvtfieldvalue('residency_change_type_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_thirty_day");}
-  if (!hiddenfield('residency_change_address_exis_r_service_plan_goal_thirty_day') && gvtfieldvalue('residency_change_address_exis_r_service_plan_goal_thirty_day')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan goal?\n`; seterror("residency_change_address_exis_r_service_plan_goal_thirty_day");}
+  if (!hiddenfield('residency_change_address_existing_barrier_service_plan_goal_thirty_day') && gvtfieldvalue('residency_change_address_existing_barrier_service_plan_goal_thirty_day')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan goal?\n`; seterror("residency_change_address_existing_barrier_service_plan_goal_thirty_day");}
 
     return edesc;
 }
@@ -565,8 +565,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qresidency_change_address_exis_r_service_plan_goal_thirty_day">
-    <div class="col6 fldresidency_change_address_exis_r_service_plan_goal_thirty_day qresidency_change_address_exis_r_service_plan_goal_thirty_day"><span class="qresidency_change_address_exis_r_service_plan_goal_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_address_exis_r_service_plan_goal_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_address_exis_r_service_plan_goal_thirty_day||Did the residency change address an existing barrier or service plan goal?||ENDFIELDTAG||</label></span><span class="qresidency_change_address_exis_r_service_plan_goal_thirty_day"><input type="radio" name="residency_change_address_exis_r_service_plan_goal_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_address_exis_r_service_plan_goal_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qresidency_change_address_existing_barrier_service_plan_goal_thirty_day">
+    <div class="col6 fldresidency_change_address_existing_barrier_service_plan_goal_thirty_day qresidency_change_address_existing_barrier_service_plan_goal_thirty_day"><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_address_existing_barrier_service_plan_goal_thirty_day||Did the residency change address an existing barrier or service plan goal?||ENDFIELDTAG||</label></span><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day"><input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>

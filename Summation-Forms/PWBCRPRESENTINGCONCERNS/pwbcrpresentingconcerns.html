@@ -23,45 +23,37 @@
 // Add MutationObserver as a fallback to the inclusion of the onchange event listener for
 // updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
 // if the function is run via startup() too early and does not run again dynamically upon change.
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM fully loaded. Initializing MutationObserver...");
+const observer = new MutationObserver(() => {
+    const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
+    
+    console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
 
-    const targetNode = document.querySelector("#bcr_presenting_concerns"); // Replace with actual ID
-
-    if (!targetNode) {
-        console.error("MutationObserver target not found at initial load. Waiting...");
-        
-        // Retry logic: Wait a bit and retry finding the element
-        setTimeout(() => {
-            const retryTarget = document.querySelector("#bcr_presenting_concerns"); 
-            if (retryTarget) {
-                console.log("Target found after delay. Attaching MutationObserver.");
-                attachObserver(retryTarget);
-            } else {
-                console.error("MutationObserver target still not found. Observer not attached.");
-            }
-        }, 1000); // Wait 1 second before retrying
-    } else {
-        console.log("MutationObserver target found. Attaching observer...");
-        attachObserver(targetNode);
+    if (!dropdowns || dropdowns.length === 0) {
+        console.error('No valid dropdowns found. Skipping updateReportFields.');
+        return;
     }
-});
 
-// Function to attach the observer
-function attachObserver(target) {
-    const observer = new MutationObserver(function(mutationsList, observer) {
-        for (let mutation of mutationsList) {
-            if (mutation.type === "attributes" || mutation.type === "childList") {
-                console.log("Mutation detected in:", mutation.target);
-                updateReportFields(); // Ensure your update function runs
-            }
+    dropdowns.forEach(dropdown => {
+        if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+            console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+            dropdown.addEventListener('change', () => {
+                console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+                updateReportFields([dropdown.id]); // Ensure it's correctly passed as an array
+            });
+
+            updateReportFields([dropdown.id]);
+
+            dropdown.dataset.initialized = true;
         }
     });
 
-    // Start observing the document body for changes
-    observer.observe(target, { attributes: true, childList: true, subtree: true });
-    console.log("MutationObserver is now watching:", target);
-}
+    if (dropdowns.length > 0) {
+        observer.disconnect();
+    }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
 
 var genpdf='true';
 

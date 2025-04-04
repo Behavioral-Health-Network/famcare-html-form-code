@@ -641,7 +641,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col3 qbcr_presenting_concerns"><span class="qbcr_presenting_concerns required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_presenting_concerns required-field-label"><label class="label-right">Presenting Concerns&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
-    <div class="col9 qbcr_presenting_concerns"><span class="qbcr_presenting_concerns"><select size="15" name="bcr_presenting_concerns" onchange="checkhideall()" multiple>
+    <div class="col9 qbcr_presenting_concerns"><span class="qbcr_presenting_concerns"><select size="15" name="bcr_presenting_concerns" id="bcr_presenting_concerns" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_presenting_concerns^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bcr_presenting_concerns||
 

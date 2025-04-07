@@ -38,8 +38,12 @@ function startup() {
     setrequire('epicc_su_tx_agency');
     setrequire('pfh_tx_facility');
     setrequire('start_date');
+    setrequire('su_tx_intake');
+    setrequire('intake_not_completed');
+    setrequire('coach_attend_intake');
+    setrequire('ces_attend_intake')
 
-	checkhideall();
+    checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
@@ -49,7 +53,14 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.epicc_su_tx_agency,"pfh_tx_facility","013")
       checkhide(f.epicc_su_tx_agency,"if_other_specify","012");
-
+      checkhide(f.su_tx_intake,"su_tx_intake_date","Yes");
+      checkhide(f.su_tx_intake,"was_intake_completed","Yes");
+      checkhide(f.was_intake_completed,"intake_not_completed","No");
+      checkhide(f.intake_not_completed,"intake_not_completed_other","Other");
+      checkhide(f.su_tx_intake,"coach_attend_intake","Yes");
+      checkhide(f.coach_attend_intake,"coach_not_attend_intake","No");
+      checkhide(f.su_tx_intake,"ces_attend_intake","Yes");
+      checkhide(f.ces_attend_intake,"ces_not_attend_intake","No");
 }
 
 function addEventListeners(){
@@ -281,6 +292,10 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('epicc_su_tx_agency') && gvtfieldvalue('epicc_su_tx_agency')=='') {edesc=edesc+`Must specify a value for Referred Treatment Agency\n`; seterror("epicc_su_tx_agency");}
   if (!hiddenfield('start_date') && gvtfieldvalue('start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("start_date");}
+  if (!hiddenfield('su_tx_intake') && gvtfieldvalue('su_tx_intake')==''){edesc=edesc+`Must specify a value for if client attened a new intake\n`; seterror("su_tx_intake");}
+  if (!hiddenfield('intake_not_completed') && gvtfieldvalue('intake_not_completed')==''){edesc=edesc+`Must specify a value for why intake was not completed\n`; seterror("intake_not_completed");}
+  if (!hiddenfield('coach_attend_intake') && gvtfieldvalue('coach_attend_intake')==''){edesc=edesc+`Must specify a value for if the epicc coach attened an intake\n`; seterror("coach_attend_intake");}
+  if (!hiddenfield('ces_attend_intake') && gvtfieldvalue('ces_attend_intake')==''){edesc=edesc+`Must specify a value for if the CES attened an intake\n`; seterror("ces_attend_intake");}
 
     return edesc;
 }
@@ -558,6 +573,74 @@ function updatesignatures(){
     <div class="col6 fldend_date qend_date"><span class="qend_date"><label class="label-top">||FIELDTAG end_date||End Date||ENDFIELDTAG||</label></span><span class="qend_date"><input type="text" name="end_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldsu_tx_intake qsu_tx_intake">
+    <div class="col12 fldsu_tx_intake qsu_tx_intake"><span class="qsu_tx_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_tx_intake required-field-label"><label class="label-top">||FIELDTAG su_tx_intake||Did client attend a new intake?||ENDFIELDTAG||</label></span><span class="qsu_tx_intake"><input type="radio" name="su_tx_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="su_tx_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    </div>
+   </div>
+  <div class="entire">
+    <div class="col12 qsu_tx_intake_date">
+        <div class="col12 fldsu_tx_intake_date"><span class="qsu_tx_intake_date"><label class="label-top">||FIELDTAG su_tx_intake_date||Intake Date||ENDFIELDTAG||</label></span><span class="qsu_tx_intake_date"><input type="text" name="su_tx_intake_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+         </div>
+   </div>
+   <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+     <div class="col12 fldwas_intake_completed qwas_intake_completed">
+        <div class="col12 fldwas_intake_completed qwas_intake_completed"><span class="qwas_intake_completed"><label class="label-top">||FIELDTAG was_intake_completed||Was intake completed?||ENDFIELDTAG||</label></span><span class="qwas_intake_completed"><input type="radio" name="was_intake_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="was_intake_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+         </div>
+     </div>    
+    <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+    </div>
+    <div class="entire">
+        <div class="col12 fldintake_not_completed qintake_not_completed">
+        <div class="col12 fldintake_not_completed qintake_not_completed"><span class="qintake_not_completed required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_not_completed required-field-label"><label class="label-top">||FIELDTAG intake_not_completed||Why was intake not completed?||ENDFIELDTAG||</label></span><span class="qintake_not_completed"><select size="1"  name="intake_not_completed" onchange="checkhideall()" >
+    <option value="">(please select)</option>
+    <option value="Agency Refused">Agency Refused</option>
+    <option value="Client Declined">Client Declined</option>
+    <option value="Agency Refused ">Client Medically Unstable For Intake</option>
+    <option value="Criteria Not Met For Treatment">Criteria Not Met For Treatment</option>
+    <option value="Necessary Providers Unavailable">Necessary Providers Unavailable</option>
+    <option value="Scheduling Or Timing Issue">Scheduling Or Timing Issue</option>
+    <option value="Other">Other</option>
+    
+    </select></span></div>
+         </div>
+        </div>
+      <div class="col6 qintake_not_completed_other">
+        <div class="col6 fldintake_not_completed_other qintake_not_completed_other"><span class="qintake_not_completed_other"><label class="label-top">||FIELDTAG intake_not_completed_other||Other Reason Intake Wasn't Completed||ENDFIELDTAG||</label></span><span class="qintake_not_completed_other"><textarea name="intake_not_completed_other" class="autoexpand"></textarea></span></div>
+      <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+    </div>
+      <div class="entire">
+        <div class="col12 fldcoach_attend_intake qcoach_attend_intake">
+        <div class="col12 fldcoach_attend_intake qcoach_attend_intake"><span class="qcoach_attend_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qcoach_attend_intake-field-label"><label class="label-top">||FIELDTAG coach_attend_intake||Did EPICC coach attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_attend_intake"><input type="radio" name="coach_attend_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="coach_attend_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+       </div>
+       <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+      <div class="col6 qcoach_not_attend_intake">
+        <div class="col6 fldcoach_not_attend_intake qcoach_not_attend_intake"><span class="qcoach_not_attend_intake"><label class="label-top">||FIELDTAG coach_not_attend_intake||Why did EPICC coach not attened the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_not_attend_intake"><textarea name="coach_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
+      <div class="entire">
+        <div class="col12 fldces_attend_intake qces_attend_intake">
+        <div class="col12 fldces_attend_intake qces_attend_intake"><span class="qces_attend_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qces_attend_intake-field-label"><label class="label-top">||FIELDTAG ces_attend_intake||Did CES attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_attend_intake"><input type="radio" name="ces_attend_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ces_attend_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+       </div>
+       <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+      <div class="col6 qces_not_attend_intake">
+        <div class="col6 fldces_not_attend_intake qces_not_attend_intake"><span class="qces_not_attend_intake"><label class="label-top">||FIELDTAG ces_not_attend_intake||Why did CES not attened the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_not_attend_intake"><textarea name="ces_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
+
 
 </div>
 </div>

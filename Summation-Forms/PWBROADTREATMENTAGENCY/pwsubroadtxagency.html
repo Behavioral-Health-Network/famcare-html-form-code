@@ -292,10 +292,10 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('epicc_su_tx_agency') && gvtfieldvalue('epicc_su_tx_agency')=='') {edesc=edesc+`Must specify a value for Referred Treatment Agency\n`; seterror("epicc_su_tx_agency");}
   if (!hiddenfield('start_date') && gvtfieldvalue('start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("start_date");}
-  if (!hiddenfield('su_tx_intake') && gvtfieldvalue('su_tx_intake')==''){edesc=edesc+`Must specify a value for if client attened a new intake\n`; seterror("su_tx_intake");}
+  if (!hiddenfield('su_tx_intake') && gvtfieldvalue('su_tx_intake')==''){edesc=edesc+`Must specify a value for if client attend a new intake\n`; seterror("su_tx_intake");}
   if (!hiddenfield('intake_not_completed') && gvtfieldvalue('intake_not_completed')==''){edesc=edesc+`Must specify a value for why intake was not completed\n`; seterror("intake_not_completed");}
-  if (!hiddenfield('coach_attend_intake') && gvtfieldvalue('coach_attend_intake')==''){edesc=edesc+`Must specify a value for if the epicc coach attened an intake\n`; seterror("coach_attend_intake");}
-  if (!hiddenfield('ces_attend_intake') && gvtfieldvalue('ces_attend_intake')==''){edesc=edesc+`Must specify a value for if the CES attened an intake\n`; seterror("ces_attend_intake");}
+  if (!hiddenfield('coach_attend_intake') && gvtfieldvalue('coach_attend_intake')==''){edesc=edesc+`Must specify a value for if the epicc coach attend an intake\n`; seterror("coach_attend_intake");}
+  if (!hiddenfield('ces_attend_intake') && gvtfieldvalue('ces_attend_intake')==''){edesc=edesc+`Must specify a value for if the CES attend an intake\n`; seterror("ces_attend_intake");}
 
     return edesc;
 }
@@ -627,7 +627,7 @@ function updatesignatures(){
         <div class="col12"><label class="label-top"></label></div>
       </div>
       <div class="col6 qcoach_not_attend_intake">
-        <div class="col6 fldcoach_not_attend_intake qcoach_not_attend_intake"><span class="qcoach_not_attend_intake"><label class="label-top">||FIELDTAG coach_not_attend_intake||Why did EPICC coach not attened the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_not_attend_intake"><textarea name="coach_not_attend_intake" class="autoexpand"></textarea></span></div>
+        <div class="col6 fldcoach_not_attend_intake qcoach_not_attend_intake"><span class="qcoach_not_attend_intake"><label class="label-top">||FIELDTAG coach_not_attend_intake||Why did EPICC coach not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_not_attend_intake"><textarea name="coach_not_attend_intake" class="autoexpand"></textarea></span></div>
       </div>
       <div class="entire">
         <div class="col12 fldces_attend_intake qces_attend_intake">
@@ -638,7 +638,7 @@ function updatesignatures(){
         <div class="col12"><label class="label-top"></label></div>
       </div>
       <div class="col6 qces_not_attend_intake">
-        <div class="col6 fldces_not_attend_intake qces_not_attend_intake"><span class="qces_not_attend_intake"><label class="label-top">||FIELDTAG ces_not_attend_intake||Why did CES not attened the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_not_attend_intake"><textarea name="ces_not_attend_intake" class="autoexpand"></textarea></span></div>
+        <div class="col6 fldces_not_attend_intake qces_not_attend_intake"><span class="qces_not_attend_intake"><label class="label-top">||FIELDTAG ces_not_attend_intake||Why did CES not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_not_attend_intake"><textarea name="ces_not_attend_intake" class="autoexpand"></textarea></span></div>
       </div>
 
 

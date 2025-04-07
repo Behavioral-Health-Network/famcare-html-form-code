@@ -36,6 +36,7 @@ function startup() {
 	}
             setrequire('Pathway_Date');
     setrequire('epicc_su_tx_agency');
+    setrequire('pfh_tx_facility');
     setrequire('start_date');
 
 	checkhideall();
@@ -46,6 +47,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
+      checkhide(f.epicc_su_tx_agency,"pfh_tx_facility","013")
       checkhide(f.epicc_su_tx_agency,"if_other_specify","012");
 
 }
@@ -528,7 +530,15 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldepicc_su_tx_agency qepicc_su_tx_agency">
     <div class="col12 fldepicc_su_tx_agency qepicc_su_tx_agency"><span class="qepicc_su_tx_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_su_tx_agency required-field-label"><label class="label-top">Referred Treatment Agency</label></span><span class="qepicc_su_tx_agency"><select size="1" name="epicc_su_tx_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') AND is_facility='0' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_su_tx_agency||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpfh_tx_facility qpfh_tx_facility">
+    <div class="col12 fldpfh_tx_facility qpfh_tx_facility"><span class="qpfh_tx_facility required-label">||PWRequiredFieldRequiredText||</span><span class="qpfh_tx_facility required-field-label"><label class="label-top">Preferred Family Healthcare Location</label></span><span class="qpfh_tx_facility"><select size="1" name="pfh_tx_facility" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') AND is_facility='1' AND facility_location='PFH' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_su_tx_agency||
 </span></div>
      </div>

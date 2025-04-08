@@ -20,40 +20,87 @@
 
 <script language="JavaScript">
 
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
 // Add MutationObserver as a fallback to the inclusion of the onchange event listener for
 // updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
 // if the function is run via startup() too early and does not run again dynamically upon change.
-const observer = new MutationObserver(() => {
-    const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
+// const observer = new MutationObserver(() => {
+//     const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
     
-    console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
 
-    if (!dropdowns || dropdowns.length === 0) {
-        console.error('No valid dropdowns found. Skipping updateReportFields.');
-        return;
-    }
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
 
-    dropdowns.forEach(dropdown => {
-        if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-            console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+//     dropdowns.forEach(dropdown => {
+//         if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//             console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
 
-            dropdown.addEventListener('change', () => {
-                console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
-                updateReportFields([dropdown.id]); // Ensure it's correctly passed as an array
-            });
+//             dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//                 updateReportFields([dropdown.id]); // Ensure it's correctly passed as an array
+//             });
 
-            updateReportFields([dropdown.id]);
+//             updateReportFields([dropdown.id]);
 
-            dropdown.dataset.initialized = true;
-        }
+//             dropdown.dataset.initialized = true;
+//         }
+//     });
+
+//     if (dropdowns.length > 0) {
+//         observer.disconnect();
+//     }
+// });
+
+// observer.observe(document.body, { childList: true, subtree: true });
+
+waitForElement('#bcr_presenting_concerns', (dropdown) => {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+    
+    dropdown.addEventListener('change', () => {
+      updateReportFields([dropdown.id]);
     });
 
-    if (dropdowns.length > 0) {
-        observer.disconnect();
-    }
+    updateReportFields([dropdown.id]); // Initial update on load
+
+    dropdown.dataset.initialized = true;
+  }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+waitForElement('#bcr_ref_placed_bh_subtype', (dropdown) => {
+  if (!dropdown.dataset.initialized) {
+    dropdown.addEventListener('change', () => {
+      updateReportFields([dropdown.id]);
+    });
+    updateReportFields([dropdown.id]);
+    dropdown.dataset.initialized = true;
+  }
+});
+
+// Repeat for any other relevant dropdowns
+
 
 var genpdf='true';
 
@@ -547,6 +594,7 @@ function updatesignatures(){
  */
  function updateReportFields(tableIds) {
   // Iterate over each table ID provided
+
   tableIds.forEach(id => {
     // Locate the dropdown element for the current table ID
     const dropdown = document.querySelector(`#${id}`);

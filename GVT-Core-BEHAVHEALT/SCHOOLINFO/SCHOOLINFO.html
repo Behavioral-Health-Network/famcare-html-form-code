@@ -1,0 +1,1068 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>School Information</title>
+<meta name="Microsoft Border" content="none">
+</head>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<PREADD SET SCHOOLS="||LOADFIELDS SELECT COUNT(ID) FROM DOESCHOOLS||||LOADCURRENTALWAYS (0)||">
+<PREEDIT SET SCHOOLS="||LOADFIELDS SELECT COUNT(ID) FROM DOESCHOOLS||||LOADCURRENTALWAYS (0)||">
+<PREEDIT SET EDITFLAG="Yes">
+<PREADD SET EDITFLAG="No">
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+
+
+<script language="JavaScript">
+
+    function ajax_option_setValue(e, inputObj) {
+        if (!inputObj) inputObj = this;
+        var tmpValue = inputObj.innerHTML;
+        if (ajax_list_MSIE) tmpValue = inputObj.innerText; else tmpValue = inputObj.textContent;
+        if (!tmpValue) tmpValue = inputObj.innerHTML;
+        ajax_list_activeInput.value = tmpValue;
+        if (document.getElementById(ajax_list_activeInput.name + '_hidden')) {
+            document.getElementById(ajax_list_activeInput.name + '_hidden').value = inputObj.innerText;
+            ajax_list_activeInput.name = "ksnLastSchoolAttendedName";
+            GetAllFromSchoolList();
+            if (window.ajaxselect) { ajaxselect(ajax_list_activeInput.name) }
+        }
+        ajax_options_hide();
+    }
+
+
+    function ExpandText_deprecated(fldname) {
+        var o = document.forms[0].elements(fldname);
+        g = parseInt(o.clientHeight / o.rows + .5);
+        h = o.scrollHeight;
+        h = parseInt(h / g) + 6;
+        o.rows = h;
+    }
+
+    var popfield;
+
+    function GetSchoolPhone(SelectField) {
+        functionreturnvalue = null;
+        try {
+            var ctrl = document.forms[0].elements["normalLastSchoolAttended"];
+            var kafindex = ctrl.selectedIndex;
+            var s = ctrl.options[kafindex].text;
+            var schoolcode = ctrl.value;
+        }
+        catch (e) { }
+        if (s == "") {
+            alert("Must select a school first");
+            return functionreturnvalue;
+        }
+        //var sql=escape("SELECT Address, City, State, Zip, Phone From DOESCHOOLS WHERE SchoolName='"+s+"'");
+        var sql = escape("SELECT Address, City, State, Zip, Phone From DOESCHOOLS WHERE SchoolID='" + schoolcode + "'");
+        var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopSchoolPhone)|SUBMITTIME(" + rightjis(cstrjis(Date()), 5) + ")^";
+        parent.fvalidate.location = fullhlink;
+        return functionreturnvalue;
+    }
+
+    function PopSchoolPhone(numelementsper, totalelements, identifier, results) {
+        functionreturnvalue = null;
+        if (totalelements > 0) {
+            document.forms[0].SchoolStreet.value = results[1][1];
+            document.forms[0].SchoolCity.value = results[1][2];
+            document.forms[0].SchoolState.value = results[1][3];
+            document.forms[0].SchoolZip.value = results[1][4];
+            var ThePhone = results[1][5];
+            if (lenjis(ThePhone) == 10) {
+                document.forms[0].SchoolPhoneNum.value = "(" + leftjis(ThePhone, 3) + ")" + " " + midjis(ThePhone, 4, 3) + "-" + midjis(ThePhone, 7);
+            } else {
+                document.forms[0].SchoolPhoneNum.value = ThePhone;
+            }
+            //        document.forms[0].SchoolPhoneNum.value=results[1][5];
+        }
+
+        return functionreturnvalue;
+    }
+
+
+    function scheduleit() {
+        functionreturnvalue = null;
+        document.forms[0].FUNCTION.value = "AUTOSCHEDULE";
+        document.forms[0].target = "_blank";
+        document.forms[0].submit();
+        return functionreturnvalue;
+    }
+
+
+    function setNext() {
+        functionreturnvalue = null;
+
+        var f = document.forms[0];
+        if (f.LASTIEPDATE.value != "") {
+            if (!datejis(f.LASTIEPDATE.value)) {
+                alert("Last IEPDATE does not appear to be a valid date.");
+                f.focus;
+                return functionreturnvalue;
+            } else {
+                if (f.NEXTIEPDATE.value == "") {
+                    f.NEXTIEPDATE.value = DateAdd("yyyy", 1, f.LASTIEPDATE.value);
+                }
+            }
+        }
+        return functionreturnvalue;
+    }
+
+    function deleteit() {
+        functionreturnvalue = null;
+        var f = document.forms[0];
+        if ("||DOCSERNO||" == "") {
+            alert("Just click the X in the upper right hand corner to delete this.");
+            return functionreturnvalue;
+        }
+        // check msgbox (yes/no) to confirm (ok/cancel) wording
+        var msgtemp = confirm("Are you sure you want to delete this record?");
+        if (msgtemp) { gg = 1 } else { gg = 7 }
+        if (gg == 7) {
+            return functionreturnvalue;
+        }
+        document.forms[0].FUNCTION.value = "DELETEDATA";
+        document.forms[0].submit();
+        return functionreturnvalue;
+    }
+    function SubmitIt() {
+        functionreturnvalue = null;
+        var f = document.forms[0];
+        f.submit();
+        return functionreturnvalue;
+    }
+
+    function checkschool() {
+        functionreturnvalue = null;
+        if (document.forms[0].notknowschoolname.checked) {
+            document.forms[0].LastSchoolAttended.value = document.forms[0].normalLastSchoolAttended.value;
+            document.forms[0].State.value = document.forms[0].normalState.value;
+            document.forms[0].County.value = document.forms[0].normalCounty.value;
+            document.forms[0].District.value = document.forms[0].normalDistrict.value;
+        } else {
+            document.forms[0].LastSchoolAttended.value = document.forms[0].ksnLastSchoolAttendedCode.value;
+            document.forms[0].State.value = document.forms[0].ksnState.value;
+            document.forms[0].County.value = document.forms[0].ksnCounty.value;
+            document.forms[0].District.value = document.forms[0].ksnDistrict.value;
+        }
+        document.forms[0].FUNCTION.value = "SAVE";
+        document.forms[0].submit();
+
+        return functionreturnvalue;
+    }
+
+
+    function GetAllFromSchoolList() {
+        functionreturnvalue = null;
+        var j = "";
+        try {
+            if (document.getElementById("ksnLastSchoolAttendedName_hidden").value == document.getElementById("ksnLastSchoolAttendedName").value) {
+                j = document.getElementById("ksnLastSchoolAttendedName").value;
+            }
+            if (j == "") {
+                return functionreturnvalue;
+            }
+            if (j == "z") {
+                document.getElementById("ksn").style.display = "none";
+                document.getElementById("normal").style.display = "none";
+                document.getElementById("selectother").style.display = "";
+                document.getElementById("LastSchoolAttended").value = "";
+                return functionreturnvalue;
+            } else {
+                if (document.forms[0].notknowschoolname.checked) {
+                    document.getElementById("normal").style.display = "";
+                    document.getElementById("ksn").style.display = "none";
+                    document.getElementById("selectother").style.display = "none";
+                    document.forms[0].OtherSchool.value = "none";
+                } else {
+                    document.getElementById("normal").style.display = "none";
+                    document.getElementById("ksn").style.display = "";
+                    document.getElementById("selectother").style.display = "none";
+                    document.forms[0].OtherSchool.value = "none";
+                }
+            }
+            var sql = escape("Select DOESchoolDistricts.AgencyId, DOESchoolDistricts.AgencyName, DOESchoolDistricts.CountyCode, DOESchoolDistricts.CountyName, DOESchools.SchoolId, DOESchools.SchoolName, DOESchools.Phone, DOESchools.Address, DOESchools.City, DOESchools.State, DOESchools.Zip, DOESchools.State As StateCode, StatesUS.Description From (DOESchools Inner Join DOESchoolDistricts on DOESchools.AgencyId=DOESchoolDistricts.AgencyID) Left Join StatesUS on DOESchools.State=StatesUS.Code Where DOESchools.SchoolName ='" + j + "' order by DOESchoolDistricts.AgencyName");
+            var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopAllList)|SUBMITTIME(" + rightjis(cstrjis(Date()), 5) + ")^";
+            parent.fvalidate.location = fullhlink;
+        }
+        catch (e) { }
+        return functionreturnvalue;
+    }
+
+    function PopAllList(numelementsper, totalelements, identifier, results) {
+        functionreturnvalue = null;
+        if (totalelements == 0) {
+            var ctrl = document.forms[0].elements["ksnState"];
+            ctrl.length = 1;
+            ctrl.options[0].text = "No Selections for this Option";
+            ctrl.options[0].value = "";
+            var ctrl = document.forms[0].elements["ksnCounty"];
+            ctrl.length = 1;
+            ctrl.options[0].text = "No Selections for this Option";
+            ctrl.options[0].value = "";
+            var ctrl = document.forms[0].elements["ksnDistrict"];
+            ctrl.length = 1;
+            ctrl.options[0].text = "No Selections for this Option";
+            ctrl.options[0].value = "";
+        } else {
+            var ctrl = document.forms[0].elements["ksnCounty"];
+            ctrl.length = 1;
+            ctrl.options[0].text = results[1][4];
+            ctrl.options[0].value = results[1][3];
+            ctrl.selectedIndex = 0;
+            var ctrl = document.forms[0].elements["ksnDistrict"];
+            ctrl.length = 1;
+            ctrl.options[0].text = results[1][2];
+            ctrl.options[0].value = results[1][1];
+            ctrl.selectedIndex = 0;
+            var ctrl = document.forms[0].elements["ksnState"];
+            ctrl.length = 1;
+            ctrl.options[0].text = results[1][13];
+            ctrl.options[0].value = results[1][10];
+            ctrl.selectedIndex = 0;
+            document.forms[0].ksnLastSchoolAttendedCode.value = results[1][5];
+            if (lenjis(results[1][7]) == 10) {
+                document.forms[0].SchoolPhoneNum.value = "(" + leftjis(results[1][7], 3) + ")" + " " + midjis(results[1][7], 4, 3) + "-" + midjis(results[1][7], 7);
+            } else {
+                document.forms[0].SchoolPhoneNum.value = results[1][7]
+            }
+            //          document.forms[0].SchoolPhoneNum.value=results[1][7];
+            document.forms[0].SchoolStreet.value = results[1][8];
+            document.forms[0].SchoolCity.value = results[1][9];
+            document.forms[0].SchoolState.value = results[1][10];
+            document.forms[0].SchoolZip.value = results[1][11];
+        }
+        return functionreturnvalue;
+    }
+
+    function GetCountyList(SelectField, fielddest) {
+        functionreturnvalue = null;
+        popfield = fielddest;
+        try {
+            var j = SelectField.value;
+        }
+        catch (e) { }
+        if (j == "") {
+            alert("Must select a State first");
+            return functionreturnvalue;
+        }
+        if (j == "z") {
+            document.getElementById("ksn").style.display = "none";
+            document.getElementById("normal").style.display = "none";
+            document.getElementById("selectother").style.display = "";
+            document.getElementById("LastSchoolAttended").value = "";
+            document.forms[0].ksnLastSchoolAttendedCode.value = "";
+            document.forms[0].SchoolPhoneNum.value = "";
+            document.forms[0].SchoolStreet.value = "";
+            document.forms[0].SchoolCity.value = "";
+            document.forms[0].SchoolState.value = "";
+            document.forms[0].SchoolZip.value = "";
+            document.forms[0].Principal.value = "";
+            document.forms[0].notknowschoolname.checked = false;
+            document.forms[0].knowschoolname.checked = false;
+            return functionreturnvalue;
+        }
+        document.getElementById("LastSchoolAttended").value = "";
+        document.forms[0].ksnLastSchoolAttendedCode.value = "";
+        document.forms[0].SchoolPhoneNum.value = "";
+        document.forms[0].SchoolStreet.value = "";
+        document.forms[0].SchoolCity.value = "";
+        document.forms[0].SchoolState.value = "";
+        document.forms[0].SchoolZip.value = "";
+        document.forms[0].Principal.value = "";
+        document.forms[0].normalCounty.value = "";
+        document.forms[0].normalCounty.length = 1
+        document.forms[0].normalDistrict.lentght = 1;
+        document.forms[0].normalDistrict.value = "";
+        document.forms[0].normalDistrict.options[0].text = " Please Select County";
+        document.forms[0].normalLastSchoolAttended.value = "";
+        document.forms[0].normalLastSchoolAttended.length = 1;
+        document.forms[0].normalLastSchoolAttended.options[0].text = "Please Select Distict";
+
+        var sql = escape("SELECT Code,Description FROM Counties WHERE State='" + j + "' order by Description");
+        var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopCountyList)|SUBMITTIME(" + rightjis(cstrjis(Date()), 5) + ")^";
+        parent.fvalidate.location = fullhlink;
+        return functionreturnvalue;
+    }
+
+    function PopCountyList(numelementsper, totalelements, identifier, results) {
+        functionreturnvalue = null;
+
+        var ctrl = document.forms[0].elements[popfield];
+        ctrl.length = 1;
+        ctrl.options[0].text = "(Please select)";
+        ctrl.options[0].value = "";
+        for (var x = 1; x <= totalelements; x++) {
+            ctrl.length = ctrl.length + 1;
+            ctrl.options[ctrl.length - 1].text = results[x][2];
+            ctrl.options[ctrl.length - 1].value = results[x][1];
+        }
+        ctrl.selectedIndex = 0;
+        if (totalelements == 0) {
+            ctrl.length = 1;
+            ctrl.options[0].text = "No Selections for this Option";
+            ctrl.options[0].value = "";
+        }
+        return functionreturnvalue;
+    }
+
+
+    function GetDistrictList(SelectField, fielddest) {
+        functionreturnvalue = null;
+        popfield = fielddest;
+        try {
+            var j = SelectField.value;
+        }
+        catch (e) { alert(e) }
+        if (j == "") {
+            alert("Must select a County first");
+            return functionreturnvalue;
+        }
+        var sql = escape("SELECT AgencyID, AgencyName FROM DOESCHOOLDISTRICTS WHERE COUNTYCODE='" + j + "'   Union  Select CountyCode, CountyName & ' Private Schools' From DOESchoolDistricts Where CountyCode='" + j + "' Order by AgencyName");
+        var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopDistrictList)|SUBMITTIME(" + rightjis(cstrjis(Date()), 5) + ")^";
+        parent.fvalidate.location = fullhlink;
+        return functionreturnvalue;
+    }
+
+    function PopDistrictList(numelementsper, totalelements, identifier, results) {
+        functionreturnvalue = null;
+
+        var ctrl = document.forms[0].elements[popfield];
+        ctrl.length = 1;
+        ctrl.options[0].text = "(Please select)";
+        ctrl.options[0].value = "";
+        for (var x = 1; x <= totalelements; x++) {
+            ctrl.length = ctrl.length + 1;
+            ctrl.options[ctrl.length - 1].text = results[x][2];
+            ctrl.options[ctrl.length - 1].value = results[x][1];
+        }
+        ctrl.selectedIndex = 0;
+        if (totalelements == 0) {
+            ctrl.length = 1;
+            ctrl.options[0].text = "No Selections for this Option";
+            ctrl.options[0].value = "";
+        }
+        return functionreturnvalue;
+    }
+
+    function GetSchoolList(SelectField, fielddest) {
+        functionreturnvalue = null;
+
+        popfield = fielddest;
+        try {
+            var s = SelectField.value;
+        }
+        catch (e) { }
+        if (s == "") {
+            alert("Must select a District first");
+            return functionreturnvalue;
+        }
+        var sql = escape("SELECT SchoolID, SchoolName, Phone FROM DOESchools WHERE AgencyID='" + s + "' order by SchoolName");
+        var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopSchoolList)|SUBMITTIME(" + rightjis(cstrjis(Date()), 5) + ")^";
+        parent.fvalidate.location = fullhlink;
+        return functionreturnvalue;
+    }
+
+    function PopSchoolList(numelementsper, totalelements, identifier, results) {
+        functionreturnvalue = null;
+        var ctrl = document.forms[0].elements[popfield];
+        ctrl.length = 1;
+        ctrl.options[0].text = "(Please select)";
+        ctrl.options[0].value = "";
+        for (var x = 1; x <= totalelements; x++) {
+            ctrl.length = ctrl.length + 1;
+            ctrl.options[ctrl.length - 1].text = results[x][2];
+            ctrl.options[ctrl.length - 1].value = results[x][1];
+        }
+        ctrl.selectedIndex = 0;
+        if (totalelements == 0) {
+            ctrl.length = 1;
+            ctrl.options[0].text = "No Selections for this Option";
+            ctrl.options[0].value = "";
+        }
+        return functionreturnvalue;
+    }
+
+    function StartUp() {
+$(".jtimepicker").timepicker({ 'scrollDefault': 'now', 'step': '15', 'minTime': '6:00am', 'maxTime': '8:00pm' });
+        functionreturnvalue = null;
+        if ("||DOCSERNO||" == "") {
+            document.forms[0].notknowschoolname.checked = true;
+            if ("||SCREENPARM PARENTSERIAL||" != "") {
+                document.getElementById("PARENTDOCSERNO").value = "||SCREENPARM PARENTSERIAL||";
+                document.getElementById("_B2").style.display = "none";
+            } else {
+                SetClientName();
+                if (cintjis("||SCHOOLS||") >= 1 && "||DOCSERNO||" == "") {
+                    document.forms[0].notknowschoolname.checked = true;
+                    document.forms[0].knowschoolname.checked = false;
+                    document.getElementById("_gvtKnowSchoolName").style.display = "";
+                } else {
+                    //    '  no school data in database.
+                    document.forms[0].notknowschoolname.checked = false;
+                    document.forms[0].knowschoolname.checked = false;
+                    document.getElementById("ksn").style.display = "none";
+                    document.getElementById("normal").style.display = "none";
+                    document.getElementById("selectother").style.display = "";
+                    document.getElementById("LastSchoolAttended").value = "";
+                }
+            }
+        } else {
+            if (document.forms[0].knowschoolname.checked) {
+                document.forms[0].notknowschoolname.checked = false;
+                document.forms[0].knowschoolname.checked = true;
+                document.getElementById("ksn").style.display = "";
+                document.getElementById("normal").style.display = "none";
+            } else {
+                if (document.forms[0].notknowschoolname.checked) {
+                    document.forms[0].notknowschoolname.checked = true;
+                    document.forms[0].knowschoolname.checked = false;
+                    document.getElementById("ksn").style.display = "none";
+                    document.getElementById("normal").style.display = "";
+                }
+            }
+            if ("||SCREENPARM PARENTSERIAL||" == "||FIELDVALUE PARENTDOCSERNO||" && "||FIELDVALUE PARENTDOCSERNO||" != "") {
+                document.getElementById("_B2").style.display = "none";
+            } else {
+                SetClientName();
+            }
+        }
+        return functionreturnvalue;
+        startform = false;
+    }
+
+    function SetClientName() {
+        functionreturnvalue = null;
+        document.getElementById("TheClientName").innerHTML = "||CLIENTNAME||";
+        return functionreturnvalue;
+    }
+
+    function changesetup(t) {
+        functionreturnvalue = null;
+        if (t == "Yes") {
+            if (document.forms[0].knowschoolname.checked) {
+                document.forms[0].notknowschoolname.checked = false;
+                document.forms[0].knowschoolname.checked = true;
+                document.getElementById("ksn").style.display = "";
+                document.getElementById("normal").style.display = "none";
+            }
+        } else {
+            if (document.forms[0].notknowschoolname.checked) {
+                document.forms[0].notknowschoolname.checked = true;
+                document.forms[0].knowschoolname.checked = false;
+                document.getElementById("ksn").style.display = "none";
+                document.getElementById("normal").style.display = "";
+            }
+        }
+
+        return functionreturnvalue;
+    }
+
+    function formatphone(TheField) {
+        functionreturnvalue = null;
+        if (instrjis(TheField.value, "(") == 0) {
+            var phonenumber = "";
+            for (var x = 1; x <= lenjis(TheField.value); x++) {
+                if (numericjis(midjis(TheField.value, x, 1))) {
+                    phonenumber = phonenumber + cstrjis(midjis(TheField.value, x, 1));
+                }
+            }
+            if (lenjis(phonenumber) == 10) {
+                TheField.value = '(' + cstrjis(leftjis(phonenumber, 3)) + ') ' + cstrjis(midjis(phonenumber, 4, 3)) + '-' + cstrjis(rightjis(phonenumber, 4));
+            } else {
+                if (lenjis(phonenumber) == 7) {
+                    TheField.value = leftjis(phonenumber, 3) + '-' + rightjis(phonenumber, 4);
+                }
+            }
+        }
+        return functionreturnvalue;
+    }
+
+    var timePat = /^(\d{1,2}):(\d{2})?$/;
+
+    function isTimejis(timeStr) {
+        functionreturnvalue = true;
+        var matchArray = timeStr.match(timePat);
+        if (matchArray == null) {
+            alert("Time entered is not in a valid format.");
+            functionreturnvalue = false;
+        }
+        return functionreturnvalue;
+    }
+
+    function NextIEPTimeblur() {
+
+        // in case user enters e.g. "12" instead of "12:00", add the ":00"
+        if (document.forms[0].NextIEPTime.value.length < 3 && document.forms[0].NextIEPTime.value != "") {
+            document.forms[0].NextIEPTime.value = document.forms[0].NextIEPTime.value + ':00';
+        }
+        // if colon is not in third position, prepend a zero (e.g.change from 5:00 to 05:00)
+        if (document.forms[0].NextIEPTime.value.substring(2, 3) != ":") {
+            document.forms[0].NextIEPTime.value = '0' + document.forms[0].NextIEPTime.value;
+        }
+        if (!isTimejis(document.forms[0].NextIEPTime.value)) {
+            document.forms[0].NextIEPTime.value = "";
+            document.forms[0].NextIEPTimeAMPM.value = "";
+        }
+        return;
+    }
+
+    function NextIEPENDTimeblur() {
+
+        // in case user enters e.g. "12" instead of "12:00", add the ":00"
+        if (document.forms[0].NextIEPENDTime.value.length < 3 && document.forms[0].NextIEPENDTime.value != "") {
+            document.forms[0].NextIEPENDTime.value = document.forms[0].NextIEPENDTime.value + ':00';
+        }
+        // if colon is not in third position, prepend a zero (e.g.change from 5:00 to 05:00)
+        if (document.forms[0].NextIEPENDTime.value.substring(2, 3) != ":") {
+            document.forms[0].NextIEPENDTime.value = '0' + document.forms[0].NextIEPENDTime.value;
+        }
+        if (!isTimejis(document.forms[0].NextIEPTime.value)) {
+            document.forms[0].NextIEPENDTime.value = "";
+            document.forms[0].NextIEPENDTimeAMPM.value = "";
+        }
+        return;
+    }
+
+    function OpenOtherDiag() {
+        if (document.forms[0].OTHER.checked) {
+            document.getElementById("OtherDiagText").style.display = "";
+            if ("||SP OPTION||" == "PRINTFORMAT") {
+                document.getElementById("OtherDiagText").innerHTML = "||FIELDVALUE OtherDiagnosis||";
+            }
+        } else {
+            document.getElementById("OtherDiagText").style.display = "none";
+            document.forms[0].OtherDiagnosis.value = "";
+        }
+    }
+
+    var startform = true
+
+    function SetSchoolType() {
+        if ("||SP OPTION||" == "PRINTFORMAT") {
+            TheType = "||FIELDVALUE SchoolType||";
+        } else {
+            TheType = document.forms[0].SchoolType.value;
+        }
+        if (TheType != "") {
+            document.getElementById("SchoolInfoSection").style.display = "";
+
+        } else {
+            document.getElementById("SchoolInfoSection").style.display = "none";
+        }
+        if (instrjis(TheType, "Alternative") > 0) {
+            document.getElementById("AltSchoolType").style.display = "";
+        } else {
+            document.getElementById("AltSchoolType").style.display = "none";
+            document.forms[0].AlternativeSchoolType.value = "";
+        }
+        if (leftjis(TheType, 1) == "1") {
+            //        if(!startform) {
+            document.getElementById("normal").style.display = "";
+            document.getElementById("ksn").style.display = "none";
+            //        }
+            document.getElementById("_gvtKnowSchoolName").style.display = "";
+            document.getElementById("selectother").style.display = "none";
+            document.forms[0].OtherSchool.value = "none";
+            if (instrjis(TheType, "Alternative") > 0) {
+                document.getElementById("AltSchoolType").style.display = "";
+            }
+            if (!startform) {
+                changesetup('No');
+                startform = false;
+            }
+        } else {
+            if (leftjis(TheType, 1) == "2") {
+                document.getElementById("SchoolInfoSection").style.display = "none";
+            } else {
+                document.getElementById("normal").style.display = "none";
+                document.getElementById("ksn").style.display = "none";
+                document.getElementById("_gvtKnowSchoolName").style.display = "none";
+                document.getElementById("selectother").style.display = "";
+                document.forms[0].OtherSchool.value = "";
+            }
+            document.getElementById("AltSchoolType").style.display = "none";
+            document.forms[0].AlternativeSchoolType.value = "";
+        }
+    }
+
+    function SetOtherOrDateObtained() {
+        var TheGrade;
+        if ("||SP OPTION||" == "PRINTFORMAT") {
+            TheGrade = "||FIELDVALUE GRADE||";
+        } else {
+            TheGrade = document.forms[0].Grade.value;
+        }
+        if (TheGrade == "Other") {
+            document.getElementById("GradeOther").style.display = "";
+            document.getElementById("DateObtainedRow").style.display = "none";
+            document.forms[0].DateObtained.value = "";
+        } else {
+            if (TheGrade >= "01" && TheGrade <= "12") {
+                document.getElementById("DateObtainedRow").style.display = "none";
+                document.forms[0].DateObtained.value = "";
+            } else {
+                document.getElementById("DateObtainedRow").style.display = "";
+            }
+            document.getElementById("GradeOther").style.display = "none";
+            document.forms[0].GradeOther.value = "";
+        }
+    }
+function choicetablesearchselect(TheField, FieldName, CurrValue) {
+        functionreturnvalue = null;
+        //alert(CurrValue);
+        if (CurrValue != "") {
+            var sql = escape("SELECT Q_HRFORM.OfficeNumber, Q_HRFORM.Cellularphone, Q_HRFORM.faxnumber, Q_HRFORM.emailaddress, HRSup.LastName & ', ' & HRSup.FirstName, HRSup.OfficeNumber From Q_HRFORM Left Join Q_HRFORM As HRSup on Q_HRFORM.EmpSupervisor=HRSup.EmployeeNumber Where Q_HRFORM.EmployeeNumber='" + CurrValue + "'");
+            parent.fvalidate.location = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(FieldName)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopReferrlInfo)^";
+          }
+        return functionreturnvalue;
+    }
+
+function PopReferrlInfo(numelementsper, totalelements, identifier, results) {
+        functionreturnvalue = null;
+        //alert(totalelements);
+        if (totalelements > 0) {
+            var f = document.forms[0];
+            f.ReferralPersonPhone.value = results[1][1];
+            f.ReferralPersonCell.value = results[1][2];
+            f.ReferralPersonFax.value = results[1][3];
+            f.ReferralPersonEmail.value = results[1][4];
+            f.ReferralPersonSupervisor.value = results[1][5];
+            f.ReferralPersonSupervisorPhone.value = results[1][6];
+        } else {
+            var f = document.forms[0];
+            f.ReferralPersonPhone.value = "";
+            f.ReferralPersonCell.value = "";
+            f.ReferralPersonFax.value = "";
+            f.ReferralPersonEmail.value = "";
+            f.ReferralPersonSupervisor.value = "";
+            f.ReferralPersonSupervisorPhone.value = "";
+        }
+        return functionreturnvalue;
+    }
+
+function SetReferralOther() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if (f.ReferralAgency.value == "" || f.ReferralAgency.value !="002") {
+		f.ReferralOther.value = "";
+		document.getElementById("ReferralOther").style.display = "none";
+	} else {
+		if (f.ReferralAgency.value == "002") {
+			document.getElementById("ReferralOther").style.display = "";
+		}
+	}
+	return functionreturnvalue;
+}
+
+
+
+function FormatPhone(fldname) {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+        var o = f.elements[fldname];
+        ph = f.elements[fldname].value;
+        // clear out punctuation so only numbers are left
+        while (ph.indexOf(" ") >= 0 || ph.indexOf("-") >= 0 || ph.indexOf("(") >= 0 || ph.indexOf(")") >= 0 || ph.indexOf(".") >= 0) {
+            ph = ph.replace(' ', '').replace('-', '').replace('(', '').replace(')', '').replace('.', '');
+        }
+        if (ph.length == 7) {
+            ph = ph.substr(0, 3) + '-' + ph.substr(3, 4);
+        }
+        if (ph.length >= 9) {
+            ph = '(' + ph.substr(0, 3) + ') ' + ph.substr(3, 3) + '-' + ph.substr(6, 4);
+        }
+	f.elements[fldname].value = ph;
+	return functionreturnvalue;
+}
+
+function FormatAutoPhone(fldname) {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	var ph = f.elements[fldname].value;
+        // clear out punctuation so only numbers are left
+	while (ph.indexOf(" ") >= 0 || ph.indexOf("-") >= 0 || ph.indexOf("(") >= 0 || ph.indexOf(")") >= 0 || ph.indexOf(".") >= 0) {
+		ph = ph.replace(' ', '').replace('-', '').replace('(', '').replace(')', '').replace('.', '');
+	}
+                
+	var idx = 0;
+	var phoneformat = "||SV PHONENUMBERFORMAT||";
+	var result = "";
+	var idx2 = 0;
+        
+	while (idx <= phoneformat.length) {
+		if (phoneformat.substring(idx, idx+1) == "#") {
+			result += ph.substring(idx2,idx2+1);
+			idx2++;
+		} else { 
+			result += phoneformat.substring(idx,idx+1);
+		}              
+		idx++;
+	}   
+	f.elements[fldname].value = result;
+        return functionreturnvalue;
+}
+
+</script>
+
+<body onLoad="StartUp();OpenOtherDiag();SetSchoolType();SetOtherOrDateObtained()">
+
+<form method="post" action="genfunc.exe">
+    <input type="hidden" name="FUNCTION" value="SAVE" /> 
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" /> 
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" /> 
+    <input type="hidden" name="CLIENTNUMBER" value="||SV CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" id="PARENTDOCSERNO" value="||FIELDVALUE PARENTDOCSERNO||" /> 
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="TABLENAME" value="SchoolInfo" /> 
+    <input type="hidden" name="VISITDT" value="||DATE||" /> 
+    <input type="hidden" name="VISITTM" value="||TIME||" /> 
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="State" value="||FIELDVALUE State||" />
+    <input type="hidden" name="County" value="||FIELDVALUE County||" />
+    <input type="hidden" name="District" value="||FIELDVALUE District||" />
+    <input type="hidden" id="LastSchoolAttended" name="LastSchoolAttended" value="||FIELDVALUE LastSchoolAttended||" />
+    <h1><span>School Information : </span><span id="TheClientName">||CLIENTNAME|| (||CLIENTNUMBER||)</span></h1>
+    <div class="extrawidecol">
+       <div class="deflist">
+
+          <div class="term">||FIELDTAG SchoolInformation||School Information||ENDFIELDTAG||</div>
+          <div class="def">
+
+            <ul>
+              <li><strong>School Type : </strong><select size="1" name="SchoolType" onChange="SetSchoolType()">
+                        <option value="||||" selected="selected">(Please Select)</option>
+                        <option value="1Regular School">Regular School</option>
+                        <option value="1Alternative School">Alternative School</option>
+                        <option value="1GED School">GED School</option>
+                        <option value="1SSD School">SSD School</option>
+                        <option value="2No School">No School</option>
+                        <option value="0Vocational Tech">Vocational Tech</option>
+                        <option value="0College">College</option>
+                        <option value="0Trade School">Trade School</option>
+                     </select>&nbsp;&nbsp;<span id="AltSchoolType" style="display:none"><select size="1" name="AlternativeSchoolType" onChange="SetSchoolType()">
+                        <option value="||Select Code, Description From AlternativeSchoolTypes Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE AlternativeSchoolType^^') and privateprovider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                        </select><span id="_choiceconfig" style="display: none"><a href="javascript:void openconfigure('AlternativeSchoolType')"><img src="images/gear_small.png"></a></span></span></li>
+                        
+     <li>
+       <strong>||FIELDTAG StartDate||Start Date||ENDFIELDTAG|| : </strong>     
+       <input type="text" name="StartDate" size="8"  class="jdatepicker">&nbsp;
+     </li>
+     <li>
+       <strong>||FIELDTAG EndDate||End Date||ENDFIELDTAG|| : </strong>
+       <input type="text" name="EndDate" size="8" class="jdatepicker">&nbsp;
+     </li>
+            </ul>
+          <span id="SchoolInfoSection" style="display:none">
+             <span id="_gvtKnowSchoolName" style="display: ">
+                <ul>
+                  <li><strong>||FIELDTAG KnowSchoolName||School Name Options||ENDFIELDTAG|| : </strong>
+                              <input type="checkbox" name="knowschoolname" value="Yes" onclick="changesetup('Yes')"/>I know the school name, but not state, county and/or district</li>
+                              <li><strong>:</strong><input type="checkbox" name="notknowschoolname" value="Yes" onclick="changesetup('No')"/>I know the State and County and want to look up district and school name
+                   </li>
+                </ul>
+             </span>
+             <span id="ksn" style="display: none">
+             <ul id="StateEntry">
+                <li><strong>State :  </strong><select size="1" name="ksnState">
+                     <option value="||SELECT Code, Description From StatesUS Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE ksnState^^') Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select>
+                </li>
+             </ul>
+             <ul id="CountyEntry">
+                <li id="_gvtksnCounty">
+                  <strong>||FIELDTAG ksnCounty||County||ENDFIELDTAG|| : </strong>
+                     <select size="1" name="ksnCounty">
+                        <option value="||Select Code, Description From Counties Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE ksnCounty^^') AND State='^^FIELDVALUE ksnState^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select>
+                </li>
+             </ul>
+             <ul id="DistrictEntry">
+                <li id="_gvtksnDistrict">
+                   <strong>||FIELDTAG ksnDistrict||District||ENDFIELDTAG|| : </strong>
+                      <select size="1"  id="ksnDistrict" name="ksnDistrict">
+                        <option value="||SELECT AgencyID, AgencyName FROM DOESCHOOLDISTRICTS WHERE COUNTYCODE='^^FIELDVALUE ksnCounty^^'   Union  Select CountyCode, CountyName + ' Private Schools' From DOESchoolDistricts Where (Status='Active' or Status='' or Status='1') AND CountyCode='^^FIELDVALUE ksnCounty^^' Order by AgencyName||" selected="selected">||CHOICETABLESQLD||</option>
+                      </select>
+                </li>
+             </ul>
+             <ul id="SchoolEntry">
+                <li id="_gvtksnLastSchoolAttendedCode"><strong>||FIELDTAG ksnLastSchoolAttendedCode||School||ENDFIELDTAG|| : </strong>
+                    <input type="hidden" name="ksnLastSchoolAttendedCode">
+                    <input type="hidden" name="ksnLastSchoolAttendedName_hidden" id="ksnLastSchoolAttendedName_hidden" >
+                    <input type="text" name="ksnLastSchoolAttendedName" id="ksnLastSchoolAttendedName" size="40">||AJAX SELECT Distinct TOP 20 SchoolName FROM DOESchools WHERE SchoolName LIKE '%^^TYPEVALUE^^%' ORDER BY SchoolName||&nbsp;
+                </li>
+             </ul>
+             </span>
+             <span id="normal" style="display: ">
+             <ul>
+                <li><strong>State : </strong>
+                     <select size="1" name="normalState" onchange="GetCountyList(this,'normalCounty')">
+                        <option value="||SELECT 'z' AS Cd,'(Manually specify)' as Descr  UNION  SELECT Code, Description From StatesUS Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE normalState^^') Order By Descr||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select>
+                </li>
+             </ul>
+             <ul>
+                <li><strong>||FIELDTAG normalCounty||County||ENDFIELDTAG|| : </strong>
+                     <select size="1" name="normalCounty" onchange="GetDistrictList(this,'normalDistrict')">
+                        <option value="||Select Code, Description From Counties Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE normalCounty^^') AND State='^^FIELDVALUE normalState^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select>
+                </li>
+             </ul>
+             <ul>
+                <li><strong>||FIELDTAG normalDistrict||District||ENDFIELDTAG|| : </strong>
+                       <select size="1"  name="normalDistrict" id="normalDistrict" onchange="GetSchoolList(this,'normalLastSchoolAttended')">
+                    <option value="||SELECT AgencyID,AgencyName FROM DOESCHOOLDISTRICTS WHERE COUNTYCODE='^^FIELDVALUE normalCounty^^'    Union  Select CountyCode, CountyName & ' Private Schools' From DOESchoolDistricts Where (Status='Active' or Status='' or Status='1' or CountyCode='^^FIELDVALUE normalDistrict^^') AND CountyCode='^^FIELDVALUE normalCounty^^' Order by AgencyName||" selected="selected">||CHOICETABLESQLD||</option>
+                       </select>
+                </li>
+             </ul>
+             <ul>
+                <li id="_gvtNormalLastSchoolAttended"><strong>||FIELDTAG normalLastSchoolAttended||School||ENDFIELDTAG|| : </strong>
+                    <select size="1"  name="normalLastSchoolAttended" onchange="GetSchoolPhone(this)">
+                    <option value="||SELECT SchoolID, SchoolName FROM DOESCHOOLS Where (Status='Active' or Status='' or Status='1' or SchoolID='^^FIELDVALUE normalLastSchoolAttended^^') AND AgencyID='^^FIELDVALUE normalDistrict^^' order by SchoolName||" selected="selected">||CHOICETABLESQLD||</option>
+                    </select>
+                </li>
+             </ul>
+             </span>
+             <ul id="selectother" style="display: none">
+                 <li id="_gvtOtherSchool"><strong>||FIELDTAG OtherSchool||Other School||ENDFIELDTAG|| :</strong><input type="text" name="OtherSchool" size="50" /></li>
+             </ul>
+             <ul>
+<span id="_gvtschooladdress">
+                <li><strong>||FIELDTAG SchoolStreet||Address||ENDFIELDTAG|| : </strong><input type="text" name="SchoolStreet" size="25" onFocus="GetAllFromSchoolList()"/>
+                    <b>||FIELDTAG ||City||ENDFIELDTAG|| : </b><input type="text" name="SchoolCity" size="15" />
+                    <b>||FIELDTAG ||State||ENDFIELDTAG|| : </b><input type="text" name="SchoolState" size="5" />
+                    <b>||FIELDTAG ||Zip||ENDFIELDTAG|| : </b><input type="text" name="SchoolZip" size="10">||AJAX SELECT Distinct TOP 20 CODE FROM ZIPCODES WHERE CODE LIKE '%^^TYPEVALUE^^%' ORDER BY CODE||&nbsp;
+                </li>
+</span>
+             </ul>
+             <ul>
+                <li id="_gvtSchoolPhoneNum"><strong>||FIELDTAG SchoolPhoneNum||Phone Number||ENDFIELDTAG|| : </strong><input type="text" name="SchoolPhoneNum" size="15" onChange="formatphone(this)"/></li>
+             </ul>
+             <ul>
+                <li id="_gvtPrincipal"><strong>||FIELDTAG Principal||Principal||ENDFIELDTAG|| : </strong><input type="text" name="Principal" size="25" />&nbsp;&nbsp;
+                     <b>||FIELDTAG Email||Email :||ENDFIELDTAG|| </b><input type="text" name="PrincipalEmail" size="25" /></</li>
+             </ul>
+             <ul>
+                <li id="_gvtGuidanceCounselor"><strong>||FIELDTAG GuidanceCounselor||Guidance Counselor||ENDFIELDTAG|| : </strong><input type="text" name="GuidanceCounselor" size="25" /></li>
+             </ul>
+             
+             <ul>
+                <li id="_gvtGrade"><strong>||FIELDTAG Grade||Current Grade||ENDFIELDTAG|| :</strong>
+                    <select size="1" name="Grade" onChange="SetOtherOrDateObtained()">
+                        <option value="||SELECT '' AS Cd,'Select' AS Dsc  UNION Select Code, Description From GradeLevel Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE Grade^^') and privateprovider='^^PRIVATEPROVIDER^^'||" selected="selected">||CHOICETABLESQLD||</option>
+                    </select><span id="_choiceconfig" style="display: none"><a href="javascript:void openconfigure('gradelevel')"><img src="images/gear_small.png"></a></span>&nbsp;&nbsp;<input type="text" name="GradeOther" size="14" id="GradeOther" style="display:none"/>
+                 </li>
+                 <span id="DateObtainedRow" style="display:none"><li id="_gvtDateObtained"><strong>||FIELDTAG DateObtained||Date Obtained||ENDFIELDTAG|| :</strong><input type="text" name="DateObtained" size="8" class="jdatepicker"/></li></span>
+                 <li id="_gvtGateWayExam"><strong>||FIELDTAG GateWayExam||Gateway Exam Passed||ENDFIELDTAG|| : </strong><input type="radio" name="GatewayExamPassed" value="Yes">Yes&nbsp;&nbsp;<input type="radio" name="GatewayExamPassed" value="No">No&nbsp;&nbsp;<input type="radio" name="GatewayExamPassed" value="N/A">N/A</li>
+                 <li id="_gvtNSLP"><strong>||FIELDTAG NSLP||Enrolled in NSLP||ENDFIELDTAG|| : </strong>
+                      <input type="radio" name="R1NSLP" value="Yes">Yes&nbsp;&nbsp;
+                      <input type="radio" name="R1NSLP" value="No">No&nbsp;&nbsp;
+                      <input type="radio" name="R1NSLP" value="N/A">N/A
+                </li>
+             </ul>
+             <ul>
+                <li id="_gvtStartTime"><strong>||FIELDTAG SchoolStartTime||School Start Time : ||ENDFIELDTAG||</strong><input type="text" name="SchoolStartTime" size="8" class="jtimepicker" /></li>
+             </ul>
+             <ul>
+                <li id="_gvtEndTime"><strong>||FIELDTAG SchoolEndTime||School End Time : ||ENDFIELDTAG||</strong><input type="text" name="SchoolEndTime" size="8" class="jtimepicker" /></li>
+             </ul>
+<span id="_gvtEarlyDismissalsection">
+             <ul>
+                <li><strong>||FIELDTAG EarlyDismissalTimes||<u>Early Dismissal Times: </u>||ENDFIELDTAG||</strong></li>
+             </ul>
+             <ul>
+                <li id="_gvtMonday"><strong>||FIELDTAG Monday||Monday||ENDFIELDTAG||<input type="checkbox" name="MondayEarlyDismissal" value="ON" /></strong>
+                           <table border=0 cellspacing=0 cellpadding=0 >
+                              <tr>
+                                 <td>&nbsp;&nbsp;||FIELDTAG MondayTime||Time:||ENDFIELDTAG||&nbsp;&nbsp;</td>
+                                 <td><input type="text" name="MondayEarlyDismissaltime" size="7" class="jtimepicker" >
+                          </table>
+                </li>        
+                <li id="_gvtTuesday"><strong>||FIELDTAG Tuesday||Tuesday||ENDFIELDTAG|| <input type="checkbox" name="TuesdayEarlyDismissal" value="ON" /></strong>
+                           <table border=0 cellspacing=0 cellpadding=0 >
+                             <tr>
+                                 <td>&nbsp;&nbsp;||FIELDTAG TuesdayTime||Time:||ENDFIELDTAG||&nbsp;&nbsp;</td>
+                                 <td><input type="text" name="TuesdayEarlyDismissaltime" size="7" class="jtimepicker" >
+                           </table>
+                </li>
+                <li id="_gvtWednesday"><strong>||FIELDTAG Wednesday||Wednesday||ENDFIELDTAG||<input type="checkbox" name="WednesdayEarlyDismissal" value="ON" /></strong>
+                           <table border=0 cellspacing=0 cellpadding=0 >
+                             <tr>
+                               <td>&nbsp;&nbsp;||FIELDTAG WednesdayTime||Time:||ENDFIELDTAG||&nbsp;&nbsp;</td>
+                               <td><input type="text" name="WednesdayEarlyDismissaltime" size="7" class="jtimepicker" ></table></li>
+                <li id="_gvtThursday"><strong>||FIELDTAG Thursday||Thursday||ENDFIELDTAG||<input type="checkbox" name="ThursdayEarlyDismissal" value="ON" /></strong>
+                           <table border=0 cellspacing=0 cellpadding=0>
+                             <tr>
+                               <td>&nbsp;&nbsp;||FIELDTAG ThursdayTime||Time:||ENDFIELDTAG||&nbsp;&nbsp;</td>
+                               <td><input type="text" name="ThursdayEarlyDismissaltime" size="7" class="jtimepicker" >
+                          </table>
+                </li>
+                <li id="_gvtFriday"><strong>||FIELDTAG Friday||Friday||ENDFIELDTAG||<input type="checkbox" name="FridayEarlyDismissal" value="ON" /></strong>
+                           <table border=0 cellspacing=0 cellpadding=0>
+                             <tr>
+                               <td>&nbsp;&nbsp;||FIELDTAG FridayTime||Time:||ENDFIELDTAG||&nbsp;&nbsp;</td>
+                               <td><input type="text" name="FridayEarlyDismissaltime" size="7" class="jtimepicker">
+                           </table>
+                </li>
+             </ul>
+</span>
+            <span id="_gvtTransportationsection">
+              <ul>
+                <li><strong>||FIELDTAG Transportation||<u>Transportation: </u>||ENDFIELDTAG||</strong></li>
+              </ul>
+              <ul>
+                <li id="_gvtAMTransportation"><strong>||FIELDTAG AMTransportation||AM: ||ENDFIELDTAG||</strong>&nbsp;&nbsp;
+                  <input type="radio" name="R1AMTrans" value="RideBus">||FIELDTAG AMRideBus||Ride Bus||ENDFIELDTAG||&nbsp;&nbsp;
+                  <input type="radio" name="R1AMTrans" value="Parentpickup">||FIELDTAG AMParentpickup||Parent pickup||ENDFIELDTAG||
+                  <input type="radio" name="R1AMTrans" value="NA">||FIELDTAG AMNA||N/A||ENDFIELDTAG||
+                </li>
+              </ul>
+              <ul>
+                <li id="_gvtPMTransportation"><strong>||FIELDTAG PMTransportation||PM: ||ENDFIELDTAG||</strong>&nbsp;&nbsp;
+                  <input type="radio" name="R1PMTrans" value="RideBus">||FIELDTAG PMRideBus||Ride Bus||ENDFIELDTAG||&nbsp;&nbsp;
+                  <input type="radio" name="R1PMTrans" value="Parentpickup">||FIELDTAG PMParent pickup||Parent pickup||ENDFIELDTAG||
+                  <input type="radio" name="R1PMTrans" value="NA">||FIELDTAG PMNA||N/A||ENDFIELDTAG||
+                </li>
+                &nbsp;&nbsp;
+                <!--line no longer wanted per - 00E20241119073031603-->
+                <!--<li id="_gvtDisciplinarySuspensions"><strong>||FIELDTAG DisciplinarySuspensions||Has there need any in school disciplinary suspensions?||ENDFIELDTAG||</strong>&nbsp;&nbsp;
+                <input type="radio" name="R1DisciplinarySuspensions" value="Yes">||FIELDTAG DisciplinarySuspensionsYes||Yes||ENDFIELDTAG||&nbsp;&nbsp;
+                  <input type="radio" name="R1DisciplinarySuspensions" value="No">||FIELDTAG DisciplinarySuspensionsNo||No||ENDFIELDTAG||
+                </li>-->
+                
+              </ul>
+            </span>
+         </div>
+         </span>
+
+          <span id="_gvtInstructionSpecialistsection">           
+      <div class="term">||FIELDTAG InstructionSpecialist||Instruction Specialist (IS)||ENDFIELDTAG||</div>
+           <div class="def">
+       <ul>
+        <li id="_gvtReferralPerson"><strong>||FIELDTAG ReferralPerson||{[Name]}||ENDFIELDTAG|| : </strong>
+            <select size="1" name="ReferralPerson">
+                <option value="||SELECT Distinct TOP 50 EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], LastName, FirstName FROM Q_HRFORM WHERE (LASTNAME LIKE '^^TYPEVALUE^^*' or FirstName LIKE '^^TYPEVALUE^^*') and EmpStatus='Active' AND PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], LastName, FirstName FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE ReferralPerson^^'||"  selected="selected">||CHOICETABLESEARCH||</option>
+            </select>||STARTSTRIP||
+            <a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(HRFormDynamicEntry)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(||SESSIONID||)|TARGETDROPDOWN(DDCareManager)|SETVALUE(TARGETDROPDOWN)|TARGETDDFIELD(ReferralPerson)|SETVALUE(TARGETDDFIELD)')">Click Here to Add Someone to the List</a>||ENDSTRIP||&nbsp;</li>
+        <li id="_gvtReferralPersonPhone"><strong>||FIELDTAG ReferralPersonPhone||{[Phone]}||ENDFIELDTAG|| : </strong>
+            <input type="text" id="ReferralPersonPhone" name="ReferralPersonPhone" size="15" onblur="FormatAutoPhone('ReferralPersonPhone')" />&nbsp;&nbsp;&nbsp; </li>
+        <li id="_gvtReferralPersonCell"><strong>||FIELDTAG ReferralPersonCellPhone||{[Cell Phone]}||ENDFIELDTAG|| : </strong>
+             <input type="text" id="ReferralPersonCell" name="ReferralPersonCell" size="15" onblur="FormatAutoPhone('ReferralPersonCell')" />&nbsp;&nbsp;&nbsp; </li>
+        <li id="_gvtReferralPersonFax"><strong>||FIELDTAG ReferralPersonFax||{[Fax]}||ENDFIELDTAG|| : </strong>
+            <input type="text" id="ReferralPersonFax" name="ReferralPersonFax" size="15" onblur="FormatAutoPhone('ReferralPersonFax')" />&nbsp;</li>
+        <li id="_gvtReferralPersonEmail"><strong>||FIELDTAG ReferralPersonEmail||{[Email]}||ENDFIELDTAG|| : </strong>
+            <input type="text" id="ReferralPersonEmail" name="ReferralPersonEmail" size="35" />&nbsp;&nbsp;&nbsp;</li>
+        <li id="_gvtReferralPersonContactMethod"><strong>||FIELDTAG ReferralPersonContactMethod||{[Pre. Contact Method]}||ENDFIELDTAG|| : </strong>
+            <input type="text" id="ReferralPersonContactMethod" name="ReferralPersonContactMethod" size="35" />&nbsp;&nbsp;&nbsp;</li>
+        <li id="_gvtReferralPersonSupervisor"><strong>||FIELDTAG ReferralPersonSupervisor||{[Supervisor]}||ENDFIELDTAG|| : </strong>
+            <input type="text" id="ReferralPersonSupervisor" name="ReferralPersonSupervisor" size="15" />&nbsp;&nbsp;&nbsp;</li> 
+        <li id="_gvtReferralPersonSupervisorPhone"><strong>||FIELDTAG ReferralPersonSupervisorPhone||{[Supervisor Phone]}||ENDFIELDTAG|| : </strong>
+            <input type="text" id="gvtReferralPersonSupervisorPhone" name="ReferralPersonSupervisorPhone" size="15" /></li> 
+      </ul>
+           </div>
+</span>
+<!--Adding display:none to _gvtTypeOfClassroomsection for task 00E20241119073031603-->
+          <span id="_gvtTypeOfClassroomsection" style="display:none">  
+           <div class="term">||FIELDTAG TypeOfClassroom||Type Of Classroom||ENDFIELDTAG||</div>
+           <div class="def">
+              <ul>
+                 <li id="_gvtTypeOfClassCurr"><strong>||FIELDTAG TypeOfClassCurr||Current||ENDFIELDTAG|| : </strong><select size="1" name="TypeOfClassCurr" >
+                    <option value="||Select Code, Description From TypeOfClassRoom Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE TypeOfClassCurr^^') and privateprovider='^^PRIVATEPROVIDER^^' and code<>'-' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select><span id="_choiceconfig" style="display: none"><a href="javascript:void openconfigure('typeofclassroom')"><img src="images/gear_small.png"></a></span></li>
+              </ul>
+              <ul>
+                 <li id="_gvtTypeOfClassNeed"><strong>||FIELDTAG TypeOfClassNeed||Needed||ENDFIELDTAG|| : </strong><select size="1" name="TypeOfClassNeed" >
+                    <option value="||Select Code, Description From TypeOfClassRoom Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE TypeOfClassNeed^^') and privateprovider='^^PRIVATEPROVIDER^^' and code<>'-' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select><span id="_choiceconfig" style="display: none"><a href="javascript:void openconfigure('typeofclassroom')"><img src="images/gear_small.png"></a></span></li>
+              </ul>
+           </div>
+</span>
+          <span id="_gvtEducationalSupportssection">
+           <div class="term">||FIELDTAG EducationalSupports||Educational Supports||ENDFIELDTAG||</div>
+           <div class="def">
+              <ul>
+                 <li id="_gvtr1504"><strong>||FIELDTAG r1504||504 Plan||ENDFIELDTAG|| : </strong>
+                                   <input type="radio" name="r1504" value="Yes">Yes 
+                                   <input type="radio" name="r1504" value="No">No 
+                                   <input type="radio" name="r1504" value="NA">N/A </li>
+                 <li id="_gvtIEP"><strong>||FIELDTAG IEP||IEP||ENDFIELDTAG|| : </strong>
+                                   <input type="radio" name="IEP" value="Yes">Yes 
+                                   <input type="radio" name="IEP" value="No">No 
+                                   <input type="radio" name="IEP" value="Pending">Pending</li>
+                 <li id="_gvtLASTIEPDATE"><strong>||FIELDTAG LASTIEPDATE||Last Meeting Date||ENDFIELDTAG|| : </strong><input type="text" name="LASTIEPDATE" size="8" class="jdatepicker"/></li>
+                 <li><span id="_gvtNEXTIEPDATE"><strong>||FIELDTAG NEXTIEPDATE||Next Meeting Date||ENDFIELDTAG|| : </strong><input type="text" name="NEXTIEPDATE" size="8" class="jdatepicker"/>&nbsp;&nbsp;&nbsp;</span>
+                    <span id="_gvtNEXTIEPTime">||FIELDTAG NextIEPTime||Time||ENDFIELDTAG|| : <input type="text" name="NextIEPTime" size="4" class="jtimepicker">
+                    <!--<select name="NextIEPTimeAMPM" size="1" onChange="NextIEPTimeblur()" display: none;>
+                       <option value="||Select Code, Description From TIMESUFFIX Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE NextIEPTimeAMPM^^') and privateprovider='^^PRIVATEPROVIDER^^'||" selected="selected">||CHOICETABLESQLD||</option>
+                    </select>--></span><span id="_choiceconfig" style="display: none"><a href="javascript:void openconfigure('TIMESUFFIX')"></a></span>
+                 </li>
+                 <li id="_gvtTypeOfMeeting"><strong>||FIELDTAG TypeOfMeeting||Type of Meeting||ENDFIELDTAG|| : </strong><select size="1" name="TypeOfMeeting">
+                     <option value="||Select Code, Description From TypeOfMeeting_base Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE TypeOfMeeting^^')||" selected="selected">||CHOICETABLESQLD||</option>
+                    </select>||CONFIGURE TypeofMeeting||                 
+                 </li>
+        
+             </ul>
+          </div>
+</span>
+          <span id="_gvtEducationalDiagnosissection">
+           <div class="term">||FIELDTAG EducationalDiagnosis||Educational Diagnosis||ENDFIELDTAG||</div>
+           <div class="def">
+             <table border="3" cellpadding="4" cellspacing="0" width="100%">
+                 <tr>
+                     <td width="25%" colspan="5" id="_gvtAutism"><input type="checkbox" name="Autism" value="YES" />||FIELDTAG Autism||Autism||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtEMODISTB"><input type="checkbox" name="EMODISTB" value="YES" />||FIELDTAG EMODISTB||Emotionally Disturbed||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtLD"><input type="checkbox" name="LD" value="YES" />||FIELDTAG LD||Learning Disabled||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtSpeechIMP"><input type="checkbox" name="VisualIMP" value="YES" />||FIELDTAG VisualIMP||Visual Impaired||ENDFIELDTAG||</td>
+                 <tr>
+                 </tr>
+                     <td width="25%" colspan="5" id="_gvtIntellectDis"><input type="checkbox" name="IntellectDis" value="YES" />||FIELDTAG IntellectDis||Intellectually Disabled||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtLangImp"><input type="checkbox" name="LangImp" value="YES" />||FIELDTAG LangImp||Language Impaired||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtBlindness"><input type="checkbox" name="Blindness" value="YES" />||FIELDTAG Blindness||Blindness||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtDeafness"><input type="checkbox" name="Deafness" value="YES" />||FIELDTAG Deafness||Deafness||ENDFIELDTAG||</td>
+                 <tr>
+                 </tr>
+                     <td width="25%" colspan="5" id="_gvtOrthoImpaired"><input type="checkbox" name="OrthoImpaired" value="YES" />||FIELDTAG OrthoImpaired||Orthopedic Impairment||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtOTHERHI"><input type="checkbox" name="MD" value="YES" />||FIELDTAG MD||Multiple Disabilities||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtTBI"> <input type="checkbox" name="TBI" value="YES" />||FIELDTAG TBI||Traumatic Brain Injured||ENDFIELDTAG||</td> 
+                     <td width="25%" colspan="5" id="_gvtOtherHImpaired"><input type="checkbox" name="OtherHImpaired" value="YES" />||FIELDTAG OtherHImpaired||Other Health Impaired||ENDFIELDTAG||</td>
+                 </tr>
+                 <tr>
+                     <td width="25%" colspan="5" id="_gvtHearingIMP"><input type="checkbox" name="HearingIMP" value="YES" />||FIELDTAG HearingIMP||Hearing Impairment||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtOther1"><input type="checkbox" name="Other1" value="YES" />||FIELDTAG Other1||Other 1||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtOther2"><input type="checkbox" name="Other2" value="YES" />||FIELDTAG Other2||Other 2||ENDFIELDTAG||</td>
+                     <td width="25%" colspan="5" id="_gvtOther3"><input type="checkbox" name="Other3" value="YES" />||FIELDTAG Other3||Other 3||ENDFIELDTAG||</td>
+                 </tr>
+                 <tr>
+                    <td width="100%" colspan="20" id="_gvtOther"><input type="checkbox" name="OTHER" value="YES" onClick="OpenOtherDiag()"/>||FIELDTAG Other||Other||ENDFIELDTAG|| <span id="OtherDiagText"><input type="text" name="OtherDiagnosis" size="135"></span></td>
+                 </tr>
+              </table>
+           </div>
+</span>
+
+          <span id="_gvtSchoolIncidentReportsection">
+           <div class="term">||FIELDTAG SchoolIncidentReport||School Incident Report||ENDFIELDTAG||</div>
+           <div class="def">||INCLUDESUMMATION SummationSchoolIncidentReport||</div>
+</span>
+          <span id="_gvtSchoolProgressReportsection">
+           <div  class="term">||FIELDTAG SchoolProgressReport||School Progress Report||ENDFIELDTAG||</div>
+           <div class="def">||INCLUDESUMMATION SummationSchoolProgressReport||</div>
+</span>
+
+
+       </div>
+    </div>
+
+    ||STARTSTRIP||
+    <div align="center">||Signatures||<br />
+    Signature : <input type="password" name="SIGNATURE" /><br />
+    Click on your browser's "Back" button to cancel this record or<br />
+    <input type="button" name="_SUBBTTN" onclick="checkschool()" value="Save" />
+    <input type="button" style="display:none" name="B2" onclick="scheduleit()" value="Schedule" />
+    <input type="button" name="_B2" id="_B2" onclick="deleteit()" value="Delete" /></div>
+    ||ENDSTRIP||
+</form>
+</body>
+</html>

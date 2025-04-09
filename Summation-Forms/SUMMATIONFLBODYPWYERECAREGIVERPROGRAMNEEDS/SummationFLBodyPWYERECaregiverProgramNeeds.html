@@ -1,0 +1,34 @@
+<html>
+<head>
+<!--PATHWAYWIZARDSUMMATION YERE Caregiver Program Needs Sum-->
+</head>
+
+<script language="JavaScript">
+</script>
+
+<script language="VBScript">
+</script>
+
+<body>
+<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWYERECaregiverProgramNeeds].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,[PWYERECaregiverProgramNeeds].[caregiver_need_basic_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_crisis_services_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_edu_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_employ_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_family_therapy_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_housing_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_legal_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_mh_case_mgmt_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_mh_adult_psych_status] ,[PWYERECaregiverProgramNeeds].[cargiver_need_mg_therapy_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_parenting_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_su_status] ,[PWYERECaregiverProgramNeeds].[caregiver_need_support_group_status]  FROM ^^SP FORMNAME^^  LEFT JOIN [yere_caregiver_program_needs] as JTBL1 ON JTBL1.CODE=[PWYERECaregiverProgramNeeds].[caregiver_needs] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<table cellspacing="0" class="summary">
+    <thead>
+        <tr>
+            <th class="colAction">Action</th>
+<th>Pathway Date</th><th>Caregiver Program Needs</th><th>Basic Needs Assistance Referral Status </th><th>Crises Services Referral Status</th><th>Education Services Referral Status </th><th>Employment Services Referral Status </th><th>Family Therapy Referral Status </th><th>Housing Referral Status</th><th>Legal Services Referral Status</th><th>Mental Health Services - Case Management Referral Status</th><th>Mental Health - Adult Psychiatry Referral Status</th><th>Mental Health - Therapy Status</th><th>Parenting Resources/Education Referral Status </th><th>Substance Use Services Referral Status </th><th>Support Groups Referral Status</th>
+            <th>||SORTCOL|ID;descending||Edited On</th>
+            <th>||SORTCOL|USERID;ascending||Edited By</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="||ALTERNATE |altrow||">
+            <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
+<td>||SF Pathway_Date||</td><td>||SF JDESC1||</td><td>||SF caregiver_need_basic_status||</td><td>||SF caregiver_need_crisis_services_status||</td><td>||SF caregiver_need_edu_status||</td><td>||SF caregiver_need_employ_status||</td><td>||SF caregiver_need_family_therapy_status||</td><td>||SF caregiver_need_housing_status||</td><td>||SF caregiver_need_legal_status||</td><td>||SF caregiver_need_mh_case_mgmt_status||</td><td>||SF caregiver_need_mh_adult_psych_status||</td><td>||SF cargiver_need_mg_therapy_status||</td><td>||SF caregiver_need_parenting_status||</td><td>||SF caregiver_need_su_status||</td><td>||SF caregiver_need_support_group_status||</td>
+            <td>||SF VISITDT|| ||SF VISITTM||</td>
+            <td>||SF USERID||</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

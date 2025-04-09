@@ -94,8 +94,8 @@ function startup() {
     setrequire('caregiver_need_mh_adult_psych_status');
     setrequire('cargiver_need_mg_therapy_status');
     setrequire('caregiver_need_parenting_status');
-    setrequire('care_substance_sum');
-    setrequire('care_support_sum');
+    setrequire('caregiver_need_su_status');
+    setrequire('caregiver_need_support_group_status');
 
 	checkhideall();
 
@@ -137,8 +137,8 @@ function checkhideall() {
    checkhide(f.caregiver_needs,"caregiver_need_mh_adult_psych_status","009");
    checkhide(f.caregiver_needs,"cargiver_need_mg_therapy_status","010");
    checkhide(f.caregiver_needs,"caregiver_need_parenting_status","011");
-   checkhide(f.caregiver_needs,"care_substance_sum","012");
-   checkhide(f.caregiver_needs,"care_support_sum","013");
+   checkhide(f.caregiver_needs,"caregiver_need_su_status","012");
+   checkhide(f.caregiver_needs,"caregiver_need_support_group_status","013");
 
 }
 
@@ -381,8 +381,8 @@ function validateform(scope='all') {
   if (!hiddenfield('caregiver_need_mh_adult_psych_status') && gvtfieldvalue('caregiver_need_mh_adult_psych_status')=='') {edesc=edesc+`Must specify a value for Mental Health - Adult Psychiatry Referral Status\n`; seterror("caregiver_need_mh_adult_psych_status");}
   if (!hiddenfield('cargiver_need_mg_therapy_status') && gvtfieldvalue('cargiver_need_mg_therapy_status')=='') {edesc=edesc+`Must specify a value for Mental Health - Therapy Status\n`; seterror("cargiver_need_mg_therapy_status");}
   if (!hiddenfield('caregiver_need_parenting_status') && gvtfieldvalue('caregiver_need_parenting_status')=='') {edesc=edesc+`Must specify a value for Parenting Resources/Education Referral Status \n`; seterror("caregiver_need_parenting_status");}
-  if (!hiddenfield('care_substance_sum') && gvtfieldvalue('care_substance_sum')=='') {edesc=edesc+`Must specify a value for Substance Use Services Referral Status \n`; seterror("care_substance_sum");}
-  if (!hiddenfield('care_support_sum') && gvtfieldvalue('care_support_sum')=='') {edesc=edesc+`Must specify a value for Support Groups Referral Status\n`; seterror("care_support_sum");}
+  if (!hiddenfield('caregiver_need_su_status') && gvtfieldvalue('caregiver_need_su_status')=='') {edesc=edesc+`Must specify a value for Substance Use Services Referral Status \n`; seterror("caregiver_need_su_status");}
+  if (!hiddenfield('caregiver_need_support_group_status') && gvtfieldvalue('caregiver_need_support_group_status')=='') {edesc=edesc+`Must specify a value for Support Groups Referral Status\n`; seterror("caregiver_need_support_group_status");}
 
     return edesc;
 }
@@ -820,9 +820,9 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldcare_substance_sum qcare_substance_sum">
-    <div class="col12 fldcare_substance_sum qcare_substance_sum"><span class="qcare_substance_sum required-label">||PWRequiredFieldRequiredText||</span><span class="qcare_substance_sum required-field-label"><label class="label-top">||FIELDTAG care_substance_sum||Substance Use Services Referral Status ||ENDFIELDTAG||</label></span><span class="qcare_substance_sum"><input type="radio" name="care_substance_sum" value="Referral/Assistance Provided; Connected" onclick="checkhideall()" >Referral/Assistance Provided; Connected&nbsp;&nbsp;<input type="radio" name="care_substance_sum" value="Referral/Assistance Provided; Not Reconnected" onclick="checkhideall()" >Referral/Assistance Provided; Not Reconnected&nbsp;&nbsp;<input type="radio" name="care_substance_sum" value="Referral/Assistance Not Yet Provided" onclick="checkhideall()" >Referral/Assistance Not Yet Provided&nbsp;&nbsp;
-<!-- FIELDOVERRIDE(care_substance_sum,10,45) -->
+    <div class="col12 fldcaregiver_need_su_status qcaregiver_need_su_status">
+    <div class="col12 fldcaregiver_need_su_status qcaregiver_need_su_status"><span class="qcaregiver_need_su_status required-label">||PWRequiredFieldRequiredText||</span><span class="qcaregiver_need_su_status required-field-label"><label class="label-top">||FIELDTAG caregiver_need_su_status||Substance Use Services Referral Status ||ENDFIELDTAG||</label></span><span class="qcaregiver_need_su_status"><input type="radio" name="caregiver_need_su_status" value="Referral/Assistance Provided; Connected" onclick="checkhideall()" >Referral/Assistance Provided; Connected&nbsp;&nbsp;<input type="radio" name="caregiver_need_su_status" value="Referral/Assistance Provided; Not Reconnected" onclick="checkhideall()" >Referral/Assistance Provided; Not Reconnected&nbsp;&nbsp;<input type="radio" name="caregiver_need_su_status" value="Referral/Assistance Not Yet Provided" onclick="checkhideall()" >Referral/Assistance Not Yet Provided&nbsp;&nbsp;
+<!-- FIELDOVERRIDE(caregiver_need_su_status,10,45) -->
 </span></div>
      </div>
   </div>
@@ -830,9 +830,9 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldcare_support_sum qcare_support_sum">
-    <div class="col12 fldcare_support_sum qcare_support_sum"><span class="qcare_support_sum required-label">||PWRequiredFieldRequiredText||</span><span class="qcare_support_sum required-field-label"><label class="label-top">||FIELDTAG care_support_sum||Support Groups Referral Status||ENDFIELDTAG||</label></span><span class="qcare_support_sum"><input type="radio" name="care_support_sum" value="Referral/Assistance Provided; Connected" onclick="checkhideall()" >Referral/Assistance Provided; Connected&nbsp;&nbsp;<input type="radio" name="care_support_sum" value="Referral/Assistance Provided; Not Reconnected" onclick="checkhideall()" >Referral/Assistance Provided; Not Reconnected&nbsp;&nbsp;<input type="radio" name="care_support_sum" value="Referral/Assistance Not Yet Provided" onclick="checkhideall()" >Referral/Assistance Not Yet Provided&nbsp;&nbsp;
-<!-- FIELDOVERRIDE(care_support_sum,10,45) -->
+    <div class="col12 fldcaregiver_need_support_group_status qcaregiver_need_support_group_status">
+    <div class="col12 fldcaregiver_need_support_group_status qcaregiver_need_support_group_status"><span class="qcaregiver_need_support_group_status required-label">||PWRequiredFieldRequiredText||</span><span class="qcaregiver_need_support_group_status required-field-label"><label class="label-top">||FIELDTAG caregiver_need_support_group_status||Support Groups Referral Status||ENDFIELDTAG||</label></span><span class="qcaregiver_need_support_group_status"><input type="radio" name="caregiver_need_support_group_status" value="Referral/Assistance Provided; Connected" onclick="checkhideall()" >Referral/Assistance Provided; Connected&nbsp;&nbsp;<input type="radio" name="caregiver_need_support_group_status" value="Referral/Assistance Provided; Not Reconnected" onclick="checkhideall()" >Referral/Assistance Provided; Not Reconnected&nbsp;&nbsp;<input type="radio" name="caregiver_need_support_group_status" value="Referral/Assistance Not Yet Provided" onclick="checkhideall()" >Referral/Assistance Not Yet Provided&nbsp;&nbsp;
+<!-- FIELDOVERRIDE(caregiver_need_support_group_status,10,45) -->
 </span></div>
      </div>
   </div>

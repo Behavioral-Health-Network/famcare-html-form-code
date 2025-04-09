@@ -695,7 +695,7 @@ function updatesignatures(){
 </div>
  <div class="entire">
     <div class="col12 fldcaregiver_needs qcaregiver_needs">
-    <div class="col12 fldcaregiver_needs qcaregiver_needs"><span class="qcaregiver_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qcaregiver_needs required-field-label"><label class="label-top">Caregiver Program Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qcaregiver_needs"><select size="15" name="caregiver_needs" onchange="checkhideall()" multiple>
+    <div class="col12 fldcaregiver_needs qcaregiver_needs"><span class="qcaregiver_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qcaregiver_needs required-field-label"><label class="label-top">Caregiver Program Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qcaregiver_needs"><select size="15" name="caregiver_needs" id="yere_caregiver_program_needs" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_caregiver_program_needs] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE caregiver_needs^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_caregiver_program_needs||
 

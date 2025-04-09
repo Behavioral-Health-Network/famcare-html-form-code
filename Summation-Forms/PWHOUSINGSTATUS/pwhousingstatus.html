@@ -1,106 +1,16 @@
 <html>
 
 <head>
-<title>BCR Presenting Concerns</title>
+<title>Housing Status</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
-||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
-<!-- FIELDOVERRIDE(BEHAVIORAL_HEALTH,10,10) -->
-<!-- FIELDOVERRIDE(PHYSICAL_HEALTH,10,10) -->
-<!-- FIELDOVERRIDE(HOUSING,10,10) -->
-<!-- FIELDOVERRIDE(SPIRITUAL_CARE,10,10) -->
-<!-- FIELDOVERRIDE(MATERNAL_HEALTH,10,10) -->
-<!-- FIELDOVERRIDE(SOCIAL_SERVICES,10,10) -->
-<!-- FIELDOVERRIDE(OTHER,10,10) -->
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
 <PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
 
 <script language="JavaScript">
-
-/**
- * Waits for a DOM element to be available before executing a callback function.
- * Useful for dynamically loaded or conditionally rendered form fields that might not
- * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
- *
- * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
- * @param {function} callback - The function to run once the element is found.
- * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
- * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
- */
-
-function waitForElement(selector, callback) {
-  const el = document.querySelector(selector);
-  if (el) {
-    callback(el);
-  } else {
-    window.requestAnimationFrame(() => waitForElement(selector, callback));
-  }
-}
-
-// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
-// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
-// if the function is run via startup() too early and does not run again dynamically upon change.
-// const observer = new MutationObserver(() => {
-//     const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
-    
-//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
-
-//     if (!dropdowns || dropdowns.length === 0) {
-//         console.error('No valid dropdowns found. Skipping updateReportFields.');
-//         return;
-//     }
-
-//     dropdowns.forEach(dropdown => {
-//         if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-//             console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
-
-//             dropdown.addEventListener('change', () => {
-//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
-//                 updateReportFields([dropdown.id]); // Ensure it's correctly passed as an array
-//             });
-
-//             updateReportFields([dropdown.id]);
-
-//             dropdown.dataset.initialized = true;
-//         }
-//     });
-
-//     if (dropdowns.length > 0) {
-//         observer.disconnect();
-//     }
-// });
-
-// observer.observe(document.body, { childList: true, subtree: true });
-
-waitForElement('#bcr_presenting_concerns', (dropdown) => {
-  if (!dropdown.dataset.initialized) {
-    console.log(`Initializing dropdown: ${dropdown.id}`);
-    
-    dropdown.addEventListener('change', () => {
-      updateReportFields([dropdown.id]);
-    });
-
-    updateReportFields([dropdown.id]); // Initial update on load
-
-    dropdown.dataset.initialized = true;
-  }
-});
-
-waitForElement('#bcr_ref_placed_bh_subtype', (dropdown) => {
-  if (!dropdown.dataset.initialized) {
-    dropdown.addEventListener('change', () => {
-      updateReportFields([dropdown.id]);
-    });
-    updateReportFields([dropdown.id]);
-    dropdown.dataset.initialized = true;
-  }
-});
-
-// Repeat for any other relevant dropdowns
-
 
 var genpdf='true';
 
@@ -125,38 +35,20 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('bcr_presenting_concerns');
+    setrequire('client_housing_status');
+    setrequire('housing_start_date');
+    setrequire('homeless_housing_insecure_eto');
 
 	checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
-
-   // Call the function with the names of the tables you want to process.
-   // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
-  
-  dropdowns.forEach(dropdown => {
-    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-      console.log(`Initializing dropdown: ${dropdown.id}`);
-
-      // Add the onchange event listener
-      dropdown.addEventListener('change', () => {
-        updateReportFields([dropdown.id]); // Pass the specific table ID
-      });
-
-      // Initialize the table's hidden fields
-      updateReportFields([dropdown.id]);
-
-      // Mark as initialized to avoid redundant listeners
-      dropdown.dataset.initialized = true;
-    }
-  });
 }
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.bcr_presenting_concerns,"other_need_ref","010");
+      checkhide(f.client_housing_status,"if_unhoused_exp","Unhoused");
+   checkhide(f.client_housing_status,"worried_losing_housing","Institutionally Housed,Precariously Housed,Stably Housed");
 
 }
 
@@ -387,7 +279,9 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('bcr_presenting_concerns') && gvtfieldvalue('bcr_presenting_concerns')=='') {edesc=edesc+`Must specify a value for Presenting Concerns\n`; seterror("bcr_presenting_concerns");}
+  if (!hiddenfield('client_housing_status') && gvtfieldvalue('client_housing_status')=='') {edesc=edesc+`Must specify a value for Housing Status\n`; seterror("client_housing_status");}
+  if (!hiddenfield('housing_start_date') && gvtfieldvalue('housing_start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("housing_start_date");}
+  if (!hiddenfield('homeless_housing_insecure_eto') && gvtfieldvalue('homeless_housing_insecure_eto')=='') {edesc=edesc+`Must specify a value for Is client currently experiencing housing instability or homelessness?\n`; seterror("homeless_housing_insecure_eto");}
 
     return edesc;
 }
@@ -581,65 +475,12 @@ function updatesignatures(){
    return;
 }
 
-/**
- * Updates hidden fields corresponding to selected dropdown options for one or more tables.
- * 
- * This function dynamically updates the values of hidden fields based on the selected options
- * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
- * identified by its ID, and hidden fields are linked to the dropdown options via their
- * `value` attributes and `data-source` attributes.
- * 
- * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
- *                           Example: ['bcr_presenting_concerns', 'table2', 'table3'].
- */
- function updateReportFields(tableIds) {
-  // Iterate over each table ID provided
-
-  tableIds.forEach(id => {
-    // Locate the dropdown element for the current table ID
-    const dropdown = document.querySelector(`#${id}`);
-    
-    // Ensure the dropdown exists before proceeding
-    if (dropdown) {
-      console.log(`Processing dropdown for table ID: ${id}`);
-
-      // Loop through all options in the dropdown
-      dropdown.querySelectorAll('option').forEach(option => {
-        // Skip placeholder options or options without a value
-        if (option.value === '') return;
-
-        // Locate the hidden field linked to this option using its value and data-source attribute
-        const reportField = document.querySelector(
-          `.report-field.value-${option.value}[data-source="${id}"]`
-        );
-
-        // Log the mapping for debugging purposes
-        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
-        console.log(`Hidden field found:`, reportField);
-
-        // If the corresponding hidden field exists, update its value
-        if (reportField) {
-          // Set the value to '1' if the option is selected, otherwise set it to '0'
-          reportField.value = option.selected ? '1' : '0';
-          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
-        } else {
-          // Log a warning if no hidden field matches the option
-          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
-        }
-      });
-    } else {
-      // Log an error if the dropdown for the specified table ID is not found
-      console.error(`Dropdown with ID ${id} not found in the DOM.`);
-    }
-  });
-}
-
-
 </script>
 
 <script language="VBScript">
 </script>
 
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
 
 <body onLoad="startup()">
 <!-- Field Override Area -->
@@ -649,7 +490,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWBCRPresentingConcerns" />
+    <input type="hidden" name="TABLENAME" value="PWHousingStatus" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -661,17 +502,8 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
-  <!-- used by updateReportFields -->
-  <input type="hidden" name="behavioral_health_need" value="||FIELDVALUE behavioral_health_need||" class="report-field value-001" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="physical_health_need" value="||FIELDVALUE physical_health_need||" class="report-field value-002" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="housing_need" value="||FIELDVALUE housing_need||" class="report-field value-003" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="spiritual_care_need" value="||FIELDVALUE spiritual_care_need||" class="report-field value-004" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="maternal_health_need" value="||FIELDVALUE maternal_health_need||" class="report-field value-006" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="social_services_need" value="||FIELDVALUE social_services_need||" class="report-field value-009" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="other_need" value="||FIELDVALUE other_need||" class="report-field value-010" data-source="bcr_presenting_concerns">
-
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>BCR Presenting Concerns</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>Housing Status</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -683,7 +515,6 @@ function updatesignatures(){
     </div>
 <div class="deflist">
 <div class="entire">
-<div class="col12 term">Presenting Concerns</div>
 </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
@@ -691,17 +522,85 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldbcr_presenting_concerns qbcr_presenting_concerns">
-    <div class="col12 fldbcr_presenting_concerns qbcr_presenting_concerns"><span class="qbcr_presenting_concerns required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_presenting_concerns required-field-label"><label class="label-top">Presenting Concerns<br>(Hold down Ctrl to select multiple)</label></span><span class="qbcr_presenting_concerns"><select size="15" name="bcr_presenting_concerns" id="bcr_presenting_concerns" onchange="checkhideall()" multiple>
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_presenting_concerns^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_presenting_concerns||
-
-<!-- FIELDOVERRIDE(bcr_presenting_concerns,10,200) -->
-</span></div>
+    <div class="col12"><label class="label-top">Institutionally Housed</label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldother_need_ref qother_need_ref">
-    <div class="col12 fldother_need_ref qother_need_ref"><span class="qother_need_ref"><label class="label-top">||FIELDTAG other_need_ref||If "Other", Specify||ENDFIELDTAG||</label></span><span class="qother_need_ref"><input type="text" name="other_need_ref" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12"><label class="label-top">Client has a long term residence within an established organization. 
+Examples: Inpatient Hospitalization or Treatment, Jail or Prison, Transitional House, Skilled Nursing Facility</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Precariously Housed</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Permanence of housing is not necessarily within full control of client. 
+Examples: Hotel, Friend or Family Residence, Currently own/rent but Unable to Make Payments, Domestic Violence Situation/Trying to Flee</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Stably Housed</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Permanence of Housing Within Reasonable Control of Client. 
+Examples: Owns Home, Rents Home, Group Home</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Unhoused</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Client is without reliable and ongoing shelter. 
+Examples: Staying on street/outdoors, Emergency Shelter</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">Client Housing Status</div>
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Please select the option that best describes the client's housing situation.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldclient_housing_status qclient_housing_status">
+    <div class="col12 fldclient_housing_status qclient_housing_status"><span class="qclient_housing_status required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_housing_status required-field-label"><label class="label-top">||FIELDTAG client_housing_status||Housing Status||ENDFIELDTAG||</label></span><span class="qclient_housing_status"><input type="radio" name="client_housing_status" value="Institutionally Housed" onclick="checkhideall()" >Institutionally Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Precariously Housed" onclick="checkhideall()" >Precariously Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Stably Housed" onclick="checkhideall()" >Stably Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Unhoused" onclick="checkhideall()" >Unhoused&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qhousing_start_date">
+    <div class="col6 fldhousing_start_date qhousing_start_date"><span class="qhousing_start_date required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_start_date required-field-label"><label class="label-top">||FIELDTAG housing_start_date||Start Date||ENDFIELDTAG||</label></span><span class="qhousing_start_date"><input type="text" name="housing_start_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+    <div class="col6 qhousing_end_date">
+    <div class="col6 fldhousing_end_date qhousing_end_date"><span class="qhousing_end_date"><label class="label-top">||FIELDTAG housing_end_date||End Date||ENDFIELDTAG||</label></span><span class="qhousing_end_date"><input type="text" name="housing_end_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qif_unhoused_exp">
+    <div class="col6 fldif_unhoused_exp qif_unhoused_exp"><span class="qif_unhoused_exp"><label class="label-top">||FIELDTAG if_unhoused_exp||If "Unhoused", where do they spend their time?||ENDFIELDTAG||</label></span><span class="qif_unhoused_exp"><textarea name="if_unhoused_exp" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qworried_losing_housing">
+    <div class="col6 fldworried_losing_housing qworried_losing_housing"><span class="qworried_losing_housing"><label class="label-top">||FIELDTAG worried_losing_housing||If client is currently housed, are they worried about losing their housing within the next year?||ENDFIELDTAG||</label></span><span class="qworried_losing_housing"><input type="radio" name="worried_losing_housing" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="worried_losing_housing" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col6"><label class="label-top">For FY25 only, please answer the following question.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col6 qhomeless_housing_insecure_eto">
+    <div class="col6 fldhomeless_housing_insecure_eto qhomeless_housing_insecure_eto"><span class="qhomeless_housing_insecure_eto required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_housing_insecure_eto required-field-label"><label class="label-top">||FIELDTAG homeless_housing_insecure_eto||Is client currently experiencing housing instability or homelessness?||ENDFIELDTAG||</label></span><span class="qhomeless_housing_insecure_eto"><input type="radio" name="homeless_housing_insecure_eto" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="homeless_housing_insecure_eto" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="homeless_housing_insecure_eto" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
 

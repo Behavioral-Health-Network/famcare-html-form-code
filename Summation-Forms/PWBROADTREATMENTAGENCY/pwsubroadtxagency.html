@@ -1,106 +1,16 @@
 <html>
 
 <head>
-<title>BCR Presenting Concerns</title>
+<title>SU Treatment Agency</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
-||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
-<!-- FIELDOVERRIDE(BEHAVIORAL_HEALTH,10,10) -->
-<!-- FIELDOVERRIDE(PHYSICAL_HEALTH,10,10) -->
-<!-- FIELDOVERRIDE(HOUSING,10,10) -->
-<!-- FIELDOVERRIDE(SPIRITUAL_CARE,10,10) -->
-<!-- FIELDOVERRIDE(MATERNAL_HEALTH,10,10) -->
-<!-- FIELDOVERRIDE(SOCIAL_SERVICES,10,10) -->
-<!-- FIELDOVERRIDE(OTHER,10,10) -->
  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
 <PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
 
 <script language="JavaScript">
-
-/**
- * Waits for a DOM element to be available before executing a callback function.
- * Useful for dynamically loaded or conditionally rendered form fields that might not
- * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
- *
- * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
- * @param {function} callback - The function to run once the element is found.
- * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
- * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
- */
-
-function waitForElement(selector, callback) {
-  const el = document.querySelector(selector);
-  if (el) {
-    callback(el);
-  } else {
-    window.requestAnimationFrame(() => waitForElement(selector, callback));
-  }
-}
-
-// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
-// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
-// if the function is run via startup() too early and does not run again dynamically upon change.
-// const observer = new MutationObserver(() => {
-//     const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
-    
-//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
-
-//     if (!dropdowns || dropdowns.length === 0) {
-//         console.error('No valid dropdowns found. Skipping updateReportFields.');
-//         return;
-//     }
-
-//     dropdowns.forEach(dropdown => {
-//         if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-//             console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
-
-//             dropdown.addEventListener('change', () => {
-//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
-//                 updateReportFields([dropdown.id]); // Ensure it's correctly passed as an array
-//             });
-
-//             updateReportFields([dropdown.id]);
-
-//             dropdown.dataset.initialized = true;
-//         }
-//     });
-
-//     if (dropdowns.length > 0) {
-//         observer.disconnect();
-//     }
-// });
-
-// observer.observe(document.body, { childList: true, subtree: true });
-
-waitForElement('#bcr_presenting_concerns', (dropdown) => {
-  if (!dropdown.dataset.initialized) {
-    console.log(`Initializing dropdown: ${dropdown.id}`);
-    
-    dropdown.addEventListener('change', () => {
-      updateReportFields([dropdown.id]);
-    });
-
-    updateReportFields([dropdown.id]); // Initial update on load
-
-    dropdown.dataset.initialized = true;
-  }
-});
-
-waitForElement('#bcr_ref_placed_bh_subtype', (dropdown) => {
-  if (!dropdown.dataset.initialized) {
-    dropdown.addEventListener('change', () => {
-      updateReportFields([dropdown.id]);
-    });
-    updateReportFields([dropdown.id]);
-    dropdown.dataset.initialized = true;
-  }
-});
-
-// Repeat for any other relevant dropdowns
-
 
 var genpdf='true';
 
@@ -125,39 +35,32 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('bcr_presenting_concerns');
+    setrequire('epicc_su_tx_agency');
+    setrequire('pfh_tx_facility');
+    setrequire('start_date');
+    setrequire('su_tx_intake');
+    setrequire('intake_not_completed');
+    setrequire('coach_attend_intake');
+    setrequire('ces_attend_intake')
 
-	checkhideall();
+    checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
-
-   // Call the function with the names of the tables you want to process.
-   // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
-  
-  dropdowns.forEach(dropdown => {
-    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-      console.log(`Initializing dropdown: ${dropdown.id}`);
-
-      // Add the onchange event listener
-      dropdown.addEventListener('change', () => {
-        updateReportFields([dropdown.id]); // Pass the specific table ID
-      });
-
-      // Initialize the table's hidden fields
-      updateReportFields([dropdown.id]);
-
-      // Mark as initialized to avoid redundant listeners
-      dropdown.dataset.initialized = true;
-    }
-  });
 }
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.bcr_presenting_concerns,"other_need_ref","010");
-
+      checkhide(f.epicc_su_tx_agency,"pfh_tx_facility","013")
+      checkhide(f.epicc_su_tx_agency,"if_other_specify","012");
+      checkhide(f.su_tx_intake,"su_tx_intake_date","Yes");
+      checkhide(f.su_tx_intake,"was_intake_completed","Yes");
+      checkhide(f.was_intake_completed,"intake_not_completed","No");
+      checkhide(f.intake_not_completed,"intake_not_completed_other","Other");
+      checkhide(f.su_tx_intake,"coach_attend_intake","Yes");
+      checkhide(f.coach_attend_intake,"coach_not_attend_intake","No");
+      checkhide(f.su_tx_intake,"ces_attend_intake","Yes");
+      checkhide(f.ces_attend_intake,"ces_not_attend_intake","No");
 }
 
 function addEventListeners(){
@@ -387,7 +290,12 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('bcr_presenting_concerns') && gvtfieldvalue('bcr_presenting_concerns')=='') {edesc=edesc+`Must specify a value for Presenting Concerns\n`; seterror("bcr_presenting_concerns");}
+  if (!hiddenfield('epicc_su_tx_agency') && gvtfieldvalue('epicc_su_tx_agency')=='') {edesc=edesc+`Must specify a value for Referred Treatment Agency\n`; seterror("epicc_su_tx_agency");}
+  if (!hiddenfield('start_date') && gvtfieldvalue('start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("start_date");}
+  if (!hiddenfield('su_tx_intake') && gvtfieldvalue('su_tx_intake')==''){edesc=edesc+`Must specify a value for if client attend a new intake\n`; seterror("su_tx_intake");}
+  if (!hiddenfield('intake_not_completed') && gvtfieldvalue('intake_not_completed')==''){edesc=edesc+`Must specify a value for why intake was not completed\n`; seterror("intake_not_completed");}
+  if (!hiddenfield('coach_attend_intake') && gvtfieldvalue('coach_attend_intake')==''){edesc=edesc+`Must specify a value for if the epicc coach attend an intake\n`; seterror("coach_attend_intake");}
+  if (!hiddenfield('ces_attend_intake') && gvtfieldvalue('ces_attend_intake')==''){edesc=edesc+`Must specify a value for if the CES attend an intake\n`; seterror("ces_attend_intake");}
 
     return edesc;
 }
@@ -581,65 +489,12 @@ function updatesignatures(){
    return;
 }
 
-/**
- * Updates hidden fields corresponding to selected dropdown options for one or more tables.
- * 
- * This function dynamically updates the values of hidden fields based on the selected options
- * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
- * identified by its ID, and hidden fields are linked to the dropdown options via their
- * `value` attributes and `data-source` attributes.
- * 
- * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
- *                           Example: ['bcr_presenting_concerns', 'table2', 'table3'].
- */
- function updateReportFields(tableIds) {
-  // Iterate over each table ID provided
-
-  tableIds.forEach(id => {
-    // Locate the dropdown element for the current table ID
-    const dropdown = document.querySelector(`#${id}`);
-    
-    // Ensure the dropdown exists before proceeding
-    if (dropdown) {
-      console.log(`Processing dropdown for table ID: ${id}`);
-
-      // Loop through all options in the dropdown
-      dropdown.querySelectorAll('option').forEach(option => {
-        // Skip placeholder options or options without a value
-        if (option.value === '') return;
-
-        // Locate the hidden field linked to this option using its value and data-source attribute
-        const reportField = document.querySelector(
-          `.report-field.value-${option.value}[data-source="${id}"]`
-        );
-
-        // Log the mapping for debugging purposes
-        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
-        console.log(`Hidden field found:`, reportField);
-
-        // If the corresponding hidden field exists, update its value
-        if (reportField) {
-          // Set the value to '1' if the option is selected, otherwise set it to '0'
-          reportField.value = option.selected ? '1' : '0';
-          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
-        } else {
-          // Log a warning if no hidden field matches the option
-          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
-        }
-      });
-    } else {
-      // Log an error if the dropdown for the specified table ID is not found
-      console.error(`Dropdown with ID ${id} not found in the DOM.`);
-    }
-  });
-}
-
-
 </script>
 
 <script language="VBScript">
 </script>
 
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
 
 <body onLoad="startup()">
 <!-- Field Override Area -->
@@ -649,7 +504,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWBCRPresentingConcerns" />
+    <input type="hidden" name="TABLENAME" value="PWSUBroadTreatmentAgency" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -661,17 +516,8 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
-  <!-- used by updateReportFields -->
-  <input type="hidden" name="behavioral_health_need" value="||FIELDVALUE behavioral_health_need||" class="report-field value-001" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="physical_health_need" value="||FIELDVALUE physical_health_need||" class="report-field value-002" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="housing_need" value="||FIELDVALUE housing_need||" class="report-field value-003" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="spiritual_care_need" value="||FIELDVALUE spiritual_care_need||" class="report-field value-004" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="maternal_health_need" value="||FIELDVALUE maternal_health_need||" class="report-field value-006" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="social_services_need" value="||FIELDVALUE social_services_need||" class="report-field value-009" data-source="bcr_presenting_concerns">
-  <input type="hidden" name="other_need" value="||FIELDVALUE other_need||" class="report-field value-010" data-source="bcr_presenting_concerns">
-
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>BCR Presenting Concerns</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>SU Treatment Agency</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -683,7 +529,7 @@ function updatesignatures(){
     </div>
 <div class="deflist">
 <div class="entire">
-<div class="col12 term">Presenting Concerns</div>
+<div class="col12 term"></div>
 </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
@@ -691,19 +537,110 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldbcr_presenting_concerns qbcr_presenting_concerns">
-    <div class="col12 fldbcr_presenting_concerns qbcr_presenting_concerns"><span class="qbcr_presenting_concerns required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_presenting_concerns required-field-label"><label class="label-top">Presenting Concerns<br>(Hold down Ctrl to select multiple)</label></span><span class="qbcr_presenting_concerns"><select size="15" name="bcr_presenting_concerns" id="bcr_presenting_concerns" onchange="checkhideall()" multiple>
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_presenting_concerns^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_presenting_concerns||
-
-<!-- FIELDOVERRIDE(bcr_presenting_concerns,10,200) -->
-</span></div>
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldother_need_ref qother_need_ref">
-    <div class="col12 fldother_need_ref qother_need_ref"><span class="qother_need_ref"><label class="label-top">||FIELDTAG other_need_ref||If "Other", Specify||ENDFIELDTAG||</label></span><span class="qother_need_ref"><input type="text" name="other_need_ref" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12"><label class="label-top">Select the treatment agency from the drop down. Enter the start date. </label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_su_tx_agency qepicc_su_tx_agency">
+    <div class="col12 fldepicc_su_tx_agency qepicc_su_tx_agency"><span class="qepicc_su_tx_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_su_tx_agency required-field-label"><label class="label-top">Referred Treatment Agency</label></span><span class="qepicc_su_tx_agency"><select size="1" name="epicc_su_tx_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') AND is_facility='0' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_su_tx_agency||
+</span></div>
      </div>
   </div>
+ <div class="entire">
+    <div class="col12 fldpfh_tx_facility qpfh_tx_facility">
+    <div class="col12 fldpfh_tx_facility qpfh_tx_facility"><span class="qpfh_tx_facility required-label">||PWRequiredFieldRequiredText||</span><span class="qpfh_tx_facility required-field-label"><label class="label-top">Preferred Family Healthcare Location</label></span><span class="qpfh_tx_facility"><select size="1" name="pfh_tx_facility" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') AND is_facility='1' AND facility_location='PFH' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_su_tx_agency||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldif_other_specify qif_other_specify">
+    <div class="col12 fldif_other_specify qif_other_specify"><span class="qif_other_specify"><label class="label-top">||FIELDTAG if_other_specify||If "Other", Specify||ENDFIELDTAG||</label></span><span class="qif_other_specify"><input type="text" name="if_other_specify" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qstart_date">
+    <div class="col6 fldstart_date qstart_date"><span class="qstart_date required-label">||PWRequiredFieldRequiredText||</span><span class="qstart_date required-field-label"><label class="label-top">||FIELDTAG start_date||Start Date||ENDFIELDTAG||</label></span><span class="qstart_date"><input type="text" name="start_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+    <div class="col6 qend_date">
+    <div class="col6 fldend_date qend_date"><span class="qend_date"><label class="label-top">||FIELDTAG end_date||End Date||ENDFIELDTAG||</label></span><span class="qend_date"><input type="text" name="end_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldsu_tx_intake qsu_tx_intake">
+    <div class="col12 fldsu_tx_intake qsu_tx_intake"><span class="qsu_tx_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_tx_intake required-field-label"><label class="label-top">||FIELDTAG su_tx_intake||Did client attend a new intake?||ENDFIELDTAG||</label></span><span class="qsu_tx_intake"><input type="radio" name="su_tx_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="su_tx_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    </div>
+   </div>
+  <div class="entire">
+    <div class="col12 qsu_tx_intake_date">
+        <div class="col12 fldsu_tx_intake_date"><span class="qsu_tx_intake_date"><label class="label-top">||FIELDTAG su_tx_intake_date||Intake Date||ENDFIELDTAG||</label></span><span class="qsu_tx_intake_date"><input type="text" name="su_tx_intake_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+         </div>
+   </div>
+   <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+     <div class="col12 fldwas_intake_completed qwas_intake_completed">
+        <div class="col12 fldwas_intake_completed qwas_intake_completed"><span class="qwas_intake_completed"><label class="label-top">||FIELDTAG was_intake_completed||Was intake completed?||ENDFIELDTAG||</label></span><span class="qwas_intake_completed"><input type="radio" name="was_intake_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="was_intake_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+         </div>
+     </div>    
+    <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+    </div>
+    <div class="entire">
+        <div class="col12 fldintake_not_completed qintake_not_completed">
+        <div class="col12 fldintake_not_completed qintake_not_completed"><span class="qintake_not_completed required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_not_completed required-field-label"><label class="label-top">||FIELDTAG intake_not_completed||Why was intake not completed?||ENDFIELDTAG||</label></span><span class="qintake_not_completed"><select size="1"  name="intake_not_completed" onchange="checkhideall()" >
+    <option value="">(please select)</option>
+    <option value="Agency Refused">Agency Refused</option>
+    <option value="Client Declined">Client Declined</option>
+    <option value="Agency Refused ">Client Medically Unstable For Intake</option>
+    <option value="Criteria Not Met For Treatment">Criteria Not Met For Treatment</option>
+    <option value="Necessary Providers Unavailable">Necessary Providers Unavailable</option>
+    <option value="Scheduling Or Timing Issue">Scheduling Or Timing Issue</option>
+    <option value="Other">Other</option>
+    
+    </select></span></div>
+         </div>
+        </div>
+      <div class="col6 qintake_not_completed_other">
+        <div class="col6 fldintake_not_completed_other qintake_not_completed_other"><span class="qintake_not_completed_other"><label class="label-top">||FIELDTAG intake_not_completed_other||Other Reason Intake Wasn't Completed||ENDFIELDTAG||</label></span><span class="qintake_not_completed_other"><textarea name="intake_not_completed_other" class="autoexpand"></textarea></span></div>
+      <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+    </div>
+      <div class="entire">
+        <div class="col12 fldcoach_attend_intake qcoach_attend_intake">
+        <div class="col12 fldcoach_attend_intake qcoach_attend_intake"><span class="qcoach_attend_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qcoach_attend_intake-field-label"><label class="label-top">||FIELDTAG coach_attend_intake||Did EPICC coach attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_attend_intake"><input type="radio" name="coach_attend_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="coach_attend_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+       </div>
+       <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+      <div class="col6 qcoach_not_attend_intake">
+        <div class="col6 fldcoach_not_attend_intake qcoach_not_attend_intake"><span class="qcoach_not_attend_intake"><label class="label-top">||FIELDTAG coach_not_attend_intake||Why did EPICC coach not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_not_attend_intake"><textarea name="coach_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
+      <div class="entire">
+        <div class="col12 fldces_attend_intake qces_attend_intake">
+        <div class="col12 fldces_attend_intake qces_attend_intake"><span class="qces_attend_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qces_attend_intake-field-label"><label class="label-top">||FIELDTAG ces_attend_intake||Did CES attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_attend_intake"><input type="radio" name="ces_attend_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ces_attend_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+       </div>
+       <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+      <div class="col6 qces_not_attend_intake">
+        <div class="col6 fldces_not_attend_intake qces_not_attend_intake"><span class="qces_not_attend_intake"><label class="label-top">||FIELDTAG ces_not_attend_intake||Why did CES not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_not_attend_intake"><textarea name="ces_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
+
 
 </div>
 </div>

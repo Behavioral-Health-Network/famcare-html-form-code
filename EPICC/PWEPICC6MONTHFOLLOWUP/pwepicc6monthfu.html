@@ -297,7 +297,7 @@ function validateform(scope='all') {
   if (!hiddenfield('treatment_path_six_month') && gvtfieldvalue('treatment_path_six_month')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_six_month");}
   if (!hiddenfield('rc_only_client_attend_first_appt_coach_six_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_six_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_six_month");}
   if (!hiddenfield('rc_only_last_date_communication_six_month') && gvtfieldvalue('rc_only_last_date_communication_six_month')=='') {edesc=edesc+`Must specify a value for Date of Last Communication\n`; seterror("rc_only_last_date_communication_six_month");}
-  if (!hiddenfield('client_attend_intake_appt_six_month') && gvtfieldvalue('client_attend_intake_appt_six_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_six_month");}
+  // if (!hiddenfield('client_attend_intake_appt_six_month') && gvtfieldvalue('client_attend_intake_appt_six_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_six_month");}
   if (!hiddenfield('mat_prescribed_physician_appt_six_month') && gvtfieldvalue('mat_prescribed_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_six_month");}
   if (!hiddenfield('what_mat_physician_appt_six_month') && gvtfieldvalue('what_mat_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_six_month");}
   if (!hiddenfield('program_participation_six_month') && gvtfieldvalue('program_participation_six_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_six_month");}
@@ -533,6 +533,9 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
+<div class="deflist">
+<div class="entire">
+</div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

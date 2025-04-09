@@ -80,8 +80,6 @@ $("#gvttimetime_referral_placed").timepicker({  'step':1, 'scrollDefault': 'now'
     setrequire('time_referral_placed');
 $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault': 'now'});
     setrequire('time_recovery_coach_arrival');
-$("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault': 'now'});
-    setrequire('time_recovery_coach_response');
     setrequire('epicc_pro_or_core_ic');
     setrequire('program_participation_ic');
     setrequire('treatment_path_ic');
@@ -394,7 +392,6 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('time_referral_placed') && gvtfieldvalue('time_referral_placed')=='') {edesc=edesc+`Must specify a value for Time of Referral Call\n`; seterror("time_referral_placed");}
   if (!hiddenfield('time_recovery_coach_arrival') && gvtfieldvalue('time_recovery_coach_arrival')=='') {edesc=edesc+`Must specify a value for Time of Recovery Coach Arrival\n`; seterror("time_recovery_coach_arrival");}
-  if (!hiddenfield('time_recovery_coach_response') && gvtfieldvalue('time_recovery_coach_response')=='') {edesc=edesc+`Must specify a value for Time of Recovery Coach Response\n`; seterror("time_recovery_coach_response");}
   if (!hiddenfield('epicc_pro_or_core_ic') && gvtfieldvalue('epicc_pro_or_core_ic')=='') {edesc=edesc+`Must specify a value for Referral Type\n`; seterror("epicc_pro_or_core_ic");}
   if (!hiddenfield('program_participation_ic') && gvtfieldvalue('program_participation_ic')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_ic");}
   if (!hiddenfield('treatment_path_ic') && gvtfieldvalue('treatment_path_ic')=='') {edesc=edesc+`Must specify a value for What is client's current anticipated service path/treatment type?\n`; seterror("treatment_path_ic");}
@@ -711,6 +708,8 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
+<div class="deflist">
+<div class="entire">
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -724,9 +723,6 @@ function updatesignatures(){
      </div>
     <div class="col4 qtime_recovery_coach_arrival">
     <div class="col4 fldtime_recovery_coach_arrival qtime_recovery_coach_arrival"><span class="qtime_recovery_coach_arrival required-label">||PWRequiredFieldRequiredText||</span><span class="qtime_recovery_coach_arrival required-field-label"><label class="label-top">||FIELDTAG time_recovery_coach_arrival||Time of Recovery Coach Arrival||ENDFIELDTAG||</label></span><span class="qtime_recovery_coach_arrival"><input type="text" name="time_recovery_coach_arrival" size="20" id="gvttimetime_recovery_coach_arrival" onchange="checkhideall()"></span></div>
-     </div>
-    <div class="col4 qtime_recovery_coach_response">
-    <div class="col4 fldtime_recovery_coach_response qtime_recovery_coach_response"><span class="qtime_recovery_coach_response required-label">||PWRequiredFieldRequiredText||</span><span class="qtime_recovery_coach_response required-field-label"><label class="label-top">||FIELDTAG time_recovery_coach_response||Time of Recovery Coach Response||ENDFIELDTAG||</label></span><span class="qtime_recovery_coach_response"><input type="text" name="time_recovery_coach_response" size="20" id="gvttimetime_recovery_coach_response" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">

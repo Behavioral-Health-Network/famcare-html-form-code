@@ -145,13 +145,13 @@ function checkhideall() {
    checkhide(f.program_participation_ic,"status_unable_contact_transfer","005,010");
    checkhide(f.program_participation_ic,"why_not_meet_prog_eligibility_ic","002");
    checkhide(f.why_not_meet_prog_eligibility_ic,"non_opioid_substance","Non-Opioid User");
-   checkhide(f.program_participation_ic,"treatment_path_ic","001");
+   checkhide(f.program_participation_ic,"treatment_path_ic","019");
    checkhide(f.who_initiated_referral,"community_referral_source_ic","Community");
    checkhide(f.program_participation_ic,"reason_ic_not_success","002,003,004,005,006,007,011");
    checkhide(f.consent_crc_referral_ic,"reason_consent_refused_crc_ic","No");
    checkhide(f.epicc_opioids_of_use,"other_opioid_ic","006");
    checkhide(f.overdose_event_referral,"overdose_location","Yes");
-   checkhide(f.overdose_location,"specify_other_location","Other ");
+   checkhide(f.overdose_location,"specify_other_location","Other");
    checkhide(f.overdose_event_referral,"first_overdose","Yes");
    checkhide(f.first_overdose,"num_past_overdoses","No");
    checkhide(f.first_overdose,"most_recent_past_overdose_date","No");
@@ -161,7 +161,7 @@ function checkhideall() {
    checkhide(f.overdose_ed_provided,"reason_oe_not_provided","No");
    checkhide(f.reason_oe_not_provided,"if_other_specify","Other");
    checkhide(f.narcan_distributed,"reason_narcan_not_distributed","No");
-   checkhide(f.reason_narcan_not_distributed,"no_narcan_exp","Other ");
+   checkhide(f.reason_narcan_not_distributed,"no_narcan_exp","Other");
 
 }
 
@@ -711,6 +711,9 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
+    <div class="deflist">
+        <div class="entire">
+        </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

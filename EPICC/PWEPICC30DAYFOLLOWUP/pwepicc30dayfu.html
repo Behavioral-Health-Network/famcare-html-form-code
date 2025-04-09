@@ -308,7 +308,6 @@ function validateform(scope='all') {
   if (!hiddenfield('if_transfer_contact_transfer_region_success_thirty_day') && gvtfieldvalue('if_transfer_contact_transfer_region_success_thirty_day')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_thirty_day");}
   if (!hiddenfield('client_status_thirty_day') && gvtfieldvalue('client_status_thirty_day')=='') {edesc=edesc+`Must specify a value for Status\n`; seterror("client_status_thirty_day");}
   if (!hiddenfield('date_transferred_reengagement_specialist_thirty_day') && gvtfieldvalue('date_transferred_reengagement_specialist_thirty_day')=='') {edesc=edesc+`Must specify a value for Date of Transfer to Re-Engagement Specialist\n`; seterror("date_transferred_reengagement_specialist_thirty_day");}
-  if (!hiddenfield('preg_post_part_thirty_days') && gvtfieldvalue('preg_post_part_thirty_days')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant or postpartum? \n`; seterror("preg_post_part_thirty_days");}
 
     return edesc;
 }
@@ -540,6 +539,9 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
+    <div class="deflist">
+        <div class="entire">
+        </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

@@ -82,7 +82,6 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('date_taken_caregiver_needs');
     setrequire('caregiver_needs');
     setrequire('caregiver_need_basic_status');
     setrequire('caregiver_need_crisis_services_status');
@@ -370,7 +369,6 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('date_taken_caregiver_needs') && gvtfieldvalue('date_taken_caregiver_needs')=='') {edesc=edesc+`Must specify a value for Date Taken\n`; seterror("date_taken_caregiver_needs");}
   if (!hiddenfield('caregiver_needs') && gvtfieldvalue('caregiver_needs')=='') {edesc=edesc+`Must specify a value for Caregiver Program Needs\n`; seterror("caregiver_needs");}
   if (!hiddenfield('caregiver_need_basic_status') && gvtfieldvalue('caregiver_need_basic_status')=='') {edesc=edesc+`Must specify a value for Basic Needs Assistance Referral Status \n`; seterror("caregiver_need_basic_status");}
   if (!hiddenfield('caregiver_need_crisis_services_status') && gvtfieldvalue('caregiver_need_crisis_services_status')=='') {edesc=edesc+`Must specify a value for Crises Services Referral Status\n`; seterror("caregiver_need_crisis_services_status");}
@@ -690,11 +688,6 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 flddate_taken_caregiver_needs qdate_taken_caregiver_needs">
-    <div class="col12 flddate_taken_caregiver_needs qdate_taken_caregiver_needs"><span class="qdate_taken_caregiver_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_taken_caregiver_needs required-field-label"><label class="label-top">||FIELDTAG date_taken_caregiver_needs||Date Taken||ENDFIELDTAG||</label></span><span class="qdate_taken_caregiver_needs"><input type="text" name="date_taken_caregiver_needs" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
 <div class="entire">

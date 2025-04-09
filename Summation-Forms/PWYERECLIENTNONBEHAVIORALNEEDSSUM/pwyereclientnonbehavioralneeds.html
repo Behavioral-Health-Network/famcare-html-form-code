@@ -82,7 +82,6 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('date_taken_youth_needs');
     setrequire('youth_needs');
     setrequire('youth_need_basic_status');
     setrequire('youth_need_crisis_status');
@@ -370,8 +369,7 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('date_taken_youth_needs') && gvtfieldvalue('date_taken_youth_needs')=='') {edesc=edesc+`Must specify a value for Date Taken\n`; seterror("date_taken_youth_needs");}
-  if (!hiddenfield('youth_needs') && gvtfieldvalue('youth_needs')=='') {edesc=edesc+`Must specify a value for YERE Youth Program Needs\n`; seterror("youth_needs");}
+  if (!hiddenfield('youth_needs') && gvtfieldvalue('youth_needs')=='') {edesc=edesc+`Must specify a value for Youth Program Needs\n`; seterror("youth_needs");}
   if (!hiddenfield('youth_need_basic_status') && gvtfieldvalue('youth_need_basic_status')=='') {edesc=edesc+`Must specify a value for Basic Needs Referral Status \n`; seterror("youth_need_basic_status");}
   if (!hiddenfield('youth_need_crisis_status') && gvtfieldvalue('youth_need_crisis_status')=='') {edesc=edesc+`Must specify a value for Crisis Services Referral Status \n`; seterror("youth_need_crisis_status");}
   if (!hiddenfield('youth_need_dental_status') && gvtfieldvalue('youth_need_dental_status')=='') {edesc=edesc+`Must specify a value for Dental Care Referral Status \n`; seterror("youth_need_dental_status");}
@@ -691,17 +689,12 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
- <div class="entire">
-    <div class="col12 flddate_taken_youth_needs qdate_taken_youth_needs">
-    <div class="col12 flddate_taken_youth_needs qdate_taken_youth_needs"><span class="qdate_taken_youth_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_taken_youth_needs required-field-label"><label class="label-top">||FIELDTAG date_taken_youth_needs||Date Taken||ENDFIELDTAG||</label></span><span class="qdate_taken_youth_needs"><input type="text" name="date_taken_youth_needs" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
 <div class="entire">
 <div class="col12 term">YERE Youth Program Needs</div>
 </div>
  <div class="entire">
     <div class="col12 fldyouth_needs qyouth_needs">
-    <div class="col12 fldyouth_needs qyouth_needs"><span class="qyouth_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qyouth_needs required-field-label"><label class="label-top">YERE Youth Program Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qyouth_needs"><select size="15" name="youth_needs" onchange="checkhideall()" multiple>
+    <div class="col12 fldyouth_needs qyouth_needs"><span class="qyouth_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qyouth_needs required-field-label"><label class="label-top">Youth Program Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qyouth_needs"><select size="15" name="youth_needs" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_youth_program_needs] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE youth_needs^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_youth_program_needs||
 

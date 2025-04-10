@@ -302,7 +302,7 @@ function validateform(scope='all') {
   if (!hiddenfield('num_ed_visits_past_three_months_three_month') && gvtfieldvalue('num_ed_visits_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_three_month");}
   if (!hiddenfield('num_hosp_past_three_months_three_month') && gvtfieldvalue('num_hosp_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_three_month");}
   if (!hiddenfield('num_leo_contacts_past_three_months_three_month') && gvtfieldvalue('num_leo_contacts_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_three_month");}
-  if (!hiddenfield('involved_jj_system_past_three_months_three_month') && gvtfieldvalue('involved_jj_system_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last 3 months?\n`; seterror("involved_jj_system_past_three_months_three_month");}
+  if (!hiddenfield('involved_jj_system_past_three_months_three_month') && gvtfieldvalue('involved_jj_system_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last three months?\n`; seterror("involved_jj_system_past_three_months_three_month");}
   if (!hiddenfield('attend_school_any_time_three_months_three_month') && gvtfieldvalue('attend_school_any_time_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Has youth attended school past three months?\n`; seterror("attend_school_any_time_three_months_three_month");}
   if (!hiddenfield('seen_pcp_past_twelve_months_three_month') && gvtfieldvalue('seen_pcp_past_twelve_months_three_month')=='') {edesc=edesc+`Must specify a value for Has a primary care physician been seen in the past 12 months?\n`; seterror("seen_pcp_past_twelve_months_three_month");}
   if (!hiddenfield('school_change_three_month') && gvtfieldvalue('school_change_three_month')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_three_month");}
@@ -557,15 +557,15 @@ function updatesignatures(){
     <div class="col4 fldother_contact_method_three_month qother_contact_method_three_month"><span class="qother_contact_method_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_three_month required-field-label"><label class="label-top">||FIELDTAG other_contact_method_three_month||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_three_month"><textarea name="other_contact_method_three_month" class="autoexpand"></textarea></span></div>
      </div>
   </div>
-<div class="entire">
-<div class="col12 term">Housing Status</div>
-</div>
- <div class="entire">
-    <div class="col6"><label class="label-top">Click Add to complete housing.</label></div>
-  </div>
- <div class="entire">
-    <div class="col6">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-  </div>
+  <div class="entire">
+    <div class="col12 term">Housing Status</div>
+    </div>
+     <div class="entire">
+        <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current housing status.</i></label></div>
+      </div>
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+      </div>
 <div class="entire">
 </div>
  <div class="entire">
@@ -589,6 +589,12 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">School</div>
 </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current school info, including "Start Date". If client has switched to a new school click "View/Edit to add an "End Date" to the current school and then create a new entry.</i></label></div>
+  </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldchanged_school_three_month qchanged_school_three_month">
     <div class="col12 fldchanged_school_three_month qchanged_school_three_month"><span class="qchanged_school_three_month"><label class="label-top">||FIELDTAG changed_school_three_month||Has client changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qchanged_school_three_month"><input type="radio" name="changed_school_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="changed_school_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -597,15 +603,24 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
   </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldattend_school_any_time_three_months_three_month qattend_school_any_time_three_months_three_month">
     <div class="col12 fldattend_school_any_time_three_months_three_month qattend_school_any_time_three_months_three_month"><span class="qattend_school_any_time_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_three_month||Has youth attended school past three months?||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_three_month"><input type="radio" name="attend_school_any_time_three_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldlast_grade_lvl_completed_three_month qlast_grade_lvl_completed_three_month">
     <div class="col12 fldlast_grade_lvl_completed_three_month qlast_grade_lvl_completed_three_month"><span class="qlast_grade_lvl_completed_three_month"><label class="label-top">||FIELDTAG last_grade_lvl_completed_three_month||Last Grade Completed||ENDFIELDTAG||</label></span><span class="qlast_grade_lvl_completed_three_month"><input type="text" name="last_grade_lvl_completed_three_month" size="10" onchange="checkhideall()"></span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 fldhave_high_school_equivalency_three_month qhave_high_school_equivalency_three_month">
@@ -632,13 +647,19 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldinvolved_jj_system_past_three_months_three_month qinvolved_jj_system_past_three_months_three_month">
-    <div class="col12 fldinvolved_jj_system_past_three_months_three_month qinvolved_jj_system_past_three_months_three_month"><span class="qinvolved_jj_system_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qinvolved_jj_system_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG involved_jj_system_past_three_months_three_month||Has youth had any involvement in the juvenile justice system in the last 3 months?||ENDFIELDTAG||</label></span><span class="qinvolved_jj_system_past_three_months_three_month"><input type="radio" name="involved_jj_system_past_three_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_three_month" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldinvolved_jj_system_past_three_months_three_month qinvolved_jj_system_past_three_months_three_month"><span class="qinvolved_jj_system_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qinvolved_jj_system_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG involved_jj_system_past_three_months_three_month||Has youth had any involvement in the juvenile justice system in the last three months?||ENDFIELDTAG||</label></span><span class="qinvolved_jj_system_past_three_months_three_month"><input type="radio" name="involved_jj_system_past_three_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="involved_jj_system_past_three_months_three_month" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 flddjo_dys_sro_involvement_three_month qdjo_dys_sro_involvement_three_month">
     <div class="col12 flddjo_dys_sro_involvement_three_month qdjo_dys_sro_involvement_three_month"><span class="qdjo_dys_sro_involvement_three_month"><label class="label-top">||FIELDTAG djo_dys_sro_involvement_three_month||Specify Type of Involvement||ENDFIELDTAG||</label></span><span class="qdjo_dys_sro_involvement_three_month"><input type="checkbox" name="involvement_sro_three_month" value="ON" onclick="checkhideall()">Contact with School Resource Officer&nbsp;&nbsp;<input type="checkbox" name="involvement_djo_three_month" value="ON" onclick="checkhideall()">DJO&nbsp;&nbsp;<input type="checkbox" name="involvement_dys_three_month" value="ON" onclick="checkhideall()">DYS&nbsp;&nbsp;<input type="checkbox" name="involvement_secure_detention_three_month" value="ON" onclick="checkhideall()">Secure Detention&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
   </div>
 <div class="entire">
 </div>
@@ -646,6 +667,9 @@ function updatesignatures(){
     <div class="col12 fldseen_pcp_past_twelve_months_three_month qseen_pcp_past_twelve_months_three_month">
     <div class="col12 fldseen_pcp_past_twelve_months_three_month qseen_pcp_past_twelve_months_three_month"><span class="qseen_pcp_past_twelve_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qseen_pcp_past_twelve_months_three_month required-field-label"><label class="label-top">||FIELDTAG seen_pcp_past_twelve_months_three_month||Has a primary care physician been seen in the past 12 months?||ENDFIELDTAG||</label></span><span class="qseen_pcp_past_twelve_months_three_month"><input type="radio" name="seen_pcp_past_twelve_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="seen_pcp_past_twelve_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 fldif_pcp_what_provider_three_month qif_pcp_what_provider_three_month">
@@ -669,18 +693,38 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">Youth Program Needs</div>
 </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+  </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
   </div>
 <div class="entire">
 </div>
+<div class="entire">
+    <div class="col12 term">Caregiver Program Needs</div>
+    </div>
+    <div class="entire">
+        <div class="col12"><label class="label-top"><i>Click "Add" below to enter the caregiver's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+      </div>
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
+      </div>
+    <div class="entire">
+    </div>
  <div class="entire">
     <div class="col12 fldattend_new_bh_intake_between_thirty_days_three_month qattend_new_bh_intake_between_thirty_days_three_month">
     <div class="col12 fldattend_new_bh_intake_between_thirty_days_three_month qattend_new_bh_intake_between_thirty_days_three_month"><span class="qattend_new_bh_intake_between_thirty_days_three_month"><label class="label-top">||FIELDTAG attend_new_bh_intake_between_thirty_days_three_month||Did youth attend a new behavioral health intake in the last thirty days?||ENDFIELDTAG||</label></span><span class="qattend_new_bh_intake_between_thirty_days_three_month"><input type="radio" name="attend_new_bh_intake_between_thirty_days_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_new_bh_intake_between_thirty_days_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">IF YES, PLEASE COMPLETE/UPDATE BEHAVIORAL HEALTH SERVICES FORM IMMEDIATELY FOLLOWING COMPLETION OF THIS FORM.</label></div>
+    <div class="col12"><label class="label-top"><i>IF YES, PLEASE COMPLETE/UPDATE BEHAVIORAL HEALTH SERVICES FORM IMMEDIATELY FOLLOWING COMPLETION OF THIS FORM.</i></label></div>
+  </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
   </div>
 <div class="entire">
 </div>
@@ -700,23 +744,24 @@ function updatesignatures(){
     <div class="col6 fldcasyere_collab_staffing_three_month qcasyere_collab_staffing_three_month"><span class="qcasyere_collab_staffing_three_month"><label class="label-top">||FIELDTAG casyere_collab_staffing_three_month||Was youth/family case staffed in a YERE collaborative staffing?||ENDFIELDTAG||</label></span><span class="qcasyere_collab_staffing_three_month"><input type="radio" name="casyere_collab_staffing_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="casyere_collab_staffing_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
-<div class="entire">
-<div class="col12 term">Caregiver Program Needs</div>
-</div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
   </div>
-<div class="entire">
-</div>
  <div class="entire">
     <div class="col12 fldactively_engaged_bhs_past_thirty_days_three_month qactively_engaged_bhs_past_thirty_days_three_month">
     <div class="col12 fldactively_engaged_bhs_past_thirty_days_three_month qactively_engaged_bhs_past_thirty_days_three_month"><span class="qactively_engaged_bhs_past_thirty_days_three_month"><label class="label-top">||FIELDTAG actively_engaged_bhs_past_thirty_days_three_month||Is youth actively engaged in  behavioral services in past 30 days?||ENDFIELDTAG||</label></span><span class="qactively_engaged_bhs_past_thirty_days_three_month"><input type="radio" name="actively_engaged_bhs_past_thirty_days_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="actively_engaged_bhs_past_thirty_days_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldyere_services_extended_beyond_ninety_days qyere_services_extended_beyond_ninety_days">
     <div class="col12 fldyere_services_extended_beyond_ninety_days qyere_services_extended_beyond_ninety_days"><span class="qyere_services_extended_beyond_ninety_days"><label class="label-top">||FIELDTAG yere_services_extended_beyond_ninety_days||Are Youth ERE services being extended beyond 90 days for this client? ||ENDFIELDTAG||</label></span><span class="qyere_services_extended_beyond_ninety_days"><input type="radio" name="yere_services_extended_beyond_ninety_days" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="yere_services_extended_beyond_ninety_days" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col2"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 fldnotes_thirty_day qnotes_thirty_day">

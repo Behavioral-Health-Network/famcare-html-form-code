@@ -46,7 +46,7 @@ function startup() {
     setrequire('involved_jj_system_past_three_months_three_month');
     setrequire('attend_school_any_time_three_months_three_month');
     setrequire('seen_pcp_past_twelve_months_three_month');
-    setrequire('school_change_three_month');
+    setrequire('changed_school_three_month');
 
 	checkhideall();
 
@@ -561,7 +561,7 @@ function updatesignatures(){
     <div class="col12 term">Housing Status</div>
     </div>
      <div class="entire">
-        <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current housing status.</i></label></div>
+        <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
       </div>
      <div class="entire">
         <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
@@ -712,6 +712,9 @@ function updatesignatures(){
       </div>
     <div class="entire">
     </div>
+    <div class="entire">
+        <div class="col12 term"></div>
+        </div>
  <div class="entire">
     <div class="col12 fldattend_new_bh_intake_between_thirty_days_three_month qattend_new_bh_intake_between_thirty_days_three_month">
     <div class="col12 fldattend_new_bh_intake_between_thirty_days_three_month qattend_new_bh_intake_between_thirty_days_three_month"><span class="qattend_new_bh_intake_between_thirty_days_three_month"><label class="label-top">||FIELDTAG attend_new_bh_intake_between_thirty_days_three_month||Did youth attend a new behavioral health intake in the last thirty days?||ENDFIELDTAG||</label></span><span class="qattend_new_bh_intake_between_thirty_days_three_month"><input type="radio" name="attend_new_bh_intake_between_thirty_days_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_new_bh_intake_between_thirty_days_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -735,6 +738,9 @@ function updatesignatures(){
     <div class="col6 qdate_youth_dla20_three_month">
     <div class="col6 flddate_youth_dla20_three_month qdate_youth_dla20_three_month"><span class="qdate_youth_dla20_three_month"><label class="label-top">||FIELDTAG date_youth_dla20_three_month||Date of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_three_month"><input type="text" name="date_youth_dla20_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col6 qlegal_guardian_meet_yere_family_support_specialist_three_month">

@@ -39,7 +39,7 @@ function startup() {
     setrequire('other_contact_method_three_month');
     setrequire('residency_change_since_referral_three_month');
     setrequire('residency_change_type_three_month');
-    setrequire('residency_change_address_exis__service_plan_goal_three_month');
+    setrequire('residency_change_address_existing_barrier_service_plan_goal_three_month');
     setrequire('num_ed_visits_past_three_months_three_month');
     setrequire('num_hosp_past_three_months_three_month');
     setrequire('num_leo_contacts_past_three_months_three_month');
@@ -59,7 +59,7 @@ function checkhideall() {
       checkhide(f.method_contact_three_month,"other_contact_method_three_month","Other");
    checkhide(f.residency_change_since_referral_three_month,"residency_change_type_three_month","Yes");
    checkhide(f.residency_change_type_three_month,"specify_other_residency_change_type_three_month","Other");
-   checkhide(f.residency_change_since_referral_three_month,"residency_change_address_exis__service_plan_goal_three_month","Yes");
+   checkhide(f.residency_change_since_referral_three_month,"residency_change_address_existing_barrier_service_plan_goal_three_month","Yes");
    checkhide(f.involved_jj_system_past_three_months_three_month,"djo_dys_sro_involvement_three_month","Yes");
    checkhide(f.attend_school_any_time_three_months_three_month,"last_grade_lvl_completed_three_month","No");
    checkhide(f.seen_pcp_past_twelve_months_three_month,"if_pcp_what_provider_three_month","Yes");
@@ -298,7 +298,7 @@ function validateform(scope='all') {
   if (!hiddenfield('other_contact_method_three_month') && gvtfieldvalue('other_contact_method_three_month')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_three_month");}
   if (!hiddenfield('residency_change_since_referral_three_month') && gvtfieldvalue('residency_change_since_referral_three_month')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral? \n`; seterror("residency_change_since_referral_three_month");}
   if (!hiddenfield('residency_change_type_three_month') && gvtfieldvalue('residency_change_type_three_month')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_three_month");}
-  if (!hiddenfield('residency_change_address_exis__service_plan_goal_three_month') && gvtfieldvalue('residency_change_address_exis__service_plan_goal_three_month')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan?\n`; seterror("residency_change_address_exis__service_plan_goal_three_month");}
+  if (!hiddenfield('residency_change_address_existing_barrier_service_plan_goal_three_month') && gvtfieldvalue('residency_change_address_existing_barrier_service_plan_goal_three_month')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan?\n`; seterror("residency_change_address_existing_barrier_service_plan_goal_three_month");}
   if (!hiddenfield('num_ed_visits_past_three_months_three_month') && gvtfieldvalue('num_ed_visits_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_three_month");}
   if (!hiddenfield('num_hosp_past_three_months_three_month') && gvtfieldvalue('num_hosp_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_three_month");}
   if (!hiddenfield('num_leo_contacts_past_three_months_three_month') && gvtfieldvalue('num_leo_contacts_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_three_month");}
@@ -582,8 +582,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col4 qresidency_change_address_exis__service_plan_goal_three_month">
-    <div class="col4 fldresidency_change_address_exis__service_plan_goal_three_month qresidency_change_address_exis__service_plan_goal_three_month"><span class="qresidency_change_address_exis__service_plan_goal_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_address_exis__service_plan_goal_three_month required-field-label"><label class="label-top">||FIELDTAG residency_change_address_exis__service_plan_goal_three_month||Did the residency change address an existing barrier or service plan?||ENDFIELDTAG||</label></span><span class="qresidency_change_address_exis__service_plan_goal_three_month"><input type="radio" name="residency_change_address_exis__service_plan_goal_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_address_exis__service_plan_goal_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col4 qresidency_change_address_existing_barrier_service_plan_goal_three_month">
+    <div class="col4 fldresidency_change_address_existing_barrier_service_plan_goal_three_month qresidency_change_address_existing_barrier_service_plan_goal_three_month"><span class="qresidency_change_address_existing_barrier_service_plan_goal_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_address_existing_barrier_service_plan_goal_three_month required-field-label"><label class="label-top">||FIELDTAG residency_change_address_existing_barrier_service_plan_goal_three_month||Did the residency change address an existing barrier or service plan?||ENDFIELDTAG||</label></span><span class="qresidency_change_address_existing_barrier_service_plan_goal_three_month"><input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">
@@ -643,21 +643,6 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col12 fldattend_school_any_time_three_months_three_month qattend_school_any_time_three_months_three_month">
-    <div class="col12 fldattend_school_any_time_three_months_three_month qattend_school_any_time_three_months_three_month"><span class="qattend_school_any_time_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_three_month||Has youth attended school past three months?||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_three_month"><input type="radio" name="attend_school_any_time_three_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldlast_grade_lvl_completed_three_month qlast_grade_lvl_completed_three_month">
-    <div class="col12 fldlast_grade_lvl_completed_three_month qlast_grade_lvl_completed_three_month"><span class="qlast_grade_lvl_completed_three_month"><label class="label-top">||FIELDTAG last_grade_lvl_completed_three_month||Last Grade Completed||ENDFIELDTAG||</label></span><span class="qlast_grade_lvl_completed_three_month"><input type="text" name="last_grade_lvl_completed_three_month" size="10" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldhave_high_school_equivalency_three_month qhave_high_school_equivalency_three_month">
-    <div class="col12 fldhave_high_school_equivalency_three_month qhave_high_school_equivalency_three_month"><span class="qhave_high_school_equivalency_three_month"><label class="label-top">||FIELDTAG have_high_school_equivalency_three_month||Does youth have high school equivalent certificate (e.g., GED)?||ENDFIELDTAG||</label></span><span class="qhave_high_school_equivalency_three_month"><input type="radio" name="have_high_school_equivalency_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_high_school_equivalency_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
     <div class="col12 fldseen_pcp_past_twelve_months_three_month qseen_pcp_past_twelve_months_three_month">
     <div class="col12 fldseen_pcp_past_twelve_months_three_month qseen_pcp_past_twelve_months_three_month"><span class="qseen_pcp_past_twelve_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qseen_pcp_past_twelve_months_three_month required-field-label"><label class="label-top">||FIELDTAG seen_pcp_past_twelve_months_three_month||Has a primary care physician been seen in the past 12 months?||ENDFIELDTAG||</label></span><span class="qseen_pcp_past_twelve_months_three_month"><input type="radio" name="seen_pcp_past_twelve_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="seen_pcp_past_twelve_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
@@ -708,8 +693,8 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col6 qlegal_guardian_meet_yere_fami_support_specialist_three_month">
-    <div class="col6 fldlegal_guardian_meet_yere_fami_support_specialist_three_month qlegal_guardian_meet_yere_fami_support_specialist_three_month"><span class="qlegal_guardian_meet_yere_fami_support_specialist_three_month"><label class="label-top">||FIELDTAG legal_guardian_meet_yere_fami_support_specialist_three_month||Did legal guardian(s) have a meeting with a YERE Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qlegal_guardian_meet_yere_fami_support_specialist_three_month"><input type="radio" name="legal_guardian_meet_yere_fami_support_specialist_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="legal_guardian_meet_yere_fami_support_specialist_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qlegal_guardian_meet_yere_family_support_specialist_three_month">
+    <div class="col6 fldlegal_guardian_meet_yere_family_support_specialist_three_month qlegal_guardian_meet_yere_family_support_specialist_three_month"><span class="qlegal_guardian_meet_yere_family_support_specialist_three_month"><label class="label-top">||FIELDTAG legal_guardian_meet_yere_family_support_specialist_three_month||Did legal guardian(s) have a meeting with a YERE Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qlegal_guardian_meet_yere_family_support_specialist_three_month"><input type="radio" name="legal_guardian_meet_yere_family_support_specialist_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="legal_guardian_meet_yere_family_support_specialist_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
     <div class="col6 qcasyere_collab_staffing_three_month">
     <div class="col6 fldcasyere_collab_staffing_three_month qcasyere_collab_staffing_three_month"><span class="qcasyere_collab_staffing_three_month"><label class="label-top">||FIELDTAG casyere_collab_staffing_three_month||Was youth/family case staffed in a YERE collaborative staffing?||ENDFIELDTAG||</label></span><span class="qcasyere_collab_staffing_three_month"><input type="radio" name="casyere_collab_staffing_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="casyere_collab_staffing_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>

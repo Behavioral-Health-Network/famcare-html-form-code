@@ -75,32 +75,33 @@ function waitForElement(selector, callback) {
 
 // observer.observe(document.body, { childList: true, subtree: true });
 
-waitForElement('#bcr_presenting_concerns', (dropdown) => {
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
   if (!dropdown.dataset.initialized) {
     console.log(`Initializing dropdown: ${dropdown.id}`);
-    
+
+    // Attach the onchange listener to trigger updateReportFields
     dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
       updateReportFields([dropdown.id]);
     });
 
-    updateReportFields([dropdown.id]); // Initial update on load
-
-    dropdown.dataset.initialized = true;
-  }
-});
-
-waitForElement('#bcr_ref_placed_bh_subtype', (dropdown) => {
-  if (!dropdown.dataset.initialized) {
-    dropdown.addEventListener('change', () => {
-      updateReportFields([dropdown.id]);
-    });
+    // Run once on load in case values were pre-selected
     updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
     dropdown.dataset.initialized = true;
   }
-});
+}
 
-// Repeat for any other relevant dropdowns
-
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#bcr_presenting_concerns', listenerSetup);
 
 var genpdf='true';
 

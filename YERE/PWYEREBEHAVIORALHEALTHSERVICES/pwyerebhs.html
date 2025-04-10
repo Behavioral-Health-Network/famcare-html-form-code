@@ -62,7 +62,7 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.bhs_service_path,"open_cmhc_and_reconnected","Reconnection Path");
    checkhide(f.bhs_service_path,"attend_bh_intake","New Intake/Admission Path");
-   checkhide(f.attend_bh_intake,"num_days_bh_intake_since_ic","Yes");
+   checkhide(f.attend_bh_intake,"num_days_bh_intake_since_ia","Yes");
    checkhide(f.attend_bh_intake,"mh_intake","Yes");
    checkhide(f.attend_bh_intake,"su_intake","Yes");
    checkhide(f.mh_intake,"mh_intake_agency","Yes");
@@ -589,8 +589,8 @@ function updatesignatures(){
     <div class="col6 qattend_bh_intake">
     <div class="col6 fldattend_bh_intake qattend_bh_intake"><span class="qattend_bh_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_bh_intake required-field-label"><label class="label-top">||FIELDTAG attend_bh_intake||Was a behavioral health intake attended?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake"><input type="radio" name="attend_bh_intake" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col6 qnum_days_bh_intake_since_ic">
-    <div class="col6 fldnum_days_bh_intake_since_ic qnum_days_bh_intake_since_ic"><span class="qnum_days_bh_intake_since_ic"><label class="label-top">||FIELDTAG num_days_bh_intake_since_ic||How many days was behavioral health intake from date of initial contact?||ENDFIELDTAG||</label></span><span class="qnum_days_bh_intake_since_ic"><input type="radio" name="num_days_bh_intake_since_ic" value="0 - 7 Days" onclick="checkhideall()" >0 - 7 Days<br><input type="radio" name="num_days_bh_intake_since_ic" value="8 - 14 Days" onclick="checkhideall()" >8 - 14 Days<br><input type="radio" name="num_days_bh_intake_since_ic" value="15 - 30 Days" onclick="checkhideall()" >15 - 30 Days<br><input type="radio" name="num_days_bh_intake_since_ic" value="31 Or More Days" onclick="checkhideall()" >31 Or More Days</span></div>
+    <div class="col6 qnum_days_bh_intake_since_ia">
+    <div class="col6 fldnum_days_bh_intake_since_ia qnum_days_bh_intake_since_ia"><span class="qnum_days_bh_intake_since_ia"><label class="label-top">||FIELDTAG num_days_bh_intake_since_ia||How many days was behavioral health intake from date of initial contact?||ENDFIELDTAG||</label></span><span class="qnum_days_bh_intake_since_ia"><input type="radio" name="num_days_bh_intake_since_ia" value="0 - 7 Days" onclick="checkhideall()" >0 - 7 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="8 - 14 Days" onclick="checkhideall()" >8 - 14 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="15 - 30 Days" onclick="checkhideall()" >15 - 30 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="31 Or More Days" onclick="checkhideall()" >31 Or More Days</span></div>
      </div>
   </div>
 <div class="entire">

@@ -46,6 +46,7 @@ function startup() {
     setrequire('involved_jj_system_past_three_months_three_month');
     setrequire('attend_school_any_time_three_months_three_month');
     setrequire('seen_pcp_past_twelve_months_three_month');
+    setrequire('school_change_three_month');
 
 	checkhideall();
 
@@ -304,7 +305,7 @@ function validateform(scope='all') {
   if (!hiddenfield('involved_jj_system_past_three_months_three_month') && gvtfieldvalue('involved_jj_system_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last 3 months?\n`; seterror("involved_jj_system_past_three_months_three_month");}
   if (!hiddenfield('attend_school_any_time_three_months_three_month') && gvtfieldvalue('attend_school_any_time_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Has youth attended school past three months?\n`; seterror("attend_school_any_time_three_months_three_month");}
   if (!hiddenfield('seen_pcp_past_twelve_months_three_month') && gvtfieldvalue('seen_pcp_past_twelve_months_three_month')=='') {edesc=edesc+`Must specify a value for Has a primary care physician been seen in the past 12 months?\n`; seterror("seen_pcp_past_twelve_months_three_month");}
-
+  if (!hiddenfield('school_change_three_month') && gvtfieldvalue('school_change_three_month')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_three_month");}
     return edesc;
 }
 
@@ -586,10 +587,34 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
+<div class="col12 term">School</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
+    <div class="col12 fldchanged_school_three_month qchanged_school_three_month">
+    <div class="col12 fldchanged_school_three_month qchanged_school_three_month"><span class="qchanged_school_three_month"><label class="label-top">||FIELDTAG changed_school_three_month||Has client changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qchanged_school_three_month"><input type="radio" name="changed_school_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="changed_school_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
   </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldattend_school_any_time_three_months_three_month qattend_school_any_time_three_months_three_month">
+    <div class="col12 fldattend_school_any_time_three_months_three_month qattend_school_any_time_three_months_three_month"><span class="qattend_school_any_time_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_three_month||Has youth attended school past three months?||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_three_month"><input type="radio" name="attend_school_any_time_three_months_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlast_grade_lvl_completed_three_month qlast_grade_lvl_completed_three_month">
+    <div class="col12 fldlast_grade_lvl_completed_three_month qlast_grade_lvl_completed_three_month"><span class="qlast_grade_lvl_completed_three_month"><label class="label-top">||FIELDTAG last_grade_lvl_completed_three_month||Last Grade Completed||ENDFIELDTAG||</label></span><span class="qlast_grade_lvl_completed_three_month"><input type="text" name="last_grade_lvl_completed_three_month" size="10" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhave_high_school_equivalency_three_month qhave_high_school_equivalency_three_month">
+    <div class="col12 fldhave_high_school_equivalency_three_month qhave_high_school_equivalency_three_month"><span class="qhave_high_school_equivalency_three_month"><label class="label-top">||FIELDTAG have_high_school_equivalency_three_month||Does youth have high school equivalent certificate (e.g., GED)?||ENDFIELDTAG||</label></span><span class="qhave_high_school_equivalency_three_month"><input type="radio" name="have_high_school_equivalency_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="have_high_school_equivalency_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Previous Encounters</div>
+</div>
  <div class="entire">
     <div class="col12 fldnum_ed_visits_past_three_months_three_month qnum_ed_visits_past_three_months_three_month">
     <div class="col12 fldnum_ed_visits_past_three_months_three_month qnum_ed_visits_past_three_months_three_month"><span class="qnum_ed_visits_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_ed_visits_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_ed_visits_past_three_months_three_month||Emergency Dept Visits in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_ed_visits_past_three_months_three_month"><input type="text" name="num_ed_visits_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>

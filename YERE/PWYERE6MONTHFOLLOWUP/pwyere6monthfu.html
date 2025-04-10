@@ -42,11 +42,12 @@ function startup() {
     setrequire('other_contact_method_six_month');
     setrequire('residency_change_since_referral_six_month');
     setrequire('residency_change_type_six_month');
+    setrequire('changed_school_six_month');
+    setrequire('attend_school_any_time_three_months_six_month');
     setrequire('num_ed_visits_past_three_months_six_month');
     setrequire('num_hosp_past_three_months_six_month');
     setrequire('num_leo_contacts_past_three_months_six_month');
     setrequire('involved_jj_system_past_three_months_six_month');
-    setrequire('attend_school_any_time_three_months_six_month');
 
 	checkhideall();
 
@@ -297,11 +298,12 @@ function validateform(scope='all') {
   if (!hiddenfield('other_contact_method_six_month') && gvtfieldvalue('other_contact_method_six_month')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_six_month");}
   if (!hiddenfield('residency_change_since_referral_six_month') && gvtfieldvalue('residency_change_since_referral_six_month')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral? \n`; seterror("residency_change_since_referral_six_month");}
   if (!hiddenfield('residency_change_type_six_month') && gvtfieldvalue('residency_change_type_six_month')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_six_month");}
+  if (!hiddenfield('changed_school_six_month') && gvtfieldvalue('changed_school_six_month')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("changed_school_six_month");}
+  if (!hiddenfield('attend_school_any_time_three_months_six_month') && gvtfieldvalue('attend_school_any_time_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Has youth attended school in past three months? \n`; seterror("attend_school_any_time_three_months_six_month");}
   if (!hiddenfield('num_ed_visits_past_three_months_six_month') && gvtfieldvalue('num_ed_visits_past_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_ed_visits_past_three_months_six_month");}
   if (!hiddenfield('num_hosp_past_three_months_six_month') && gvtfieldvalue('num_hosp_past_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_six_month");}
   if (!hiddenfield('num_leo_contacts_past_three_months_six_month') && gvtfieldvalue('num_leo_contacts_past_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_six_month");}
   if (!hiddenfield('involved_jj_system_past_three_months_six_month') && gvtfieldvalue('involved_jj_system_past_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Has youth had any involvement in the juvenile justice system in the last 3 months?\n`; seterror("involved_jj_system_past_three_months_six_month");}
-  if (!hiddenfield('attend_school_any_time_three_months_six_month') && gvtfieldvalue('attend_school_any_time_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Has youth attended school in past three months? \n`; seterror("attend_school_any_time_three_months_six_month");}
 
     return edesc;
 }
@@ -588,6 +590,23 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
+<div class="col12 term">School</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldchanged_school_six_month qchanged_school_six_month">
+    <div class="col12 fldchanged_school_six_month qchanged_school_six_month"><span class="qchanged_school_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qchanged_school_six_month required-field-label"><label class="label-top">||FIELDTAG changed_school_six_month||Has youth changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qchanged_school_six_month"><input type="radio" name="changed_school_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="changed_school_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldattend_school_any_time_three_months_six_month qattend_school_any_time_three_months_six_month">
+    <div class="col12 fldattend_school_any_time_three_months_six_month qattend_school_any_time_three_months_six_month"><span class="qattend_school_any_time_three_months_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_six_month required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_six_month||Has youth attended school in past three months? ||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_six_month"><input type="radio" name="attend_school_any_time_three_months_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Previous Encounters</div>
 </div>
  <div class="entire">
     <div class="col12 fldnum_ed_visits_past_three_months_six_month qnum_ed_visits_past_three_months_six_month">
@@ -612,11 +631,6 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 flddjo_dys_sro_involvement_six_month qdjo_dys_sro_involvement_six_month">
     <div class="col12 flddjo_dys_sro_involvement_six_month qdjo_dys_sro_involvement_six_month"><span class="qdjo_dys_sro_involvement_six_month"><label class="label-top">||FIELDTAG djo_dys_sro_involvement_six_month||Specify Type of Involvment||ENDFIELDTAG||</label></span><span class="qdjo_dys_sro_involvement_six_month"><input type="checkbox" name="involvement_sro_six_month" value="ON" onclick="checkhideall()">Contact With School Resource Officer&nbsp;&nbsp;<input type="checkbox" name="involvement_with_djo_six_month" value="ON" onclick="checkhideall()">DJO&nbsp;&nbsp;<input type="checkbox" name="involvement_dys_six_month" value="ON" onclick="checkhideall()">DYS&nbsp;&nbsp;<input type="checkbox" name="involvement_with_secure_detention_six_month" value="ON" onclick="checkhideall()">Secure Detention&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldattend_school_any_time_three_months_six_month qattend_school_any_time_three_months_six_month">
-    <div class="col12 fldattend_school_any_time_three_months_six_month qattend_school_any_time_three_months_six_month"><span class="qattend_school_any_time_three_months_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_school_any_time_three_months_six_month required-field-label"><label class="label-top">||FIELDTAG attend_school_any_time_three_months_six_month||Has youth attended school in past three months? ||ENDFIELDTAG||</label></span><span class="qattend_school_any_time_three_months_six_month"><input type="radio" name="attend_school_any_time_three_months_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_school_any_time_three_months_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">

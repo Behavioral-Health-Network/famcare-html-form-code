@@ -63,38 +63,98 @@
 
 <script language="JavaScript">
 
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
 // Add MutationObserver as a fallback to the inclusion of the onchange event listener for
 // updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
 // if the function is run via startup() too early and does not run again dynamically upon change.
-const observer = new MutationObserver(() => {
-  // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#yere_mh_concerns, #yere_type_trauma_reported, #yere_substance_use_history, #yere_type_of_school_discipline'); // Add more IDs as needed
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#yere_mh_concerns, #yere_type_trauma_reported, #yere_substance_use_history, #yere_type_of_school_discipline'); // Add more IDs as needed
 
-  dropdowns.forEach(dropdown => {
-    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-      console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
 
       // Add the onchange event listener
-      dropdown.addEventListener('change', () => {
-        updateReportFields([dropdown.id]); // Pass the specific table ID to updateReportFields
-      });
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
 
       // Initialize the table's hidden fields
-      updateReportFields([dropdown.id]);
+//      updateReportFields([dropdown.id]);
 
       // Mark as initialized to avoid redundant listeners
-      dropdown.dataset.initialized = true;
-    }
-  });
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
 
-  if (dropdowns.length > 0) {
+//     if (dropdowns.length > 0) {
     // Disconnect the observer if all dropdowns are found
-    observer.disconnect();
-  }
-});
+//    observer.disconnect();
+//  }
+//});
 
 // Start observing the document body for changes
-observer.observe(document.body, { childList: true, subtree: true });
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#yere_mh_concerns', listenerSetup);
+waitForElement('#yere_type_trauma_reported', listenerSetup);
+waitForElement('#yere_substance_use_history', listenerSetup);
+waitForElement('#yere_type_of_school_discipline', listenerSetup);
 
 var genpdf='true';
 
@@ -518,8 +578,7 @@ function hiddenfield(g) {
 }
 
 function submitit() {
-// parse the multi-select list and update the report fields
-updateReportFields(['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_substance_use_history', 'yere_type_of_school_discipline'])
+
  
   // use alert to display error messages
   let errdesc = validateform();     
@@ -547,6 +606,13 @@ updateReportFields(['yere_mh_concerns', 'yere_type_trauma_reported', 'yere_subst
     document.querySelector('#divMissingMessageRow').scrollIntoView();
     return;
   }
+
+  // Force update of report fields before submission
+    updateReportFields([
+      'yere_mh_concerns', 'yere_type_trauma_reported', 
+      'yere_substance_use_history', 'yere_type_of_school_discipline'
+          // add other dropdown IDs here as needed
+   ]);
 
 	const f = document.forms[0];
    //***Error checking should be done here before a quick save
@@ -577,6 +643,12 @@ function deleteit() {
 }
 
 function quicksubmitit() {
+  // Force update of report fields before submission
+  updateReportFields([
+      'yere_mh_concerns', 'yere_type_trauma_reported', 
+      'yere_substance_use_history', 'yere_type_of_school_discipline'
+          // add other dropdown IDs here as needed
+   ]);
 //	errdesc=validateform();
 //	if (errdesc!="") {alert(errdesc); return;}
 	var f=document.forms[0];
@@ -676,6 +748,7 @@ function updatesignatures(){
  */
  function updateReportFields(tableIds) {
   // Iterate over each table ID provided
+  
   tableIds.forEach(id => {
     // Locate the dropdown element for the current table ID
     const dropdown = document.querySelector(`#${id}`);

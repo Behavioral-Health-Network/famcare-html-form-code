@@ -44,7 +44,9 @@ function waitForElement(selector, callback) {
 // updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
 // if the function is run via startup() too early and does not run again dynamically upon change.
 // const observer = new MutationObserver(() => {
-//     const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#bcr_presenting_concerns'); // Add more IDs as needed
+
     
 //     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
 
@@ -53,54 +55,60 @@ function waitForElement(selector, callback) {
 //         return;
 //     }
 
-//     dropdowns.forEach(dropdown => {
-//         if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-//             console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
 
-//             dropdown.addEventListener('change', () => {
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
 //                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
-//                 updateReportFields([dropdown.id]); // Ensure it's correctly passed as an array
-//             });
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
 
-//             updateReportFields([dropdown.id]);
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
 
-//             dropdown.dataset.initialized = true;
-//         }
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
 //     });
 
 //     if (dropdowns.length > 0) {
-//         observer.disconnect();
-//     }
-// });
+// Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
 
+// Start observing the document body for changes
 // observer.observe(document.body, { childList: true, subtree: true });
 
-waitForElement('#bcr_presenting_concerns', (dropdown) => {
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
   if (!dropdown.dataset.initialized) {
     console.log(`Initializing dropdown: ${dropdown.id}`);
-    
+
+    // Attach the onchange listener to trigger updateReportFields
     dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
       updateReportFields([dropdown.id]);
     });
 
-    updateReportFields([dropdown.id]); // Initial update on load
-
-    dropdown.dataset.initialized = true;
-  }
-});
-
-waitForElement('#bcr_ref_placed_bh_subtype', (dropdown) => {
-  if (!dropdown.dataset.initialized) {
-    dropdown.addEventListener('change', () => {
-      updateReportFields([dropdown.id]);
-    });
+    // Run once on load in case values were pre-selected
     updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
     dropdown.dataset.initialized = true;
   }
-});
+}
 
-// Repeat for any other relevant dropdowns
-
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#bcr_presenting_concerns', listenerSetup);
 
 var genpdf='true';
 
@@ -650,7 +658,6 @@ function updatesignatures(){
 
 <script language="VBScript">
 </script>
-
 
 <body onLoad="startup()">
 <!-- Field Override Area -->

@@ -835,7 +835,7 @@ function SetPreviousAddresses(numelementsper, totalelements, identifier, results
 
 </script>
 
-<script language="JavaScript" src="script/Includeclient1.js">
+<script language="JavaScript" src="script/Includeclient2.js">
 </script>
 
 <body onload="Startup();AgeRefresh();CheckForTribe();ShowPreviousAddresses(); financialstatus();SetState();GenPDF(); checkhideall()">
@@ -896,7 +896,7 @@ function SetPreviousAddresses(numelementsper, totalelements, identifier, results
              <ul>
                 <li><strong>||FIELDTAG EntryDate||Date Entered/Created||ENDFIELDTAG|| : </strong>
                      <input type="text" name="EntryDate" size="8" onblur="checkdate(this)" value="||Date||" class="jdatepicker"/></li>
-                <li id="_gvtClientStatus"><strong>||FIELDTAG ClientStatus||Status||ENDFIELDTAG|| : </strong><font size="3" align="left"><select size="1" name="ClientStatus">
+                <li id="_gvtClientStatus"><strong>||FIELDTAG ClientStatus||Status||ENDFIELDTAG|| : </strong><font size="3" align="left"><select id="clientStatus" size="1" name="ClientStatus" style="background-color:#FDFDD3">
                     <option value="||Select Code, Description From CLIENTSTATUS Where DocRevNo = ' 0 ' AND PrivateProvider='^^PRIVATEPROVIDER^^' AND ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE ClientStatus^^') Order By description||" selected="selected">||CHOICETABLESQLD||</option>
                  </select></font>||CONFIGURE CLIENTSTATUS||
                </li>
@@ -965,7 +965,7 @@ function SetPreviousAddresses(numelementsper, totalelements, identifier, results
                  </select>||CONFIGURE RACE||</li>
                <li id="RaceOtherRow" style="display: none"><strong>||FIELDTAG RaceOther||Please specify||ENDFIELDTAG|| : </strong><input type="text" name="RaceOther" size="30"/>
                </li>
-               <li id="_gvtEthnicity"><strong>||FIELDTAG Ethnicity||Ethnicity||ENDFIELDTAG|| : </strong><select size="1" onchange="setEthnicity()" name="Ethnicity">
+               <li id="_gvtEthnicity"><strong>||FIELDTAG Ethnicity||Ethnicity||ENDFIELDTAG|| : </strong><select size="1" onchange="setEthnicity()" name="Ethnicity" style="background-color:#FDFDD3">
                  <option value="||Select Code, Description From Ethnicity Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE EMPLOYMENTSTATUS^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
                  </select> ||CONFIGURE Ethnicity||</li>
                <li id="EthnicityOtherRow" style="display: none"><strong>||FIELDTAG EthnicityOther||Specify Other Ethnicity||ENDFIELDTAG|| : </strong><input type="text" name="EthnicityOther" size="30" />

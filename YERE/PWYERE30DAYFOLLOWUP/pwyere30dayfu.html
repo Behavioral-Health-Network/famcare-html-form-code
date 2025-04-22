@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>6 Month Follow-Up</title>
+<title>YERE 30 Day Follow Up TP</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
@@ -34,16 +34,13 @@ function startup() {
 
 		}
 	}
-            setrequire('Pathway_Date');
-    setrequire('treatment_path_six_month');
-    setrequire('rc_only_client_attend_first_appt_coach_six_month');
-    setrequire('rc_only_last_date_communication_six_month');
-    // client_attend_intake_appt_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-    // setrequire('client_attend_intake_appt_six_month');
-    setrequire('mat_prescribed_physician_appt_six_month');
-    setrequire('what_mat_physician_appt_six_month');
-    setrequire('program_participation_six_month');
-
+            setrequire('pathway_date');
+    setrequire('method_contact_thirty_day');
+    setrequire('other_contact_method_thirty_day');
+    setrequire('residency_change_since_referral_thirty_day');
+    setrequire('residency_change_type_thirty_day');
+    setrequire('residency_change_address_existing_barrier_service_plan_goal_thirty_day');
+    setrequire('school_change_thirty_day');
 	checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
@@ -52,15 +49,10 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.treatment_path_six_month,"rc_only_client_attend_first_appt_coach_six_month","Recovery Coach Only");
-   checkhide(f.treatment_path_six_month,"rc_only_last_date_communication_six_month","Recovery Coach Only");
-//    checkhide(f.treatment_path_six_month,"client_attend_intake_appt_six_month","MAT,Non-MAT Treatment");
-//    intake_appt_date_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-//    checkhide(f.client_attend_intake_appt_six_month,"intake_appt_date_six_month","Yes");
-   checkhide(f.treatment_path_six_month,"intake_conducted_appt_date_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_six_month,"mat_prescribed_physician_appt_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.mat_prescribed_physician_appt_six_month,"what_mat_physician_appt_six_month","Yes");
-   checkhide(f.program_participation_six_month,"preg_post_part_six_month","020,021");
+      checkhide(f.method_contact_thirty_day,"other_contact_method_thirty_day","Other");
+   checkhide(f.residency_change_since_referral_thirty_day,"residency_change_type_thirty_day","Yes");
+   checkhide(f.residency_change_type_thirty_day,"specify_other_residency_change_type_thirty_day","Other");
+   checkhide(f.residency_change_since_referral_thirty_day,"residency_change_address_existing_barrier_service_plan_goal_thirty_day","Yes");
 
 }
 
@@ -290,16 +282,13 @@ function validateform(scope='all') {
        f.TESTRIGHTANSWERS.value=cstrjis(right);
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
-     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('treatment_path_six_month') && gvtfieldvalue('treatment_path_six_month')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_six_month");}
-  if (!hiddenfield('rc_only_client_attend_first_appt_coach_six_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_six_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_six_month");}
-  if (!hiddenfield('rc_only_last_date_communication_six_month') && gvtfieldvalue('rc_only_last_date_communication_six_month')=='') {edesc=edesc+`Must specify a value for Date of Last Communication\n`; seterror("rc_only_last_date_communication_six_month");}
-  // if (!hiddenfield('client_attend_intake_appt_six_month') && gvtfieldvalue('client_attend_intake_appt_six_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_six_month");}
-  if (!hiddenfield('mat_prescribed_physician_appt_six_month') && gvtfieldvalue('mat_prescribed_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_six_month");}
-  if (!hiddenfield('what_mat_physician_appt_six_month') && gvtfieldvalue('what_mat_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_six_month");}
-  if (!hiddenfield('program_participation_six_month') && gvtfieldvalue('program_participation_six_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_six_month");}
-  // if (!hiddenfield('if_transfer_contact_transfer_region_success_six_month') && gvtfieldvalue('if_transfer_contact_transfer_region_success_six_month')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_six_month");}
-
+     if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
+  if (!hiddenfield('method_contact_thirty_day') && gvtfieldvalue('method_contact_thirty_day')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_contact_thirty_day");}
+  if (!hiddenfield('other_contact_method_thirty_day') && gvtfieldvalue('other_contact_method_thirty_day')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_thirty_day");}
+  if (!hiddenfield('residency_change_since_referral_thirty_day') && gvtfieldvalue('residency_change_since_referral_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral?\n`; seterror("residency_change_since_referral_thirty_day");}
+  if (!hiddenfield('residency_change_type_thirty_day') && gvtfieldvalue('residency_change_type_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_thirty_day");}
+  if (!hiddenfield('residency_change_address_existing_barrier_service_plan_goal_thirty_day') && gvtfieldvalue('residency_change_address_existing_barrier_service_plan_goal_thirty_day')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan goal?\n`; seterror("residency_change_address_existing_barrier_service_plan_goal_thirty_day");}
+  if (!hiddenfield('school_change_thirty_day') && gvtfieldvalue('school_change_thirty_day')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_thirty_day");}
     return edesc;
 }
 
@@ -507,7 +496,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWEPICC6MonthFollowUp" />
+    <input type="hidden" name="TABLENAME" value="PWYERE30DayFollowUpTP" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -520,7 +509,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>6 Month Follow-Up</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>YERE 30 Day Follow Up TP</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -534,112 +523,143 @@ function updatesignatures(){
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col12 fldPathway_Date qPathway_Date">
-    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month"><span class="qtreatment_path_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_six_month required-field-label"><label class="label-top">||FIELDTAG treatment_path_six_month||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_six_month"><input type="radio" name="treatment_path_six_month" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month"><span class="qrc_only_client_attend_first_appt_coach_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_six_month||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_six_month"><input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month"><span class="qrc_only_last_date_communication_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_last_date_communication_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_last_date_communication_six_month||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_six_month"><input type="text" name="rc_only_last_date_communication_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <!-- <div class="entire">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month"><span class="qclient_attend_intake_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_six_month required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_six_month||Did client attend an intake appointment?||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_six_month"><select size="1"  name="client_attend_intake_appt_six_month" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
-
-</select></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month"><span class="qintake_appt_date_six_month"><label class="label-top">||FIELDTAG intake_appt_date_six_month||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_six_month"><input type="text" name="intake_appt_date_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
- <div class="entire">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month"><span class="qintake_conducted_appt_date_six_month"><label class="label-top">||FIELDTAG intake_conducted_appt_date_six_month||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_six_month"><input type="radio" name="intake_conducted_appt_date_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Active Treatment Agency</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client is still actively attending the same substance use treatment agency, leave as is. If client chose to attend a different agency click "View/Edit" to add an "End Date" to the active treatment agency and then create a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWSUBroadTreatmentAgency||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month"><span class="qmat_prescribed_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_six_month required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_six_month||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_six_month"><input type="radio" name="mat_prescribed_physician_appt_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month"><span class="qwhat_mat_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_six_month required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_six_month"><select size="1" name="what_mat_physician_appt_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_six_month^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_types_mat||
-</span></div>
+    <div class="col12 fldpathway_date qpathway_date">
+    <div class="col12 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Program Participation</div>
 </div>
  <div class="entire">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month"><span class="qprogram_participation_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_six_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_six_month"><select size="1" name="program_participation_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_six_month^^') and six_month_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_program_participation||
-</span></div>
+    <div class="col4 qstill_actively_engaged_yere_thirty_day">
+    <div class="col4 fldstill_actively_engaged_yere_thirty_day qstill_actively_engaged_yere_thirty_day"><span class="qstill_actively_engaged_yere_thirty_day"><label class="label-top">||FIELDTAG still_actively_engaged_yere_thirty_day||Is youth still actively engaged in ERE services?||ENDFIELDTAG||</label></span><span class="qstill_actively_engaged_yere_thirty_day"><input type="radio" name="still_actively_engaged_yere_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="still_actively_engaged_yere_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month"><span class="qpreg_post_part_six_month"><label class="label-top">||FIELDTAG preg_post_part_six_month||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_six_month"><input type="radio" name="preg_post_part_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col4 qmethod_contact_thirty_day">
+    <div class="col4 fldmethod_contact_thirty_day qmethod_contact_thirty_day"><span class="qmethod_contact_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_thirty_day required-field-label"><label class="label-top">||FIELDTAG method_contact_thirty_day||Method of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_thirty_day"><input type="radio" name="method_contact_thirty_day" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_thirty_day" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_thirty_day" value="Other" onclick="checkhideall()" >Other</span></div>
+     </div>
+    <div class="col4 qother_contact_method_thirty_day">
+    <div class="col4 fldother_contact_method_thirty_day qother_contact_method_thirty_day"><span class="qother_contact_method_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_thirty_day required-field-label"><label class="label-top">||FIELDTAG other_contact_method_thirty_day||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_thirty_day"><textarea name="other_contact_method_thirty_day" class="autoexpand"></textarea></span></div>
      </div>
   </div>
 <div class="entire">
 <div class="col12 term">Housing Status</div>
 </div>
- <div class="entire">
+<div class="entire">
     <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
   </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
 <div class="entire">
-<div class="col12 term">Payor Source</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's payor source hasn't changed, leave as is. If client's payor source has changed, click "View/Edit", add an "End Date" to the current entry, select "No" for "Payor is Current", then add a new entry.</i></label></div>
+    <div class="col6 qresidency_change_since_referral_thirty_day">
+    <div class="col6 fldresidency_change_since_referral_thirty_day qresidency_change_since_referral_thirty_day"><span class="qresidency_change_since_referral_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_since_referral_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_since_referral_thirty_day||Residency change since Youth ERE referral?||ENDFIELDTAG||</label></span><span class="qresidency_change_since_referral_thirty_day"><input type="radio" name="residency_change_since_referral_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_since_referral_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+    <div class="col6 qresidency_change_type_thirty_day">
+    <div class="col6 fldresidency_change_type_thirty_day qresidency_change_type_thirty_day"><span class="qresidency_change_type_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_type_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_type_thirty_day||Residency Change Type||ENDFIELDTAG||</label></span><span class="qresidency_change_type_thirty_day"><input type="radio" name="residency_change_type_thirty_day" value="Homeless To Housed" onclick="checkhideall()" >Homeless To Housed<br><input type="radio" name="residency_change_type_thirty_day" value="Out Of Home Placement (Foster Care Or Residential Treatment Facility)" onclick="checkhideall()" >Out Of Home Placement (Foster Care Or Residential Treatment Facility)<br><input type="radio" name="residency_change_type_thirty_day" value="Other" onclick="checkhideall()" >Other
+<!-- FIELDOVERRIDE(residency_change_type_thirty_day,10,69) -->
+</span></div>
+     </div>
+    <div class="col6 qspecify_other_residency_change_type_thirty_day">
+    <div class="col6 fldspecify_other_residency_change_type_thirty_day qspecify_other_residency_change_type_thirty_day"><span class="qspecify_other_residency_change_type_thirty_day"><label class="label-top">||FIELDTAG specify_other_residency_change_type_thirty_day||Other Type of Residency Change||ENDFIELDTAG||</label></span><span class="qspecify_other_residency_change_type_thirty_day"><textarea name="specify_other_residency_change_type_thirty_day" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qresidency_change_address_existing_barrier_service_plan_goal_thirty_day">
+    <div class="col6 fldresidency_change_address_existing_barrier_service_plan_goal_thirty_day qresidency_change_address_existing_barrier_service_plan_goal_thirty_day"><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_address_existing_barrier_service_plan_goal_thirty_day||Did the residency change address an existing barrier or service plan goal?||ENDFIELDTAG||</label></span><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day"><input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">School</div>
+</div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day">
+    <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day"><span class="qschool_change_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qschool_change_thirty_day required-field-label"><label class="label-top">||FIELDTAG school_change_thirty_day||Has youth changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qschool_change_thirty_day"><input type="radio" name="school_change_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_change_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"><i>If client hasn't changed schools, leave as is. If client has switched to a new school, click "View/Edit to add an "End Date" to the current school and then create a new entry.</i></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
+  </div>
+<div class="entire">
+<div class="col12 term">Youth Program Needs</div>
+</div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>If client's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
+  </div>
+<div class="entire">
+</div>
+<div class="entire">
+    <div class="col12 term">Caregiver Program Needs</div>
+    </div>
+    <div class="entire">
+        <div class="col12"><label class="label-top"><i>If caregiver's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
+      </div>    
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
+      </div>
+      <div class="entire">
+        <div class="col12 term"></div>
+        </div>
+      <div class="entire">
+        <div class="col6"><label class="label-top"></label></div>
+      </div>     
+ <div class="entire">
+    <div class="col12 fldattend_bh_intake_between_ia_thirty_day qattend_bh_intake_between_ia_thirty_day">
+    <div class="col12 fldattend_bh_intake_between_ia_thirty_day qattend_bh_intake_between_ia_thirty_day"><span class="qattend_bh_intake_between_ia_thirty_day"><label class="label-top">||FIELDTAG attend_bh_intake_between_ia_thirty_day||Did youth attend a behavioral health intake between initial assessment and now?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake_between_ia_thirty_day"><input type="radio" name="attend_bh_intake_between_ia_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake_between_ia_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"><i>IF YES, PLEASE COMPLETE/UPDATE BEHAVIORAL HEALTH SERVICES FORM IMMEDIATELY FOLLOWING COMPLETION OF THIS FORM.</i></label></div>
+  </div>
+<div class="entire">
+</div>
+<div class="entire">
+  <div class="col6"><label class="label-top"></label></div>
+</div>
+ <div class="entire">
+    <div class="col6 qlegal_guardian_meet_yere_family_support_specialist_thirty_day">
+    <div class="col6 fldlegal_guardian_meet_yere_family_support_specialist_thirty_day qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><span class="qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><label class="label-top">||FIELDTAG legal_guardian_meet_yere_family_support_specialist_thirty_day||Did legal guardian(s) have a meeting with a YERE Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><input type="radio" name="legal_guardian_meet_yere_family_support_specialist_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="legal_guardian_meet_yere_family_support_specialist_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6 qcase_staffed_yere_collab_staffing_thirty_day">
+    <div class="col6 fldcase_staffed_yere_collab_staffing_thirty_day qcase_staffed_yere_collab_staffing_thirty_day"><span class="qcase_staffed_yere_collab_staffing_thirty_day"><label class="label-top">||FIELDTAG case_staffed_yere_collab_staffing_thirty_day||Was youth/family case staffed in a YERE collaborative staffing?||ENDFIELDTAG||</label></span><span class="qcase_staffed_yere_collab_staffing_thirty_day"><input type="radio" name="case_staffed_yere_collab_staffing_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="case_staffed_yere_collab_staffing_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+<div class="entire">
+  <div class="col6"><label class="label-top"></label></div>
+</div>
+ <div class="entire">
+    <div class="col12 fldactively_engaged_bhs_past_thirty_days_thirty_day qactively_engaged_bhs_past_thirty_days_thirty_day">
+    <div class="col12 fldactively_engaged_bhs_past_thirty_days_thirty_day qactively_engaged_bhs_past_thirty_days_thirty_day"><span class="qactively_engaged_bhs_past_thirty_days_thirty_day"><label class="label-top">||FIELDTAG actively_engaged_bhs_past_thirty_days_thirty_day||Is youth actively engaged in  behavioral services?||ENDFIELDTAG||</label></span><span class="qactively_engaged_bhs_past_thirty_days_thirty_day"><input type="radio" name="actively_engaged_bhs_past_thirty_days_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="actively_engaged_bhs_past_thirty_days_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldnotes_thirty_day qnotes_thirty_day">
+    <div class="col12 fldnotes_thirty_day qnotes_thirty_day"><span class="qnotes_thirty_day"><label class="label-top">||FIELDTAG notes_thirty_day||Notes||ENDFIELDTAG||</label></span><span class="qnotes_thirty_day"><textarea name="notes_thirty_day" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
 
 </div>

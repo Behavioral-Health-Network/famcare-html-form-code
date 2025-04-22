@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>6 Month Follow-Up</title>
+<title>SU Treatment Agency</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
@@ -35,16 +35,15 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('treatment_path_six_month');
-    setrequire('rc_only_client_attend_first_appt_coach_six_month');
-    setrequire('rc_only_last_date_communication_six_month');
-    // client_attend_intake_appt_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-    // setrequire('client_attend_intake_appt_six_month');
-    setrequire('mat_prescribed_physician_appt_six_month');
-    setrequire('what_mat_physician_appt_six_month');
-    setrequire('program_participation_six_month');
+    setrequire('epicc_su_tx_agency');
+    setrequire('pfh_tx_facility');
+    setrequire('start_date');
+    setrequire('su_tx_intake');
+    setrequire('intake_not_completed');
+    setrequire('coach_attend_intake');
+    setrequire('ces_attend_intake')
 
-	checkhideall();
+    checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
@@ -52,16 +51,16 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.treatment_path_six_month,"rc_only_client_attend_first_appt_coach_six_month","Recovery Coach Only");
-   checkhide(f.treatment_path_six_month,"rc_only_last_date_communication_six_month","Recovery Coach Only");
-//    checkhide(f.treatment_path_six_month,"client_attend_intake_appt_six_month","MAT,Non-MAT Treatment");
-//    intake_appt_date_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-//    checkhide(f.client_attend_intake_appt_six_month,"intake_appt_date_six_month","Yes");
-   checkhide(f.treatment_path_six_month,"intake_conducted_appt_date_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_six_month,"mat_prescribed_physician_appt_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.mat_prescribed_physician_appt_six_month,"what_mat_physician_appt_six_month","Yes");
-   checkhide(f.program_participation_six_month,"preg_post_part_six_month","020,021");
-
+      checkhide(f.epicc_su_tx_agency,"pfh_tx_facility","013")
+      checkhide(f.epicc_su_tx_agency,"if_other_specify","012");
+      checkhide(f.su_tx_intake,"su_tx_intake_date","Yes");
+      checkhide(f.su_tx_intake,"was_intake_completed","Yes");
+      checkhide(f.was_intake_completed,"intake_not_completed","No");
+      checkhide(f.intake_not_completed,"intake_not_completed_other","Other");
+      checkhide(f.su_tx_intake,"coach_attend_intake","Yes");
+      checkhide(f.coach_attend_intake,"coach_not_attend_intake","No");
+      checkhide(f.su_tx_intake,"ces_attend_intake","Yes");
+      checkhide(f.ces_attend_intake,"ces_not_attend_intake","No");
 }
 
 function addEventListeners(){
@@ -291,14 +290,12 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('treatment_path_six_month') && gvtfieldvalue('treatment_path_six_month')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_six_month");}
-  if (!hiddenfield('rc_only_client_attend_first_appt_coach_six_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_six_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_six_month");}
-  if (!hiddenfield('rc_only_last_date_communication_six_month') && gvtfieldvalue('rc_only_last_date_communication_six_month')=='') {edesc=edesc+`Must specify a value for Date of Last Communication\n`; seterror("rc_only_last_date_communication_six_month");}
-  // if (!hiddenfield('client_attend_intake_appt_six_month') && gvtfieldvalue('client_attend_intake_appt_six_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_six_month");}
-  if (!hiddenfield('mat_prescribed_physician_appt_six_month') && gvtfieldvalue('mat_prescribed_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_six_month");}
-  if (!hiddenfield('what_mat_physician_appt_six_month') && gvtfieldvalue('what_mat_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_six_month");}
-  if (!hiddenfield('program_participation_six_month') && gvtfieldvalue('program_participation_six_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_six_month");}
-  // if (!hiddenfield('if_transfer_contact_transfer_region_success_six_month') && gvtfieldvalue('if_transfer_contact_transfer_region_success_six_month')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_six_month");}
+  if (!hiddenfield('epicc_su_tx_agency') && gvtfieldvalue('epicc_su_tx_agency')=='') {edesc=edesc+`Must specify a value for Referred Treatment Agency\n`; seterror("epicc_su_tx_agency");}
+  if (!hiddenfield('start_date') && gvtfieldvalue('start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("start_date");}
+  if (!hiddenfield('su_tx_intake') && gvtfieldvalue('su_tx_intake')==''){edesc=edesc+`Must specify a value for if client attend a new intake\n`; seterror("su_tx_intake");}
+  if (!hiddenfield('intake_not_completed') && gvtfieldvalue('intake_not_completed')==''){edesc=edesc+`Must specify a value for why intake was not completed\n`; seterror("intake_not_completed");}
+  if (!hiddenfield('coach_attend_intake') && gvtfieldvalue('coach_attend_intake')==''){edesc=edesc+`Must specify a value for if the epicc coach attend an intake\n`; seterror("coach_attend_intake");}
+  if (!hiddenfield('ces_attend_intake') && gvtfieldvalue('ces_attend_intake')==''){edesc=edesc+`Must specify a value for if the CES attend an intake\n`; seterror("ces_attend_intake");}
 
     return edesc;
 }
@@ -507,7 +504,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWEPICC6MonthFollowUp" />
+    <input type="hidden" name="TABLENAME" value="PWSUBroadTreatmentAgency" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -520,7 +517,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>6 Month Follow-Up</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>SU Treatment Agency</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -532,6 +529,7 @@ function updatesignatures(){
     </div>
 <div class="deflist">
 <div class="entire">
+<div class="col12 term"></div>
 </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
@@ -539,108 +537,110 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month"><span class="qtreatment_path_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_six_month required-field-label"><label class="label-top">||FIELDTAG treatment_path_six_month||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_six_month"><input type="radio" name="treatment_path_six_month" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Select the treatment agency from the drop down. Enter the start date. </label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_su_tx_agency qepicc_su_tx_agency">
+    <div class="col12 fldepicc_su_tx_agency qepicc_su_tx_agency"><span class="qepicc_su_tx_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_su_tx_agency required-field-label"><label class="label-top">Referred Treatment Agency</label></span><span class="qepicc_su_tx_agency"><select size="1" name="epicc_su_tx_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') AND is_facility='0' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_su_tx_agency||
+</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month"><span class="qrc_only_client_attend_first_appt_coach_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_six_month||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_six_month"><input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpfh_tx_facility qpfh_tx_facility">
+    <div class="col12 fldpfh_tx_facility qpfh_tx_facility"><span class="qpfh_tx_facility required-label">||PWRequiredFieldRequiredText||</span><span class="qpfh_tx_facility required-field-label"><label class="label-top">Preferred Family Healthcare Location</label></span><span class="qpfh_tx_facility"><select size="1" name="pfh_tx_facility" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_su_tx_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_su_tx_agency^^') AND is_facility='1' AND facility_location='PFH' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_su_tx_agency||
+</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month"><span class="qrc_only_last_date_communication_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_last_date_communication_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_last_date_communication_six_month||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_six_month"><input type="text" name="rc_only_last_date_communication_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 fldif_other_specify qif_other_specify">
+    <div class="col12 fldif_other_specify qif_other_specify"><span class="qif_other_specify"><label class="label-top">||FIELDTAG if_other_specify||If "Other", Specify||ENDFIELDTAG||</label></span><span class="qif_other_specify"><input type="text" name="if_other_specify" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
- <!-- <div class="entire">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month"><span class="qclient_attend_intake_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_six_month required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_six_month||Did client attend an intake appointment?||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_six_month"><select size="1"  name="client_attend_intake_appt_six_month" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qstart_date">
+    <div class="col6 fldstart_date qstart_date"><span class="qstart_date required-label">||PWRequiredFieldRequiredText||</span><span class="qstart_date required-field-label"><label class="label-top">||FIELDTAG start_date||Start Date||ENDFIELDTAG||</label></span><span class="qstart_date"><input type="text" name="start_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+    <div class="col6 qend_date">
+    <div class="col6 fldend_date qend_date"><span class="qend_date"><label class="label-top">||FIELDTAG end_date||End Date||ENDFIELDTAG||</label></span><span class="qend_date"><input type="text" name="end_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldsu_tx_intake qsu_tx_intake">
+    <div class="col12 fldsu_tx_intake qsu_tx_intake"><span class="qsu_tx_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_tx_intake required-field-label"><label class="label-top">||FIELDTAG su_tx_intake||Did client attend a new intake?||ENDFIELDTAG||</label></span><span class="qsu_tx_intake"><input type="radio" name="su_tx_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="su_tx_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    </div>
+   </div>
+  <div class="entire">
+    <div class="col12 qsu_tx_intake_date">
+        <div class="col12 fldsu_tx_intake_date"><span class="qsu_tx_intake_date"><label class="label-top">||FIELDTAG su_tx_intake_date||Intake Date||ENDFIELDTAG||</label></span><span class="qsu_tx_intake_date"><input type="text" name="su_tx_intake_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+         </div>
+   </div>
+   <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+     <div class="col12 fldwas_intake_completed qwas_intake_completed">
+        <div class="col12 fldwas_intake_completed qwas_intake_completed"><span class="qwas_intake_completed"><label class="label-top">||FIELDTAG was_intake_completed||Was intake completed?||ENDFIELDTAG||</label></span><span class="qwas_intake_completed"><input type="radio" name="was_intake_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="was_intake_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+         </div>
+     </div>    
+    <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+    </div>
+    <div class="entire">
+        <div class="col12 fldintake_not_completed qintake_not_completed">
+        <div class="col12 fldintake_not_completed qintake_not_completed"><span class="qintake_not_completed required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_not_completed required-field-label"><label class="label-top">||FIELDTAG intake_not_completed||Why was intake not completed?||ENDFIELDTAG||</label></span><span class="qintake_not_completed"><select size="1"  name="intake_not_completed" onchange="checkhideall()" >
+    <option value="">(please select)</option>
+    <option value="Agency Refused">Agency Refused</option>
+    <option value="Client Declined">Client Declined</option>
+    <option value="Agency Refused ">Client Medically Unstable For Intake</option>
+    <option value="Criteria Not Met For Treatment">Criteria Not Met For Treatment</option>
+    <option value="Necessary Providers Unavailable">Necessary Providers Unavailable</option>
+    <option value="Scheduling Or Timing Issue">Scheduling Or Timing Issue</option>
+    <option value="Other">Other</option>
+    
+    </select></span></div>
+         </div>
+        </div>
+      <div class="col6 qintake_not_completed_other">
+        <div class="col6 fldintake_not_completed_other qintake_not_completed_other"><span class="qintake_not_completed_other"><label class="label-top">||FIELDTAG intake_not_completed_other||Other Reason Intake Wasn't Completed||ENDFIELDTAG||</label></span><span class="qintake_not_completed_other"><textarea name="intake_not_completed_other" class="autoexpand"></textarea></span></div>
+      <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+    </div>
+      <div class="entire">
+        <div class="col12 fldcoach_attend_intake qcoach_attend_intake">
+        <div class="col12 fldcoach_attend_intake qcoach_attend_intake"><span class="qcoach_attend_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qcoach_attend_intake-field-label"><label class="label-top">||FIELDTAG coach_attend_intake||Did EPICC coach attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_attend_intake"><input type="radio" name="coach_attend_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="coach_attend_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+       </div>
+       <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+      <div class="col6 qcoach_not_attend_intake">
+        <div class="col6 fldcoach_not_attend_intake qcoach_not_attend_intake"><span class="qcoach_not_attend_intake"><label class="label-top">||FIELDTAG coach_not_attend_intake||Why did EPICC coach not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qcoach_not_attend_intake"><textarea name="coach_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
+      <div class="entire">
+        <div class="col12 fldces_attend_intake qces_attend_intake">
+        <div class="col12 fldces_attend_intake qces_attend_intake"><span class="qces_attend_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qces_attend_intake-field-label"><label class="label-top">||FIELDTAG ces_attend_intake||Did CES attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_attend_intake"><input type="radio" name="ces_attend_intake"value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ces_attend_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        </div>
+       </div>
+       <div class="entire">
+        <div class="col12"><label class="label-top"></label></div>
+      </div>
+      <div class="col6 qces_not_attend_intake">
+        <div class="col6 fldces_not_attend_intake qces_not_attend_intake"><span class="qces_not_attend_intake"><label class="label-top">||FIELDTAG ces_not_attend_intake||Why did CES not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_not_attend_intake"><textarea name="ces_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
 
-</select></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month"><span class="qintake_appt_date_six_month"><label class="label-top">||FIELDTAG intake_appt_date_six_month||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_six_month"><input type="text" name="intake_appt_date_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
- <div class="entire">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month"><span class="qintake_conducted_appt_date_six_month"><label class="label-top">||FIELDTAG intake_conducted_appt_date_six_month||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_six_month"><input type="radio" name="intake_conducted_appt_date_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Active Treatment Agency</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client is still actively attending the same substance use treatment agency, leave as is. If client chose to attend a different agency click "View/Edit" to add an "End Date" to the active treatment agency and then create a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWSUBroadTreatmentAgency||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month"><span class="qmat_prescribed_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_six_month required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_six_month||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_six_month"><input type="radio" name="mat_prescribed_physician_appt_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month"><span class="qwhat_mat_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_six_month required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_six_month"><select size="1" name="what_mat_physician_appt_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_six_month^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_types_mat||
-</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Program Participation</div>
-</div>
- <div class="entire">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month"><span class="qprogram_participation_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_six_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_six_month"><select size="1" name="program_participation_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_six_month^^') and six_month_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_program_participation||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month"><span class="qpreg_post_part_six_month"><label class="label-top">||FIELDTAG preg_post_part_six_month||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_six_month"><input type="radio" name="preg_post_part_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Housing Status</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Payor Source</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's payor source hasn't changed, leave as is. If client's payor source has changed, click "View/Edit", add an "End Date" to the current entry, select "No" for "Payor is Current", then add a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
-  </div>
 
 </div>
 </div>

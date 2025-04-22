@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>6 Month Follow-Up</title>
+<title>Housing Status</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
@@ -35,14 +35,9 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('treatment_path_six_month');
-    setrequire('rc_only_client_attend_first_appt_coach_six_month');
-    setrequire('rc_only_last_date_communication_six_month');
-    // client_attend_intake_appt_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-    // setrequire('client_attend_intake_appt_six_month');
-    setrequire('mat_prescribed_physician_appt_six_month');
-    setrequire('what_mat_physician_appt_six_month');
-    setrequire('program_participation_six_month');
+    setrequire('client_housing_status');
+    setrequire('housing_start_date');
+    setrequire('homeless_housing_insecure_eto');
 
 	checkhideall();
 
@@ -52,15 +47,8 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.treatment_path_six_month,"rc_only_client_attend_first_appt_coach_six_month","Recovery Coach Only");
-   checkhide(f.treatment_path_six_month,"rc_only_last_date_communication_six_month","Recovery Coach Only");
-//    checkhide(f.treatment_path_six_month,"client_attend_intake_appt_six_month","MAT,Non-MAT Treatment");
-//    intake_appt_date_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-//    checkhide(f.client_attend_intake_appt_six_month,"intake_appt_date_six_month","Yes");
-   checkhide(f.treatment_path_six_month,"intake_conducted_appt_date_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_six_month,"mat_prescribed_physician_appt_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.mat_prescribed_physician_appt_six_month,"what_mat_physician_appt_six_month","Yes");
-   checkhide(f.program_participation_six_month,"preg_post_part_six_month","020,021");
+      checkhide(f.client_housing_status,"if_unhoused_exp","Unhoused");
+   checkhide(f.client_housing_status,"worried_losing_housing","Institutionally Housed,Precariously Housed,Stably Housed");
 
 }
 
@@ -291,14 +279,9 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('treatment_path_six_month') && gvtfieldvalue('treatment_path_six_month')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_six_month");}
-  if (!hiddenfield('rc_only_client_attend_first_appt_coach_six_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_six_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_six_month");}
-  if (!hiddenfield('rc_only_last_date_communication_six_month') && gvtfieldvalue('rc_only_last_date_communication_six_month')=='') {edesc=edesc+`Must specify a value for Date of Last Communication\n`; seterror("rc_only_last_date_communication_six_month");}
-  // if (!hiddenfield('client_attend_intake_appt_six_month') && gvtfieldvalue('client_attend_intake_appt_six_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_six_month");}
-  if (!hiddenfield('mat_prescribed_physician_appt_six_month') && gvtfieldvalue('mat_prescribed_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_six_month");}
-  if (!hiddenfield('what_mat_physician_appt_six_month') && gvtfieldvalue('what_mat_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_six_month");}
-  if (!hiddenfield('program_participation_six_month') && gvtfieldvalue('program_participation_six_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_six_month");}
-  // if (!hiddenfield('if_transfer_contact_transfer_region_success_six_month') && gvtfieldvalue('if_transfer_contact_transfer_region_success_six_month')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_six_month");}
+  if (!hiddenfield('client_housing_status') && gvtfieldvalue('client_housing_status')=='') {edesc=edesc+`Must specify a value for Housing Status\n`; seterror("client_housing_status");}
+  if (!hiddenfield('housing_start_date') && gvtfieldvalue('housing_start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("housing_start_date");}
+  if (!hiddenfield('homeless_housing_insecure_eto') && gvtfieldvalue('homeless_housing_insecure_eto')=='') {edesc=edesc+`Must specify a value for Is client currently experiencing housing instability or homelessness?\n`; seterror("homeless_housing_insecure_eto");}
 
     return edesc;
 }
@@ -507,7 +490,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWEPICC6MonthFollowUp" />
+    <input type="hidden" name="TABLENAME" value="PWHousingStatus" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -520,7 +503,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>6 Month Follow-Up</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>Housing Status</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -539,107 +522,86 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month"><span class="qtreatment_path_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_six_month required-field-label"><label class="label-top">||FIELDTAG treatment_path_six_month||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_six_month"><input type="radio" name="treatment_path_six_month" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
-     </div>
+    <div class="col12"><label class="label-top">Institutionally Housed</label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month"><span class="qrc_only_client_attend_first_appt_coach_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_six_month||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_six_month"><input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month"><span class="qrc_only_last_date_communication_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_last_date_communication_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_last_date_communication_six_month||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_six_month"><input type="text" name="rc_only_last_date_communication_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <!-- <div class="entire">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month"><span class="qclient_attend_intake_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_six_month required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_six_month||Did client attend an intake appointment?||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_six_month"><select size="1"  name="client_attend_intake_appt_six_month" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
-
-</select></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month"><span class="qintake_appt_date_six_month"><label class="label-top">||FIELDTAG intake_appt_date_six_month||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_six_month"><input type="text" name="intake_appt_date_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
- <div class="entire">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month"><span class="qintake_conducted_appt_date_six_month"><label class="label-top">||FIELDTAG intake_conducted_appt_date_six_month||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_six_month"><input type="radio" name="intake_conducted_appt_date_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Active Treatment Agency</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client is still actively attending the same substance use treatment agency, leave as is. If client chose to attend a different agency click "View/Edit" to add an "End Date" to the active treatment agency and then create a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWSUBroadTreatmentAgency||</div>
+    <div class="col12"><label class="label-top">Client has a long term residence within an established organization. 
+Examples: Inpatient Hospitalization or Treatment, Jail or Prison, Transitional House, Skilled Nursing Facility</label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month"><span class="qmat_prescribed_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_six_month required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_six_month||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_six_month"><input type="radio" name="mat_prescribed_physician_appt_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
+    <div class="col12"><label class="label-top">Precariously Housed</label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month"><span class="qwhat_mat_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_six_month required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_six_month"><select size="1" name="what_mat_physician_appt_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_six_month^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_types_mat||
-</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Program Participation</div>
-</div>
- <div class="entire">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month"><span class="qprogram_participation_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_six_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_six_month"><select size="1" name="program_participation_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_six_month^^') and six_month_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_program_participation||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month"><span class="qpreg_post_part_six_month"><label class="label-top">||FIELDTAG preg_post_part_six_month||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_six_month"><input type="radio" name="preg_post_part_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Housing Status</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+    <div class="col12"><label class="label-top">Permanence of housing is not necessarily within full control of client. 
+Examples: Hotel, Friend or Family Residence, Currently own/rent but Unable to Make Payments, Domestic Violence Situation/Trying to Flee</label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
+    <div class="col12"><label class="label-top">Stably Housed</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Permanence of Housing Within Reasonable Control of Client. 
+Examples: Owns Home, Rents Home, Group Home</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Unhoused</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Client is without reliable and ongoing shelter. 
+Examples: Staying on street/outdoors, Emergency Shelter</label></div>
+  </div>
+ <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
-<div class="col12 term">Payor Source</div>
+<div class="col12 term">Client Housing Status</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's payor source hasn't changed, leave as is. If client's payor source has changed, click "View/Edit", add an "End Date" to the current entry, select "No" for "Payor is Current", then add a new entry.</i></label></div>
+    <div class="col12"><label class="label-top">Please select the option that best describes the client's housing situation.</label></div>
   </div>
  <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+    <div class="col12 fldclient_housing_status qclient_housing_status">
+    <div class="col12 fldclient_housing_status qclient_housing_status"><span class="qclient_housing_status required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_housing_status required-field-label"><label class="label-top">||FIELDTAG client_housing_status||Housing Status||ENDFIELDTAG||</label></span><span class="qclient_housing_status"><input type="radio" name="client_housing_status" value="Institutionally Housed" onclick="checkhideall()" >Institutionally Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Precariously Housed" onclick="checkhideall()" >Precariously Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Stably Housed" onclick="checkhideall()" >Stably Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Unhoused" onclick="checkhideall()" >Unhoused&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qhousing_start_date">
+    <div class="col6 fldhousing_start_date qhousing_start_date"><span class="qhousing_start_date required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_start_date required-field-label"><label class="label-top">||FIELDTAG housing_start_date||Start Date||ENDFIELDTAG||</label></span><span class="qhousing_start_date"><input type="text" name="housing_start_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+    <div class="col6 qhousing_end_date">
+    <div class="col6 fldhousing_end_date qhousing_end_date"><span class="qhousing_end_date"><label class="label-top">||FIELDTAG housing_end_date||End Date||ENDFIELDTAG||</label></span><span class="qhousing_end_date"><input type="text" name="housing_end_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qif_unhoused_exp">
+    <div class="col6 fldif_unhoused_exp qif_unhoused_exp"><span class="qif_unhoused_exp"><label class="label-top">||FIELDTAG if_unhoused_exp||If "Unhoused", where do they spend their time?||ENDFIELDTAG||</label></span><span class="qif_unhoused_exp"><textarea name="if_unhoused_exp" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qworried_losing_housing">
+    <div class="col6 fldworried_losing_housing qworried_losing_housing"><span class="qworried_losing_housing"><label class="label-top">||FIELDTAG worried_losing_housing||If client is currently housed, are they worried about losing their housing within the next year?||ENDFIELDTAG||</label></span><span class="qworried_losing_housing"><input type="radio" name="worried_losing_housing" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="worried_losing_housing" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col6"><label class="label-top">For FY25 only, please answer the following question.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col6 qhomeless_housing_insecure_eto">
+    <div class="col6 fldhomeless_housing_insecure_eto qhomeless_housing_insecure_eto"><span class="qhomeless_housing_insecure_eto required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_housing_insecure_eto required-field-label"><label class="label-top">||FIELDTAG homeless_housing_insecure_eto||Is client currently experiencing housing instability or homelessness?||ENDFIELDTAG||</label></span><span class="qhomeless_housing_insecure_eto"><input type="radio" name="homeless_housing_insecure_eto" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="homeless_housing_insecure_eto" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="homeless_housing_insecure_eto" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
   </div>
 
 </div>

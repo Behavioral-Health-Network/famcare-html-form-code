@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>6 Month Follow-Up</title>
+<title>Payor Source</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
@@ -35,14 +35,11 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('treatment_path_six_month');
-    setrequire('rc_only_client_attend_first_appt_coach_six_month');
-    setrequire('rc_only_last_date_communication_six_month');
-    // client_attend_intake_appt_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-    // setrequire('client_attend_intake_appt_six_month');
-    setrequire('mat_prescribed_physician_appt_six_month');
-    setrequire('what_mat_physician_appt_six_month');
-    setrequire('program_participation_six_month');
+    setrequire('payor_source');
+    setrequire('managed_medicaid_provider');
+    setrequire('show_me_healthy_kids');
+    setrequire('payor_source_start_date');
+    setrequire('payor_is_current');
 
 	checkhideall();
 
@@ -52,15 +49,9 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.treatment_path_six_month,"rc_only_client_attend_first_appt_coach_six_month","Recovery Coach Only");
-   checkhide(f.treatment_path_six_month,"rc_only_last_date_communication_six_month","Recovery Coach Only");
-//    checkhide(f.treatment_path_six_month,"client_attend_intake_appt_six_month","MAT,Non-MAT Treatment");
-//    intake_appt_date_six_month is being moved to the PWSUBroadTreatmentAgency summation. Do not remove the data from the table. 
-//    checkhide(f.client_attend_intake_appt_six_month,"intake_appt_date_six_month","Yes");
-   checkhide(f.treatment_path_six_month,"intake_conducted_appt_date_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_six_month,"mat_prescribed_physician_appt_six_month","MAT,Non-MAT Treatment");
-   checkhide(f.mat_prescribed_physician_appt_six_month,"what_mat_physician_appt_six_month","Yes");
-   checkhide(f.program_participation_six_month,"preg_post_part_six_month","020,021");
+      checkhide(f.payor_source,"private_insurance_provider","007");
+   checkhide(f.payor_source,"managed_medicaid_provider","005");
+   checkhide(f.managed_medicaid_provider,"show_me_healthy_kids","002");
 
 }
 
@@ -291,14 +282,11 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('treatment_path_six_month') && gvtfieldvalue('treatment_path_six_month')=='') {edesc=edesc+`Must specify a value for Treatment Path\n`; seterror("treatment_path_six_month");}
-  if (!hiddenfield('rc_only_client_attend_first_appt_coach_six_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_six_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_six_month");}
-  if (!hiddenfield('rc_only_last_date_communication_six_month') && gvtfieldvalue('rc_only_last_date_communication_six_month')=='') {edesc=edesc+`Must specify a value for Date of Last Communication\n`; seterror("rc_only_last_date_communication_six_month");}
-  // if (!hiddenfield('client_attend_intake_appt_six_month') && gvtfieldvalue('client_attend_intake_appt_six_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_six_month");}
-  if (!hiddenfield('mat_prescribed_physician_appt_six_month') && gvtfieldvalue('mat_prescribed_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_six_month");}
-  if (!hiddenfield('what_mat_physician_appt_six_month') && gvtfieldvalue('what_mat_physician_appt_six_month')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_six_month");}
-  if (!hiddenfield('program_participation_six_month') && gvtfieldvalue('program_participation_six_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_six_month");}
-  // if (!hiddenfield('if_transfer_contact_transfer_region_success_six_month') && gvtfieldvalue('if_transfer_contact_transfer_region_success_six_month')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_six_month");}
+  if (!hiddenfield('payor_source') && gvtfieldvalue('payor_source')=='') {edesc=edesc+`Must specify a value for Payor Source\n`; seterror("payor_source");}
+  if (!hiddenfield('managed_medicaid_provider') && gvtfieldvalue('managed_medicaid_provider')=='') {edesc=edesc+`Must specify a value for Managed Medicaid Provider\n`; seterror("managed_medicaid_provider");}
+  if (!hiddenfield('show_me_healthy_kids') && gvtfieldvalue('show_me_healthy_kids')=='') {edesc=edesc+`Must specify a value for Show Me Healthy Kids\n`; seterror("show_me_healthy_kids");}
+  if (!hiddenfield('payor_source_start_date') && gvtfieldvalue('payor_source_start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("payor_source_start_date");}
+  if (!hiddenfield('payor_is_current') && gvtfieldvalue('payor_is_current')=='') {edesc=edesc+`Must specify a value for Payor is Current\n`; seterror("payor_is_current");}
 
     return edesc;
 }
@@ -507,7 +495,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWEPICC6MonthFollowUp" />
+    <input type="hidden" name="TABLENAME" value="PWPayorSource" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -520,7 +508,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>6 Month Follow-Up</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>Payor Source</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -539,23 +527,41 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month">
-    <div class="col12 fldtreatment_path_six_month qtreatment_path_six_month"><span class="qtreatment_path_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_six_month required-field-label"><label class="label-top">||FIELDTAG treatment_path_six_month||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_six_month"><input type="radio" name="treatment_path_six_month" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_six_month" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Select the payor source from the dropdown list. If more than one payor source is active, then create a new record for the other payor source and ensure that both are marked active.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpayor_source qpayor_source">
+    <div class="col12 fldpayor_source qpayor_source"><span class="qpayor_source required-label">||PWRequiredFieldRequiredText||</span><span class="qpayor_source required-field-label"><label class="label-top">Payor Source</label></span><span class="qpayor_source"><select size="1" name="payor_source" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [payor_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE payor_source^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE payor_source||
+</span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_six_month qrc_only_client_attend_first_appt_coach_six_month"><span class="qrc_only_client_attend_first_appt_coach_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_six_month||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_six_month"><input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldprivate_insurance_provider qprivate_insurance_provider">
+    <div class="col12 fldprivate_insurance_provider qprivate_insurance_provider"><span class="qprivate_insurance_provider"><label class="label-top">||FIELDTAG private_insurance_provider||Private Insurance Provider||ENDFIELDTAG||</label></span><span class="qprivate_insurance_provider"><input type="text" name="private_insurance_provider" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month">
-    <div class="col12 fldrc_only_last_date_communication_six_month qrc_only_last_date_communication_six_month"><span class="qrc_only_last_date_communication_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_last_date_communication_six_month required-field-label"><label class="label-top">||FIELDTAG rc_only_last_date_communication_six_month||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_six_month"><input type="text" name="rc_only_last_date_communication_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 fldmanaged_medicaid_provider qmanaged_medicaid_provider">
+    <div class="col12 fldmanaged_medicaid_provider qmanaged_medicaid_provider"><span class="qmanaged_medicaid_provider required-label">||PWRequiredFieldRequiredText||</span><span class="qmanaged_medicaid_provider required-field-label"><label class="label-top">Managed Medicaid Provider</label></span><span class="qmanaged_medicaid_provider"><select size="1" name="managed_medicaid_provider" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [managed_medicaid_provider] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE managed_medicaid_provider^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE managed_medicaid_provider||
+</span></div>
      </div>
   </div>
- <!-- <div class="entire">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month">
-    <div class="col12 fldclient_attend_intake_appt_six_month qclient_attend_intake_appt_six_month"><span class="qclient_attend_intake_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_six_month required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_six_month||Did client attend an intake appointment?||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_six_month"><select size="1"  name="client_attend_intake_appt_six_month" onchange="checkhideall()" >
+ <div class="entire">
+    <div class="col12 fldshow_me_healthy_kids qshow_me_healthy_kids">
+    <div class="col12 fldshow_me_healthy_kids qshow_me_healthy_kids"><span class="qshow_me_healthy_kids required-label">||PWRequiredFieldRequiredText||</span><span class="qshow_me_healthy_kids required-field-label"><label class="label-top">||FIELDTAG show_me_healthy_kids||Show Me Healthy Kids||ENDFIELDTAG||</label></span><span class="qshow_me_healthy_kids"><select size="1"  name="show_me_healthy_kids" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
@@ -564,82 +570,19 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month">
-    <div class="col12 fldintake_appt_date_six_month qintake_appt_date_six_month"><span class="qintake_appt_date_six_month"><label class="label-top">||FIELDTAG intake_appt_date_six_month||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_six_month"><input type="text" name="intake_appt_date_six_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
- <div class="entire">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month">
-    <div class="col12 fldintake_conducted_appt_date_six_month qintake_conducted_appt_date_six_month"><span class="qintake_conducted_appt_date_six_month"><label class="label-top">||FIELDTAG intake_conducted_appt_date_six_month||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_six_month"><input type="radio" name="intake_conducted_appt_date_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpayor_source_start_date qpayor_source_start_date">
+    <div class="col12 fldpayor_source_start_date qpayor_source_start_date"><span class="qpayor_source_start_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpayor_source_start_date required-field-label"><label class="label-top">||FIELDTAG payor_source_start_date||Start Date||ENDFIELDTAG||</label></span><span class="qpayor_source_start_date"><input type="text" name="payor_source_start_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Active Treatment Agency</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client is still actively attending the same substance use treatment agency, leave as is. If client chose to attend a different agency click "View/Edit" to add an "End Date" to the active treatment agency and then create a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWSUBroadTreatmentAgency||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month">
-    <div class="col12 fldmat_prescribed_physician_appt_six_month qmat_prescribed_physician_appt_six_month"><span class="qmat_prescribed_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_six_month required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_six_month||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_six_month"><input type="radio" name="mat_prescribed_physician_appt_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpayor_source_end_date qpayor_source_end_date">
+    <div class="col12 fldpayor_source_end_date qpayor_source_end_date"><span class="qpayor_source_end_date"><label class="label-top">||FIELDTAG payor_source_end_date||End Date||ENDFIELDTAG||</label></span><span class="qpayor_source_end_date"><input type="text" name="payor_source_end_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month">
-    <div class="col12 fldwhat_mat_physician_appt_six_month qwhat_mat_physician_appt_six_month"><span class="qwhat_mat_physician_appt_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_six_month required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_six_month"><select size="1" name="what_mat_physician_appt_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_six_month^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_types_mat||
-</span></div>
+    <div class="col12 fldpayor_is_current qpayor_is_current">
+    <div class="col12 fldpayor_is_current qpayor_is_current"><span class="qpayor_is_current required-label">||PWRequiredFieldRequiredText||</span><span class="qpayor_is_current required-field-label"><label class="label-top">||FIELDTAG payor_is_current||Payor is Current||ENDFIELDTAG||</label></span><span class="qpayor_is_current"><input type="radio" name="payor_is_current" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="payor_is_current" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Program Participation</div>
-</div>
- <div class="entire">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month">
-    <div class="col12 fldprogram_participation_six_month qprogram_participation_six_month"><span class="qprogram_participation_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_six_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_six_month"><select size="1" name="program_participation_six_month" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_six_month^^') and six_month_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_program_participation||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month">
-    <div class="col12 fldpreg_post_part_six_month qpreg_post_part_six_month"><span class="qpreg_post_part_six_month"><label class="label-top">||FIELDTAG preg_post_part_six_month||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_six_month"><input type="radio" name="preg_post_part_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_six_month" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Housing Status</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Payor Source</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's payor source hasn't changed, leave as is. If client's payor source has changed, click "View/Edit", add an "End Date" to the current entry, select "No" for "Payor is Current", then add a new entry.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
   </div>
 
 </div>

@@ -20,38 +20,95 @@
 
 <script language="JavaScript">
 
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
 // Add MutationObserver as a fallback to the inclusion of the onchange event listener for
 // updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
 // if the function is run via startup() too early and does not run again dynamically upon change.
-const observer = new MutationObserver(() => {
+// const observer = new MutationObserver(() => {
   // Use querySelectorAll to find all relevant dropdowns
-  const dropdowns = document.querySelectorAll('#epicc_opioids_of_use'); // Add more IDs as needed
+//  const dropdowns = document.querySelectorAll('#epicc_opioids_of_use'); // Add more IDs as needed
 
-  dropdowns.forEach(dropdown => {
-    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
-      console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+    
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
 
       // Add the onchange event listener
-      dropdown.addEventListener('change', () => {
-        updateReportFields([dropdown.id]); // Pass the specific table ID to updateReportFields
-      });
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
 
       // Initialize the table's hidden fields
-      updateReportFields([dropdown.id]);
+//      updateReportFields([dropdown.id]);
 
       // Mark as initialized to avoid redundant listeners
-      dropdown.dataset.initialized = true;
-    }
-  });
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
 
-  if (dropdowns.length > 0) {
-    // Disconnect the observer if all dropdowns are found
-    observer.disconnect();
-  }
-});
+//     if (dropdowns.length > 0) {
+// Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
 
 // Start observing the document body for changes
-observer.observe(document.body, { childList: true, subtree: true });
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#epicc_opioids_of_use', listenerSetup);
 
 var genpdf='true';
 
@@ -80,8 +137,6 @@ $("#gvttimetime_referral_placed").timepicker({  'step':1, 'scrollDefault': 'now'
     setrequire('time_referral_placed');
 $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault': 'now'});
     setrequire('time_recovery_coach_arrival');
-$("#gvttimetime_recovery_coach_response").timepicker({  'step':1, 'scrollDefault': 'now'});
-    setrequire('time_recovery_coach_response');
     setrequire('epicc_pro_or_core_ic');
     setrequire('program_participation_ic');
     setrequire('treatment_path_ic');
@@ -145,13 +200,13 @@ function checkhideall() {
    checkhide(f.program_participation_ic,"status_unable_contact_transfer","005,010");
    checkhide(f.program_participation_ic,"why_not_meet_prog_eligibility_ic","002");
    checkhide(f.why_not_meet_prog_eligibility_ic,"non_opioid_substance","Non-Opioid User");
-   checkhide(f.program_participation_ic,"treatment_path_ic","001");
+   checkhide(f.program_participation_ic,"treatment_path_ic","019");
    checkhide(f.who_initiated_referral,"community_referral_source_ic","Community");
    checkhide(f.program_participation_ic,"reason_ic_not_success","002,003,004,005,006,007,011");
    checkhide(f.consent_crc_referral_ic,"reason_consent_refused_crc_ic","No");
    checkhide(f.epicc_opioids_of_use,"other_opioid_ic","006");
    checkhide(f.overdose_event_referral,"overdose_location","Yes");
-   checkhide(f.overdose_location,"specify_other_location","Other ");
+   checkhide(f.overdose_location,"specify_other_location","Other");
    checkhide(f.overdose_event_referral,"first_overdose","Yes");
    checkhide(f.first_overdose,"num_past_overdoses","No");
    checkhide(f.first_overdose,"most_recent_past_overdose_date","No");
@@ -161,7 +216,7 @@ function checkhideall() {
    checkhide(f.overdose_ed_provided,"reason_oe_not_provided","No");
    checkhide(f.reason_oe_not_provided,"if_other_specify","Other");
    checkhide(f.narcan_distributed,"reason_narcan_not_distributed","No");
-   checkhide(f.reason_narcan_not_distributed,"no_narcan_exp","Other ");
+   checkhide(f.reason_narcan_not_distributed,"no_narcan_exp","Other");
 
 }
 
@@ -394,7 +449,6 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('time_referral_placed') && gvtfieldvalue('time_referral_placed')=='') {edesc=edesc+`Must specify a value for Time of Referral Call\n`; seterror("time_referral_placed");}
   if (!hiddenfield('time_recovery_coach_arrival') && gvtfieldvalue('time_recovery_coach_arrival')=='') {edesc=edesc+`Must specify a value for Time of Recovery Coach Arrival\n`; seterror("time_recovery_coach_arrival");}
-  if (!hiddenfield('time_recovery_coach_response') && gvtfieldvalue('time_recovery_coach_response')=='') {edesc=edesc+`Must specify a value for Time of Recovery Coach Response\n`; seterror("time_recovery_coach_response");}
   if (!hiddenfield('epicc_pro_or_core_ic') && gvtfieldvalue('epicc_pro_or_core_ic')=='') {edesc=edesc+`Must specify a value for Referral Type\n`; seterror("epicc_pro_or_core_ic");}
   if (!hiddenfield('program_participation_ic') && gvtfieldvalue('program_participation_ic')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_ic");}
   if (!hiddenfield('treatment_path_ic') && gvtfieldvalue('treatment_path_ic')=='') {edesc=edesc+`Must specify a value for What is client's current anticipated service path/treatment type?\n`; seterror("treatment_path_ic");}
@@ -500,6 +554,12 @@ function submitit() {
     return;
   }
 
+   // Force update of report fields before submission
+   updateReportFields([
+    'epicc_opioids_of_use'
+    // add other dropdown IDs here as needed
+  ]);
+
 	const f = document.forms[0];
    //***Error checking should be done here before a quick save
 	f.target="fvalidate";
@@ -529,6 +589,11 @@ function deleteit() {
 }
 
 function quicksubmitit() {
+     // Force update of report fields before submission
+     updateReportFields([
+    'epicc_opioids_of_use'
+    // add other dropdown IDs here as needed
+  ]);
 //	errdesc=validateform();
 //	if (errdesc!="") {alert(errdesc); return;}
 	var f=document.forms[0];
@@ -628,6 +693,7 @@ function updatesignatures(){
  */
  function updateReportFields(tableIds) {
   // Iterate over each table ID provided
+  
   tableIds.forEach(id => {
     // Locate the dropdown element for the current table ID
     const dropdown = document.querySelector(`#${id}`);
@@ -711,6 +777,9 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
+    <div class="deflist">
+        <div class="entire">
+        </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -724,9 +793,6 @@ function updatesignatures(){
      </div>
     <div class="col4 qtime_recovery_coach_arrival">
     <div class="col4 fldtime_recovery_coach_arrival qtime_recovery_coach_arrival"><span class="qtime_recovery_coach_arrival required-label">||PWRequiredFieldRequiredText||</span><span class="qtime_recovery_coach_arrival required-field-label"><label class="label-top">||FIELDTAG time_recovery_coach_arrival||Time of Recovery Coach Arrival||ENDFIELDTAG||</label></span><span class="qtime_recovery_coach_arrival"><input type="text" name="time_recovery_coach_arrival" size="20" id="gvttimetime_recovery_coach_arrival" onchange="checkhideall()"></span></div>
-     </div>
-    <div class="col4 qtime_recovery_coach_response">
-    <div class="col4 fldtime_recovery_coach_response qtime_recovery_coach_response"><span class="qtime_recovery_coach_response required-label">||PWRequiredFieldRequiredText||</span><span class="qtime_recovery_coach_response required-field-label"><label class="label-top">||FIELDTAG time_recovery_coach_response||Time of Recovery Coach Response||ENDFIELDTAG||</label></span><span class="qtime_recovery_coach_response"><input type="text" name="time_recovery_coach_response" size="20" id="gvttimetime_recovery_coach_response" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">

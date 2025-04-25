@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<!--PATHWAYWIZARDSUMMATION Provider Information-->
+<title>Provider Information</title>
+</head>
+
+<body topmargin="0">
+
+||SQC SELECT Top 1000 TheProv.Id, 
+  TheProv.ParentOrganization, 
+  TheProv.PROVIDERTYPE, 
+  TheProv.DOCSERNO, 
+  TheProv.PROVIDERCODE,
+  TheProv.PROVIDERCODE as ForTheParent,
+  TheProv.PROVIDERNAME, 
+  TheProv.Address, 
+  TheProv.City, 
+  TheProv.State, 
+  TheProv.Zip, 
+
+  TheProv.PROVIDERNAME 
+    + CASE WHEN LEN(TheProv.Address)>0 THEN ' '+TheProv.Address ELSE '' END 
+    + CASE WHEN LEN(TheProv.City)>0    THEN ' '+TheProv.City ELSE '' END 
+    + CASE WHEN LEN(TheProv.State)>0   THEN ' '+TheProv.State ELSE '' END 
+    + CASE WHEN LEN(TheProv.Zip)>0     THEN ' '+TheProv.Zip ELSE '' END 
+  AS MapMarkerInfo, 
+
+  TheProv.[MASTER] as TheMasterProvider, 
+    TheProv.Latitude, TheProv.Longitude,
+    CONVERT(int,dbo.udfCalculateDistanceFromZip('^^SV ZIPSEARCH^^',COALESCE(TheProv.Latitude,z.Latitude),COALESCE(TheProv.Longitude,z.Longitude))) AS Distance,
+    CASE WHEN '^^SV DISTANCEVISIBLE^^'='1' THEN '' ELSE 'none' END AS DisplayDistance,
+    CASE WHEN TheProv.Latitude IS NOT NULL THEN 'Map' ELSE ' ' END AS MapLinkText,
+    CASE WHEN TheProv.Latitude IS NOT NULL THEN '' ELSE 'none' END AS MapLinkDisplay,
+  IIF((TheProv.CMO<>'' AND TheProv.CMO IS NOT NULL),'Click for contracts','') AS CMOINDICATOR,
+(SELECT cstr(SUM(1)) FROM PROVIDERWINGS WHERE PROVIDERWINGS.PROVIDERCODE=TheProv.PROVIDERCODE AND [DOCREVNO]=' 0 ') AS WC,
+IIF([WC] IS NULL,'No Wings',[WC]) AS WINGCOUNT,(SELECT COUNT(ID) FROM PROVIDERCONTRACT WHERE PROVIDERCONTRACT.PROVIDER=THEPROV.PROVIDERCODE AND DOCREVNO=' 0 ') AS NUMCONTRACTS, 
+(SELECT cstr(SUM(1)) FROM PROVIDERGRID WHERE PROVIDERGRID.PROVIDERCODE=TheProv.PROVIDERCODE AND [DOCREVNO]=' 0 ') AS GC,
+IIF([GC] IS NULL,'No Grids',[GC]) AS GRIDCOUNT, 
+  TheProv.SiteProvider as TheSiteProviderField, 
+  Case When TheProv.ProviderType = 'SP' then 'Service Provider' else case when TheProv.ProviderType = 'PO' then 'Parent Organization' else case when TheProv.ProviderType = 'B' then 'Both' else '' end end end as TheProviderTypeField 
+  
+  FROM PROVIDER As TheProv 
+ LEFT JOIN ZipCodes z ON TheProv.Zip = z.ZipCode
+
+  
+WHERE TheProv.[DOCREVNO]=' 0 '
+^^SV EXTRASQL1^^ 
+  
+  ORDER BY TheProv.[PROVIDERNAME]||||TSSTART||
+  <!--_AUTONAVIGATION-->
+<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>
+<a href="javascript:void addsummationrecord('||SP SUMMATION||','PROVIDER')"><img alt="Add New" src="images/add.gif" /><b>Click here to add new Provider</b></a></div>
+<table class="summary">
+<thead>
+ <tr>
+    <th align="center">||SORTCOL|TheProv.ParentOrganization;ascending||Parent Provider</th>
+    <th align="center">||SORTCOL|TheProv.PROVIDERTYPE;ascending||Organization Type</th>
+    <th align="center" style="display:none">||SORTCOL|TheProv.PROVIDERTYPE;ascending||Type</th>
+    <th align="center">||SORTCOL|TheProv.PROVIDERCODE;ascending||Provider Code<br>Click to Edit</th>
+    <th align="center">||SORTCOL|TheProv.PROVIDERNAME;ascending||Provider Name<br>Click to Edit</th>
+    <th align="center" style="display:||SF DisplayDistance||">||SORTCOL|Distance;ascending||Direct Distance<br>from ||SV ZIPSEARCH||</th>
+  ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||    
+    <th align="center">Map</th>
+  ||ENDDISPLAY|| 
+    <th align="center">Provider Grids</th>             
+    <th align="center">Wings</th>
+    <th align="center">||SORTCOL|TheProv.[MASTER];ascending||Master<br>Provider</th>
+    <th align="center">||SORTCOL|TheProv.SiteProvider;ascending||Site<br>Provider</th>
+ </tr>
+</thead>
+<tbody>
+        <tr class="||ALTERNATE |altrow||">
+    <td align="left" valign="top">||BUILDLISTC Select ProviderName + ' (' + p.ProviderCode + ')<br>' From Provider p Where p.DocRevNo = ' 0 ' And (CharIndex(p.ProviderCode,'^^SF ParentOrganization^^') > 0) Order by ProviderName||</td>
+    <td align="center">||SF TheProviderTypeField||</td>
+    <td align="center" style="display:none"><font face="Arial" size="2">||SF PROVIDERTYPE||</font></td>
+    <td align="center"><font face="Arial"><a href="javascript:void editsummationrecord('||SP SUMMATION||','PROVIDER','||SF DOCSERNO||')">||SF PROVIDERCODE||</a></font></td>
+    <td align="left"><font face="Arial"><a href="javascript:void editsummationrecord('||SP SUMMATION||','PROVIDER','||SF DOCSERNO||')">||SF PROVIDERNAME||</a><br>||SF Address|| ||SF City||, ||SF State||  ||SF Zip||</font></td>
+    <td align="center" style="display:||SF DisplayDistance||">||SF Distance|| ||LOADFIELDS SELECT CASE WHEN '^^MEASUREMENTSYSTEM^^'='METRIC' THEN 'km' ELSE 'mi' END AS UOM||||LOADCURRENTALWAYS (0)||</td>  
+  ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||    
+    <td align="center"><span style="display:||SF MapLinkDisplay||"><a href="javascript:void showlocationwithinfo('||SF LATITUDE||','||SF LONGITUDE||','||SF MapMarkerInfo||')"><img src="images/mapicon.png" alt="map" /></a></span></td>
+  ||ENDDISPLAY||
+       <td align="center"><a href="javascript:void addsummationchildrecord('||SP SUMMATION||','PROVIDERGRIDSMASTERLIMIT','Grids for ||SF PROVIDERNAME||','||SF PROVIDERCODE||)|GRIDPROVIDERCODE(||SF PROVIDERCODE||)|SETVALUE(GRIDPROVIDERCODE')">||SF GRIDCOUNT||</a></td>
+    <td align="center" width="10%"><font face="Arial"><a href="javascript:void addsummationchildrecord('||SP SUMMATION||','PROVIDERWINGSMASTER','Wings for ||SF PROVIDERNAME||','||SF PROVIDERCODE||')">||SF WINGCOUNT||</a></font></td>
+    <td align="center">||SF TheMasterProvider||</td>
+    <td align="center"><font face="Arial">||SF TheSiteProviderField||</font></td>
+  </tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -46,6 +46,7 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('ems_involved_ref');
     setrequire('leo_involved_referral');
     setrequire('epicc_program_participation_referral');
+    setrequire('housing_status_referral');
 
 	checkhideall();
 
@@ -600,12 +601,9 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">Housing Status</div>
 </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's current housing status.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-  </div>
+<div class="col6 qhousing_status_referral">
+  <div class="col6 fldhousing_status_referral qhousing_status_referral"><span class="qhousing_status_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_status_referral required-field-label"><label class="label-top">||FIELDTAG housing_status_referral||Housing Status at Referral||ENDFIELDTAG||</label></span><span class="qhousing_status_referral"><input type="radio" name="housing_status_referral" value="Housed" onclick="checkhideall()" >Housed&nbsp;&nbsp;<input type="radio" name="housing_status_referral" value="Unhoused" onclick="checkhideall()" >Unhoused&nbsp;&nbsp;<input type="radio" name="housing_status_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>

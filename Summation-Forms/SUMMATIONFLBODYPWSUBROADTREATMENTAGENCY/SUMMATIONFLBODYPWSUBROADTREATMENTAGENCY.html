@@ -1,0 +1,54 @@
+<html>
+<head>
+</head>
+<script language="JavaScript">
+</script>
+<script language="VBScript">
+</script>
+<body>
+<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Copy Most Recent" src="images/copy.gif" /> Copy</a> ||ENDSTRIP||</div>
+<!--_AUTONAVIGATION-->||SQC SELECT f.id,
+ f.docserno,
+ f.VISITTM,
+ f.VISITDT,
+ f.USERID,
+f.[PATHWAY_DATE] as [PATHWAY_DATE],
+f.[EPICC_SU_TX_AGENCY] as [EPICC_SU_TX_AGENCY],
+f.[START_DATE] as [START_DATE],
+f.[END_DATE] as [END_DATE],
+f.[SU_TX_INTAKE] as [SU_TX_INTAKE],
+f.[SU_TX_INTAKE_DATE] as [SU_TX_INTAKE_DATE]
+ FROM ^^SP FORMNAME^^ f
+ ^^SP EXTRAJOINS^^ WHERE f.CLIENTNUMBER='^^CLIENTNUMBER^^' AND f.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY f.DOCSERNO DESC|| ||TSSTART||
+<table cellspacing="0" class="summary">
+<thead>
+<tr>
+<th class="colAction">Action</th>
+<th>Pathway Date</th>
+<th>Agency</th>
+<th>Start Date</th>
+<th>End Date</th>
+<th>Intake Completed</th>
+<th>Intake Date</th>
+
+
+<!-- INSERT POINTHEAD DO NOT MOVE OR REMOVE THIS COMMENT -->
+</tr>
+</thead>
+<tbody>
+<tr class="||ALTERNATE |altrow||">
+<td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void completeprintform('||SP FORMNAME||','||SF DOCSERNO||')">Print</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
+<td>||SF PATHWAY_DATE||</td>
+<td>||SF EPICC_SU_TX_AGENCY||</td>
+<td>||SF START_DATE||</td>
+<td>||SF END_DATE||</td>
+<td>||SF SU_TX_INTAKE||</td>
+<td>||SF SU_TX_INTAKE_DATE||</td>
+
+
+<!-- INSERT POINTDETAIL DO NOT MOVE OR REMOVE THIS COMMENT -->
+</tr>
+</tbody>
+</table>
+</body>
+</html>

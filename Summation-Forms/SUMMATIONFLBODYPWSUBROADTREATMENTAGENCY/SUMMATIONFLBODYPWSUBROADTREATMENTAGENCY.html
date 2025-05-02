@@ -10,37 +10,28 @@
 </script>
 
 <body>
-<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Copy Most Recent" src="images/copy.gif" /> Copy</a> ||ENDSTRIP||</div>
-<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWSUBroadTreatmentAgency].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,[PWSUBroadTreatmentAgency].[start_date]  FROM ^^SP FORMNAME^^  LEFT JOIN [epicc_su_tx_agency] as JTBL1 ON JTBL1.CODE=[PWSUBroadTreatmentAgency].[epicc_su_tx_agency] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWSUBroadTreatmentAgency].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,[PWSUBroadTreatmentAgency].[start_date], [PWSUBroadTreatmentAgency].[end_date], [PWSUBroadTreatmentAgency].[su_tx_intake_date],[PWSUBroadTreatmentAgency].[su_tx_intake]   FROM ^^SP FORMNAME^^  LEFT JOIN [epicc_su_tx_agency] as JTBL1 ON JTBL1.CODE=[PWSUBroadTreatmentAgency].[epicc_su_tx_agency] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
 <table cellspacing="0" class="summary">
-<thead>
-<tr>
-<th class="colAction">Action</th>
-<th>Pathway Date</th>
-<th>Agency</th>
-<th>Start Date</th>
-<th>End Date</th>
-<th>Intake Completed</th>
+    <thead>
+        <tr>
+            <th class="colAction">Action</th>
+<th>Pathway Date</th><th>Referred Treatment Agency</th><th>Start Date</th><th>End Date</th><th>Intake Completed</th>
 <th>Intake Date</th>
-
-
-<!-- INSERT POINTHEAD DO NOT MOVE OR REMOVE THIS COMMENT -->
-</tr>
-</thead>
-<tbody>
-<tr class="||ALTERNATE |altrow||">
-<td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void completeprintform('||SP FORMNAME||','||SF DOCSERNO||')">Print</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
-<td>||SF PATHWAY_DATE||</td>
-<td>||SF JDESC1||</td>
-<td>||SF START_DATE||</td>
-<td>||SF END_DATE||</td>
+            <th>||SORTCOL|ID;descending||Edited On</th>
+            <th>||SORTCOL|USERID;ascending||Edited By</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="||ALTERNATE |altrow||">
+            <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
+<td>||SF Pathway_Date||</td><td>||SF JDESC1||</td><td>||SF start_date||</td><td>||SF END_DATE||</td>
 <td>||SF SU_TX_INTAKE||</td>
 <td>||SF SU_TX_INTAKE_DATE||</td>
-
-
-<!-- INSERT POINTDETAIL DO NOT MOVE OR REMOVE THIS COMMENT -->
-</tr>
-</tbody>
+            <td>||SF VISITDT|| ||SF VISITTM||</td>
+            <td>||SF USERID||</td>
+        </tr>
+    </tbody>
 </table>
 </body>
 </html>

@@ -445,8 +445,6 @@ function hiddenfield(g) {
 }
 
 function submitit() {
-	
- 
   // use alert to display error messages
   let errdesc = validateform();     
   if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
@@ -508,6 +506,37 @@ function deleteit() {
 	return functionreturnvalue;
 }
 
+<!-- 
+Function: quicksubmitit
+
+Description:
+This function is responsible for handling the quick submission of a form. 
+It ensures that report fields are updated before submission, hides specific 
+buttons during the submission process, and performs necessary configurations 
+for the form submission. Additionally, it disables buttons to prevent multiple 
+submissions and restores certain UI elements after processing.
+
+Parameters:
+None
+
+Steps:
+1. Calls `updateReportFields` to update specified report fields before submission.
+2. Hides buttons (_B1, _B2, _B3) to prevent user interaction during submission.
+3. Displays the "SaveButtons" element.
+4. Sets the form's target to "fvalidate".
+5. Temporarily changes the `CONFIRMSCREEN` value to "SAVECONFIRMQUICK".
+6. If `genpdf` is true, calls `buildhtmlclean` to generate a clean HTML version.
+7. Restores signature options (elements with IDs starting with "sigoption") after `buildhtmlclean`.
+8. Submits the form.
+9. Disables all buttons to prevent further user interaction during submission.
+10. Restores the original `CONFIRMSCREEN` value.
+
+Notes:
+- Error checking is commented out and should be implemented where indicated.
+- The function assumes the presence of specific form elements and IDs.
+- The `updateReportFields` function and `buildhtmlclean` are external dependencies.
+- This function is designed for a specific form structure and may need adjustments for other use cases.
+-->
 function quicksubmitit() {
   // Force update of report fields before submission
   updateReportFields([

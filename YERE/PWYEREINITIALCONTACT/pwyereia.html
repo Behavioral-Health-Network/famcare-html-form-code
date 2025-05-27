@@ -506,7 +506,6 @@ function validateform(scope='all') {
   if (!hiddenfield('ineligible_reason_ia') && gvtfieldvalue('ineligible_reason_ia')=='') {edesc=edesc+`Must specify a value for Reason Ineligible\n`; seterror("ineligible_reason_ia");}
   if (!hiddenfield('referred_from_ed_or_ip') && gvtfieldvalue('referred_from_ed_or_ip')=='') {edesc=edesc+`Must specify a value for Referred from the ED or Inpatient?\n`; seterror("referred_from_ed_or_ip");}
   if (!hiddenfield('client_discharged_hospital') && gvtfieldvalue('client_discharged_hospital')=='') {edesc=edesc+`Must specify a value for Has client been discharged from the hospital?\n`; seterror("client_discharged_hospital");}
-  if (!hiddenfield('discharge_date') && gvtfieldvalue('discharge_date')=='') {edesc=edesc+`Must specify a value for Date of Discharge\n`; seterror("discharge_date");}
   if (!hiddenfield('method_contact_ia') && gvtfieldvalue('method_contact_ia')=='') {edesc=edesc+`Must specify a value for How was the initial assessment completed?\n`; seterror("method_contact_ia");}
   if (!hiddenfield('met_client_at_hospital') && gvtfieldvalue('met_client_at_hospital')=='') {edesc=edesc+`Must specify a value for Did Outreach Team meet with client at the hospital?\n`; seterror("met_client_at_hospital");}
   if (!hiddenfield('reason_didnt_meet_at_hospital') && gvtfieldvalue('reason_didnt_meet_at_hospital')=='') {edesc=edesc+`Must specify a value for If no, specify.\n`; seterror("reason_didnt_meet_at_hospital");}
@@ -530,7 +529,8 @@ function validateform(scope='all') {
   if (!hiddenfield('have_co_occurring_substance_use') && gvtfieldvalue('have_co_occurring_substance_use')=='') {edesc=edesc+`Must specify a value for Is there any co-occurring substance use?\n`; seterror("have_co_occurring_substance_use");}
   if (!hiddenfield('substance_use_history') && gvtfieldvalue('substance_use_history')=='') {edesc=edesc+`Must specify a value for Substance Use History\n`; seterror("substance_use_history");}
   if (!hiddenfield('co_occurring_mh_su_dx') && gvtfieldvalue('co_occurring_mh_su_dx')=='') {edesc=edesc+`Must specify a value for Is there any co-occurring mental health/substance use diagnosis?\n`; seterror("co_occurring_mh_su_dx");}
-
+  if (!hiddenfield('attendance_truancy_issues') && gvtfieldvalue('attendance_truancy_issues')=='') {edesc=edesc+`Must specify a value for Has youth experienced any attendance/truancy issues in the past three months?\n`; seterror("attendance_truancy_issues");}
+  if (!hiddenfield('school_discipline_suspension') && gvtfieldvalue('school_discipline_suspension')=='') {edesc=edesc+`Must specify a value for Has youth experienced any school discipline or suspensions in the past three months?\n`; seterror("school_discipline_suspension");}
     return edesc;
 }
 

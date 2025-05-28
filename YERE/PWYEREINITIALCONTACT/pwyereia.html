@@ -183,7 +183,6 @@ function startup() {
     setrequire('ineligible_reason_ia');
     setrequire('referred_from_ed_or_ip');
     setrequire('client_discharged_hospital');
-    setrequire('discharge_date');
     setrequire('method_contact_ia');
     setrequire('met_client_at_hospital');
     setrequire('reason_didnt_meet_at_hospital');
@@ -193,7 +192,9 @@ function startup() {
     setrequire('num_leo_contacts_past_three_months_ia');
     setrequire('involved_jj_system_past_three_months_ia');
     setrequire('attend_school_any_time_three_months_ia');
+    setrequire('attendance_truancy_issues');
     setrequire('type_of_attendance_truancy_issues');
+    setrequire('school_discipline_suspension')
     setrequire('type_of_school_discipline');
     setrequire('chronic_severe_physical_health_concern');
     setrequire('been_exposed_trauma');
@@ -505,7 +506,6 @@ function validateform(scope='all') {
   if (!hiddenfield('ineligible_reason_ia') && gvtfieldvalue('ineligible_reason_ia')=='') {edesc=edesc+`Must specify a value for Reason Ineligible\n`; seterror("ineligible_reason_ia");}
   if (!hiddenfield('referred_from_ed_or_ip') && gvtfieldvalue('referred_from_ed_or_ip')=='') {edesc=edesc+`Must specify a value for Referred from the ED or Inpatient?\n`; seterror("referred_from_ed_or_ip");}
   if (!hiddenfield('client_discharged_hospital') && gvtfieldvalue('client_discharged_hospital')=='') {edesc=edesc+`Must specify a value for Has client been discharged from the hospital?\n`; seterror("client_discharged_hospital");}
-  if (!hiddenfield('discharge_date') && gvtfieldvalue('discharge_date')=='') {edesc=edesc+`Must specify a value for Date of Discharge\n`; seterror("discharge_date");}
   if (!hiddenfield('method_contact_ia') && gvtfieldvalue('method_contact_ia')=='') {edesc=edesc+`Must specify a value for How was the initial assessment completed?\n`; seterror("method_contact_ia");}
   if (!hiddenfield('met_client_at_hospital') && gvtfieldvalue('met_client_at_hospital')=='') {edesc=edesc+`Must specify a value for Did Outreach Team meet with client at the hospital?\n`; seterror("met_client_at_hospital");}
   if (!hiddenfield('reason_didnt_meet_at_hospital') && gvtfieldvalue('reason_didnt_meet_at_hospital')=='') {edesc=edesc+`Must specify a value for If no, specify.\n`; seterror("reason_didnt_meet_at_hospital");}
@@ -529,7 +529,8 @@ function validateform(scope='all') {
   if (!hiddenfield('have_co_occurring_substance_use') && gvtfieldvalue('have_co_occurring_substance_use')=='') {edesc=edesc+`Must specify a value for Is there any co-occurring substance use?\n`; seterror("have_co_occurring_substance_use");}
   if (!hiddenfield('substance_use_history') && gvtfieldvalue('substance_use_history')=='') {edesc=edesc+`Must specify a value for Substance Use History\n`; seterror("substance_use_history");}
   if (!hiddenfield('co_occurring_mh_su_dx') && gvtfieldvalue('co_occurring_mh_su_dx')=='') {edesc=edesc+`Must specify a value for Is there any co-occurring mental health/substance use diagnosis?\n`; seterror("co_occurring_mh_su_dx");}
-
+  if (!hiddenfield('attendance_truancy_issues') && gvtfieldvalue('attendance_truancy_issues')=='') {edesc=edesc+`Must specify a value for Has youth experienced any attendance/truancy issues in the past three months?\n`; seterror("attendance_truancy_issues");}
+  if (!hiddenfield('school_discipline_suspension') && gvtfieldvalue('school_discipline_suspension')=='') {edesc=edesc+`Must specify a value for Has youth experienced any school discipline or suspensions in the past three months?\n`; seterror("school_discipline_suspension");}
     return edesc;
 }
 
@@ -912,9 +913,9 @@ function updatesignatures(){
     <div class="col4 qclient_discharged_hospital">
     <div class="col4 fldclient_discharged_hospital qclient_discharged_hospital"><span class="qclient_discharged_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_discharged_hospital required-field-label"><label class="label-top">||FIELDTAG client_discharged_hospital||Has client been discharged from the hospital?||ENDFIELDTAG||</label></span><span class="qclient_discharged_hospital"><input type="radio" name="client_discharged_hospital" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_discharged_hospital" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col4 qdischarge_date">
-    <div class="col4 flddischarge_date qdischarge_date"><span class="qdischarge_date required-label">||PWRequiredFieldRequiredText||</span><span class="qdischarge_date required-field-label"><label class="label-top">||FIELDTAG discharge_date||Date of Discharge||ENDFIELDTAG||</label></span><span class="qdischarge_date"><input type="text" name="discharge_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
+       <div class="col4 flddischarge_date qdischarge_date">
+       <div class="col4 flddischarge_date qdischarge_date"><span class="qdischarge_date"><label class="label-top">||FIELDTAG discharge_date||Date of Discharge||ENDFIELDTAG||</label></span><span class="qdischarge_date"><input type="text" name="discharge_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+        </div>
   </div>
 <div class="entire">
 </div>
@@ -1011,10 +1012,10 @@ function updatesignatures(){
     <div class="col12 fldlast_grade_lvl_completed_ia qlast_grade_lvl_completed_ia">
     <div class="col12 fldlast_grade_lvl_completed_ia qlast_grade_lvl_completed_ia"><span class="qlast_grade_lvl_completed_ia"><label class="label-top">||FIELDTAG last_grade_lvl_completed_ia||Last Grade Level Completed||ENDFIELDTAG||</label></span><span class="qlast_grade_lvl_completed_ia"><input type="text" name="last_grade_lvl_completed_ia" size="10" onchange="checkhideall()"></span></div>
      </div>
-  </div>
- <div class="entire">
+   </div>
+   <div class="entire">
     <div class="col12 fldattendance_truancy_issues qattendance_truancy_issues">
-    <div class="col12 fldattendance_truancy_issues qattendance_truancy_issues"><span class="qattendance_truancy_issues"><label class="label-top">||FIELDTAG attendance_truancy_issues||Has youth experienced any attendance/truancy issues in the past three months?||ENDFIELDTAG||</label></span><span class="qattendance_truancy_issues"><input type="radio" name="attendance_truancy_issues" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attendance_truancy_issues" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="attendance_truancy_issues" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldattendance_truancy_issues qattendance_truancy_issues"><span class="qattendance_truancy_issues required-label">||PWRequiredFieldRequiredText||</span><span class="qattendance_truancy_issues required-field-label"><label class="label-top">||FIELDTAG attendance_truancy_issues||Has youth experienced any attendance/truancy issues in the past three months?||ENDFIELDTAG||</label></span><span class="qattendance_truancy_issues"><input type="radio" name="attendance_truancy_issues" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attendance_truancy_issues" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="attendance_truancy_issues" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -1022,9 +1023,9 @@ function updatesignatures(){
     <div class="col12 fldtype_of_attendance_truancy_issues qtype_of_attendance_truancy_issues"><span class="qtype_of_attendance_truancy_issues required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_attendance_truancy_issues required-field-label"><label class="label-top">||FIELDTAG type_of_attendance_truancy_issues||Explain Type Of Attendance/Truancy Issues||ENDFIELDTAG||</label></span><span class="qtype_of_attendance_truancy_issues"><input type="text" name="type_of_attendance_truancy_issues" size="100" onchange="checkhideall()"></span></div>
      </div>
   </div>
- <div class="entire">
+   <div class="entire">
     <div class="col12 fldschool_discipline_suspension qschool_discipline_suspension">
-    <div class="col12 fldschool_discipline_suspension qschool_discipline_suspension"><span class="qschool_discipline_suspension"><label class="label-top">||FIELDTAG school_discipline_suspension||Has youth experienced any school discipline or suspensions in the past three months?||ENDFIELDTAG||</label></span><span class="qschool_discipline_suspension"><input type="radio" name="school_discipline_suspension" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_discipline_suspension" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="school_discipline_suspension" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldschool_discipline_suspension qschool_discipline_suspension"><span class="qschool_discipline_suspension required-label">||PWRequiredFieldRequiredText||</span><span class="qschool_discipline_suspension required-field-label"><label class="label-top">||FIELDTAG school_discipline_suspension||Has youth experienced any school discipline or suspensions in the past three months?||ENDFIELDTAG||</label></span><span class="qschool_discipline_suspension"><input type="radio" name="school_discipline_suspension" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_discipline_suspension" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="school_discipline_suspension" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

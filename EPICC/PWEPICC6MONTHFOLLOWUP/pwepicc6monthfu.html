@@ -29,7 +29,7 @@ function startup() {
 
           f._B1.style.display = "";
           f._B2.style.display = "";
-          f._B3.style.display = "";
+          // f._B3.style.display = "";
           document.getElementById("SaveButtons").style.display = "";
 
 		}
@@ -385,7 +385,7 @@ function submitit() {
   $(':button').prop('disabled',true);
 	f._B1.style.display = "none";
 	f._B2.style.display = "none";
-	f._B3.style.display = "none";
+	// f._B3.style.display = "none";
 }
 
 function deleteit() {
@@ -405,40 +405,40 @@ function deleteit() {
 	return functionreturnvalue;
 }
 
-function quicksubmitit() {
-//	errdesc=validateform();
-//	if (errdesc!="") {alert(errdesc); return;}
-	var f=document.forms[0];
-	//***Error checking should be done here before a quick save
-	f._B1.style.display = "none";
-	f._B2.style.display = "none";
-	f._B3.style.display = "none";
-	document.getElementById("SaveButtons").style.display = "";
-	f.target = "fvalidate";
-	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
-	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
-	if (genpdf) {buildhtmlclean()}
-    // restore signature options after buildhtmlclean
-    document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
-	f.submit();
-        $(':button').prop('disabled',true);
-	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
-	return;
-}
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
 
-function QuickSubmitReturn() {
-	var functionreturnvalue = null;
-	var f = document.forms[0];
-	//***Reset the form after a quick submit here
-	f._B1.style.display = "";
-	f._B2.style.display = "";
-	f._B3.style.display = "";
-	document.getElementById("SaveButtons").style.display = "";
-        $(':button').prop('disabled',false);
-	updatesignatures();
-	alert("Record Saved");
-	return functionreturnvalue;
-}
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
 
 function resetsave() {
 	var functionreturnvalue = null;
@@ -446,7 +446,7 @@ function resetsave() {
 	//***Reset the form after a quick submit here
 	f._B1.style.display = "";
 	f._B2.style.display = "";
-	f._B3.style.display = "";
+	// f._B3.style.display = "";
 	document.getElementById("SaveButtons").style.display = "";
         $(':button').prop('disabled',false);
 	return functionreturnvalue;
@@ -649,8 +649,8 @@ function updatesignatures(){
     <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
     Signature: <input type="password" name="SIGNATURE" /><br />
     <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
-    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
-    <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div>
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
 ||ENDSTRIP||
 </form>
 </body>

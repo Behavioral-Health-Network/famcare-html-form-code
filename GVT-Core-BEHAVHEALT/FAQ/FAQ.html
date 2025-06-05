@@ -62,11 +62,29 @@
         <section>
             <h2>Common Questions (Program Workers & Managers)</h2>
 
+            <!-- Subsection: General -->
+            <h3>General</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">Can I access FAMCare on my tablet?</div>
+                <div class="answer">The mobile system menu is smaller, but still includes a face sheet, contacts, and case notes</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I add a page to the Favorites tab?</div>
+                <div class="answer">When viewing a page in FAMCare, click the "Add to Favorites" link to display the form in your favorites list and quickly return to that page in the future.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What do I do if I have forgotten my password?</div>
+                <div class="answer">If, at any time, you forget your user ID and/or password, click the Forgot Password link to retrieve your information.</div>
+            </div>
+
+
             <!-- Subsection: Caseload -->
             <h3>Caseload</h3>
             <div class="faq-item">
                 <div class="question" onclick="toggleAnswer(this)">How do I add a client to my caseload?</div>
-                <div class="answer">Use Client Search/Add to find the client you are wanting to add to your caseload. On the search results screen, there will be a column called "Case Load Functions" and in that column, link to "Add/View Caseload"  When you click this link, the client will be added to your caseload, and you will be redirected to your caseload screen.</div>
+                <div class="answer">Use <strong>Client Search/Add</strong> to find the client you are wanting to add to your caseload. On the search results screen, there will be a column called "Case Load Functions" and in that column, link to "Add/View Caseload"  When you click this link, the client will be added to your caseload, and you will be redirected to your caseload screen.</div>
             </div>
 
             <div class="faq-item">
@@ -87,13 +105,39 @@
             <div class="faq-item">
                 <div class="question" onclick="toggleAnswer(this)">How do I search for a client?</div>
                 <div class="answer">
-                    <p>On the top left of the screen, next to the Home Button, there is a "FAMCare" icon. Click this icon and you will see a drop down of items. Towards the bottom is a link for "Client Search/Add" Clicking this link will take you to the search screen.</p>"
+                    <p>On the top left of the screen, next to the Home Button, there is a "FAMCare" icon. Click this icon and you will see a drop down of items. Towards the bottom is a link for "Client Search/Add" Clicking this link will take you to the search screen.</p>
                     <p class="note">*Note: You can add the Search Page to your favorites by clicking on "Add to Favorites" at the top of the Search Page.*</p></div>
             </div>
 
             <div class="faq-item">
-                <div class="question" onclick="toggleAnswer(this)">I think I found the client, but their name appears to be spelled incorrectly, what should I do?</div>
-                <div class="answer">Check the date of birth and other demographic fields, to ensure it is indeed the same client. Then notify the data team if you think any client name or demographic information needs to be corrected.  </div>
+                <div class="question" onclick="toggleAnswer(this)">What if I see two clients who appear to be the same person?</div>
+                <div class="answer">
+                    <p>Check the client’s full name, date of birth, and any available demographic information to confirm whether they are truly duplicates. If you suspect a duplicate, do <strong>not</strong> add a new client or update both profiles. Instead, contact the Data Team with details so they can investigate and merge records if appropriate.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How can I find an existing client if I'm not sure of the correct spelling of their name?</div>
+                <div class="answer">Yes, there are multiple ways to search for clients: 
+                    Soundex Search 
+                    Wild Card (use of a wild card disables the Soundex search because these are mutually exclusive options)
+                    Search by other fields under the search parameters.   </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">Can I print out a completed client form? Can I print other forms?</div>
+                <div class="answer">Yes. At the top of the client form is a button, "View Saved Record in Printable Format." The form will open in a new window and you can print from there.
+                    
+                    Pathway forms can be printed as well.  On the summation for the form (When you access the form through the Master Pathway Dashboard) there is a PDF link to click. This will open the form in a new window as a PDF that you may print.  </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What if I find a duplicate client when I do a client search?</div>
+                <div class="answer">If this happens, contact a member of the Data Team to request that duplicate client records be verified and then merged.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">My client moved and has a new address. Besides the Housing Summation, do I document that anywhere?</div>
+                <div class="answer">If you know the client's new address, you may go to the Client form and under the Client Contact Information header add a new address.</div>
             </div>
 
             <!-- Subsection: Pathways and Pathway Forms -->
@@ -114,6 +158,11 @@
             </div>
 
             <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I access the forms I need to complete for my clients?</div>
+                <div class="answer">Once the client has been enrolled in your Program's Pathway, you will be able to access all of the relevant forms. If the client is already on your case load, you can click on the Pathway Icon, which will take you to the Master Pathway Dashboard. From the Dashboard, you click on the bar next to the due date for each form.</div>
+            </div>
+
+            <div class="faq-item">
                 <div class="question" onclick="toggleAnswer(this)">Are there other ways to access my Pathway Forms?</div>
                 <div class="answer">
                     <p>It is recommended that staff access the master pathway Dashboard by clicking on the Pathway Icon and then accessing the forms from the dashboard. 
@@ -131,12 +180,21 @@
                     </p> </div>
             </div>
 
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">I've completed all of the Pathway forms for my client and they are ready to be dismisssed. What do I need to do? </div>
+                <div class="answer">
+                    <p>Dismissal procedures vary by program. Please refer to your program manual, which you can find in FAMCare's Resource Library. In most cases, Program managers will handle dismissing clients. 
+                        
+                        You can remove the client from your caseload by clicking the red circle with the "x" inside. You always have the option to re-add the client back to your caseload if needed. 
+                    </p> </div>
+            </div>
+
         <!-- Subsection: Summations -->
             <h3>Summations</h3>
             <div class="faq-item">
                 <div class="question" onclick="toggleAnswer(this)">What is a Summation?</div>
                 <div class="answer">
-                    <p> A summation...
+                    <p> Summations in FAMCare are designed to display multiple records associated with a client or case within a table embedded in a form. They are particularly useful for tracking changes over time or reviewing a client's history without needing to navigate away from the current form. They provide users with a consolidated view of historical or iterative data, such as case notes, address changes, or payor histories, directly on the form.
                     </p> </div>
                  </div>
         
@@ -148,19 +206,18 @@
                      </p> </div>
              </div>
 
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">Should I edit or add a new summation record?</div>
+                <div class="answer">
+                    <p>In general, you should only edit summation records when the information was entered incorrectly or needs correction shortly after submission. Most summation forms are used to track a history of changes over time (e.g., changes in housing, program worker assignments, or client contacts).</p>
+                    <p>When a client’s situation changes (e.g., they move to a new address or start working with a new provider), you should <strong>create a new entry</strong> in the summation instead of editing the existing one.</p>
+                    <p class="note">Refer to your program manual for specific guidance on each summation type.</p>
+    </div>
+</div>
+
             <!-- Add more subsections and questions here -->
         </section>
 
-        <!-- Section: Managers -->
-        <section>
-            <h2>Manager-Specific Questions</h2>
-
-            <!-- Subsection: Pathway Forms -->
-            <h3>Pathway Forms</h3>
-            <div class="faq-item">
-                <div class="question" onclick="toggleAnswer(this)">How do I access the forms I need to complete for my clients?</div>
-                <div class="answer">Once the client has been enrolled in your Program's Pathway, you will be able to access all of the relevant forms. If the client is already on your case load, you can click on the Pathway Icon, which will take you to the Master Pathway Dashboard. From the Dashboard, you click on the bar next to the due date for each form.</div>
-            </div>
 
             <!-- Subsection: Troubleshooting -->
             <h3>Troubleshooting</h3>
@@ -170,15 +227,78 @@
                     <p>In the caseload section, find your client and:</p>
                     <ol>
                         <li>Verify that you have a column on your dashboard called, "Pathway Workflow".</li>
-                        <li>If that column exists and you don't see the colorful icon, the client may not have been enrolled in your program yet OR this client may have already completed all of the pathway forms.</li>
+                        <li>If that column exists and you don't see the colorful icon, the client may not have been enrolled in your program yet <strong>OR</strong> this client may have already completed all of the pathway forms.</li>
                     </ol>
-                    <p> If this is a new client, make sure they were enrolled on the Client/Demographics Form. If you do not see an enrollment, follow your program manaual instructions to add the enrollment or discuss with your supervisor. </p>
-                </div>
-                    <p> If you do not see the Pathway Icon, but the client is enrolled in your program, it may be that the client has not been assigned to a pathway. You can check this by clicking on the Client Menu Icon and selecting "Client Demographics".  </p>
-                </div>
+                    <p> If this is a new client, make sure they were enrolled in your program on the <strong>Client/Demographics Form</strong>. If you do not see an enrollment, follow your program manaual instructions to add the enrollment or discuss with your supervisor. </p>
+                
                     <p>If this a client who has already completed all of the pathway forms, they will show on your caseload as having no Active Pathway. To view their forms, click on the client menu icon, and then select Master Pathway Dashboard. There is a  drop down that should allow you to pick the client's pathway. </p>
                 </div>
             </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">I entered a form, but the bar on the dashboard is still showing that it's incomplete. What do I need to do?</div>
+                <div class="answer">First, try refreshing the Pathway timeline. When viewing an active Pathway on the Master Pathway Dashboard, "Click to refresh timeline" link to see if the bar for the form will update appropriately.
+
+                <p>Second, confirm that your <strong>Pathway Date</strong> was within the appropriate date range. If the form was completed too early, the dashboard will not show the contact as completed. </p>
+            
+                <p>Contact Program Manager and Data Team if issue persists. </p> </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What if the Pathway Dashboard does not display a timeline for required forms of an eligible client?</div>
+                <div class="answer">If this happens, go to the client's <strong>Intake/Demographic Form</strong>, click to open the <strong>Pathway Enrollment</strong> - Record Count section, and verify that the Pathway Enrollment is displayed with no end date. If the Pathway does not appear in the list, click the Refresh link. If you still don't see the Pathway enrollment, contact a member of the data team for assistance. </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">In a drop down list of agencies, I'm not seeing the agency I want to select. What should I do?</div>
+                <div class="answer">Depending on the form, there may be an option to select "Other Agency" and then write in your agency. On other forms, there is not an "Other" option due to reporting requirements, so  please notify a member of the data team.  </div>
+            </div>
+
+        <!-- Section: Managers -->
+        <section>
+            <h2>Manager-Specific Questions</h2>
+
+            <!-- Subsection: Reporting and Program Management -->
+            <h3>General</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What should I do if a FAMCare user gets locked out of their account?</div>
+                <div class="answer">If FAMCare locks a user out of their account, check to see if the user had saved their password for logging in. Passwords should not be saved, and users can adjust this in their browser's settings. Contact the Data Team to reset the user account. The user should then enter a temporary password provided by the Data Team and will then be prompted to create a new password.</div>
+            </div>
+
+            <!-- Subsection: Reporting and Program Management -->
+            <h3>Reports and Program Oversight</h3>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">Where can I find reports for my program?</div>
+                <div class="answer">
+                    <p>Click on the "Reports" menu and select “Reports and Outcomes List”. From there, browse to the <strong>Program Management</strong> or <strong>Exception Reports</strong> folders. These contain curated reports specific to your program’s forms and data.</p>
+                    <p class="note">Excercise caution with reports in the other folders in the list because the majority of those default reports that are not specific to our implementation of FAMCare and likely will not work as expected.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                 <div class="question" onclick="toggleAnswer(this)">What are Exception Reports and how should I use them?</div>
+                <div class="answer">
+                    <p>Exception Reports are designed to help you find missing or overdue forms and identify data that is incomplete or incorrectly entered. These reports are used to ensure high data quality for monthly, quarterly, and annual reporting.</p>
+                    <p>Refer to the supervisor manual for specific expectations about review frequency and what to look for in these reports.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I know which clients are missing forms?</div>
+                <div class="answer">
+                    <p>Use the Caseload Report in the “Program Management” folder to identify clients with overdue or incomplete forms. This report assists you to identify forms that are due based on the client’s enrollment and pathway start date but have not yet been completed. Additional data about clients may also be available to you in this report depending on the specifications you have provided to the Data Team for creating the report.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How can I use the Caseload page to monitor my team’s activity?</div>
+                <div class="answer">
+                    <p>The Caseload page offers a helpful tool for reviewing form completion across the caseload of your direct reports. You may confirm that a Pathway is open and active for a client, and you may verify that the client status is 'Active' or 'InActive' as well. You can view due dates and completion statuses for each form associated with a client’s pathway by clicking the Pathway Workflow icon to view the client's Master Pathway Dashboard.</p>
+                    <p>Managers should use this dashboard to ensure timely form entry and follow up with team members as needed.</p>
+                </div>
+            </div>
+
 
             <!-- Add more subsections and questions here -->
         </section>

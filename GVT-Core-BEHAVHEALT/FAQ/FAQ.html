@@ -62,6 +62,24 @@
         <section>
             <h2>Common Questions (Program Workers & Managers)</h2>
 
+            <!-- Subsection: General -->
+            <h3>General</h3>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">Can I access FAMCare on my tablet?</div>
+                <div class="answer">The mobile system menu is smaller, but still includes a face sheet, contacts, and case notes</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I add a page to the Favorites tab?</div>
+                <div class="answer">When viewing a page in FAMCare, click the "Add to Favorites" link to display the form in your favorites list and quickly return to that page in the future.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What do I do if I have forgotten my password?</div>
+                <div class="answer">If, at any time, you forget your user ID and/or password, click the Forgot Password link to retrieve your information.</div>
+            </div>
+
+
             <!-- Subsection: Caseload -->
             <h3>Caseload</h3>
             <div class="faq-item">
@@ -111,6 +129,16 @@
                     Pathway forms can be printed as well.  On the summation for the form (When you access the form through the Master Pathway Dashboard) there is a PDF link to click. This will open the form in a new window as a PDF that you may print.  </div>
             </div>
 
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What if I find a duplicate client when I do a client search?</div>
+                <div class="answer">If this happens, contact a member of the Data Team to request that duplicate client records be verified and then merged.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">My client moved and has a new address. Besides the Housing Summation, do I document that anywhere?</div>
+                <div class="answer">If you know the client's new address, you may go to the Client form and under the Client Contact Information header add a new address.</div>
+            </div>
+
             <!-- Subsection: Pathways and Pathway Forms -->
             <h3>Pathways and Pathway Forms</h3>
             <div class="faq-item">
@@ -129,6 +157,11 @@
             </div>
 
             <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">How do I access the forms I need to complete for my clients?</div>
+                <div class="answer">Once the client has been enrolled in your Program's Pathway, you will be able to access all of the relevant forms. If the client is already on your case load, you can click on the Pathway Icon, which will take you to the Master Pathway Dashboard. From the Dashboard, you click on the bar next to the due date for each form.</div>
+            </div>
+
+            <div class="faq-item">
                 <div class="question" onclick="toggleAnswer(this)">Are there other ways to access my Pathway Forms?</div>
                 <div class="answer">
                     <p>It is recommended that staff access the master pathway Dashboard by clicking on the Pathway Icon and then accessing the forms from the dashboard. 
@@ -143,6 +176,15 @@
                 <div class="question" onclick="toggleAnswer(this)">Will ineligible clients be assigned to a Pathway? </div>
                 <div class="answer">
                     <p>Yes, all clients enrolled will be assigned to a Pathway, but this does not require that all Pathway forms be completed. For instance, if a client is ineligible, they will still be added to a Pathway before dismissal.  
+                    </p> </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">I've completed all of the Pathway forms for my client and they are ready to be dismisssed. What do I need to do? </div>
+                <div class="answer">
+                    <p>Dismissal procedures vary by program. Please refer to your program manual, which you can find in FAMCare's Resource Library. In most cases, Program managers will handle dismissing clients. 
+                        
+                        You can remove the client from your caseload by clicking the red circle with the "x" inside. You always have the option to re-add the client back to your caseload if needed. 
                     </p> </div>
             </div>
 
@@ -166,16 +208,6 @@
             <!-- Add more subsections and questions here -->
         </section>
 
-        <!-- Section: Managers -->
-        <section>
-            <h2>Manager-Specific Questions</h2>
-
-            <!-- Subsection: Pathway Forms -->
-            <h3>Pathway Forms</h3>
-            <div class="faq-item">
-                <div class="question" onclick="toggleAnswer(this)">How do I access the forms I need to complete for my clients?</div>
-                <div class="answer">Once the client has been enrolled in your Program's Pathway, you will be able to access all of the relevant forms. If the client is already on your case load, you can click on the Pathway Icon, which will take you to the Master Pathway Dashboard. From the Dashboard, you click on the bar next to the due date for each form.</div>
-            </div>
 
             <!-- Subsection: Troubleshooting -->
             <h3>Troubleshooting</h3>
@@ -194,6 +226,34 @@
                     <p>If this a client who has already completed all of the pathway forms, they will show on your caseload as having no Active Pathway. To view their forms, click on the client menu icon, and then select Master Pathway Dashboard. There is a  drop down that should allow you to pick the client's pathway. </p>
                 </div>
             </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">I entered a form, but the bar on the dashboard is still showing that it's incomplete. What do I need to do?</div>
+                <div class="answer">First, try refreshing the Pathway timeline. When viewing an active Pathway on the Master Pathway Dashboard, "Click to refresh timeline" link to see if the bar for the form will update appropriately.
+
+                Second, confirm that your Pathway Date was within the appropriate date range. If the form was completed too early, the dashboard will not show the contact as completed. 
+            
+                Contact Program Manager and Data Team if issue persists. </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What if the Pathway Dashboard does not display a timeline for required forms of an eligible client?</div>
+                <div class="answer">If this happens, go to the client's Intake/Demographic Form, click to open the Pathway Enrollment - Record Count section, and verify that the Pathway Enrollment is displayed with no end date. If the Pathway does not appear in the list, click the Refresh link. If you still don't see the Pathway enrollment, contact a member of the data team for assistance. </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">In a drop down list of agencies, I'm not seeing the agency I want to select. What should I do?</div>
+                <div class="answer">Depending on the form, there may be an option to select "Other Agency" and then write in your agency. On other forms, there is not an "Other" option due to reporting requirements, so  please notify a member of the data team.  </div>
+            </div>
+
+        <!-- Section: Managers -->
+        <section>
+            <h2>Manager-Specific Questions</h2>
+            <div class="faq-item">
+                <div class="question" onclick="toggleAnswer(this)">What should I do if a FAMCare user gets locked out of their account?</div>
+                <div class="answer">If FAMCare locks a user out of their account, check to see if the user had saved their password for logging in. Passwords should not be saved, and users can adjust this in their browser's settings. Contact the Data Team to reset the user account. The user should then enter a temporary password provided by the Data Team and will then be prompted to create a new password.</div>
+            </div>
+
 
             <!-- Add more subsections and questions here -->
         </section>

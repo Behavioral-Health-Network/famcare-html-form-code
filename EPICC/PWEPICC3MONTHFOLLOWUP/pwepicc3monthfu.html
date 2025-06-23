@@ -41,7 +41,7 @@ function startup() {
     // setrequire('client_attend_intake_appt_three_month');
     // setrequire('intake_appt_date_three_month');
     setrequire('mat_prescribed_physician_appt_three_month');
-    setrequire('what_mat_physician_appt_thirty_day');
+    setrequire('what_mat_physician_appt_three_month');
     setrequire('program_participation_three_month');
     setrequire('if_transfer_what_region_three_month');
     setrequire('if_transfer_contact_transfer_region_success_three_month');
@@ -61,7 +61,7 @@ function checkhideall() {
    checkhide(f.treatment_path_three_month,"rc_only_last_date_communication_three_month","Recovery Coach Only");
 //    checkhide(f.treatment_path_three_month,"client_attend_intake_appt_three_month","MAT,Non-MAT Treatment");
    checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
-   checkhide(f.mat_prescribed_physician_appt_three_month,"what_mat_physician_appt_thirty_day","Yes");
+   checkhide(f.mat_prescribed_physician_appt_three_month,"what_mat_physician_appt_three_month","Yes");
 //    checkhide(f.client_attend_intake_appt_three_month,"intake_appt_date_three_month","Yes");
    checkhide(f.program_participation_three_month,"preg_post_part_three_month","015");
    checkhide(f.program_participation_three_month,"if_transfer_what_region_three_month","010");
@@ -302,7 +302,7 @@ function validateform(scope='all') {
   if (!hiddenfield('rc_only_client_attend_first_appt_coach_three_month') && gvtfieldvalue('rc_only_client_attend_first_appt_coach_three_month')=='') {edesc=edesc+`Must specify a value for Contact Since IC\n`; seterror("rc_only_client_attend_first_appt_coach_three_month");}
 //   if (!hiddenfield('client_attend_intake_appt_three_month') && gvtfieldvalue('client_attend_intake_appt_three_month')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment?\n`; seterror("client_attend_intake_appt_three_month");}
   if (!hiddenfield('mat_prescribed_physician_appt_three_month') && gvtfieldvalue('mat_prescribed_physician_appt_three_month')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_three_month");}
-  if (!hiddenfield('what_mat_physician_appt_thirty_day') && gvtfieldvalue('what_mat_physician_appt_thirty_day')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_thirty_day");}
+  if (!hiddenfield('what_mat_physician_appt_three_month') && gvtfieldvalue('what_mat_physician_appt_three_month')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_three_month");}
   if (!hiddenfield('program_participation_three_month') && gvtfieldvalue('program_participation_three_month')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_three_month");}
   if (!hiddenfield('if_transfer_what_region_three_month') && gvtfieldvalue('if_transfer_what_region_three_month')=='') {edesc=edesc+`Must specify a value for What Region?\n`; seterror("if_transfer_what_region_three_month");}
   if (!hiddenfield('if_transfer_contact_transfer_region_success_three_month') && gvtfieldvalue('if_transfer_contact_transfer_region_success_three_month')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_three_month");}
@@ -603,9 +603,9 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldwhat_mat_physician_appt_thirty_day qwhat_mat_physician_appt_thirty_day">
-    <div class="col12 fldwhat_mat_physician_appt_thirty_day qwhat_mat_physician_appt_thirty_day"><span class="qwhat_mat_physician_appt_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_thirty_day required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_thirty_day"><select size="1" name="what_mat_physician_appt_thirty_day" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_thirty_day^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldwhat_mat_physician_appt_three_month qwhat_mat_physician_appt_three_month">
+    <div class="col12 fldwhat_mat_physician_appt_three_month qwhat_mat_physician_appt_three_month"><span class="qwhat_mat_physician_appt_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_three_month required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_three_month"><select size="1" name="what_mat_physician_appt_three_month" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_hree_month^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_types_mat||
 </span></div>
      </div>

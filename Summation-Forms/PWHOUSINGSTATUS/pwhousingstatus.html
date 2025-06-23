@@ -38,6 +38,8 @@ function startup() {
     setrequire('client_housing_status');
     setrequire('housing_start_date');
     setrequire('homeless_housing_insecure_eto');
+    setrequire('housing_status_incarcerated');
+    setrequire('unhoused_shelter');
 
 	checkhideall();
 
@@ -49,7 +51,8 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.client_housing_status,"if_unhoused_exp","Unhoused");
    checkhide(f.client_housing_status,"worried_losing_housing","Institutionally Housed,Precariously Housed,Stably Housed");
-
+   checkhide(f.client_housing_status,"housing_status_incarcerated", "Institutionally Housed");
+   checkhide(f.client_housing_status,"unhoused_shelter", "Unhoused");
 }
 
 function addEventListeners(){
@@ -282,7 +285,8 @@ function validateform(scope='all') {
   if (!hiddenfield('client_housing_status') && gvtfieldvalue('client_housing_status')=='') {edesc=edesc+`Must specify a value for Housing Status\n`; seterror("client_housing_status");}
   if (!hiddenfield('housing_start_date') && gvtfieldvalue('housing_start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("housing_start_date");}
   if (!hiddenfield('homeless_housing_insecure_eto') && gvtfieldvalue('homeless_housing_insecure_eto')=='') {edesc=edesc+`Must specify a value for Is client currently experiencing housing instability or homelessness?\n`; seterror("homeless_housing_insecure_eto");}
-
+  if (!hiddenfield('unhoused_shelter') && gvtfieldvalue('unhoused_shelter')=='') {edesc=edesc+`Must specify a value for Is client currently in a shelter?\n`; seterror("unhoused_shelter");}
+  if (!hiddenfield('housing_status_incarcerated') && gvtfieldvalue('housing_status_incarcerated')=='') {edesc=edesc+`Must specify a value for Is client currently incarcerated?\n`; seterror("housing_status_incarcerated");}
     return edesc;
 }
 
@@ -570,6 +574,21 @@ Examples: Staying on street/outdoors, Emergency Shelter</label></div>
  <div class="entire">
     <div class="col12 fldclient_housing_status qclient_housing_status">
     <div class="col12 fldclient_housing_status qclient_housing_status"><span class="qclient_housing_status required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_housing_status required-field-label"><label class="label-top">||FIELDTAG client_housing_status||Housing Status||ENDFIELDTAG||</label></span><span class="qclient_housing_status"><input type="radio" name="client_housing_status" value="Institutionally Housed" onclick="checkhideall()" >Institutionally Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Precariously Housed" onclick="checkhideall()" >Precariously Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Stably Housed" onclick="checkhideall()" >Stably Housed&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Unhoused" onclick="checkhideall()" >Unhoused&nbsp;&nbsp;<input type="radio" name="client_housing_status" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+//Added housing_status_incarcerated and unhoused_shelter fields on 06/23/2025. These fields were added mainly for ERE clients. We needed these questions to be able to collect the data to be entered in to CareManager for MBHC.
+ <div class="entire">
+    <div class="col12 fldhousing_status_incarcerated qhousing_status_incarcerated">
+    <div class="col12 fldhousing_status_incarcerated qhousing_status_incarcerated"><span class="qhousing_status_incarcerated required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_status_incarcerated required-field-label"><label class="label-top">||FIELDTAG housing_status_incarcerated||Is client currently incarcerated?||ENDFIELDTAG||</label></span><span class="qhousing_status_incarcerated"><input type="radio" name="housing_status_incarcerated" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="housing_status_incarcerated" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldunhoused_shelter qunhoused_shelter">
+    <div class="col12 fldunhoused_shelter qunhoused_shelter"><span class="qunhoused_shelter required-label">||PWRequiredFieldRequiredText||</span><span class="qunhoused_shelter required-field-label"><label class="label-top">||FIELDTAG unhoused_shelter||Is client currently staying in a shelter?||ENDFIELDTAG||</label></span><span class="qunhoused_shelter"><input type="radio" name="unhoused_shelter" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="unhoused_shelter" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">

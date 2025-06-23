@@ -131,9 +131,16 @@ catch(err)
 	var f = document.forms[0];
 	console.clear();
 	$(".jtimepicker").timepicker({ 'scrollDefault': 'now', 'step': 15 }); 
-// unhide pathway section if new record and we have at least one pathway...
-	if ("||DOCSERNO||"=="" && f.PATHWAY.length>1) {document.getElementById("pathwayspan").style.display=""}        
-	document.getElementById("pathwayspan").style.display="";
+
+// unhide pathway section if new record...
+	if ("||EDITFLAG||" == "1" && "||FIELDVALUE PATHWAY||" != "") {
+		document.getElementById("PATHWAYDis").innerHTML = "<b>||LOADFIELDS Select PathwayName From Pathway Where DocRevNo = ' 0 ' And DocSerNo = '^^FIELDVALUE PATHWAY^^'||||LOADCURRENTALWAYS (0)||</b>";
+		f.PATHWAY.style.display = "none";
+	}       
+	if ("||EDITFLAG||" == "1" && "||FIELDVALUE PATHWAYDATE||" != "") {
+		document.getElementById("PATHWAYDATEDis").innerHTML = "<b>||FIELDVALUE PATHWAYDATE||</b>";
+		f.PATHWAYDATE.style.display = "none";
+	}  
 	setbundled();
         
 ||STARTSTRIP||
@@ -226,34 +233,36 @@ catch(err)
                 document.getElementById("BillingDates").innerHTML=document.getElementById("BillingDates").innerHTML+"<br>Billing Locked As of "+LockDate;
         }
 
-        totalelements = 0;
+	totalelements = 0;
 
-///PULLDATA SELECT PROVIDER.ProviderCode,PROVIDER.PROVIDERNAME FROM PROVIDER WHERE Provider.SiteProvider='Yes' and PROVIDER.DOCREVNO=' 0 ' and (CharIndex('||FIELDVALUE Region||',ParentOrganization) > 0 or ProviderCode = '^^FIELDVALUE PrimaryProviderCode^^') ORDER BY PROVIDERNAME
-        var ctrl=f.PrimaryProviderCode;
-        ctrl.length=1;
+///PULLDATA SELECT PROVIDER.ProviderCode,PROVIDER.PROVIDERNAME FROM PROVIDER WHERE Provider.SiteProvider='Yes' and PROVIDER.DOCREVNO=' 0 ' and (CharIndex('||FIELDVALUE Region||',ParentOrganization) > 0 or ProviderCode = '||FIELDVALUE PrimaryProviderCode||') ORDER BY PROVIDERNAME
+
+	var ctrl=f.PrimaryProviderCode;
+	ctrl.length=1;
 //This if determines whether the PrimaryProviderCode drop down gets the entire list on Edit, or just the saved value
-        if (GroupList.indexOf("|GVT|") < 0 && GroupList.indexOf("|CASE WORKER OR SOCIAL WORKER SUPERVISION|") < 0 && GroupList.indexOf("|PROGRAM DIRECTOR|") < 0 && GroupList.indexOf("|PROGRAM MANAGER|") < 0) {
-                ctrl.selectedIndex = 0;
-                ctrl.options[0].text = "||LOADFIELDS Select ProviderName From Q_Provider Where ProviderCode='^^FIELDVALUE PRIMARYPROVIDERCODE^^' and privateprovider='^^PRIVATEPROVIDER^^'||||LOADCURRENTALWAYS (0)||";
-                ctrl.options[0].value = "||FIELDVALUE PRIMARYPROVIDERCODE||";
-        } else {
-                ctrl.options[0].text="(Please Select from the Following List)";
-                ctrl.options[0].value="";
-                for (var x = 1; x <= totalelements; x++) {
-                        ctrl.length=ctrl.length+1;
-                        ctrl.options[ctrl.length-1].text=results[x][2];
-                        ctrl.options[ctrl.length-1].value=results[x][1];
-                }
-                var ProvListLength=ctrl.length;
-                ctrl.selectedIndex=0;
-                for (var x = 0; x <= ProvListLength-1; x++) {
-                             if (ctrl.options[x].value=="||FIELDVALUE PRIMARYPROVIDERCODE||") {
-                                 ctrl.selectedIndex=x;
+//Changed this to show the whole list all of the time.  Task : 00E20250522141342756
+//	if (GroupList.indexOf("|GVT|") < 0 && GroupList.indexOf("|CASE WORKER OR SOCIAL WORKER SUPERVISION|") < 0 && GroupList.indexOf("|PROGRAM DIRECTOR|") < 0 && GroupList.indexOf("|PROGRAM MANAGER|") < 0 && GroupList.indexOf("|THERAPISTS OR CLINICIANS|") < 0) {
+//		ctrl.selectedIndex = 0;
+//		ctrl.options[0].text = "||LOADFIELDS Select ProviderName From Q_Provider Where ProviderCode='^^FIELDVALUE PRIMARYPROVIDERCODE^^' and privateprovider='^^PRIVATEPROVIDER^^'||||LOADCURRENTALWAYS (0)||";
+//		ctrl.options[0].value = "||FIELDVALUE PRIMARYPROVIDERCODE||";
+//	} else {
+		ctrl.options[0].text="(Please Select from the Following List)";
+		ctrl.options[0].value="";
+		for (var x = 1; x <= totalelements; x++) {
+			ctrl.length=ctrl.length+1;
+			ctrl.options[ctrl.length-1].text=results[x][2];
+			ctrl.options[ctrl.length-1].value=results[x][1];
+		}
+		var ProvListLength=ctrl.length;
+		ctrl.selectedIndex=0;
+		for (var x = 0; x <= ProvListLength-1; x++) {
+			if (ctrl.options[x].value=="||FIELDVALUE PRIMARYPROVIDERCODE||") {
+				ctrl.selectedIndex=x;
+				break;
+			}
+		}
+//	}
 
-                                 break;
-                             }
-                }
-             }
         GetWingList();
 ||ENDSTRIP||
 	return functionreturnvalue;
@@ -273,6 +282,13 @@ function GetProvList() {
 	f.PATHWAY.options[0].text="Wait while retrieving information....";
 	f.PATHWAY.options[0].value="";
 
+	document.getElementById("PATHWAYDis").innerHTML = "";
+	f.PATHWAY.style.display = "";
+      
+	document.getElementById("PATHWAYDATEDis").innerHTML = "";
+	f.PATHWAYDATE.style.display = "";
+	f.PATHWAYDATE.value = "";
+
 	f.ClosingReason.length=1;
 	f.ClosingReason.options[0].text="Wait while retrieving information....";
 	f.ClosingReason.options[0].value="";
@@ -291,7 +307,7 @@ function GetProvList() {
 
         var iwhere="";
         var SQL1=escape("SELECT PROVIDER.ProviderCode,PROVIDER.PROVIDERNAME FROM PROVIDER WHERE PROVIDER.DOCREVNO=' 0 ' And (CharIndex('"+f.Region.value+"',Provider.ParentOrganization) > 0) ORDER BY PROVIDERNAME");
-	var SQL2=escape("Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('"+f.Region.value+"',PROVIDERLIST) > 0 or Code='||FIELDVALUE Region||') And Coalesce([Status],'') != 'Inactive') Order by [Description]");
+	var SQL2=escape("Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('"+f.Region.value+"',PROVIDERLIST) > 0 or Code='||FIELDVALUE ClosingReason||') And Coalesce([Status],'') != 'Inactive') Order by [Description]");
 	var SQL3=escape("SELECT DOCSERNO,PATHWAYNAME FROM PATHWAY WHERE DOCREVNO=' 0 ' AND (CharIndex('"+f.Region.value+"',PROVIDERLIST) > 0 or DOCSERNO = '^^FIELDVALUE PATHWAY^^') ORDER BY PATHWAYNAME");
         var fullhlink="genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER1(W)|IDENTIFIER2(ClosingReason)|IDENTIFIER3(PATHWAY)|ERROR(SUPPRESS)|SQL1("+SQL1+")|SQL2("+SQL2+")|SQL3("+SQL3+")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION1(PopProvs)|POPULATEFUNCTION2(PopDropDown)|POPULATEFUNCTION3(PopDropDown)|SUBMITTIME("+Date()+")^";
         parent.fvalidate.location=fullhlink;
@@ -417,7 +433,7 @@ function GetProviderLockDateNext(){
 function GetProviderLockDateStep2(){
 	var functionreturnvalue = null;
 	var f = document.forms[0];
-	if (GroupList.indexOf("|ACCOUNTING|") < 0 && GroupList.indexOf("|CASE WORKER OR SOCIAL WORKER SUPERVISION|") < 0 && GroupList.indexOf("|PROGRAM DIRECTOR|") < 0 && GroupList.indexOf("|PROGRAM MANAGER|") < 0 && "||EDITFLAG||"=="1" && "||SUPERFLAG||" != "Y") {
+	if (GroupList.indexOf("|ACCOUNTING|") < 0 && GroupList.indexOf("|CASE WORKER OR SOCIAL WORKER SUPERVISION|") < 0 && GroupList.indexOf("|PROGRAM DIRECTOR|") < 0 && GroupList.indexOf("|PROGRAM MANAGER|") < 0 && GroupList.indexOf("|CASE WORKERS|")< 0 && "||EDITFLAG||"=="1" && "||SUPERFLAG||" != "Y") {
 		if (f.PrimaryProviderCode.value!="||FIELDVALUE PRIMARYPROVIDERCODE||") {
 			alert("You are not authorized to change the Provider for this Placement");
 			var ctrl=f.PrimaryProviderCode;
@@ -731,29 +747,6 @@ function SaveNags() {
             }
             catch (e) {}
         }
-        if ("||FIELDVALUE STARTINGDATE||"=="" && "||BILLINGMODULE||"!="YES") {
-            try {
-                if (cdatejis(f.StartingDate.value) <= cdatejis(LockDate)) {
-                        var TheMessage="Because you are part of the Admin group for ||PROVIDERNAME||,";
-                        if ( "||PROVIDERCODE||"=="||TOPPARENTPROVIDERCODE||" && GroupList.indexOf("|ACCOUNTING|") >= 0) {
-// check msgbox (yes/no) to confirm (ok/cancel) wording
-                                var msgtemp=confirm("Please Note: The Starting Date is prior to the Lock Date.");
-                                if (msgtemp) {gg=1} else {gg=7}
-                                if (gg==7 ) {
-                                        CanSave = false;
-                                        return functionreturnvalue;
-                                }
-                        }
-                }
-                f.FUNCTION.Value = "SAVE";
-                if (FromClientForm!="") {
-                        f.CONFIRMSCREEN.value = "saveconfirmrefreshsummary";
-                }
-                CanSave = true;
-                return functionreturnvalue;
-            }
-            catch (e) {}
-        }
 
 	if(f.PATHWAY.value == ""){
 		alert("Please Select a Pathway.");
@@ -880,6 +873,30 @@ function SaveNags() {
                         CanSave = false;
                         return functionreturnvalue;
                 }
+        }
+
+        if ("||FIELDVALUE STARTINGDATE||"=="" && "||BILLINGMODULE||"!="YES") {
+            try {
+                if (cdatejis(f.StartingDate.value) <= cdatejis(LockDate)) {
+                        var TheMessage="Because you are part of the Admin group for ||PROVIDERNAME||,";
+                        if ( "||PROVIDERCODE||"=="||TOPPARENTPROVIDERCODE||" && GroupList.indexOf("|ACCOUNTING|") >= 0) {
+// check msgbox (yes/no) to confirm (ok/cancel) wording
+                                var msgtemp=confirm("Please Note: The Starting Date is prior to the Lock Date.");
+                                if (msgtemp) {gg=1} else {gg=7}
+                                if (gg==7 ) {
+                                        CanSave = false;
+                                        return functionreturnvalue;
+                                }
+                        }
+                }
+                f.FUNCTION.Value = "SAVE";
+                if (FromClientForm!="") {
+                        f.CONFIRMSCREEN.value = "saveconfirmrefreshsummary";
+                }
+                CanSave = true;
+                return functionreturnvalue;
+            }
+            catch (e) {}
         }
         return functionreturnvalue;
 }
@@ -1290,12 +1307,12 @@ function UpdateProgramWorker() {
 
     </ul>
 
-     <ul id="pathwayspan" style="display: none">
+     <ul id="pathwayspan">
        <li>Please note: By selecting a Pathway below, you'll be enrolling this client in a new Pathway workflow. This will not update existing pathways for the client.</li>
        <li><strong>||FIELDTAG SetPathway||Set Pathway||ENDFIELDTAG|| :</strong><select size="1" name="PATHWAY" style="background-color:#FDFDD3">
-         <option value="||SELECT DOCSERNO,PATHWAYNAME FROM PATHWAY WHERE DOCREVNO=' 0 ' AND (CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or DOCSERNO = '^^FIELDVALUE PATHWAY^^') ORDER BY PATHWAYNAME||">||CHOICETABLESQLD||</option>
-         </select></li>
-       <li><strong>||FIELDTAG PathwayDate||Pathway Date||ENDFIELDTAG|| :</strong><input type="text" size="8" name="PATHWAYDATE" value="||DATE||" style="background-color:#FDFDD3"></li>
+         <option value="||SELECT DOCSERNO, PATHWAYNAME FROM PATHWAY WHERE DOCREVNO=' 0 ' AND (CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or DOCSERNO = '^^FIELDVALUE PATHWAY^^') ORDER BY PATHWAYNAME||">||CHOICETABLESQLD||</option>
+         </select><span id="PATHWAYDis"></span></li>
+       <li><strong>||FIELDTAG PathwayDate||Pathway Date||ENDFIELDTAG|| :</strong><input type="text" size="8" name="PATHWAYDATE" value="||DATE+ED0||" style="background-color:#FDFDD3"><span id="PATHWAYDATEDis"></span></li>
      </ul>
 
 <div class="term">Provider History</div>
@@ -1382,7 +1399,7 @@ function UpdateProgramWorker() {
      <li id="_gvtClosingReason">
        <strong>||FIELDTAG ClosingReason||Closing Reason||ENDFIELDTAG|| : </strong>        
        <select size="1" name="ClosingReason" >
-       <option value="||Select Code, Description From ClosingReasons Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE CLOSINGREASON^^') and privateprovider='^^PRIVATEPROVIDER^^' Order By Description||">||CHOICETABLESQLD||</option>
+       <option value="||Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or Code='^^FIELDVALUE ClosingReason^^') And Coalesce([Status],'') != 'Inactive') Order by [Description]||">||CHOICETABLESQLD||</option>
        </select>&nbsp;||CONFIGURE CLOSINGREASONS||</li>
      <li id="_gvtLeavingAgency">
        <strong>||FIELDTAG R1LeavingAgency||Is Client Leaving Agency?||ENDFIELDTAG|| </strong>

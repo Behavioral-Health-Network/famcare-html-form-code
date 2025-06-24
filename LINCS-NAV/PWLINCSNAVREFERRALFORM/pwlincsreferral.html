@@ -302,7 +302,7 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('answerfirst_case_num') && gvtfieldvalue('answerfirst_case_num')=='') {edesc=edesc+`Must specify a value for AnswerFirst Case Number\n`; seterror("answerfirst_case_num");}
+  // if (!hiddenfield('answerfirst_case_num') && gvtfieldvalue('answerfirst_case_num')=='') {edesc=edesc+`Must specify a value for AnswerFirst Case Number\n`; seterror("answerfirst_case_num");}
   if (!hiddenfield('contact_method_at_referral') && gvtfieldvalue('contact_method_at_referral')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("contact_method_at_referral");}
   if (!hiddenfield('caller_name') && gvtfieldvalue('caller_name')=='') {edesc=edesc+`Must specify a value for Caller's First and Last Name\n`; seterror("caller_name");}
   if (!hiddenfield('referring_agency') && gvtfieldvalue('referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Hospital\n`; seterror("referring_agency");}
@@ -581,7 +581,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col6 qanswerfirst_case_num">
-    <div class="col6 fldanswerfirst_case_num qanswerfirst_case_num"><span class="qanswerfirst_case_num required-label">||PWRequiredFieldRequiredText||</span><span class="qanswerfirst_case_num required-field-label"><label class="label-top">||FIELDTAG answerfirst_case_num||AnswerFirst Case Number||ENDFIELDTAG||</label></span><span class="qanswerfirst_case_num"><input type="text" name="answerfirst_case_num" size="20" onchange="checkhideall()"></span></div>
+    <div class="col6 fldanswerfirst_case_num qanswerfirst_case_num"><span class="qanswerfirst_case_num"><label class="label-top">||FIELDTAG answerfirst_case_num||AnswerFirst Case Number||ENDFIELDTAG||</label></span><span class="qanswerfirst_case_num"><input type="text" name="answerfirst_case_num" size="20" onchange="checkhideall()"></span></div>
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>

@@ -1217,11 +1217,62 @@ function UpdateProgramWorker() {
     return
   }
 
+function ShowConditionalAgencyFields() {
+    var f = document.forms[0];
+    var closingReason = f.ClosingReason.value;
+    var region = f.Region.value;
+
+    // Hide both by default
+    document.getElementById("ReconnectionAgencyRow").style.display = "none";
+    document.getElementById("TransferAgencyRow").style.display = "none";
+
+    if (closingReason == "020") {
+        document.getElementById("ReconnectionAgencyRow").style.display = "";
+        populateAgencyDropdown("ReconnectionAgency", region);
+    } else if (closingReason == "031") {
+        document.getElementById("TransferAgencyRow").style.display = "";
+        populateAgencyDropdown("TransferAgency", region);
+    }
+}
+
+function populateAgencyDropdown(dropdownName, region) {
+    var dropdown = document.getElementsByName(dropdownName)[0];
+    dropdown.length = 1;
+    dropdown.options[0].text = "Please Select Agency";
+    dropdown.options[0].value = "";
+
+    if (!region) return;
+
+    // SQL to get providers for the region (same as PrimaryProviderCode)
+    var SQL = escape("SELECT PROVIDER.ProviderCode,PROVIDER.PROVIDERNAME FROM PROVIDER WHERE PROVIDER.DOCREVNO=' 0 ' And (CharIndex('" + region + "',Provider.ParentOrganization) > 0) ORDER BY PROVIDERNAME");
+    var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(" + dropdownName + ")|ERROR(SUPPRESS)|SQL(" + SQL + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopulateAgencyDropdownCallback)|SUBMITTIME(" + Date() + ")^";
+    parent.fvalidate.location = fullhlink;
+}
+
+function PopulateAgencyDropdownCallback(numelementsper, totalelements, identifier, results) {
+    var dropdown = document.getElementsByName(identifier)[0];
+    dropdown.length = 1;
+    dropdown.options[0].text = "Please Select Agency";
+    dropdown.options[0].value = "";
+    for (var x = 1; x <= totalelements; x++) {
+        dropdown.length = dropdown.length + 1;
+        dropdown.options[dropdown.length - 1].text = results[x][2];
+        dropdown.options[dropdown.length - 1].value = results[x][1];
+    }
+}
+
+// Also update on Region change
+var oldGetProvList = GetProvList;
+GetProvList = function() {
+    oldGetProvList();
+    ShowConditionalAgencyFields();
+}
+
 </script>
 
 ||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM|| 
 
-<body onLoad="StartUp(); ShowClosingReasons()">
+<body onLoad="StartUp(); ShowClosingReasons(); ShowConditionalAgencyFields()">
 
 <form method="POST" action="genfunc.exe">
  <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||">
@@ -1398,9 +1449,21 @@ function UpdateProgramWorker() {
        </select>||CONFIGURE HOURATDISCHARGE||</li>
      <li id="_gvtClosingReason">
        <strong>||FIELDTAG ClosingReason||Closing Reason||ENDFIELDTAG|| : </strong>        
-       <select size="1" name="ClosingReason" >
+       <select size="1" name="ClosingReason" onChange="ShowConditionalAgencyFields()">
        <option value="||Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or Code='^^FIELDVALUE ClosingReason^^') And Coalesce([Status],'') != 'Inactive') Order by [Description]||">||CHOICETABLESQLD||</option>
        </select>&nbsp;||CONFIGURE CLOSINGREASONS||</li>
+     <li id="ReconnectionAgencyRow" style="display:none;">
+        <strong>Reconnection Agency : </strong>
+        <select name="ReconnectionAgency" id="ReconnectionAgency">
+        <option value="">Please Select Agency</option>
+        </select>
+     </li>
+     <li id="TransferAgencyRow" style="display:none;">
+        <strong>Transfer Agency : </strong>
+        <select name="TransferAgency" id="TransferAgency">
+        <option value="">Please Select Agency</option>
+        </select>
+     </li>
      <li id="_gvtLeavingAgency">
        <strong>||FIELDTAG R1LeavingAgency||Is Client Leaving Agency?||ENDFIELDTAG|| </strong>
        <input type="radio" value="Yes" name="R1LeavingAgency" >Yes&nbsp;&nbsp; <input type="radio" name="R1LeavingAgency" value="No" >No

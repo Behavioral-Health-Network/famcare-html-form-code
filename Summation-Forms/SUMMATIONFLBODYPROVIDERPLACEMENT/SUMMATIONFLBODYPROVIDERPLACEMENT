@@ -14,14 +14,17 @@
 ||SQC SELECT TOP 200 '' AS DUMMY,Q_Provider.ProviderName As ProvName, ProviderPlacement.DocSerNo, StartingDate, EndingDate, MasterService.Description As TheService, 
 DateDiff(d,ProviderPlacement.StartingDate,Case When ProviderPlacement.EndingDate Is Null Then GetDate() Else ProviderPlacement.EndingDate End) As TheLOS,
 HRFORM.FirstName+' '+HRFORM.LastName as TheWorker, Case When ('^^SV BILLINGMODULE^^' = 'YES' or '^^SV FUNDINGSOURCEONLYMODULE^^' = 'YES') Then '' Else 'display:none' End As HidePS,
-Coalesce(fh.ProviderName,pw.wing) As TheWing
+Coalesce(fh.ProviderName,pw.wing) As TheWing, CR.Description AS Closing_Reason_Description, RA.ProviderName AS Reconnection_Agency_Name, TA.ProviderName AS Transfer_Agency_Name
  
 FROM (ProviderPlacement Left Join Q_Provider on ProviderPlacement.PrimaryProviderCode=Q_Provider.ProviderCode) 
 Left Join MasterService on ProviderPlacement.ServiceCode=MasterService.Code And MasterService.PrivateProvider='^^SV PrivateProvider^^' 
 LEFT JOIN HRFORM on ProviderPlacement.ProgramWorker=HRFORM.EmployeeNumber And ProviderPlacement.PrivateProvider=HRFORM.PrivateProvider And HRFORM.DocRevNo=' 0 '
 Left Join Q_Provider fh on fh.ProviderCode = ProviderPlacement.PrimaryWing
 Left Join ProviderWings pw on pw.Wing = ProviderPlacement.PrimaryWing And pw.DocRevNo = ' 0 ' And pw.ProviderCode = ProviderPlacement.PrimaryProviderCode 
- 
+LEFT JOIN ClosingReasons AS CR ON ProviderPlacement.ClosingReason = CR.Code
+LEFT JOIN Q_Provider AS RA ON ProviderPlacement.ReconnectionAgency = RA.ProviderCode
+LEFT JOIN Q_Provider AS TA ON ProviderPlacement.TransferAgency = TA.ProviderCode
+
 WHERE ProviderPlacement.ClientNumber='^^SV CLIENTNUMBER^^' And ProviderPlacement.DOCREVNO=' 0 ' ORDER BY ProviderPlacement.StartingDate DESC|| ||TSSTART||
 <!--_AUTONAVIGATION-->
 <table cellspacing="0" class="summary">
@@ -30,13 +33,16 @@ WHERE ProviderPlacement.ClientNumber='^^SV CLIENTNUMBER^^' And ProviderPlacement
             ||STARTSTRIP||<th class="colAction" width="15%">Action</th>||ENDSTRIP||
             <th>||SORTCOL|StartingDate;descending||Start Date</th>
             <th>End Date</th>
+            <th>Dismissal Reason</th>
             <th>||SORTCOL|Q_Provider.ProviderName;ascending||Provider Name</th>
-            <th>Service Provided</th>
+            <!-- <th>Service Provided</th> -->
             <th>Program Worker</th>
             <th>Length of<br>Placement</th>
-           ||STARTDISPLAY|ALWAYS|XYESX|X^^PROVIDERWINGMODULE^^X||
-            <th>Wing/Room</th>
-           ||ENDDISPLAY||
+            <th>Reconnection Agency</th>
+            <th>Transfer Agency</th>
+           <!-- ||STARTDISPLAY|ALWAYS|XYESX|X^^PROVIDERWINGMODULE^^X|| -->
+           <!-- <th>Wing/Room</th> -->
+           <!-- ||ENDDISPLAY|| -->
         </tr>
     </thead>
     <tbody>
@@ -44,13 +50,16 @@ WHERE ProviderPlacement.ClientNumber='^^SV CLIENTNUMBER^^' And ProviderPlacement
             ||STARTSTRIP||<td class="colAction" width="15%"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void completeprintform('||SP FORMNAME||','||SF DOCSERNO||')">Print</a> </td>||ENDSTRIP||
             <td><center>||SF StartingDate||</center></td>
             <td><center>||SF EndingDate||</center></td>
+            <td><center>||SF Closing_Reason_Description||</center></td>
             <td><center>||SF ProvName||</center></td>
-            <td><center>||SF TheService||</center></td>
+            <!-- <td><center>||SF TheService||</center></td> -->
             <td><center>||SF TheWorker||</center></td>
             <td><center><b>||SF TheLOS||</b></center></td>
-          ||STARTDISPLAY|ALWAYS|XYESX|X^^PROVIDERWINGMODULE^^X||
-            <td><center>||SF TheWing||</center></td>
-          ||ENDDISPLAY||
+            <td><center>||SF Reconnection_Agency_Name||</center></td>
+            <td><center>||SF Transfer_Agency_Name||</center></td>
+          <!-- ||STARTDISPLAY|ALWAYS|XYESX|X^^PROVIDERWINGMODULE^^X|| -->
+          <!-- <td><center>||SF TheWing||</center></td> -->
+          <!-- ||ENDDISPLAY|| -->
         </tr>
         <tr class="||ALTERNATE |altrow||" style="||SF HidePS||">
             <td width="10%" align="right" colspan="2"><b>Pay Source(s) : </b></td>

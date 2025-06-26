@@ -1363,7 +1363,7 @@ GetProvList = function() {
        <li><strong>||FIELDTAG SetPathway||Set Pathway||ENDFIELDTAG|| :</strong><select size="1" name="PATHWAY" style="background-color:#FDFDD3">
          <option value="||SELECT DOCSERNO, PATHWAYNAME FROM PATHWAY WHERE DOCREVNO=' 0 ' AND (CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or DOCSERNO = '^^FIELDVALUE PATHWAY^^') ORDER BY PATHWAYNAME||">||CHOICETABLESQLD||</option>
          </select><span id="PATHWAYDis"></span></li>
-       <li><strong>||FIELDTAG PathwayDate||Pathway Date||ENDFIELDTAG|| :</strong><input type="text" size="8" name="PATHWAYDATE" value="||DATE+ED0||" style="background-color:#FDFDD3"><span id="PATHWAYDATEDis"></span></li>
+       <li><strong>||FIELDTAG PathwayDate||Pathway Date||ENDFIELDTAG|| :</strong><input type="text" size="8" name="PATHWAYDATE" value="||DATE+ED0||" class="jdatepicker" style="background-color:#FDFDD3"><span id="PATHWAYDATEDis"></span></li>
      </ul>
 
 <div class="term">Provider History</div>

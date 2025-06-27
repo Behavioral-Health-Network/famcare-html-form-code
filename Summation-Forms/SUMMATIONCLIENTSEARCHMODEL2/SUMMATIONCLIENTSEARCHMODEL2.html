@@ -52,12 +52,13 @@ ORDER BY LASTNAME,FIRSTNAME|| ||TSSTART||<!--_AUTONAVIGATION-->
     <th>Name (click to select)</th>
    
     <th>Case Load Functions</th>
+    <th>Client Number</th>
     <th>Client Type</th>
     <th align="center">Provider</th>
     <th>Race</th>
     <th>Gender</th>
     <th>Birthdate</th>
-    <th>Pic</th>
+   <!-- <th>Pic</th> -->
   </tr>
     </thead>
     <tbody>
@@ -68,12 +69,13 @@ ORDER BY LASTNAME,FIRSTNAME|| ||TSSTART||<!--_AUTONAVIGATION-->
     
     <td> <span id="CaseLoadLinks||SF CLIENTNUMBER||" style="display:||SF HideCaseLoadOptions||"><a href="javascript:void addcaseload('||SF CLIENTNUMBER||','')">Add</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void addcaseload('||SF CLIENTNUMBER||','VIEW')"><nobr>Add \ View Caseload</nobr></a>&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="genfunc.exe?FULLFUNCTION^BLANKFORM|SESSIONID(||SV SESSIONID||)|FORMNAME(CLIENTLOADSTEP1)|PROVIDERCODE(||PROVIDERCODE||)|CLIENTNUMBER(||SF CLIENTNUMBER||)|MENUREFRESH(YES)|SPAWNNEWSESSION(YES)|TIMER(||TIME||)^" target="_blank"><nobr>||DUALTABOPTION||</nobr></a>
      </td>
-    <td>||SF ClientType||</td>
+    <td align="center">||SF CLIENTNUMBER||</td>
+    <td align="center">||SF ClientType||</td>
     <td><font color="||SF ProvColor||"><b>||SF ProvName||</b></font>||BUILDLISTC Select ProviderName & ' - ' & Convert(varchar(10),StartingDate,101) & '&lt;br&gt;' From Q_ProviderPlacement Where ClientNumber = '^^SF CLIENTNUMBER^^' And EndingDate Is Null||</td>
-    <td>||SF DESCRIPTION||&nbsp; </td>
-    <td>||SF GX||&nbsp; </td>
-    <td>||SF Birthdate||</td>
-    <td>||SV THUMBNAIL SELECT 'ClientPic.'+IMAGEEXTENSION,IMAGE FROM IMAGES WHERE IMAGEKEY='CLIENT^^SF CLIENTNUMBER^^'|50|50||</td>
+    <td align="center">||SF DESCRIPTION||&nbsp; </td>
+    <td align="center">||SF GX||&nbsp; </td>
+    <td align="center">||SF Birthdate||</td>
+    <!-- <td>||SV THUMBNAIL SELECT 'ClientPic.'+IMAGEEXTENSION,IMAGE FROM IMAGES WHERE IMAGEKEY='CLIENT^^SF CLIENTNUMBER^^'|50|50||</td> -->
   </tr>
 </tbody>
 </table>

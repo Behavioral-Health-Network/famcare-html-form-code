@@ -1,0 +1,999 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="Microsoft Theme" content="none">
+<meta name="Microsoft Border" content="none">
+<title>Client Search Model 2</title>
+  
+  <link href="addon/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" type="text/css" />
+    <script src="addon/jQuery-contextMenu/jquery.contextMenu.js" type="text/javascript"></script>
+    <script src="addon/jQuery-contextMenu/jquery.ui.position.min.js" type="text/javascript"></script>
+    <script src="addon/jQuery-contextMenu/main.js" type="text/javascript"></script>
+    
+      <style type="text/css">
+  .NotDisplayed  {
+    display: none;
+  }
+    
+    .HideDisplayTarget  {
+    display: none;
+  }
+  
+  .bullet:before{
+        content:"• ";
+}
+    .RedColored{
+      color: #ff0000;
+    }
+  </style>
+  
+</head>
+<PREADD SET EXTRAPAREN="">
+<PREADD SET EXTRAJOIN="">
+<PREADD SET EXTRASQL="AND CLIENT.ID=0">
+<PREADD SET EXTRASQLREF=" And ReferralIn.ID=0">
+<PREADD SET EXTRASQLREC=" And PWFosterParentRecruitmentAndPreCertInfo.ID=0">
+<PREADD SETPARM HELPFORMNAME="ClientSearchDetention">
+<PREADD SETPARM ALLOWHOMEPAGE="YES">
+<PREADD SET CLIENTNUMBER="||||">
+
+
+<PREADD SET CANSEEALL="||LOADFIELDS Select Case When (CharIndex('|ACCOUNTING|','^^SV GROUPLIST^^') &gt; 0 Or CharIndex('|CASE WORKERS|','^^SV GROUPLIST^^') &gt; 0 Or CharIndex('|CASE WORKER OR SOCIAL|','^^SV GROUPLIST^^') &gt; 0) And CharIndex('|ADMIN|','^^SV GROUPLIST^^') = 0 Then 'No' Else 'Yes' End||||LOADCURRENTVALUE (0)||">
+
+
+<script language="Javascript">
+  ///PULLDATA SELECT DESCRIPTION, FieldName, FieldType, LinkTable, LinkField, LinkDescription, checkboxvalue, FieldDesc FROM ClientSearchParameters_BASE WHERE docrevno=' 0 ' and (statusDesc='active' or statusDesc='') order by fieldtype,code
+    var t = '';
+    var sqlw = "";
+    var ddcount = 1;
+function Specialsummationrefresh(divid) {
+        functionreturnvalue = null;
+        var allowtodoupdate = -1;
+        sqlw = "";
+
+        var f = document.forms[0];
+        if (f.ProviderName.value!="" && instrjis(f.ProviderName.value,"[")==0) {
+             alert("When searching for a provider/program placement, please select from the Ajax dropdown list");
+             return;
+        }
+        if (f.ProviderName.value!="") {
+             tt=instrjis(f.ProviderName.value,"[");
+             prov=midjis(f.ProviderName.value,tt+1);
+             tt=instrjis(prov,"]");
+             if (tt!=0) {prov=leftjis(prov,tt-1)}
+             o=f.PlacementType;
+             sqlw=" (SELECT TOP 1 PP.ID FROM PROVIDERPLACEMENT PP WHERE PP.CLIENTNUMBER=CLIENT.CLIENTNUMBER AND PP.DOCREVNO=' 0 ' AND PP.PRIMARYPROVIDERCODE='"+prov+"'";
+             if (o[0].checked) {sqlw=sqlw+" AND PP.ENDINGDATE IS NULL"}
+             if (o[1].checked) {sqlw=sqlw+" AND PP.ENDINGDATE IS NOT NULL"}
+             sqlw=sqlw+") IS NOT NULL ";
+        }
+        addwhere("LASTNAME", " Like ", "'");
+        addwhere("FIRSTNAME", " Like ", "'");
+        addwhere("CLIENTNUMBER", "=", "'");
+        addwhere("FamilyName", " Like ", "'");
+        addwhere("DHSCASENO", "=", "'");
+  $('.textbox').each(function()   {
+    var textparam = $(this).prop('name');
+    if($(this).val() != '')  {
+    //alert(textparam + ' t');
+    addwhere(textparam, " Like ", "'");
+    }
+  });
+  $('.checkboxes').each(function()  {
+    var checkparam = $(this).prop('name');
+    if($(this).prop('checked') != false)  {
+    //alert(checkparam + ' c');
+    addwhere(checkparam, "=", "'");
+    }
+  });
+  $('.dropdown').each(function()  {
+    var dropparam = $(this).prop('name');
+    if($(this).val() != '')  {
+    //alert(dropparam + ' d');
+    addwhere(dropparam, "=", "'");
+    }
+  });
+        var t = f.BIRTHDATE.value;
+        if (t != "") {
+            if (!datejis(t)) {
+                alert("Birthdate is not a valid date format.  You must specify month/day/year");
+                return functionreturnvalue;
+            }
+            if (sqlw != "") {
+                sqlw = sqlw + " AND ";
+            }
+            sqlw = sqlw + "ABS(DATEDIFF(day,[CLIENT].[BIRTHDATE],'" + t + "'))<1830";
+            t = cdatejis(t);
+            var m = monthjis(t);
+            var d = dayjis(t);
+            sqlw = sqlw + " AND MONTH([CLIENT].[BIRTHDATE])=" + cstrjis(m) + " AND DAY([CLIENT].[BIRTHDATE])=" + cstrjis(d);
+        }
+
+	if(f.ClientAliases.value != ""){
+		var al = f.ClientAliases.value;
+		var alcrit = "";
+		var alcritnew = "";
+		var alc = 1;
+		if(al.indexOf(",") >= 0){
+			while(al.indexOf(",") >= 0 && alc < 10){
+				alcrit = al.substr(0,al.indexOf(","));
+				al = al.substr(al.indexOf(",")+1);
+
+				if(alcritnew != ""){alcritnew = alcritnew + " or "}
+				alcritnew = alcritnew + " Cast([Client].NickName As VarChar(max)) Like '*"+RemoveSpaces(alcrit)+"*'";
+				//alert(alcrit);
+				alc = alc + 1;
+			}
+		}
+		alcrit = al;
+		if(alcritnew != ""){alcritnew = alcritnew + " or "}
+		alcritnew = alcritnew + " Cast([Client].NickName As VarChar(max)) Like '*"+RemoveSpaces(alcrit)+"*'";
+		//alert(alcritnew);
+		if(sqlw != ""){sqlw = sqlw + " And "}
+		sqlw = sqlw + " (" + alcritnew + ")";
+	}
+
+        var extraparen = "";
+        var extrajoin = "";
+        if (f.PASSPORTTYPE.value != "") {
+            extraparen = "(";
+            extrajoin = " LEFT JOIN CLIENTPASSPORT ON CLIENT.CLIENTNUMBER=CLIENTPASSPORT.CLIENTNUMBER)";
+            if (sqlw != "") {
+                sqlw = sqlw + " AND ";
+            }
+            sqlw = sqlw + "CLIENTPASSPORT.IDNUMBERTYPE='" + f.PASSPORTTYPE.value + "' AND CLIENTPASSPORT.IDNUMBER LIKE '" + f.PassportSearchNumber.value + "' AND CLIENTPASSPORT.DOCREVNO=' 0 '";
+            if (f.PassportSearchNumber.value == "") {
+                alert("If you select a passport type to search on, you must specify at least part of a passport number (wildcards ok)");
+                return functionreturnvalue;
+            }
+        }
+        if (sqlw == "") {
+            alert("You must supply at least one search criteria");
+            return functionreturnvalue;
+        }
+        sqlw = " AND (" + sqlw + ") ";
+
+        document.getElementById(divid).innerHTML = "<p align=center><img src=\"images/PleaseWait.gif\"></p>";
+        parent.fvalidate.document.open();
+        parent.fvalidate.document.write("Refreshing " + divid);
+        parent.fvalidate.document.close();
+       //alert(sqlw);
+        sqlw = escape(sqlw);
+        extraparen = escape(extraparen);
+        extrajoin = escape(extrajoin);
+        var urlfunc = "genfunc.exe?FULLFUNCTION^REFRESHSUMMATION|SUMMATION(" + divid + ")|EXTRAPAREN(" + extraparen + ")|SETVALUE(EXTRAPAREN)|EXTRAJOIN(" + extrajoin + ")|SETVALUE(EXTRAJOIN)|EXTRASQL(" + sqlw + ")|SETVALUE(EXTRASQL)|SESSIONID(||SESSIONID||)^";
+        // '   msgbox urlfunc
+        parent.fvalidate.location.replace(urlfunc);
+        document.getElementById("B1Client").style.display = "";
+        document.getElementById("B1Ref").style.display = "";
+        document.getElementById("B1Recruitment").style.display = "";
+        return functionreturnvalue;
+    }
+
+    function addwhere(fld, op, delim) {
+        functionreturnvalue = null;
+        var f=document.forms[0];
+        var t = document.forms[0].elements[fld].value;
+        if (t == "") {
+            return functionreturnvalue;
+        }
+  	    if (op == "=" && delim == "'" && t.indexOf("*") >= 0) {
+		    var op = " LIKE ";
+	    } else {
+		    if (op == " Like " && t.indexOf("*") < 0) {
+			    t = t + "*";
+		    }
+	    }
+        if (sqlw != "") {
+            sqlw = sqlw + " AND ";
+        }
+        if ((fld=="LASTNAME" || fld=="FIRSTNAME") && f.SOUNDEX.checked) {
+            if (fld=="LASTNAME") {
+                  sqlw=sqlw+"CLIENT.SOUNDEXLAST=SOUNDEX('"+soundexxlate(t)+"')";
+            } else {
+                  sqlw=sqlw+"CLIENT.SOUNDEXFIRST=SOUNDEX('"+soundexxlate(t)+"')";
+            }
+        } else {
+             sqlw = sqlw + "CONVERT(VARCHAR(MAX),[CLIENT].[" + fld + "])" + op + delim + t + delim;
+        }
+        return functionreturnvalue;
+    }
+
+function RemoveSpaces(t){
+	var functionreturnvalue = t;
+	var f = document.forms[0];
+	var cc = 1;
+	while(t.substr(0,1) == " " && cc < 10){
+		t = t.substr(1);
+		cc = cc + 1;
+	}
+	functionreturnvalue = t;
+	return functionreturnvalue;
+}
+
+    function Recruitmentsummationrefresh(divid) {
+        functionreturnvalue = null;
+        sqlw = "";
+        var f = document.forms[0];
+        if (f.ApplicantFirstname.value != "") {
+            sqlw = " And (ApplicantFirstname Like '*" + f.ApplicantFirstname.value + "*' Or CoAppliantFirstName Like '*"+ f.ApplicantFirstname.value + "*')";
+        }
+        if (f.ApplicantLastName.value != "") {
+            sqlw = sqlw + " And (ApplicantLastName Like '*" + f.ApplicantLastName.value + "*' Or CoAppliantLastName Like '*" + f.ApplicantLastName.value + "*')";
+        }
+        if (f.Office.value != "") {
+            sqlw = sqlw + " And Office = '" + f.Office.value + "'";
+        }
+        if (f.PARENTORGANIZATION.value != "") {
+            sqlw = sqlw + " And PARENTORGANIZATION = '" + f.PARENTORGANIZATION.value + "'";
+        }
+        
+        if (sqlw == "") {
+            alert("You must supply at least one search criteria");
+            return functionreturnvalue;
+        }
+        document.getElementById(divid).innerHTML = "<p align=center><img src=\"images/PleaseWait.gif\"></p>";
+        sqlw = escape(sqlw);
+        var urlfunc = "genfunc.exe?FULLFUNCTION^REFRESHSUMMATION|SUMMATION(" + divid + ")|EXTRASQLREC(" + sqlw + ")|SETVALUE(EXTRASQLREC)|SESSIONID(||SESSIONID||)^";
+        // '   msgbox urlfunc
+        parent.fvalidate.location.replace(urlfunc);
+        document.getElementById("B1Client").style.display = "";
+        document.getElementById("B1Ref").style.display = "";
+        document.getElementById("B1Recruitment").style.display = "";
+        return functionreturnvalue;
+    }
+
+    function selectclient(t) {
+        functionreturnvalue = null;
+        var hlink = "genfunc.exe?FULLFUNCTION^CLIENTACCESS|ACCESSFORM(||ACCESSFORM||)|OVERRIDETEMPLATE(CLIENTRedirector)|CLIENTNUMBER(" + t + ")|SESSIONID(||SESSIONID||)";
+        //     var hlink="genfunc.exe?FULLFUNCTION^CLIENTACCESS|ACCESSFORM(||ACCESSFORM||)|OVERRIDETEMPLATE(CLIENTLOAD)|CLIENTNUMBER("+t+")|SESSIONID(||SESSIONID||)";
+        window.location = hlink;
+        return functionreturnvalue;
+    }
+
+    function startup() {
+        functionreturnvalue = null;
+        $('.searchbuttons').hide();
+        var security = '||GROUPLIST||';
+        //alert(security);
+        
+        security = security.toUpperCase();
+        var test = security.indexOf('ADMIN','GVT')
+        //alert(test);
+        if(security.indexOf('ADMIN') > 0 || security.indexOf('GVT') > 0)  {
+          document.getElementById('adminonly').style.display = '';
+        }
+        for(var x = 1; x <= totalelements; x++){
+          if(results[x][3] == 'text')  {
+            $('#customsearch').append('<li><strong>' +  results[x][1] + ' : </strong>' + '<inp' + 'ut type="text" na' + 'me = "' + results[x][2] + '" class="textbox" data-cfield="' + results[x][2] + '" size="35" onchange="RemoveApostrophe(this)">  ' + results[x][8] + '</li>');
+          }
+          if(results[x][3] == 'checkbox')  {
+            $('#customsearch').append('<li><strong>' + results[x][1] + ' : </strong><in' + 'put ty' + 'pe="checkbox" na' + 'me="' + results[x][2] + '" id="' + results[x][2] + '" class="checkboxes" data-cfield="' + results[x][2] + '" value="' + results[x][7] + '">  ' + results[x][8] + '</li>');
+          }
+          if(results[x][3] == 'radio' || results[x][3] == 'dropdown')  {
+            if(results[x][5] != '')  {
+              $('#customsearch').append('<li><strong>' + results[x][1] + ' : </strong><se' + 'lect na' + 'me="' + results[x][2] + '" id="' + results[x][5] + ddcount + '" class="'+ results[x][6] + ' count' + ddcount + ' dropdown yes" data-cfield="' + results[x][4] + '" size="1"></select>  ' + results[x][8] + '</li>');
+              ddcount = ddcount + 1
+            } else {
+              $('#customsearch').append('<li><strong>' + results[x][1] + ' : </strong><se' + 'lect na' + 'me="' + results[x][2] + '" id="' + results[x][2] + ddcount + '" class="'+ results[x][1] + ' count' + ddcount + ' dropdown" data-cfield="' + results[x][2] + '" size="1"></select>  ' + results[x][8] + '</li>');
+              ddcount = ddcount + 1
+            }
+          }
+        }
+        document.forms["SearchScreen"].LASTNAME.focus();
+        document.forms["SearchScreen"].R1SearchType[0].checked = true;
+        if (ucasejis("||ReferralRequired||") != "YES") {
+            //document.forms["SearchScreen"].B1Client.style.display = "";
+            document.forms["SearchScreen"].B1Ref.value = "Start New Referral";
+        }
+      //document.getElementById('customsearch').innerHTML = t;
+        return functionreturnvalue;
+    }
+
+    function addcaseload(clnum, vwoption) {
+        functionreturnvalue = null;
+        var hlink = "genfunc.exe?FULLFUNCTION^CLIENTACCESS|OVERRIDETEMPLATE(CLIENTLOADADDCASELOAD)|VIEWCASELOAD(" + vwoption + ")|ACCESSFORM(||ACCESSFORM||)|CLIENTNUMBER(" + clnum + ")|SETVALUE(CLIENTNUMBER)|SESSIONID(||SESSIONID||)";
+        try{
+             document.getElementById("CaseLoadLinks" + clnum).style.display = "none";
+        } catch(e) {}
+        parent.window.fvalidate.location = hlink;
+        return functionreturnvalue;
+    }
+
+    function removecaseload(clnum) {
+        functionreturnvalue = null;
+        var hlink = "genfunc.exe?FULLFUNCTION^BLANKFORM|CLIENTNUM(" + clnum + ")|FORMNAME(USERREMOVECASELOAD)|SESSIONID(||SESSIONID||)|TIMER(" + cstrjis(Date()) + ")^";
+        parent.fvalidate.location = hlink;
+        return functionreturnvalue;
+    }
+
+    function specialrefresh(t) {
+        functionreturnvalue = null;
+        var hlink = "genfunc.exe?FULLFUNCTION^CLIENTACCESS|ACCESSFORM(||ACCESSFORM||)|OVERRIDETEMPLATE(CLIENT)|CLIENTNUMBER(" + t + ")|SESSIONID(||SESSIONID||)";
+        window.location = hlink;
+        return functionreturnvalue;
+    }
+
+    function quickinfo(clnum) {
+        functionreturnvalue = null;
+        var url = "genfunc.exe?FULLFUNCTION^UNIQUEFORM|FORMNAME(CLIENTFACESHEET)|TABLENAME(CLIENT)|CLIENTNUMBER(" + clnum + ")|SESSIONID(S||SESSIONID||)^";
+        openhyperlink(url);
+        return functionreturnvalue;
+    }
+
+    function FamilyBuild() {
+        functionreturnvalue = null;
+        var url = "genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(FAMILYBUILD)|SESSIONID(S||SESSIONID||)^";
+        openhyperlink(url);
+        return functionreturnvalue;
+    }
+
+    function NewClient() {
+        document.getElementById("fullpage").style.display = "none";
+        document.getElementById("waitGraphTop").innerHTML = "<p align=center><img src=\"images/PleaseWait.gif\"></p>";
+        var f1 = document.forms["newclient"]
+        var f = document.forms[0];
+        f1.FIRSTNAME.value = f.FIRSTNAME.value;
+        f1.LASTNAME.value = f.LASTNAME.value;
+        f1.submit()
+        return;
+    }
+
+    function NewReferral() {
+        var f2 = document.forms["newreferral"]
+        document.getElementById("fullpage").style.display = "none";
+        document.getElementById("waitGraphTop").innerHTML = "<p align=center><img src=\"images/PleaseWait.gif\"></p>";
+        var f = document.forms[0];
+        f2.FIRSTNAME.value = f.RefFIRSTNAME.value;
+        f2.LASTNAME.value = f.RefLASTNAME.value;
+        f2.submit()
+        return;
+    }
+
+    function NewRecruitment() {
+        functionreturnvalue = null;
+        var url = "genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(PWFosterParentRecruitmentAndPreCertInfo)|TABLENAME(PWFosterParentRecruitmentAndPreCertInfo)|CLIENTNUMBER()|SUMMARYDIVID(SummationRecruitmentSearch)|SESSIONID(S||SESSIONID||)^";
+        openhyperlink(url);
+        return functionreturnvalue;
+    }
+    
+var SrchType = 'Client';
+
+    function SetSearch(SearchOption) {
+    SrchType = SearchOption;
+        if (SearchOption == 'Client') {
+            document.forms["SearchScreen"].R1SearchType[0].checked = true;
+            document.getElementById("SearchClient").style.display = "";
+            document.getElementById("SearchReferral").style.display = "none";
+            document.getElementById("SearchRecruitment").style.display = "none";
+
+
+            if (document.forms["SearchScreen"].RefLASTNAME.value != "") { document.forms["SearchScreen"].LASTNAME.value = document.forms["SearchScreen"].RefLASTNAME.value; }
+            if (document.forms["SearchScreen"].RefFIRSTNAME.value != "") { document.forms["SearchScreen"].FIRSTNAME.value = document.forms["SearchScreen"].RefFIRSTNAME.value; }
+            if (document.forms["SearchScreen"].RefBIRTHDATE.value != "") { document.forms["SearchScreen"].BIRTHDATE.value = document.forms["SearchScreen"].RefBIRTHDATE.value; }
+            if (document.forms["SearchScreen"].ApplicantLastName.value != "") { document.forms["SearchScreen"].LASTNAME.value = document.forms["SearchScreen"].ApplicantLastName.value; }
+            if (document.forms["SearchScreen"].ApplicantFirstname.value != "") { document.forms["SearchScreen"].FIRSTNAME.value = document.forms["SearchScreen"].ApplicantFirstname.value; }
+
+            document.forms["SearchScreen"].LASTNAME.focus();
+
+        }
+        if (SearchOption == 'Referral') {
+            document.forms["SearchScreen"].R1SearchType[1].checked = true;
+            document.getElementById("SearchClient").style.display = "none";
+            document.getElementById("SearchReferral").style.display = "";
+            document.getElementById("SearchRecruitment").style.display = "none";
+
+            if (document.forms["SearchScreen"].LASTNAME.value != "") { document.forms["SearchScreen"].RefLASTNAME.value = document.forms["SearchScreen"].LASTNAME.value; }
+            if (document.forms["SearchScreen"].FIRSTNAME.value != "") { document.forms["SearchScreen"].RefFIRSTNAME.value = document.forms["SearchScreen"].FIRSTNAME.value; }
+            if (document.forms["SearchScreen"].BIRTHDATE.value != "") { document.forms["SearchScreen"].RefBIRTHDATE.value = document.forms["SearchScreen"].BIRTHDATE.value; }
+            if (document.forms["SearchScreen"].ApplicantLastName.value != "") { document.forms["SearchScreen"].RefLASTNAME.value = document.forms["SearchScreen"].ApplicantLastName.value; }
+            if (document.forms["SearchScreen"].ApplicantFirstname.value != "") { document.forms["SearchScreen"].RefFIRSTNAME.value = document.forms["SearchScreen"].ApplicantFirstname.value; }
+        }
+        if (SearchOption == 'Recruitment') {
+            document.forms["SearchScreen"].R1SearchType[2].checked = true;
+            document.getElementById("SearchClient").style.display = "none";
+            document.getElementById("SearchReferral").style.display = "none";
+            document.getElementById("SearchRecruitment").style.display = "";
+
+            if (document.forms["SearchScreen"].LASTNAME.value != "") { document.forms["SearchScreen"].ApplicantLastName.value = document.forms["SearchScreen"].LASTNAME.value; }
+            if (document.forms["SearchScreen"].FIRSTNAME.value != "") { document.forms["SearchScreen"].ApplicantFirstname.value = document.forms["SearchScreen"].FIRSTNAME.value; }
+            if (document.forms["SearchScreen"].RefLASTNAME.value != "") { document.forms["SearchScreen"].ApplicantLastName.value = document.forms["SearchScreen"].RefLASTNAME.value; }
+            if (document.forms["SearchScreen"].RefFIRSTNAME.value != "") { document.forms["SearchScreen"].ApplicantFirstname.value = document.forms["SearchScreen"].RefFIRSTNAME.value; }
+            document.forms["SearchScreen"].ApplicantLastName.focus();
+        }
+
+    }
+
+    function RefreshSummationReferral(divid) {
+        functionreturnvalue = null;
+        var allowtodoupdate = -1;
+        sqlw = "";
+
+        var f = document.forms[0];
+
+        addwhereRef("RefLASTNAME", " Like ", "'");
+        addwhereRef("RefFIRSTNAME", " Like ", "'");
+        var t = f.RefBIRTHDATE.value;
+        if (t != "") {
+            if (!datejis(t)) {
+                alert("Birthdate is not a valid date format.  You must specify month/day/year");
+                return functionreturnvalue;
+            }
+            if (sqlw != "") {
+                sqlw = sqlw + " AND ";
+            }
+            sqlw = sqlw + "ABS(DATEDIFF(day,[ReferralIn].[BIRTHDATE],'" + t + "'))<1830";
+            t = cdatejis(t);
+            var m = monthjis(t);
+            var d = dayjis(t);
+            sqlw = sqlw + " And MONTH([ReferralIn].[BIRTHDATE])=" + cstrjis(m) + " AND DAY([ReferralIn].[BIRTHDATE])=" + cstrjis(d);
+        }
+        if (f.StartDate.value != "") {
+            if (f.EndDate.value == "") {
+                alert("Please Enter An End Date");
+                return;
+            }
+            if (!datejis(f.StartDate.value)) {
+                alert("Starting Date is not a valid date format.  You must specify month/day/year");
+                return functionreturnvalue;
+            }
+            if (!datejis(f.EndDate.value)) {
+                alert("Ending Date is not a valid date format.  You must specify month/day/year");
+                return functionreturnvalue;
+            }
+            if (sqlw != "") {
+                sqlw = sqlw + " AND ";
+            }
+            sqlw = sqlw + " ([ReferralIn].[DateInitReferral] Between '" + f.StartDate.value + "' AND '" + f.EndDate.value + "')";
+        }
+
+        if (sqlw == "") {
+            alert("You must supply at least one search criteria");
+            return functionreturnvalue;
+        }
+        sqlw = " AND (" + sqlw + ") ";
+
+        document.getElementById(divid).innerHTML = "<p align=center><img src=\"images/PleaseWait.gif\"></p>";
+        //alert(sqlw);
+        sqlw = escape(sqlw);
+        var urlfunc = "genfunc.exe?FULLFUNCTION^REFRESHSUMMATION|SUMMATION(" + divid + ")|EXTRASQLREF(" + sqlw + ")|SETVALUE(EXTRASQLREF)|SESSIONID(||SESSIONID||)^";
+        // '   msgbox urlfunc
+        parent.fvalidate.location.replace(urlfunc);
+        document.getElementById("B1Client").style.display = "";
+        document.getElementById("B1Ref").style.display = "";
+        document.getElementById("B1Recruitment").style.display = "";
+
+        return functionreturnvalue;
+    }
+
+ 
+
+
+    function addwhereRef(fld, op, delim) {
+        functionreturnvalue = null;
+        var t = document.forms[0].elements[fld].value;
+        fld = midjis(fld, 4);
+        if (t == "") {
+            return functionreturnvalue;
+        }
+        if (op == "=" && delim == "'" && instrjis(t, "*") != 0) {
+            var op = " LIKE ";
+        } else {
+            if (op == " Like " && instrjis(t, "*") == 0) {
+                t = t + "*";
+            }
+        }
+        if (sqlw != "") {
+            sqlw = sqlw + " AND ";
+        }
+        sqlw = sqlw + "[ReferralIn].[" + fld + "]" + op + delim + t + delim;
+
+
+        return functionreturnvalue;
+    }
+  
+    
+    function Popdropdown(numelementsper,totalelements,identifier,results) {
+        functionreturnvalue = null;
+  if(totalelements < 1) {
+    return
+  }
+  totalelements = totalelements + 1
+  $('#' + identifier).append($('<option>', {
+            value: '||||',
+            text: 'Please select'
+                }));
+        for(var x=1; x<=totalelements - 1; x++){
+          if(results[x][1] != '' && results[x][1] != null)  {
+          $('#' + identifier).append($('<option>', {
+            value: results[x][1],
+            text: results[x][1]
+                }));
+          }
+}
+  for(var x = 0; x <= ddcount; x++){
+    if(!$('.' + x + 'count').hasClass('populated'))  {
+    return;
+    }
+  }
+}
+      
+
+function PopdropdownMT(numelementsper,totalelements,identifier,results) {
+        functionreturnvalue = null;
+  if(totalelements < 1) {
+    return
+  }
+  totalelements = totalelements + 1
+  $('#' + identifier).append($('<option>', {
+            value: "||||",
+            text: 'Please Select'
+                }));
+        for(var x=1; x<=totalelements - 1; x++){
+          if(results[x][1] != '' && results[x][1] != null)  {
+          $('#' + identifier).append($('<option>', {
+            value: results[x][1],
+            text: results[x][2]
+                }));
+          }
+}
+  for(var x = 0; x <= ddcount; x++){
+    if(!$('.' + x + 'count').hasClass('populated'))  {
+    return;
+    }
+  }
+}
+  
+  
+  function dropdownpopulate(start)   {
+    if(start == 'start')  {
+    ddcount = ddcount - 1
+    }
+    var f2=document.forms[3];
+    for(var x = 1; x <= ddcount; x++){
+      if($('.count' + x).hasClass('populated') == false) {
+      var b = $('.count' + x).prop('id');
+      var c = $('.count' + x).prop('class');
+      var d = $('.count' + x).data('cfield');
+      var e = c.indexOf(' ');
+      c = leftjis(c,e);
+      var f = b.indexOf(x);
+      b = leftjis(b,f);
+      var g = b.indexOf(' ');
+      var fname = $('.count' + x).prop('name');
+      var ftype = fname.substring(0,3);
+      ftype = ftype.toUpperCase();
+      if(fname == 'CLIENTTYPE')  {
+          $('.count' + x).attr('onchange','CheckClientType(\'' + ftype + '\',this)');
+        }
+        if($('.count' + x).hasClass('yes') == true)  {
+          var f=document.forms[0];
+    if(d == 'Q_HRFORM')  {
+	var sql="SELECT DISTINCT " + c + ", " + b + " FROM " + d + " where empstatus='Active' order by " + b;
+    } else {
+    var sql="SELECT DISTINCT " + c + ", " + b + " FROM " + d + " where (Status='Active' or Status='' or Status='1') order by " + b
+    }
+          document.getElementById('IDENTIFIER' + x).value = b + x
+          document.getElementById('SQL' + x).value = escape(sql);
+          document.getElementById('POPULATEFUNCTION' + x).value = 'PopdropdownMT';
+          $('.count' + x).addClass('populated')
+        } else {
+          var sql="SELECT DISTINCT CONVERT(VARCHAR(MAX)," + b + ") FROM client where docrevno=' 0 ' order by CONVERT(VARCHAR(MAX)," + b + ")"
+          document.getElementById('IDENTIFIER' + x).value = b + x
+          document.getElementById('SQL' + x).value = escape(sql);
+          document.getElementById('POPULATEFUNCTION' + x).value = 'Popdropdown';
+          $('.count' + x).addClass('populated')
+        }
+      }
+    }
+    // no need to submit now, use new SV
+//    f2.submit();
+    $('.searchbuttons').show();
+    $('#customsearch').show();
+    $('.searchwait').hide();
+   // following is new SV to do inline populations of drop downs.
+    ||CLIENTSEARCHPOPULATE||
+  }
+  
+  function showsearchparams(div)  {
+    if($('#' + div).hasClass('NotDisplayed'))  {
+      $('#' + div).removeClass('NotDisplayed');
+    } else {
+      $('#' + div).addClass('NotDisplayed');
+    }
+  }
+
+
+  
+  
+  function popupmenuselect(clnum,cltype,o) {
+       return;
+       alert("We would popup the menu for "+clnum+", type "+cltype);
+
+    }
+    function mapout(arr){
+      var items = [];
+       $.map(arr, function( v,k ) {
+         if(Object.prototype.toString.call( v[1] ) === '[object Array]'){
+           var mnuitms = [];
+           for(var n=1; n<v.length;n++){
+             var lnk = v[n][1];
+             var re = new RegExp(/\|SESSIONID\(([S]+)/);
+             if (re.test(lnk)) {
+               lnk = lnk.replace(re,"|SESSIONID(");
+             }
+             var vitm = {"label": v[n][0],type:"anchor","value": lnk};
+             mnuitms.push(vitm);          
+           }
+           var subitm = {
+             "label": v[0],
+             "items": mnuitms
+           }
+
+           items.push(subitm);
+
+         } else {
+           var lnk = v[1];
+           var re = new RegExp(/\|SESSIONID\(([S]+)/);
+           if (re.test(lnk)) {
+             lnk = lnk.replace(re,"|SESSIONID(");
+           }
+           var itm = {"label": v[0],type:"anchor","value": lnk};
+           items.push(itm);
+         }
+      });
+      return items;
+    }
+
+    function generalsummationcallback() {
+      $.contextMenu({
+        selector: '.context-menu-one',
+        build: function($trigger, e) {
+          var clnum = $trigger.attr("client");
+          var ptype = $trigger.attr("clienttype");
+          if (ptype==1) {
+              var mna = buildMenuArrayClientMini(clnum);
+          } else {
+              var mna = buildMenuArrayClientParentMini(clnum);
+          }
+          return {
+            callback: function(key, options) {
+              var m = "clicked: " + key;
+              window.console && console.log(m); 
+            },
+            items: mapout(mna)
+          };
+        }
+      });
+      $('body').on('click', 'img.context-menu-one', function() {
+        $(this).trigger("contextmenu");
+      });
+    }
+    
+    
+    
+    function detectEnterKey(e) {
+	var evt = e || window.event;
+          var f = document.forms[0];
+	if(evt.keyCode == 13){
+              // Added by Jeff 4-29-14 - If/Else to include Referral
+              if(SrchType == 'Client'){
+                  // Added 2 lines by Jeff 6-10-14 since removeapostrophe bombs with some browsers
+                  f.LASTNAME.value = f.LASTNAME.value.replace("'","`");
+                  f.FIRSTNAME.value = f.FIRSTNAME.value.replace("'","`");  
+	       Specialsummationrefresh('SummationClientSearchModel2');
+              }
+              if(SrchType == 'Referral') {
+                  // Added 2 lines by Jeff 6-10-14 since removeapostrophe bombs with some browsers
+                  f.RefLASTNAME.value = f.RefLASTNAME.value.replace("'","`");
+                  f.RefFIRSTNAME.value = f.RefFIRSTNAME.value.replace("'","`"); 
+                  RefreshSummationReferral('SummationReferralSearch');
+              }
+              if(SrchType == 'Recruitment') {
+              Recruitmentsummationrefresh('SummationRecruitmentSearch')
+              }
+	}
+	return document.defaultAction;
+}
+
+document.onkeypress=detectEnterKey
+
+function addreferralnew()  {
+var f = document.forms[0];
+addsummationrecordchild('SummationReferralSearch','ReferralIn)|CLIENTNUMBER()|SETVALUE(CLIENTNUMBER)|LASTNAME(' + f.RefLASTNAME.value +')|SETVALUE(LASTNAME)|FIRSTNAME(' + f.RefFIRSTNAME.value + ')|SETVALUE(FIRSTNAME','')
+}
+
+function showsoundex(o2) {
+    f=document.forms[0];
+    o=f.SOUNDEX;
+    g1=f.FIRSTNAME.value;
+    g2=f.LASTNAME.value;
+    if (instrjis(g1+g2,"*")!=0 || instrjis(g1+g2,"%")!=0 && o.checked) {
+//        document.getElementById("soundexspan").style.display="none";
+        if (o2.name=="SOUNDEX") {
+            alert("Cannot use Soundex when using wildcard characters");
+        }
+        o.checked=false;
+        return;
+    }
+    
+//    if (document.getElementById("soundexspan").style.display=="") {return}
+//    document.getElementById("soundexspan").style.display="";
+//    o.checked=true;
+}
+
+function soundexxlate(gx) {
+   g=ucasejis(gx);
+   g=g.replace(/`/g,"");
+   if (leftjis(g,2)=="PH") {g="F"+midjis(g,3); return g;}
+   if (leftjis(g,2)=="GE") {g="J"+midjis(g,2); return g;}
+   if (leftjis(g,2)=="GI") {g="J"+midjis(g,2); return g;}
+   if (leftjis(g,2)=="QU") {g="KW"+midjis(g,3); return g;}
+   if (leftjis(g,2)=="CE") {g="SE"+midjis(g,3); return g;}
+   if (leftjis(g,2)=="CI") {g="SI"+midjis(g,3); return g;}
+   if (leftjis(g,3)=="CAE") {g="SEE"+midjis(g,4); return g;}
+   if (leftjis(g,2)=="CY") {g="S"+midjis(g,2); return g;}
+   if (leftjis(g,2)=="PH") {g="F"+midjis(g,3); return g;}
+   if (leftjis(g,3)=="CHR") {g="K"+midjis(g,3); return g;}
+   if (leftjis(g,2)=="CH") {
+       return g;
+   }
+   if (leftjis(g,1)=="C") {g="K"+midjis(g,2)}
+   return g;
+}
+
+$(document).ready(function() {
+if('||FOSTERMODULE||' != 'YES') {
+$('.RecruitmentSection').addClass('NotDisplayed');
+}
+});
+
+
+    
+
+</script>
+
+||INCLUDE REMOVEAPOSTROPHE.HTM||
+||INCLUDE FunctionSummationLibrary.htm||
+
+<body onload="startup();dropdownpopulate('start')">
+
+<form action="genfunc.exe" method="post" name="SearchScreen">
+<div id="waitGraphTop"></div>
+<div id="fullpage">
+<input type="hidden" name="_NOSPELLCHECK" value="YES">
+<input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+<div>&nbsp;</div>
+||SEARCHTRVIDEO||<br>
+||SEARCHTRTEXT||
+<div>&nbsp;</div>
+<font style="arial" size="5"><b><span>||FIELDTAG Client||Client||ENDFIELDTAG|| Search : </span></b></font>&nbsp;&nbsp;
+
+<div align="center">
+   <input type="button" name="B1Fam" onclick="FamilyBuild()" value="Build New Family" style="display:none"/>&nbsp;&nbsp;&nbsp;&nbsp;
+   <input type="button" name="B1Client" id="B1Client" onclick="NewClient()" value="Add New Client" style="display:none"/>&nbsp;&nbsp;&nbsp;&nbsp;
+   <input type="button" name="B1Ref" id="B1Ref" onclick="addreferralnew()" value="Start New Intake" style="display:none"/>&nbsp;&nbsp;&nbsp;&nbsp;
+
+<span class="RecruitmentSection">
+   <input type="button" name="B1Recruitment" id="B1Recruitment" onclick="NewRecruitment()" value="Add New Recruitment" style="display:none"/>&nbsp;&nbsp;&nbsp;&nbsp;
+</span>
+
+</div>
+<div class="extrawidecol">
+<div class="deflist">
+<div class="term">Search Parameters</div>
+<div id="Div1" class="def">
+    <ul>
+         <li><strong>&nbsp;</strong>
+             <input type="radio" name="R1SearchType" value="SearchClient" onClick="SetSearch('Client')"> ||FIELDTAG Client||Client||ENDFIELDTAG||&nbsp;&nbsp;
+             <span id="_gvtReferral"><input type="radio" name="R1SearchType" value="SearchReferral" onClick="SetSearch('Referral')"> ||FIELDTAG Referral||Referral||ENDFIELDTAG||&nbsp;&nbsp;</span>
+ <span class="RecruitmentSection">           
+         <span id="_gvtRecruitment"><input type="radio" name="R1SearchType" value="SearchRecruitment" onClick="SetSearch('Recruitment')"> ||FIELDTAG Recruitment||Recruitment||ENDFIELDTAG|| &nbsp;&nbsp;</span>
+ </span>        
+     </li>
+
+     </ul>
+</div> <div id="SearchClient">
+<div class="def highlighted">
+    <ul>
+        <li style="display:none">
+            <strong>Family Name: </strong>
+            <input type="text" name="FamilyName" onchange="RemoveApostrophe(this)" />&nbsp;Default search includes * &nbsp;
+        </li>
+        <li style="display:none">
+            <strong>DHS Case No : </strong>
+            <input type="text" name="DHSCASENO" onchange="RemoveApostrophe(this)" />
+        </li>
+        <li>
+            <strong>Last Name : </strong>
+            <input type="text" name="LASTNAME" onchange="RemoveApostrophe(this);showsoundex(this)" />&nbsp;Default search includes soundex (sounds like) unless wildcard (*) specified&nbsp;
+        </li>
+        <li>
+            <strong>First Name : </strong>
+            <input type="text" name="FIRSTNAME" onchange="RemoveApostrophe(this);showsoundex(this);" />&nbsp;Default search includes soundex (sounds like) unless wildcard (*) specified&nbsp;
+        </li>
+        <li id="soundexspan"><strong>Soundex Search : </strong><input type="checkbox" checked name="SOUNDEX" value="ON" onclick="showsoundex(this)"> (check to include Soundex (sounds like) search)</li>
+        <li id="_gvtAliases">
+            <strong>Aliases : </strong>
+            <input type="text" name="ClientAliases" onchange="RemoveApostrophe(this)" size="35" />&nbsp;Separate Names with a Comma, and No Spaces&nbsp;
+        </li>
+        <li id="_gvtClientNumber">
+            <strong>Client Number : </strong>
+            <input type="text" name="CLIENTNUMBER" />(exact match)&nbsp;
+        </li>
+        <li id="_gvtBirthDate">
+            <strong>Birth Date : </strong>
+            <input type="text" name="BIRTHDATE" size = "8" class="jdatepicker"/>(Searches exact month and date, +/- 5 years)&nbsp;
+        </li>
+        <li id="_gvtPLACEMENT">
+           <strong>||FIELDTAG PLACEMENT||Program/Provider||ENDFIELDTAG|| : </strong><input type="text" name="ProviderName" size="50">||AJAX SELECT TOP 20 P.PROVIDERNAME+' ['+P.PROVIDERCODE+']' FROM PROVIDER P LEFT JOIN ProviderHeirarchy PH ON P.ProviderCode = PH.providercode Where p.docrevno=' 0 ' and P.PROVIDERNAME LIKE '*^^TYPEVALUE^^*' AND P.SiteProvider='Yes' And p.ProviderStatus='Active' And '^^ProviderCode^^' IN (PH.allowableprovider) Order By P.ProviderName||
+            <input type="radio" name="PlacementType" value="Active">Active&nbsp;&nbsp;<input type="radio" name="PlacementType" value="Inactive">Inactive&nbsp;&nbsp;<input type="radio" checked name="PlacementType" value="Both">Both
+        </li>
+        <li id="_gvtAddress">
+            <strong>Address : </strong>
+            <input type="text" name="TheAddress" onchange="RemoveApostrophe(this)" size = "30" />
+        </li>
+        <span id="customsearch">&nbsp;</span>
+        <li>
+            <strong>Client ID Numbers :</strong>
+            <select size="1" name="PASSPORTTYPE">
+            <option value="||Select Code, Description From CLIENTPASSPORTNUMBERTYPE Where (Status='Active' or Status='' or Status='1') AND CLIENTPASSPORTNUMBERTYPE.PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' Order by Description||" selected="selected">||CHOICETABLESQLD||</option>
+            </select></li>
+        <li><strong>&nbsp;</strong><input type="text" name="PassportSearchNumber" size="40" />&nbsp;
+        </li>
+        <li style="display: none">
+            <strong>View for selected Treatment Leaders </strong>
+            <select size="1" name="D3">
+            <option selected="selected">Treatment Leaders -</option>
+            </select>&nbsp;
+        </li>        
+    </ul>
+</div>
+    <div align="center"><input type="button" name="B1" onclick="Specialsummationrefresh('SummationClientSearchModel2')" value="Search" /><input type="reset" class="searchbuttons" value="Reset the Search Options"></div>
+<div id="SummationClientSearchModel2"> </div>
+ </div>
+
+
+<div id="SearchRecruitment" style="display:none">
+<div class="def highlighted">
+    <ul>
+        <li>
+            <strong>Last Name : </strong>
+            <input type="text" name="ApplicantLastName" onchange="RemoveApostrophe(this)" />&nbsp;Default search includes * &nbsp;
+        </li>
+        <li>
+            <strong>First Name : </strong>
+            <input type="text" name="ApplicantFirstname" onchange="RemoveApostrophe(this)" />&nbsp;Default search includes * &nbsp;
+        </li>
+        <li><strong>Office Contacted :</strong><select size="1" name="Office">
+          <option value="||Select ProviderCode, ProviderName From Q_Provider Where SiteProvider='Yes' And ProviderStatus='Active' Order By ProviderName||">||CHOICETABLESQLD||</option>
+          </select></li>
+        <li><strong>Office Assigned To :</strong><select size="1" name="PARENTORGANIZATION">
+          <option value="||Select ProviderCode, ProviderName From Q_Provider Where SiteProvider='Yes' And ProviderStatus='Active' Order By ProviderName||">||CHOICETABLESQLD||</option>
+          </select></li>
+    </ul>
+</div>
+    <div align="center"><input type="button" name="B10" onclick="Recruitmentsummationrefresh('SummationRecruitmentSearch')" value="Search" /><input type="reset" class="searchbuttons" value="Reset the Search Options"></div>
+<div id="SummationRecruitmentSearch"> </div>
+ </div>
+
+
+<div id="SearchReferral" style="display:none">
+<div class="def highlighted">
+    <ul>
+        <li>
+            <strong>Last Name : </strong>
+            <input type="text" name="RefLASTNAME" onchange="RemoveApostrophe(this)" />&nbsp;Default search includes * &nbsp;
+        </li>
+        <li>
+            <strong>First Name : </strong>
+            <input type="text" name="RefFIRSTNAME" onchange="RemoveApostrophe(this)" />&nbsp;Default search includes * &nbsp;
+        </li>
+        <li>
+            <strong>Birth Date : </strong>
+            <input type="text" name="RefBIRTHDATE" size = "8" class="jdatepicker"/>(Searches exact month and date, +/- 5 years)&nbsp;
+        </li>
+        <li>
+            <strong>Referral Date : </strong>
+            <input type="text" name="StartDate" size = "8" class="jdatepicker"/> To <input type="text" name="EndDate" size = "8" class="jdatepicker"/>
+        </li>
+    </ul>
+</div>
+    <div align="center"><input type="button" name="B11" onclick="RefreshSummationReferral('SummationReferralSearch')" value="Search" /><input type="reset" class="searchbuttons" value="Reset the Search Options"></div>
+
+<div id="SummationReferralSearch"> </div>
+
+</div>
+
+
+  <div id="adminonly" style="display:none">
+    <div class="entire" align="center" onclick="showsearchparams('searchparamsumm')">
+      <div class="td20">
+        <a>Click here to display/hide search parameters</a>
+      </div>
+    </div>
+    <div id="searchparamsumm" class="NotDisplayed">
+    ||INCLUDESUMMATION SummationClientSearchParameters_Base||
+    </div>
+  </div>
+
+
+
+</div>
+
+</div>
+<div id="waitgraphhere"></div>
+</form>
+
+<form action="genfunc.exe" method="post" name="newclient">
+    <input type="hidden" name="FORMNAME" value="Client" />
+    <input type="hidden" name="FUNCTION" value="BLANKFORM" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="||TABLENAME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||||" />
+    <input type="hidden" name="FIRSTNAME" value="||||" />
+    <input type="hidden" name="LASTNAME" value="||||" />
+</form>
+<form action="genfunc.exe" method="post" name="newreferral">
+    <input type="hidden" name="FORMNAME" value="ReferralIn" />
+    <input type="hidden" name="FUNCTION" value="BLANKFORM" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="||TABLENAME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||||" />
+    <input type="hidden" name="FIRSTNAME" value="||||" />
+    <input type="hidden" name="LASTNAME" value="||||" />
+</form>
+<form method="POST" action="genfunc.exe" target="fvalidate">
+  <input type="hidden" name="FUNCTION" value="PULLDATA">
+  <input type="hidden" name="SESSIONID" value="||SESSIONID||">
+  <input type="hidden" name="ERROR" value="SUPRESS">
+  <input type="hidden" name="JAVASCRIPT" value="MULTIARRAY">
+  <input type="hidden" name="SQL1" id="SQL1" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION1" id="POPULATEFUNCTION1" value="||||">
+  <input type="hidden" name="IDENTIFIER1" id="IDENTIFIER1" value="||||">
+  <input type="hidden" name="SQL2" id="SQL2" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION2" id="POPULATEFUNCTION2" value="||||">
+  <input type="hidden" name="IDENTIFIER2" id="IDENTIFIER2" value="||||">
+  <input type="hidden" name="SQL3" id="SQL3" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION3" id="POPULATEFUNCTION3" value="||||">
+  <input type="hidden" name="IDENTIFIER3" id="IDENTIFIER3" value="||||">
+  <input type="hidden" name="SQL4" id="SQL4" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION4" id="POPULATEFUNCTION4" value="||||">
+  <input type="hidden" name="IDENTIFIER4" id="IDENTIFIER4" value="||||">
+  <input type="hidden" name="SQL5" id="SQL5" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION5" id="POPULATEFUNCTION5" value="||||">
+  <input type="hidden" name="IDENTIFIER5" id="IDENTIFIER5" value="||||">
+  <input type="hidden" name="SQL6" id="SQL6" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION6" id="POPULATEFUNCTION6" value="||||">
+  <input type="hidden" name="IDENTIFIER6" id="IDENTIFIER6" value="||||">
+  <input type="hidden" name="SQL7" id="SQL7" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION7" id="POPULATEFUNCTION7" value="||||">
+  <input type="hidden" name="IDENTIFIER7" id="IDENTIFIER7" value="||||">
+  <input type="hidden" name="SQL8" id="SQL8" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION8" id="POPULATEFUNCTION8" value="||||">
+  <input type="hidden" name="IDENTIFIER8" id="IDENTIFIER8" value="||||">
+  <input type="hidden" name="SQL9" id="SQL9" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION9" id="POPULATEFUNCTION9" value="||||">
+  <input type="hidden" name="IDENTIFIER9" id="IDENTIFIER9" value="||||">
+  <input type="hidden" name="SQL10" id="SQL10" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION10" id="POPULATEFUNCTION10" value="||||">
+  <input type="hidden" name="IDENTIFIER10" id="IDENTIFIER10" value="||||">
+  <input type="hidden" name="SQL11" id="SQL11" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION11" id="POPULATEFUNCTION11" value="||||">
+  <input type="hidden" name="IDENTIFIER11" id="IDENTIFIER11" value="||||">
+  <input type="hidden" name="SQL12" id="SQL12" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION12" id="POPULATEFUNCTION12" value="||||">
+  <input type="hidden" name="IDENTIFIER12" id="IDENTIFIER12" value="||||">
+  <input type="hidden" name="SQL13" id="SQL13" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION13" id="POPULATEFUNCTION13" value="||||">
+  <input type="hidden" name="IDENTIFIER13" id="IDENTIFIER13" value="||||">
+  <input type="hidden" name="SQL14" id="SQL14" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION14" id="POPULATEFUNCTION14" value="||||">
+  <input type="hidden" name="IDENTIFIER14" id="IDENTIFIER14" value="||||">
+  <input type="hidden" name="SQL15" id="SQL15" value="||||">
+  <input type="hidden" name="POPULATEFUNCTION15" id="POPULATEFUNCTION15" value="||||">
+  <input type="hidden" name="IDENTIFIER15" id="IDENTIFIER15" value="||||">
+</form>
+</body>
+</html>

@@ -11,7 +11,7 @@
 <body>
 <!--PATHWAYWIZARDSUMMATION Client Enroll/Disenroll Summation-->
 ||STARTSTRIP||<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a>||ENDSTRIP|| </div>||ENDSTRIP||
-||SQC SELECT TOP 200 '' AS DUMMY,Q_Provider.ProviderName As ProvName, ProviderPlacement.DocSerNo, StartingDate, EndingDate, MasterService.Description As TheService, 
+||SQC SELECT TOP 200 '' AS DUMMY,Q_Provider.ProviderName As ProvName, ProviderPlacement.DocSerNo, ProviderPlacement.Region, REG.ProviderName AS Program, StartingDate, EndingDate, MasterService.Description As TheService, 
 DateDiff(d,ProviderPlacement.StartingDate,Case When ProviderPlacement.EndingDate Is Null Then GetDate() Else ProviderPlacement.EndingDate End) As TheLOS,
 HRFORM.FirstName+' '+HRFORM.LastName as TheWorker, Case When ('^^SV BILLINGMODULE^^' = 'YES' or '^^SV FUNDINGSOURCEONLYMODULE^^' = 'YES') Then '' Else 'display:none' End As HidePS,
 Coalesce(fh.ProviderName,pw.wing) As TheWing, CR.Description AS Closing_Reason_Description, RA.ProviderName AS Reconnection_Agency_Name, TA.ProviderName AS Transfer_Agency_Name
@@ -24,6 +24,7 @@ Left Join ProviderWings pw on pw.Wing = ProviderPlacement.PrimaryWing And pw.Doc
 LEFT JOIN ClosingReasons AS CR ON ProviderPlacement.ClosingReason = CR.Code
 LEFT JOIN Q_Provider AS RA ON ProviderPlacement.ReconnectionAgency = RA.ProviderCode
 LEFT JOIN Q_Provider AS TA ON ProviderPlacement.TransferAgency = TA.ProviderCode
+LEFT JOIN Q_Provider AS REG ON ProviderPlacement.Region = REG.ProviderCode
 
 WHERE ProviderPlacement.ClientNumber='^^SV CLIENTNUMBER^^' And ProviderPlacement.DOCREVNO=' 0 ' ORDER BY ProviderPlacement.StartingDate DESC|| ||TSSTART||
 <!--_AUTONAVIGATION-->
@@ -34,6 +35,7 @@ WHERE ProviderPlacement.ClientNumber='^^SV CLIENTNUMBER^^' And ProviderPlacement
             <th>||SORTCOL|StartingDate;descending||Start Date</th>
             <th>End Date</th>
             <th>Dismissal Reason</th>
+            <th>Program</th>
             <th>||SORTCOL|Q_Provider.ProviderName;ascending||Provider Name</th>
             <!-- <th>Service Provided</th> -->
             <th>Program Worker</th>
@@ -51,6 +53,7 @@ WHERE ProviderPlacement.ClientNumber='^^SV CLIENTNUMBER^^' And ProviderPlacement
             <td><center>||SF StartingDate||</center></td>
             <td><center>||SF EndingDate||</center></td>
             <td><center>||SF Closing_Reason_Description||</center></td>
+            <td><center>||SF Program||</center></td>
             <td><center>||SF ProvName||</center></td>
             <!-- <td><center>||SF TheService||</center></td> -->
             <td><center>||SF TheWorker||</center></td>

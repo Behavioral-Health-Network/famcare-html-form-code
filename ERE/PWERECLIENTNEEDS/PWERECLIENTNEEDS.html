@@ -9,8 +9,120 @@
 <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
  <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
 <PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+  <!-- FIELDOVERRIDE (BASIC_NEEDS_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (BIRTH_CERTIFICATE,10,10) -->
+  <!-- FIELDOVERRIDE (CHILD_CARE,10,10) -->
+  <!-- FIELDOVERRIDE (COMMUNITY_BASED_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (CRISIS_SERVICES,10,10) -->
+  <!-- FIELDOVERRIDE (DENTAL_CARE,10,10) -->
+  <!-- FIELDOVERRIDE (DEVELOPMENT_DISABILITIES_SERVICES,10,10) -->
+  <!-- FIELDOVERRIDE (EMPLOYMENT_SERVICES,10,10) -->
+  <!-- FIELDOVERRIDE (FOOD_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (HOUSING,10,10) -->
+  <!-- FIELDOVERRIDE (ID,10,10) -->
+  <!-- FIELDOVERRIDE (LEGAL_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (MEDICATION_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (MENTAL_HEALTH_SERVICES,10,10) -->
+  <!-- FIELDOVERRIDE (PAYER_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (PHYSICAL_HEALTH_SERVICES,10,10) -->
+  <!-- FIELDOVERRIDE (PSYCHIATRY,10,10) -->
+  <!-- FIELDOVERRIDE (SOCIAL_SECURITY,10,10) -->
+  <!-- FIELDOVERRIDE (SUBSTANCE_USE_SERVICES,10,10) -->
+  <!-- FIELDOVERRIDE (TRANSPORTATION_ASSISTANCE,10,10) -->
+  <!-- FIELDOVERRIDE (NONE,10,10) -->
 
 <script language="JavaScript">
+
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#yere_mh_concerns, #yere_type_trauma_reported, #yere_substance_use_history, #yere_type_of_school_discipline'); // Add more IDs as needed
+
+
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
+
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
+
+//     if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
+
+// Start observing the document body for changes
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#ere_client_needs', listenerSetup);
+ 
 
 var genpdf='true';
 
@@ -29,7 +141,8 @@ function startup() {
 
           f._B1.style.display = "";
           f._B2.style.display = "";
-          f._B3.style.display = "";
+         // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+         //  f._B3.style.display = "";
           document.getElementById("SaveButtons").style.display = "";
 
 		}
@@ -41,6 +154,27 @@ function startup() {
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
   return functionreturnvalue;
+
+// Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#ere_mental_health_history, #ere_substance_use_history, #ere_physical_health_history'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
 }
 
 function checkhideall() {
@@ -63,7 +197,7 @@ function checkhideall() {
    checkhide(f.client_needs,"phys_health_status","015");
    checkhide(f.client_needs,"phychiatry_status","016");
    checkhide(f.client_needs,"ss_card_status","017");
-   checkhide(f.client_needs,"su_servives_status","018");
+   checkhide(f.client_needs,"su_services_status","018");
    checkhide(f.client_needs,"transportation_assist_status","019");
 
 }
@@ -382,7 +516,8 @@ function submitit() {
   $(':button').prop('disabled',true);
 	f._B1.style.display = "none";
 	f._B2.style.display = "none";
-	f._B3.style.display = "none";
+   // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
 }
 
 function deleteit() {
@@ -401,41 +536,41 @@ function deleteit() {
 	f.submit();
 	return functionreturnvalue;
 }
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
 
-function quicksubmitit() {
-//	errdesc=validateform();
-//	if (errdesc!="") {alert(errdesc); return;}
-	var f=document.forms[0];
-	//***Error checking should be done here before a quick save
-	f._B1.style.display = "none";
-	f._B2.style.display = "none";
-	f._B3.style.display = "none";
-	document.getElementById("SaveButtons").style.display = "";
-	f.target = "fvalidate";
-	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
-	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
-	if (genpdf) {buildhtmlclean()}
-    // restore signature options after buildhtmlclean
-    document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
-	f.submit();
-        $(':button').prop('disabled',true);
-	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
-	return;
-}
-
-function QuickSubmitReturn() {
-	var functionreturnvalue = null;
-	var f = document.forms[0];
-	//***Reset the form after a quick submit here
-	f._B1.style.display = "";
-	f._B2.style.display = "";
-	f._B3.style.display = "";
-	document.getElementById("SaveButtons").style.display = "";
-        $(':button').prop('disabled',false);
-	updatesignatures();
-	alert("Record Saved");
-	return functionreturnvalue;
-}
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
 
 function resetsave() {
 	var functionreturnvalue = null;
@@ -443,7 +578,8 @@ function resetsave() {
 	//***Reset the form after a quick submit here
 	f._B1.style.display = "";
 	f._B2.style.display = "";
-	f._B3.style.display = "";
+   // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "";
 	document.getElementById("SaveButtons").style.display = "";
         $(':button').prop('disabled',false);
 	return functionreturnvalue;
@@ -489,6 +625,59 @@ function updatesignatures(){
    return;
 }
 
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['ere_client_needs',etc.].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+
 </script>
 
 <script language="VBScript">
@@ -516,6 +705,28 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
+<!-- used by updateReportFields -->
+<input type="hidden" name="" value="||FIELDVALUE need_basic_needs_assistance||" class="report-field value-001" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_birth_certificate||" class="report-field value-002" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_child_care||" class="report-field value-003" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_community_based_assistance||" class="report-field value-004" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_crisis_services||" class="report-field value-005" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_dental_care||" class="report-field value-006" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_developmental_disabilities_services||" class="report-field value-007" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_employment_services||" class="report-field value-008" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_food_assistance||" class="report-field value-009" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_housing||" class="report-field value-010" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_id||" class="report-field value-011" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_legal_assistance||" class="report-field value-012" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_mental_health_services||" class="report-field value-013" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_payer_assistance||" class="report-field value-014" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_phyical_health_services||" class="report-field value-015" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_psychiatry||" class="report-field value-016" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_social_security_card||" class="report-field value-017" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_substance_use_services||" class="report-field value-018" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_transportation_assistance||" class="report-field value-019" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_medication_assistance||" class="report-field value-020" data-source="ere_client_needs">
+<input type="hidden" name="" value="||FIELDVALUE need_none||" class="report-field value-021" data-source="ere_client_needs">
 <!--STARTOFPROVIDERFORM -->
     <h1><span>ERE Client Needs</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
@@ -540,7 +751,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldclient_needs qclient_needs">
-    <div class="col12 fldclient_needs qclient_needs"><span class="qclient_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_needs required-field-label"><label class="label-top">Client Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qclient_needs"><select size="15" name="client_needs" onchange="checkhideall()" multiple>
+    <div class="col12 fldclient_needs qclient_needs"><span class="qclient_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_needs required-field-label"><label class="label-top">Client Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qclient_needs"><select size="15" name="client_needs" onchange="updateReportFields(['ere_client_needs']);checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_client_needs] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE client_needs^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ere_client_needs||
 
@@ -553,7 +764,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldbasic_needs_status qbasic_needs_status">
-    <div class="col12 fldbasic_needs_status qbasic_needs_status"><span class="qbasic_needs_status"><label class="label-top">||FIELDTAG basic_needs_status||Basic Needs Assistance Status||ENDFIELDTAG||</label></span><span class="qbasic_needs_status"><input type="checkbox" name="basic_needs_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="basic_needs_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="basic_needs_status_3_NeedMetorStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldbasic_needs_status qbasic_needs_status"><span class="qbasic_needs_status"><label class="label-top">||FIELDTAG basic_needs_status||Basic Needs Assistance Status||ENDFIELDTAG||</label></span><span class="qbasic_needs_status"><input type="checkbox" name="basic_needs_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="basic_needs_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="basic_needs_status_six_month" value="ON" onclick="checkhideall()">Need Met or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -561,7 +772,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldbirth_certificate_status qbirth_certificate_status">
-    <div class="col12 fldbirth_certificate_status qbirth_certificate_status"><span class="qbirth_certificate_status"><label class="label-top">||FIELDTAG birth_certificate_status||Birth Certificate Status||ENDFIELDTAG||</label></span><span class="qbirth_certificate_status"><input type="checkbox" name="birth_certificate_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="birth_certificate_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="birth_certificate_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldbirth_certificate_status qbirth_certificate_status"><span class="qbirth_certificate_status"><label class="label-top">||FIELDTAG birth_certificate_status||Birth Certificate Status||ENDFIELDTAG||</label></span><span class="qbirth_certificate_status"><input type="checkbox" name="birth_certificate_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="birth_certificate_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="birth_certificate_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -569,7 +780,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldchild_care_status qchild_care_status">
-    <div class="col12 fldchild_care_status qchild_care_status"><span class="qchild_care_status"><label class="label-top">||FIELDTAG child_care_status||Child Care Status||ENDFIELDTAG||</label></span><span class="qchild_care_status"><input type="checkbox" name="child_care_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="child_care_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="child_care_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldchild_care_status qchild_care_status"><span class="qchild_care_status"><label class="label-top">||FIELDTAG child_care_status||Child Care Status||ENDFIELDTAG||</label></span><span class="qchild_care_status"><input type="checkbox" name="child_care_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="child_care_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="child_care_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -577,7 +788,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldcommunity_based_assist_status qcommunity_based_assist_status">
-    <div class="col12 fldcommunity_based_assist_status qcommunity_based_assist_status"><span class="qcommunity_based_assist_status"><label class="label-top">||FIELDTAG community_based_assist_status||Community Based Assistance Status||ENDFIELDTAG||</label></span><span class="qcommunity_based_assist_status"><input type="checkbox" name="community_based_assist_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldcommunity_based_assist_status qcommunity_based_assist_status"><span class="qcommunity_based_assist_status"><label class="label-top">||FIELDTAG community_based_assist_status||Community Based Assistance Status||ENDFIELDTAG||</label></span><span class="qcommunity_based_assist_status"><input type="checkbox" name="community_based_assist_status_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -585,7 +796,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldcrisis_services_status qcrisis_services_status">
-    <div class="col12 fldcrisis_services_status qcrisis_services_status"><span class="qcrisis_services_status"><label class="label-top">||FIELDTAG crisis_services_status||Crisis Services Status||ENDFIELDTAG||</label></span><span class="qcrisis_services_status"><input type="checkbox" name="crisis_services_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="crisis_services_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="crisis_services_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldcrisis_services_status qcrisis_services_status"><span class="qcrisis_services_status"><label class="label-top">||FIELDTAG crisis_services_status||Crisis Services Status||ENDFIELDTAG||</label></span><span class="qcrisis_services_status"><input type="checkbox" name="crisis_services_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="crisis_services_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="crisis_services_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -593,7 +804,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 flddental_care_status qdental_care_status">
-    <div class="col12 flddental_care_status qdental_care_status"><span class="qdental_care_status"><label class="label-top">||FIELDTAG dental_care_status||Dental Care Status||ENDFIELDTAG||</label></span><span class="qdental_care_status"><input type="checkbox" name="dental_care_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="dental_care_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="dental_care_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 flddental_care_status qdental_care_status"><span class="qdental_care_status"><label class="label-top">||FIELDTAG dental_care_status||Dental Care Status||ENDFIELDTAG||</label></span><span class="qdental_care_status"><input type="checkbox" name="dental_care_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="dental_care_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="dental_care_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -601,7 +812,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 flddd_services_status qdd_services_status">
-    <div class="col12 flddd_services_status qdd_services_status"><span class="qdd_services_status"><label class="label-top">||FIELDTAG dd_services_status||Developmental Disabilities Services Status||ENDFIELDTAG||</label></span><span class="qdd_services_status"><input type="checkbox" name="dd_services_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 flddd_services_status qdd_services_status"><span class="qdd_services_status"><label class="label-top">||FIELDTAG dd_services_status||Developmental Disabilities Services Status||ENDFIELDTAG||</label></span><span class="qdd_services_status"><input type="checkbox" name="dd_services_status_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -609,7 +820,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldemployment_services_status qemployment_services_status">
-    <div class="col12 fldemployment_services_status qemployment_services_status"><span class="qemployment_services_status"><label class="label-top">||FIELDTAG employment_services_status||Employment Services Status||ENDFIELDTAG||</label></span><span class="qemployment_services_status"><input type="checkbox" name="employment_services_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="employment_services_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="employment_services_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldemployment_services_status qemployment_services_status"><span class="qemployment_services_status"><label class="label-top">||FIELDTAG employment_services_status||Employment Services Status||ENDFIELDTAG||</label></span><span class="qemployment_services_status"><input type="checkbox" name="employment_services_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="employment_services_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="employment_services_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -617,7 +828,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldfood_assist_status qfood_assist_status">
-    <div class="col12 fldfood_assist_status qfood_assist_status"><span class="qfood_assist_status"><label class="label-top">||FIELDTAG food_assist_status||Food Assistance Status||ENDFIELDTAG||</label></span><span class="qfood_assist_status"><input type="checkbox" name="food_assist_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="food_assist_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="food_assist_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldfood_assist_status qfood_assist_status"><span class="qfood_assist_status"><label class="label-top">||FIELDTAG food_assist_status||Food Assistance Status||ENDFIELDTAG||</label></span><span class="qfood_assist_status"><input type="checkbox" name="food_assist_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="food_assist_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="food_assist_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -625,7 +836,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldhousing_status qhousing_status">
-    <div class="col12 fldhousing_status qhousing_status"><span class="qhousing_status"><label class="label-top">||FIELDTAG housing_status||Housing Status||ENDFIELDTAG||</label></span><span class="qhousing_status"><input type="checkbox" name="housing_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="housing_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="housing_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldhousing_status qhousing_status"><span class="qhousing_status"><label class="label-top">||FIELDTAG housing_status||Housing Status||ENDFIELDTAG||</label></span><span class="qhousing_status"><input type="checkbox" name="housing_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="housing_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="housing_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -633,7 +844,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldid_status qid_status">
-    <div class="col12 fldid_status qid_status"><span class="qid_status"><label class="label-top">||FIELDTAG id_status||ID Status||ENDFIELDTAG||</label></span><span class="qid_status"><input type="checkbox" name="id_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="id_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="id_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldid_status qid_status"><span class="qid_status"><label class="label-top">||FIELDTAG id_status||ID Status||ENDFIELDTAG||</label></span><span class="qid_status"><input type="checkbox" name="id_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="id_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="id_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -641,7 +852,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldlegal_assit_status qlegal_assit_status">
-    <div class="col12 fldlegal_assit_status qlegal_assit_status"><span class="qlegal_assit_status"><label class="label-top">||FIELDTAG legal_assit_status||Legal Assistance Status||ENDFIELDTAG||</label></span><span class="qlegal_assit_status"><input type="checkbox" name="legal_assit_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="legal_assit_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="legal_assit_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldlegal_assit_status qlegal_assit_status"><span class="qlegal_assit_status"><label class="label-top">||FIELDTAG legal_assit_status||Legal Assistance Status||ENDFIELDTAG||</label></span><span class="qlegal_assit_status"><input type="checkbox" name="legal_assit_referred_enaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="legal_assit_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="legal_assit_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -649,7 +860,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldmedication_assit_status qmedication_assit_status">
-    <div class="col12 fldmedication_assit_status qmedication_assit_status"><span class="qmedication_assit_status"><label class="label-top">||FIELDTAG medication_assit_status||Medication Assistance Status||ENDFIELDTAG||</label></span><span class="qmedication_assit_status"><input type="checkbox" name="medication_assit_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="medication_assit_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="medication_assit_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldmedication_assit_status qmedication_assit_status"><span class="qmedication_assit_status"><label class="label-top">||FIELDTAG medication_assit_status||Medication Assistance Status||ENDFIELDTAG||</label></span><span class="qmedication_assit_status"><input type="checkbox" name="medication_assit_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="medication_assit_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="medication_assit_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -657,7 +868,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldmh_status qmh_status">
-    <div class="col12 fldmh_status qmh_status"><span class="qmh_status"><label class="label-top">||FIELDTAG mh_status||Mental Health Services Status||ENDFIELDTAG||</label></span><span class="qmh_status"><input type="checkbox" name="mh_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="mh_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="mh_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldmh_status qmh_status"><span class="qmh_status"><label class="label-top">||FIELDTAG mh_status||Mental Health Services Status||ENDFIELDTAG||</label></span><span class="qmh_status"><input type="checkbox" name="mh_status_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="mh_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="mh_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -665,7 +876,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldpayor_source_status qpayor_source_status">
-    <div class="col12 fldpayor_source_status qpayor_source_status"><span class="qpayor_source_status"><label class="label-top">||FIELDTAG payor_source_status||Payor Source Status||ENDFIELDTAG||</label></span><span class="qpayor_source_status"><input type="checkbox" name="payor_source_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="payor_source_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="payor_source_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpayor_source_status qpayor_source_status"><span class="qpayor_source_status"><label class="label-top">||FIELDTAG payor_source_status||Payor Source Status||ENDFIELDTAG||</label></span><span class="qpayor_source_status"><input type="checkbox" name="payor_source_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="payor_source_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="payor_source_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -673,7 +884,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldphys_health_status qphys_health_status">
-    <div class="col12 fldphys_health_status qphys_health_status"><span class="qphys_health_status"><label class="label-top">||FIELDTAG phys_health_status||Physical Health Services Status||ENDFIELDTAG||</label></span><span class="qphys_health_status"><input type="checkbox" name="phys_health_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="phys_health_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="phys_health_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldphys_health_status qphys_health_status"><span class="qphys_health_status"><label class="label-top">||FIELDTAG phys_health_status||Physical Health Services Status||ENDFIELDTAG||</label></span><span class="qphys_health_status"><input type="checkbox" name="phys_health_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="phys_health_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="phys_health_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -681,7 +892,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldphychiatry_status qphychiatry_status">
-    <div class="col12 fldphychiatry_status qphychiatry_status"><span class="qphychiatry_status"><label class="label-top">||FIELDTAG phychiatry_status||Phychiatry Status||ENDFIELDTAG||</label></span><span class="qphychiatry_status"><input type="checkbox" name="phychiatry_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="phychiatry_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="phychiatry_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldphychiatry_status qphychiatry_status"><span class="qphychiatry_status"><label class="label-top">||FIELDTAG phychiatry_status||Phychiatry Status||ENDFIELDTAG||</label></span><span class="qphychiatry_status"><input type="checkbox" name="phychiatry_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="phychiatry_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="phychiatry_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -689,15 +900,15 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldss_card_status qss_card_status">
-    <div class="col12 fldss_card_status qss_card_status"><span class="qss_card_status"><label class="label-top">||FIELDTAG ss_card_status||Socail Security Card Status||ENDFIELDTAG||</label></span><span class="qss_card_status"><input type="checkbox" name="ss_card_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="ss_card_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="ss_card_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldss_card_status qss_card_status"><span class="qss_card_status"><label class="label-top">||FIELDTAG ss_card_status||Socail Security Card Status||ENDFIELDTAG||</label></span><span class="qss_card_status"><input type="checkbox" name="ss_card_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="ss_card_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="ss_card_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldsu_servives_status qsu_servives_status">
-    <div class="col12 fldsu_servives_status qsu_servives_status"><span class="qsu_servives_status"><label class="label-top">||FIELDTAG su_servives_status||Substance Use Services Status||ENDFIELDTAG||</label></span><span class="qsu_servives_status"><input type="checkbox" name="su_servives_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="su_servives_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="su_servives_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldsu_services_status qsu_services_status">
+    <div class="col12 fldsu_services_status qsu_services_status"><span class="qsu_services_status"><label class="label-top">||FIELDTAG su_services_status||Substance Use Services Status||ENDFIELDTAG||</label></span><span class="qsu_services_status"><input type="checkbox" name="su_services_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="su_services_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="su_services_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -705,7 +916,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldtransportation_assist_status qtransportation_assist_status">
-    <div class="col12 fldtransportation_assist_status qtransportation_assist_status"><span class="qtransportation_assist_status"><label class="label-top">||FIELDTAG transportation_assist_status||Transportation Assistance Status||ENDFIELDTAG||</label></span><span class="qtransportation_assist_status"><input type="checkbox" name="transportation_assist_status_1_ReferredToOrEngagedWithResourc" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="transportation_assist_status_2_NeedMetOrStableAtThreeMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="transportation_assist_status_3_NeedMetOrStableAtSixMonths" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldtransportation_assist_status qtransportation_assist_status"><span class="qtransportation_assist_status"><label class="label-top">||FIELDTAG transportation_assist_status||Transportation Assistance Status||ENDFIELDTAG||</label></span><span class="qtransportation_assist_status"><input type="checkbox" name="transportation_assist_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="transportation_assist_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="transportation_assist_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
 
@@ -716,8 +927,9 @@ function updatesignatures(){
     <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
     Signature: <input type="password" name="SIGNATURE" /><br />
     <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
-    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
-    <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div>
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
 ||ENDSTRIP||
 </form>
 </body>

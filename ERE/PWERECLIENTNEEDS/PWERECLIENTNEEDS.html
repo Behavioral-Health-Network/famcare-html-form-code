@@ -195,7 +195,7 @@ function checkhideall() {
    checkhide(f.client_needs,"mh_status","013");
    checkhide(f.client_needs,"payor_source_status","014");
    checkhide(f.client_needs,"phys_health_status","015");
-   checkhide(f.client_needs,"phychiatry_status","016");
+   checkhide(f.client_needs,"psychiatry_status","016");
    checkhide(f.client_needs,"ss_card_status","017");
    checkhide(f.client_needs,"su_services_status","018");
    checkhide(f.client_needs,"transportation_assist_status","019");
@@ -706,27 +706,27 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!-- used by updateReportFields -->
-<input type="hidden" name="" value="||FIELDVALUE need_basic_needs_assistance||" class="report-field value-001" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_birth_certificate||" class="report-field value-002" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_child_care||" class="report-field value-003" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_community_based_assistance||" class="report-field value-004" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_crisis_services||" class="report-field value-005" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_dental_care||" class="report-field value-006" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_developmental_disabilities_services||" class="report-field value-007" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_employment_services||" class="report-field value-008" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_food_assistance||" class="report-field value-009" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_housing||" class="report-field value-010" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_id||" class="report-field value-011" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_legal_assistance||" class="report-field value-012" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_mental_health_services||" class="report-field value-013" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_payer_assistance||" class="report-field value-014" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_phyical_health_services||" class="report-field value-015" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_psychiatry||" class="report-field value-016" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_social_security_card||" class="report-field value-017" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_substance_use_services||" class="report-field value-018" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_transportation_assistance||" class="report-field value-019" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_medication_assistance||" class="report-field value-020" data-source="ere_client_needs">
-<input type="hidden" name="" value="||FIELDVALUE need_none||" class="report-field value-021" data-source="ere_client_needs">
+<input type="hidden" name="need_basic_needs_assistance" value="||FIELDVALUE need_basic_needs_assistance||" class="report-field value-001" data-source="ere_client_needs">
+<input type="hidden" name="need_birth_certificate" value="||FIELDVALUE need_birth_certificate||" class="report-field value-002" data-source="ere_client_needs">
+<input type="hidden" name="need_child_care" value="||FIELDVALUE need_child_care||" class="report-field value-003" data-source="ere_client_needs">
+<input type="hidden" name="need_community_based_assistance" value="||FIELDVALUE need_community_based_assistance||" class="report-field value-004" data-source="ere_client_needs">
+<input type="hidden" name="need_crisis_services" value="||FIELDVALUE need_crisis_services||" class="report-field value-005" data-source="ere_client_needs">
+<input type="hidden" name="need_dental_care" value="||FIELDVALUE need_dental_care||" class="report-field value-006" data-source="ere_client_needs">
+<input type="hidden" name="need_developmental_disabilities_services" value="||FIELDVALUE need_developmental_disabilities_services||" class="report-field value-007" data-source="ere_client_needs">
+<input type="hidden" name="need_employment_services" value="||FIELDVALUE need_employment_services||" class="report-field value-008" data-source="ere_client_needs">
+<input type="hidden" name="need_food_assistance" value="||FIELDVALUE need_food_assistance||" class="report-field value-009" data-source="ere_client_needs">
+<input type="hidden" name="need_housing" value="||FIELDVALUE need_housing||" class="report-field value-010" data-source="ere_client_needs">
+<input type="hidden" name="need_id" value="||FIELDVALUE need_id||" class="report-field value-011" data-source="ere_client_needs">
+<input type="hidden" name="need_legal_assistance" value="||FIELDVALUE need_legal_assistance||" class="report-field value-012" data-source="ere_client_needs">
+<input type="hidden" name="need_mental_health_services" value="||FIELDVALUE need_mental_health_services||" class="report-field value-013" data-source="ere_client_needs">
+<input type="hidden" name="need_payer_assistance" value="||FIELDVALUE need_payer_assistance||" class="report-field value-014" data-source="ere_client_needs">
+<input type="hidden" name="need_phyical_health_services" value="||FIELDVALUE need_phyical_health_services||" class="report-field value-015" data-source="ere_client_needs">
+<input type="hidden" name="need_psychiatry" value="||FIELDVALUE need_psychiatry||" class="report-field value-016" data-source="ere_client_needs">
+<input type="hidden" name="need_social_security_card" value="||FIELDVALUE need_social_security_card||" class="report-field value-017" data-source="ere_client_needs">
+<input type="hidden" name="need_substance_use_services" value="||FIELDVALUE need_substance_use_services||" class="report-field value-018" data-source="ere_client_needs">
+<input type="hidden" name="need_transportation_assistance" value="||FIELDVALUE need_transportation_assistance||" class="report-field value-019" data-source="ere_client_needs">
+<input type="hidden" name="need_medication_assistance" value="||FIELDVALUE need_medication_assistance||" class="report-field value-020" data-source="ere_client_needs">
+<input type="hidden" name="need_none" value="||FIELDVALUE need_none||" class="report-field value-021" data-source="ere_client_needs">
 <!--STARTOFPROVIDERFORM -->
     <h1><span>ERE Client Needs</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
@@ -754,8 +754,7 @@ function updatesignatures(){
     <div class="col12 fldclient_needs qclient_needs"><span class="qclient_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_needs required-field-label"><label class="label-top">Client Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qclient_needs"><select size="15" name="client_needs" onchange="updateReportFields(['ere_client_needs']);checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_client_needs] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE client_needs^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ere_client_needs||
-
-<!-- FIELDOVERRIDE(client_needs,10,200) -->
+   <!-- FIELDOVERRIDE(client_needs,10,200) -->
 </span></div>
      </div>
   </div>
@@ -788,7 +787,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldcommunity_based_assist_status qcommunity_based_assist_status">
-    <div class="col12 fldcommunity_based_assist_status qcommunity_based_assist_status"><span class="qcommunity_based_assist_status"><label class="label-top">||FIELDTAG community_based_assist_status||Community Based Assistance Status||ENDFIELDTAG||</label></span><span class="qcommunity_based_assist_status"><input type="checkbox" name="community_based_assist_status_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldcommunity_based_assist_status qcommunity_based_assist_status"><span class="qcommunity_based_assist_status"><label class="label-top">||FIELDTAG community_based_assist_status||Community Based Assistance Status||ENDFIELDTAG||</label></span><span class="qcommunity_based_assist_status"><input type="checkbox" name="community_based_assist_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="community_based_assist_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -812,7 +811,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 flddd_services_status qdd_services_status">
-    <div class="col12 flddd_services_status qdd_services_status"><span class="qdd_services_status"><label class="label-top">||FIELDTAG dd_services_status||Developmental Disabilities Services Status||ENDFIELDTAG||</label></span><span class="qdd_services_status"><input type="checkbox" name="dd_services_status_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 flddd_services_status qdd_services_status"><span class="qdd_services_status"><label class="label-top">||FIELDTAG dd_services_status||Developmental Disabilities Services Status||ENDFIELDTAG||</label></span><span class="qdd_services_status"><input type="checkbox" name="dd_services_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="dd_services_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -891,8 +890,8 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldphychiatry_status qphychiatry_status">
-    <div class="col12 fldphychiatry_status qphychiatry_status"><span class="qphychiatry_status"><label class="label-top">||FIELDTAG phychiatry_status||Phychiatry Status||ENDFIELDTAG||</label></span><span class="qphychiatry_status"><input type="checkbox" name="phychiatry_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="phychiatry_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="phychiatry_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpsychiatry_status qpsychiatry_status">
+    <div class="col12 fldpsychiatry_status qpsychiatry_status"><span class="qpsychiatry_status"><label class="label-top">||FIELDTAG psychiatry_status||Psychiatry Status||ENDFIELDTAG||</label></span><span class="qpsychiatry_status"><input type="checkbox" name="psychiatry_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="psychiatry_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="psychiatry_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -919,6 +918,7 @@ function updatesignatures(){
     <div class="col12 fldtransportation_assist_status qtransportation_assist_status"><span class="qtransportation_assist_status"><label class="label-top">||FIELDTAG transportation_assist_status||Transportation Assistance Status||ENDFIELDTAG||</label></span><span class="qtransportation_assist_status"><input type="checkbox" name="transportation_assist_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;<input type="checkbox" name="transportation_assist_status_three_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Three Months&nbsp;&nbsp;<input type="checkbox" name="transportation_assist_status_six_month" value="ON" onclick="checkhideall()">Need Met Or Stable At Six Months&nbsp;&nbsp;</span></div>
      </div>
   </div>
+
 
 </div>
 </div>

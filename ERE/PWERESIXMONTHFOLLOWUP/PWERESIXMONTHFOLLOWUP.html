@@ -29,7 +29,8 @@ function startup() {
 
           f._B1.style.display = "";
           f._B2.style.display = "";
-          f._B3.style.display = "";
+          // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+          // f._B3.style.display = "";
           document.getElementById("SaveButtons").style.display = "";
 
 		}
@@ -37,7 +38,8 @@ function startup() {
             setrequire('Pathway_Date');
     setrequire('still_engaged_ere_services_six_month');
     setrequire('ineligible_reason_six_month');
-    setrequire('contact_result_ppc_six_month');
+    // Commenting out code for PPC contact as a result of not needing the question now but might want it in the future.
+    // setrequire('contact_result_ppc_six_month');
     setrequire('employment_status_six_month');
     setrequire('num_er_visits_past_three_months_six_month');
     setrequire('num_hosp_past_three_months_six_month');
@@ -284,7 +286,8 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('still_engaged_ere_services_six_month') && gvtfieldvalue('still_engaged_ere_services_six_month')=='') {edesc=edesc+`Must specify a value for Is individual still actively engaged in ERE servics?\n`; seterror("still_engaged_ere_services_six_month");}
   if (!hiddenfield('ineligible_reason_six_month') && gvtfieldvalue('ineligible_reason_six_month')=='') {edesc=edesc+`Must specify a value for Reason Not Engaged\n`; seterror("ineligible_reason_six_month");}
-  if (!hiddenfield('contact_result_ppc_six_month') && gvtfieldvalue('contact_result_ppc_six_month')=='') {edesc=edesc+`Must specify a value for Was this contact a direct result of an alert message from PointClickCare?\n`; seterror("contact_result_ppc_six_month");}
+  // Commenting out code for PPC contact as a result of not needing the question now but might want it in the future.
+  // if (!hiddenfield('contact_result_ppc_six_month') && gvtfieldvalue('contact_result_ppc_six_month')=='') {edesc=edesc+`Must specify a value for Was this contact a direct result of an alert message from PointClickCare?\n`; seterror("contact_result_ppc_six_month");}
   if (!hiddenfield('employment_status_six_month') && gvtfieldvalue('employment_status_six_month')=='') {edesc=edesc+`Must specify a value for Employment Status\n`; seterror("employment_status_six_month");}
   if (!hiddenfield('num_er_visits_past_three_months_six_month') && gvtfieldvalue('num_er_visits_past_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_er_visits_past_three_months_six_month");}
   if (!hiddenfield('num_hosp_past_three_months_six_month') && gvtfieldvalue('num_hosp_past_three_months_six_month')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_six_month");}
@@ -375,7 +378,8 @@ function submitit() {
   $(':button').prop('disabled',true);
 	f._B1.style.display = "none";
 	f._B2.style.display = "none";
-	f._B3.style.display = "none";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
 }
 
 function deleteit() {
@@ -394,41 +398,41 @@ function deleteit() {
 	f.submit();
 	return functionreturnvalue;
 }
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
 
-function quicksubmitit() {
-//	errdesc=validateform();
-//	if (errdesc!="") {alert(errdesc); return;}
-	var f=document.forms[0];
-	//***Error checking should be done here before a quick save
-	f._B1.style.display = "none";
-	f._B2.style.display = "none";
-	f._B3.style.display = "none";
-	document.getElementById("SaveButtons").style.display = "";
-	f.target = "fvalidate";
-	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
-	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
-	if (genpdf) {buildhtmlclean()}
-    // restore signature options after buildhtmlclean
-    document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
-	f.submit();
-        $(':button').prop('disabled',true);
-	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
-	return;
-}
-
-function QuickSubmitReturn() {
-	var functionreturnvalue = null;
-	var f = document.forms[0];
-	//***Reset the form after a quick submit here
-	f._B1.style.display = "";
-	f._B2.style.display = "";
-	f._B3.style.display = "";
-	document.getElementById("SaveButtons").style.display = "";
-        $(':button').prop('disabled',false);
-	updatesignatures();
-	alert("Record Saved");
-	return functionreturnvalue;
-}
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
 
 function resetsave() {
 	var functionreturnvalue = null;
@@ -436,7 +440,8 @@ function resetsave() {
 	//***Reset the form after a quick submit here
 	f._B1.style.display = "";
 	f._B2.style.display = "";
-	f._B3.style.display = "";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "";
 	document.getElementById("SaveButtons").style.display = "";
         $(':button').prop('disabled',false);
 	return functionreturnvalue;
@@ -550,11 +555,12 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
- <div class="entire">
+  <!-- Commenting out code for PPC contact as a result of not needing the question now but might want it in the future. -->
+ <!-- <div class="entire">
     <div class="col12 fldcontact_result_ppc_six_month qcontact_result_ppc_six_month">
     <div class="col12 fldcontact_result_ppc_six_month qcontact_result_ppc_six_month"><span class="qcontact_result_ppc_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qcontact_result_ppc_six_month required-field-label"><label class="label-top">||FIELDTAG contact_result_ppc_six_month||Was this contact a direct result of an alert message from PointClickCare?||ENDFIELDTAG||</label></span><span class="qcontact_result_ppc_six_month"><input type="radio" name="contact_result_ppc_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="contact_result_ppc_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -642,8 +648,9 @@ function updatesignatures(){
     <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
     Signature: <input type="password" name="SIGNATURE" /><br />
     <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
-    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
-    <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div>
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
 ||ENDSTRIP||
 </form>
 </body>

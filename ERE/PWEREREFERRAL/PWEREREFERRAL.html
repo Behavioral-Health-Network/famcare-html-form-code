@@ -57,7 +57,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.patient_location_referral,"first_ip_hosp","Inpatient,Physical Health Unit");
+      checkhide(f.patient_location_referral,"first_ip_hosp","Inpatient Phychiatric Unit");
    checkhide(f.client_eligible,"ineligible_reason_referral","No");
    checkhide(f.ineligible_reason_referral,"other_ineligible_reason","004");
 
@@ -548,7 +548,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldpatient_location_referral qpatient_location_referral">
-    <div class="col12 fldpatient_location_referral qpatient_location_referral"><span class="qpatient_location_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qpatient_location_referral required-field-label"><label class="label-top">||FIELDTAG patient_location_referral||Where was the patient located in the hospital?||ENDFIELDTAG||</label></span><span class="qpatient_location_referral"><input type="radio" name="patient_location_referral" value="Emergency Department" onclick="checkhideall()" >Emergency Department<br><input type="radio" name="patient_location_referral" value="Inpatient" onclick="checkhideall()" >Inpatient<br><input type="radio" name="patient_location_referral" value="Physical Health Unit" onclick="checkhideall()" >Physical Health Unit</span></div>
+    <div class="col12 fldpatient_location_referral qpatient_location_referral"><span class="qpatient_location_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qpatient_location_referral required-field-label"><label class="label-top">||FIELDTAG patient_location_referral||Where was the patient located in the hospital?||ENDFIELDTAG||</label></span><span class="qpatient_location_referral"><input type="radio" name="patient_location_referral" value="Emergency Department" onclick="checkhideall()" >Emergency Department<br><input type="radio" name="patient_location_referral" value="Inpatient Phychiatric Unit" onclick="checkhideall()" >Inpatient Phychiatric Unit<br><input type="radio" name="patient_location_referral" value="Physical Health Unit" onclick="checkhideall()" >Physical Health Unit</span></div>
      </div>
   </div>
  <div class="entire">
@@ -556,7 +556,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldfirst_ip_hosp qfirst_ip_hosp">
-    <div class="col12 fldfirst_ip_hosp qfirst_ip_hosp"><span class="qfirst_ip_hosp required-label">||PWRequiredFieldRequiredText||</span><span class="qfirst_ip_hosp required-field-label"><label class="label-top">||FIELDTAG first_ip_hosp||Is this the patients first inpatient hospitilization?||ENDFIELDTAG||</label></span><span class="qfirst_ip_hosp"><input type="radio" name="first_ip_hosp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="first_ip_hosp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldfirst_ip_hosp qfirst_ip_hosp"><span class="qfirst_ip_hosp required-label">||PWRequiredFieldRequiredText||</span><span class="qfirst_ip_hosp required-field-label"><label class="label-top">||FIELDTAG first_ip_hosp||Is this the patient's first inpatient hospitilization?||ENDFIELDTAG||</label></span><span class="qfirst_ip_hosp"><input type="radio" name="first_ip_hosp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="first_ip_hosp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

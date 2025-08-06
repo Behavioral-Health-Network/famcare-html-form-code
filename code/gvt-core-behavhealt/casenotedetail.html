@@ -1,0 +1,1961 @@
+<html>
+
+  <head>
+    <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+    <title>Case Note Detail</title>
+    <meta name="Microsoft Border" content="none">
+  </head>
+
+  <script type="text/javascript" src="script/jquery.timepicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="script/jquery.timepicker.css" />
+
+  <!-- FIELDOVERRIDE(SUPLOCKED,10,10) -->
+  <!-- FIELDOVERRIDE(CWLOCKED,10,10) -->
+  <!-- FIELDOVERRIDE(SupervisorSectionHeader,10,300) -->
+  <!-- FIELDOVERRIDE(PrimaryDiagnosisDesc,10,150) -->
+  <!-- FIELDOVERRIDE(SecondaryDiagnosisDesc,10,150) -->
+  <!-- FIELDOVERRIDE(LIFESKILL,10,75) -->
+  <!-- FIELDOVERRIDE(JAVASCRIPT,0,0) -->
+
+  <PREADD SET EDITMODE="0">
+  <PREEDIT SET EDITMODE="1">
+  <PREADD SETPARM FACMFirstName="||LOADFIELDS SELECT Q_HRFORM.FIRSTNAME,Q_HRFORM.LASTNAME,EMPLOYEENUMBER FROM Q_HRFORM WHERE (FAMCAREUSERID='^^USERID^^' or UserIdLink='^^USERID^^')||||LOADCURRENTALWAYS (0)||">
+  <PREADD SETPARM FACMLastName="||LOADCURRENTALWAYS (1)||">
+  <PREADD SETPARM FACMEmpNumber="||LOADCURRENTALWAYS (2)||">
+  <PREADD SETPARM FACMCountyCode="">
+  <PREADD SETPARM FACMProLevel="">
+  <PREADD SETPARM FACMRateLevel="">
+  <PREEDIT SETPARM ENTEREDBYSUP="||LOADFIELDS Select SupervisorID From UserId Where UserID='^^FIELDVALUE ENTEREDBY^^'||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM INVOICEBALANCE="||LOADFIELDS Select Sum(Extension) From ARTRANS Inner Join Invoice on ARTRANS.ParentRecordID = Invoice.ID Where Invoice.Cust_PO = '^^FIELDVALUE DOCSERNO^^' And (ARTRANS.Tran_Type='C' or ARTRANS.Tran_Type='S')||||LOADCURRENTALWAYS (0)||">
+  <POSTADD EMAILPDFLINK NOTIFICATIONINFORMATION="NOTIFYOtherPDF(ON),||FIELDVALUE CaseworkerPDFEmail||,Oasis Counseling Progress Note Update">
+  <POSTEDIT EMAILPDFLINK NOTIFICATIONINFORMATION="NOTIFYOtherPDF(ON),||FIELDVALUE CaseworkerPDFEmail||,Oasis Counseling Progress Note Update">
+  <POSTADD EMAILLINK NOTIFICATIONINFORMATION="NotifyCaseWorker(ON),||SCREENPARM CaseWorkerEmail||,Case Note Review Request">
+  <POSTEDIT EMAILLINK NOTIFICATIONINFORMATION="NotifyCaseWorker(ON),||SCREENPARM CaseWorkerEmail||,Case Note Review Request--edited form">
+  <POSTADD EMAILLINK NOTIFICATIONINFORMATION="NOTIFYOther(ON),||SCREENPARM OtherMailAddress||,Case Note Review Request.">
+  <POSTEDIT EMAILLINK NOTIFICATIONINFORMATION="NOTIFYOther(ON),||SCREENPARM OtherMailAddress||,Case Note Review Request--edited form.">
+  <POSTADD EMAILLINK NOTIFICATIONINFORMATION="NotifySupervisor(ON),||SCREENPARM SupervisorEmail||,Case Note Review Request..">
+  <POSTEDIT EMAILLINK NOTIFICATIONINFORMATION="NotifySupervisor(ON),||SCREENPARM SupervisorEmail||,Case Note Review Request--edited form..">
+  <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+  <PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+  <POSTDELETE UPDATEQUERY DUMMY1="Update Mileage Set DocRevNo='888' Where ParentDocSerNo='||FIELDVALUE DOCSERNO||' And ClientNumber='||CLIENTNUMBER||'">
+  <POSTDELETE UPDATEQUERY DUMMY1="Update TimeLog Set DocRevNo='888' Where ParentDocSerNo='||FIELDVALUE DOCSERNO||' And ClientNumber='||CLIENTNUMBER||'">
+  <PREADD SET HIDEEDITOPTIONS="||||">
+  <PREEDIT SET HIDEEDITOPTIONS="||LOADFIELDS Select Case When '^^FIELDVALUE CWLOCKED^^' = 'Yes' Then 'none' Else '' End Where charindex(UCase('Case Worker or Social Worker Supervision'),'^^GROUPLIST^^')=0 And charindex('|ACCOUNTING|','^^GROUPLIST^^')=0 And charindex('|ADMIN|','^^GROUPLIST^^')=0||||LOADCURRENTALWAYS (0)||">
+  <POSTEDIT UPDATEQUERY DUMMY1="DELETE FROM ARTRANS WHERE INV_NUM='||LOADFIELDS Select Inv_Num,PRT_NUM From Invoice Where Cust_PO='^^FIELDVALUE DOCSERNO^^'||||LOADCURRENTALWAYS (0)||' AND '||SCREENPARM _REJECTINVOICE||'='YES'">
+  <POSTEDIT UPDATEQUERY DUMMY1="DELETE FROM INVOICE WHERE INV_NUM='||LOADCURRENTALWAYS (0)||' AND '||SCREENPARM _REJECTINVOICE||'='YES'">
+  <PREADD SETPARM CWSIGNED="||USERID||">
+  <PREADD SETPARM CWLockedDate="||DATE||">
+  <PREADD SETPARM CWLockedTime="||TIME||">
+  <PREADD SETPARM CWCredentials="||LOADFIELDS Select 'By : ' + Rtrim(LTrim(HRF.FirstName)) + ' ' + Rtrim(LTrim(HRF.LastName)) + Case When HRF.TitleCredentials != '' Then ', ' + Case When Left(HRF.TitleCredentials,5) = 'Other' Then HRF.CREDENTIALSOTHER Else HRF.TitleCredentials End Else '' End From Q_HRFORM HRF Where FamCareUserId='^^SP CWSIGNED^^'||||LOADCURRENTVALUE (0)||">
+  <PREADD SETPARM SUPSIGNED="||USERID||">
+  <PREADD SETPARM SUPLockedDate="||DATE||">
+  <PREADD SETPARM SUPLockedTime="||TIME||">
+  <PREADD SETPARM SUPredentials="||LOADFIELDS Select 'By : ' + Rtrim(LTrim(HRF.FirstName)) + ' ' + Rtrim(LTrim(HRF.LastName)) + Case When HRF.TitleCredentials != '' Then ', ' + Case When Left(HRF.TitleCredentials,5) = 'Other' Then HRF.CREDENTIALSOTHER Else HRF.TitleCredentials End Else '' End From Q_HRFORM HRF Where FamCareUserId='^^SP SUPSIGNED^^'||||LOADCURRENTVALUE (0)||">
+  <PREEDIT SETPARM CWSIGNED="||LOADFIELDS Select Case When '^^FIELDVALUE CWLOCKEDBY^^' = '' Then '^^USERID^^' Else '^^FIELDVALUE CWLOCKEDBY^^' End||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM CWLockedDate="||LOADFIELDS Select Case When '^^FIELDVALUE CWLockedDate^^' = '' Then '^^DATE^^' Else '^^FIELDVALUE CWLockedDate^^' End||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM CWLockedTime="||LOADFIELDS Select Case When '^^FIELDVALUE CWLockedTime^^' = '' Then '^^TIME^^' Else '^^FIELDVALUE CWLockedTIme^^' End||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM CWCredentials="||LOADFIELDS Select 'By : ' + Rtrim(LTrim(HRF.FirstName)) + ' ' + Rtrim(LTrim(HRF.LastName)) + Case When HRF.TitleCredentials != '' Then ', ' + Case When Left(HRF.TitleCredentials,5) = 'Other' Then HRF.CREDENTIALSOTHER Else HRF.TitleCredentials End Else '' End From Q_HRFORM HRF Where FamCareUserId='^^SP CWSIGNED^^'||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM SUPSIGNED="||LOADFIELDS Select Case When '^^FIELDVALUE SUPLOCKEDBY^^' = '' Then '^^USERID^^' Else '^^FIELDVALUE SUPLOCKEDBY^^' End||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM SUPLockedDate="||LOADFIELDS Select Case When '^^FIELDVALUE SUPLockedDate^^' = '' Then '^^DATE^^' Else '^^FIELDVALUE SUPLockedDate^^' End||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM SUPLockedTime="||LOADFIELDS Select Case When '^^FIELDVALUE SUPLockedTime^^' = '' Then '^^TIME^^' Else '^^FIELDVALUE SUPLockedTime^^' End||||LOADCURRENTALWAYS (0)||">
+  <PREEDIT SETPARM SUPCredentials="||LOADFIELDS Select 'By : ' + Rtrim(LTrim(HRF.FirstName)) + ' ' + Rtrim(LTrim(HRF.LastName)) + Case When HRF.TitleCredentials != '' Then ', ' + Case When Left(HRF.TitleCredentials,5) = 'Other' Then HRF.CREDENTIALSOTHER Else HRF.TitleCredentials End Else '' End From Q_HRFORM HRF Where FamCareUserId='^^SP SUPSIGNED^^'||||LOADCURRENTALWAYS (0)||">
+  <PREADD SETPARM TXPLANCURRENT="||LOADFIELDS Select Max(DocSerNo) From ResSerPlan Where DocRevNo = ' 0 ' And ClientNumber='^^CLIENTNUMBER^^'||||LOADCURRENTVALUE (0)||">
+  <PREEDIT SETPARM TXPLANCURRENT="||LOADFIELDS Select Max(DocSerNo) From ResSerPlan Where DocRevNo = ' 0 ' And ClientNumber='^^CLIENTNUMBER^^'||||LOADCURRENTVALUEALWAYS (0)||">
+  <PREEDIT SETPARM TXPLANCURRENT="||LOADFIELDS Select Case When '^^FIELDVALUE TXPLANDOCSERNO^^' = '' Then '^^SP TXPLANCURRENT^^' Else '^^FIELDVALUE TXPLANDOCSERNO^^' End||||LOADCURRENTVALUEALWAYS (0)||">
+
+  ||INCLUDE FUNCTIONVALIDDATE.HTM||
+
+  <script language="JavaScript">
+    // following are the various arrays and what they are used for, dynamic processing:::
+    // svccontract & svccontractm: one for one array with procedurecode to hold rates & facts about each service in the list.
+    //  it is build via waterfall of all the contracts based on funding source & provider chosen.
+    //  counts are svccontractc & svccontractmc
+    // 1-proc code 2-description 3-rate 4-rate admin 5-uom 6-client resp 7-copy 8-writeoff 9-clresp (cust id responsible)
+
+    // proc is array of all procedure codes from master service table (prognotservice checked)
+    // procc is the count
+    // note we should not use rates from this array as we should have contracts instead...
+    //1-code 2-description 3-unitrate (float) 4-unitdef 5-insurance form 6-rate levels (no longer used) 7-billable 8-min/unit 9-minimum/minutes/unit
+
+
+    //procr is master insurance contracts, all contracts
+    // procrc
+    //1-proc 2-rate (float) 3-adminrate (float) 4-start (date) 5-end (date) 6-paysosurce 7-provider 8-is M for mileage, shared rate table
+
+    //procm list of codes from master service that are mileage.
+    // procmc
+    //1-code 2-description 3-unitrate 4-unit definition 5-unsurance form 6-ratelevel1a (not used any more)
+
+    // ins is jjinsurancedetail level array
+    // insc is the count
+    // 1-docserno (jjinsurancedetail) 2-companyname 3-policyidentifier 4-startdate (date) 5-enddate (date) 
+    // 6-ins. form 7-paysource type 8-paysource class 9-auth #, 10-svc auth detail 11-funding source code
+
+    // insfull is jjinsurance detail broken down to service level
+    // incfullc is count
+    // 1-docserno (jjinsurance detail) 2-start (date) 3-end (date) 4-auth number 5-paysource 6-svc 7-units 8-dollars 9-rate 10-provider 11-client resp 12-copy 13-writeoff 14-clresp (cust id responsible)
+
+    //ProvData array contains the list of providers where this person is placed
+    //ProvCount
+    // 1-providercode 2-start date (text valid date) 3-end date (text valid date) 4-providername
+
+    // svcarray contains list of insurance, procedures, quantities from casenotes grouped by insurance & procedure but not including this one
+    // svcc is the count - note the array includes both mileage and regular
+    // 1-insurance (docserno of jjinsurancedetail) 2-procedure 3-total quantity 
+
+    // OverLapData contains dates/times of casenotes for this server to ensure no overlap (not used heavily at this time)
+    // NumOverLapData
+    // 1-contact date (text), 2-start time (text) 3-ampm 4-end time 5-ampm 6-server 7-name
+
+    var accountflag=0;  // set to 1 if in accounting group
+    var supflag = 0;
+
+    var sc;
+    var svcchk;
+
+    var tm="";
+    var inmenu=0;
+    var fld="";
+
+    var fsource="";
+
+    var svccontract = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      svccontract[xgvt] = new Array(8);
+    }
+    var svccontractc = 0;
+
+    var svccontractm = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      svccontractm[xgvt] = new Array(8);
+    }
+    var svccontractmc = 0;
+
+    var proc = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      proc[xgvt] = new Array(1);
+    }
+    var procc = 0;
+    var procr = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      procr[xgvt] = new Array(1);
+    }
+    var procrc = 0;
+    var procm = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      procm[xgvt] = new Array(1);
+    }
+    var proccm = 0;
+    var ins = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      ins[xgvt] = new Array(1);
+    }
+    var insc = 0;
+    var insfull = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      ins[xgvt] = new Array(1);
+    }
+    var insfullc = 0;
+    var svcarray = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      svcarray[xgvt] = new Array(1);
+    }
+    var svcc = 0;
+    var curinsvalue = "";
+    var rate1 = 0;
+    var rate2 = 0;
+
+    var rate1e = 0;
+
+    var rate2e = 0;
+
+    var rateadmin=0;
+    var rateadmine=0;
+
+    var procarrayindex = 0;
+
+    var ResetAfterSave = false;
+
+    var clinclause = "";
+    var region = "";
+    var cclass = "";
+    var InitialFormLoad = true;
+
+    var maxunits = 999999;
+
+    var maxhourbill = 999999;
+
+    var maxmileage = 999999;
+
+    var maxtotalbill = 999999;
+
+    var maxmiles = 999999;
+
+    var needbilling = false;  // if any billing component changes, flag this as true so we can warn at the end....(even if not signed)
+
+    var OverLapData = new Array(1);
+    for (var xgvt = 1; xgvt <= 1; xgvt++) {
+      OverLapData[xgvt] = new Array(7);
+    }
+    //$$$ put in union select on jjinsuranceservice....
+    ///PULLDATA SELECT PP.PRIMARYPROVIDERCODE,PP.STARTINGDATE,PP.ENDINGDATE,P.PROVIDERNAME FROM PROVIDERPLACEMENT AS PP,PROVIDER AS P WHERE PP.CLIENTNUMBER='||CLIENTNUMBER||' AND PP.DOCREVNO=' 0 ' AND P.PROVIDERCODE=PP.PRIMARYPROVIDERCODE AND P.DOCREVNO=' 0 '  UNION  SELECT IDS.PROVIDER,ID.STARTDATE,ID.ENDDATE,P.PROVIDERNAME FROM JJINSURANCEDETAIL AS ID LEFT JOIN JJINSURANCEDETAILSERVICE AS IDS ON ID.DOCSERNO=IDS.DOCSERNO LEFT JOIN PROVIDER AS P ON IDS.PROVIDER=P.PROVIDERCODE AND P.DOCREVNO=' 0 ' WHERE ID.CLIENTNUMBER='||CLIENTNUMBER||' AND ID.DOCREVNO=' 0 ' AND IDS.PROVIDER<>''
+    var ProvData;
+    var ProvCount=totalelements;
+    if (totalelements!=0) {
+      ProvData = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        ProvData[xgvt] = new Array(4);
+        ProvData[xgvt][1]=results[xgvt][1];
+        if (results[xgvt][2]=="") {results[xgvt][2]="1/1/1900"}
+        if (results[xgvt][3]=="") {results[xgvt][3]="12/31/2099"}
+        ProvData[xgvt][1]=results[xgvt][1];
+        ProvData[xgvt][2]=results[xgvt][2];
+        ProvData[xgvt][3]=results[xgvt][3];
+        ProvData[xgvt][4]=results[xgvt][4];
+      }
+    }
+
+    var NumOverLapData = 0;
+
+    var  includesvcn1="||CLIENTNUMBER||";
+    var  includesvcn2="||SESSIONID||";
+    var  includesvcn3="||DOCSERNO||";
+    var  includesvcn4="||FIELDVALUE ContactDate||";
+    var  includesvcn5="||FIELDVALUE DOCSERNO||";
+    var  includesvcn6="||FIELDVALUE SERVER||";
+    var  includesvcn7="||EDITMODE||";
+    var  includesvcn8="||BILLINGMODULE||";
+    var  includesvcn9="||FIELDVALUE CWLOCKED||";
+    var  includesvcn10="||USERID||";
+    var  includesvcn11="||DATE||";
+    var  includesvcn12="||TIME||";
+    var  includesvcn13="||FIELDVALUE SUPLOCKED||";
+    var  includesvcn14="||SCREENPARM OPTION||";
+    var  includesvcn15="||FIELDVALUE CONTACTNAMES||";
+    var  includesvcn16="||FIELDVALUE CONTACTNAME||";
+    var  includesvcn17="||FIELDVALUE CONTACTINTERACTIONS||";
+    var  includesvcn18="||FIELDVALUE PrivateComment||";
+    var  includesvcn19="||FIELDVALUE LIFESKILLS||";
+    var  includesvcn20="||FIELDVALUE CASENOTETYPES||";
+    var  includesvcn21="||FIELDVALUE ENTEREDBY||";
+    var  includesvcn22="||CASENOTETYPE||";
+    var  includesvcn23="||FIELDVALUE LifeSkillsAddressed||";
+    var  includesvcn24="||SP FACMFirstName||";
+    var  includesvcn25="||SP FACMLastName||";
+    var  includesvcn26="||FIELDVALUE INSURANCE||";
+    var  includesvcn27="||SP CURRENTSERIAL||";
+    var  includesvcn28="||ALLOWBILLWITHOUTFUNDINGDETAIL||";
+    var  includesvcn29="||ALLOWAUTHORIZATIONWITHNOSERVICES||";
+    var  includesvcn30="||GROUPLIST||";
+    var  includesvcn31="||FIELDVALUE REJECT||";
+    var  includesvcn32="||USERIDSUPEMAIL||";
+    var  includesvcn33="||LOADFIELDS Select Email From UserId Where UserId.UserID='^^USERID^^'||";
+    var  includesvcn34="||LOADCURRENTALWAYS (0)||";
+    var  includesvcn35="||PRIVATEPROVIDER||";
+    var  includesvcn36="||FIELDVALUE PROCEDURECODE||";
+    var  includesvcn37="||SCREENPARM DOCSERNO||";
+    var  includesvcn38="||FIELDVALUE PROCEDUREMILEAGE||";
+    var  includesvcn39="||SCREENPARM ENTEREDBYSUP||";
+    var  includesvcn40="||SP FACMEmpNumber||";
+    var  includesvcn41="||SP FACMProLevel||";
+    var  includesvcn42="||SP FACMRateLevel||";
+    //    var  includesvcn43="xOADIELDS Select TOP 1 Inv_Num,PRT_NUM,BILL_NAME From Invoice Where Cust_PO='^^FIELDVALUE DOCSERNO^^' and '^^FIELDVALUE DOCSERNO^^'<>'' AND LEFT(CUST_ID,2)<>'CL' ORDER BY ID DESC";
+    var  includesvcn43="||LOADFIELDS Select TOP 1 Inv_Num,PRT_NUM,BILL_NAME From Invoice Where Cust_PO='^^FIELDVALUE DOCSERNO^^' and '^^FIELDVALUE DOCSERNO^^'<>'' ORDER BY ID DESC||||LOADCURRENTALWAYS (0)||";
+    var  includesvcn51="||LOADCURRENTALWAYS (2)||"; // funding source full name on latest invoice
+    var  includesvcn44="||LOADCURRENTALWAYS (1)||";
+    var  includesvcn45="||SP ENTEREDBYSUP||";
+    var  includesvcn46="||DHSNUMBER||";
+    var  includesvcn47="||CREATEBILLONINITIALSIGNATURE||";
+    var  includesvcn48="||CASENOTESERVICESITEDEFAULT||";
+    var  includesvcn49="||CREATEBILLONACCOUNTSIGNATURE||";
+    var  includesvcn50="||SCREENPARM MARKSIGNED||";
+    // note see 8 lines above for includesvcn51
+    var  includesvcn52=ucasejis("||ALLOWFUNDINGRATEOVERRIDE||");
+    var  includesvcn53="||SCREENPARM CREATEWALKOUT||";
+    var  includesvcn54="||SCREENPARM PASSEDSIGNATURE||";
+    var  includesvcn55="||LOADFIELDS SELECT START_DATE,END_DATE FROM COMPANY WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^'||||LOADCURRENTALWAYS START_DATE||";
+    var  includesvcn56="||LOADCURRENTALWAYS (1)||";
+    if (includesvcn55=="") {includesvcn55="1/1/1900"}
+    if (includesvcn56=="") {includesvcn56="12/31/2099"}
+    var includesvcn57="||SP PASSEDQTYTOBILL||";
+    var includesvcn58="||MAINMENU||";
+
+    // update so if we come from scheduler (passedsignature), treat as createbilloninitialsignature....
+    if (includesvcn54!="") {includesvcn47="YES"}
+
+
+    function StartUp() {
+      var functionreturnvalue = null;
+      var f = document.forms[0];
+      dserno=f.DOCSERNO.value;
+
+      if(f.Goaldomaincasenoteprimary.value != '')  {
+        document.getElementById('GoalPrimary').style.display = '';
+      }
+      if(f.GoalTypecasenoteprimary.value != '')  {
+        document.getElementById('ObjectivePrimary').style.display = ''
+      }
+      if(f.Goaldomaincasenotesecondary.value != '')  {
+        document.getElementById('GoalSecondary').style.display = ''
+      }
+      if(f.GoalTypecasenotesecondary.value != '')  {
+        document.getElementById('ObjectiveSecondary').style.display = ''
+      }
+      supflag = 0;
+      accountflag = 0;
+      var adminflag = 0;
+      //$(".jtimepicker").timepicker({ 'scrollDefault': 'now', 'step': '15', 'minTime': '6:00am', 'maxTime': '9:00pm' });
+      if (document.getElementById("_gvtR1Billable").style.display!="") {f.R1Billable[1].checked=true}
+      try {additionalsetup()} catch(e) {}
+      // update to set billable to No on no billing accounts
+      if ("||FIELDVALUE R1BILLABLE||"=="No") {
+        f.R1Billable[1].checked = true;
+        setbillable();
+      }
+      // change to responsible party first one if no records are in it....
+      if (f.CLIENTRESPPARTY.length==1) {o=f.CLIENTRESPPARTY; o[0].text="(Client receiving service)"}
+      if (f.DOCSERNO.value=="" && "||CASENOTESERVICESITEDEFAULT||"!="") {f.ServiceSite.value="||CASENOTESERVICESITEDEFAULT||"}
+      if("||FIELDVALUE DOCSERNO||" != ""){
+        if("||SP INVOICEBALANCE||" == "" || "||SP INVOICEBALANCE||" == "0"){
+          f._B2.style.display = "";
+        } else {
+          f._B2.style.display = "none";
+          document.getElementById("DeleteMsg").innerHTML = "<font size='2'><b>&nbsp;&nbsp;&nbsp;No Delete with Open Invoices.</font></b>";
+        }
+      }
+
+      if('||DOCSERNO||' == '') {
+      f.ContactDate.value = "||DATEJS||";
+        f.R1Billable[0].focus();
+      }
+      $(document).ready(function(){
+        if('||DOCSERNO||' == '') {
+          $(".StartupHighlight").animate({ fontSize: "150%" }, 500 )
+          .animate({ fontSize: "100%" }, {
+            duration: 500
+          });
+        }
+      });
+
+      
+
+      if (""+includesvcn8+"" == "YES") {
+        //$$$ in case anything needs to be done with propulated list..
+      }
+      // 
+      if (instrjis(ucasejis(""+includesvcn30+""), "CASE WORKER OR SOCIAL WORKER SUPERVISION") != 0) {
+        supflag = 1;
+      }
+      if (instrjis(ucasejis(""+includesvcn30+""), "|ACCOUNTING|") != 0) {
+        accountflag = 1;
+        if (includesvcn49!="") {supflag=1}   // if accounting user, then they can create the invoice....
+      }
+      if (instrjis(ucasejis(""+includesvcn30+""), "|ADMIN|") != 0) {
+        adminflag = 1;
+      }
+      // unhide the backout button IF in accounting && has been billed
+      if (instrjis(ucasejis("" + includesvcn30 + ""), "|ACCOUNTING|") != 0 && includesvcn43!="") {
+        document.getElementById("_B4").style.display="";
+      }
+      //      If (Supflag=1 or accountflag=1) And ""+includesvcn14+"" <> "PRINTFORMAT" Then
+      document.getElementById("ImportantHistory").style.display = "";
+      //      End If
+      if ((supflag == 0 && accountflag == 0 && adminflag == 0)) {
+        document.getElementById("_gvtInsuranceBalance").style.display = "none";
+      }
+      var f = document.forms[0];
+      if (""+includesvcn31+"" != "") {
+
+        document.getElementById("SupervisorSection").style.display = "";
+      }
+      if (""+includesvcn14+"" == "PRINTFORMAT") {
+        return functionreturnvalue;
+      }  else {
+        if(f.SupervisorEmail.value=="") {
+          f.SupervisorEmail.value=""+includesvcn32+"";
+        }
+        if(f.CaseWorkerEmail.value=="") {
+          f.CaseWorkerEmail.value=""+includesvcn33+""+includesvcn34+"";
+        }
+      }
+
+      if("||FIELDVALUE CWLOCKEDBY||" != ""){
+        document.getElementById("CaseWorkerSignature").style.display = "";
+      }
+      if("||FIELDVALUE SUPLOCKEDBY||" != ""){
+        document.getElementById("SupervisorSignature").style.display = "";
+        document.getElementById("EmailSection").style.display = "none";
+      }
+
+
+      if(f.PrimaryDiagnosisDesc.value == "" && "||FIELDVALUE CWLocked||"==""){
+        f.PrimaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|DSMV_IVPrimary|CLEANJS||";
+        if (f.PrimaryDiagnosisDesc.value=="") {
+          f.PrimaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|ICD_9Primary|CLEANJS||";
+        }
+        if(f.PrimaryDiagnosisDesc.value != ""){f.PrimaryServed.checked = true}
+      }
+      if(f.SecondaryDiagnosisDesc.value == "" && "||FIELDVALUE CWLocked||"==""){
+        f.SecondaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|DSMV_IVSecondary|CLEANJS||";
+        if (f.SecondaryDiagnosisDesc.value=="") {
+          f.SecondaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|ICD_9Secondary|CLEANJS||";
+        }
+        if(f.SecondaryDiagnosisDesc.value != ""){f.SecondaryServed.checked = true}
+      }
+
+      f.REJECT.checked = false;
+
+      ///PULLDATA SELECT [NUMBER] FROM RELATIONSHIP WHERE [NUMBER]<>'||CLIENTNUMBER||' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'
+      clinclause = "";
+      for (var x = 1; x <= totalelements; x++) {
+        if (x != 1) {
+          clinclause = clinclause + ",";
+        }
+        clinclause = clinclause + "'" + results[x][1] + "'";
+      }
+      if (clinclause == "") {
+        clinclause = "''";
+      }
+      // change to order by description
+      ///PULLDATA select md.code,md.description,md.unitrate,md.unitdefinition,md.InsuranceFormOnly,cstr(md.ratelevel1a)+','+cstr(md.ratelevel1b)+','+cstr(md.ratelevel1c)+','+cstr(md.ratelevel2a)+','+cstr(md.ratelevel2b)+','+cstr(md.ratelevel2c)+','+cstr(md.ratelevel3a)+','+cstr(md.ratelevel3b)+','+cstr(md.ratelevel3c),ms.Billable,ms.minutesperunit,ms.minimumminutesperunit from medicaldentalbillingcodes as md left join masterservice as ms on ms.code=md.code and ms.privateprovider=md.privateprovider where md.MedicalDental='M' And md.PrivateProvider='||PRIVATEPROVIDER||' order by md.DESCRIPTION
+      proc = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        proc[xgvt] = new Array(9);
+      }
+      procc = totalelements;
+      var o;
+      if (""+includesvcn36+"" == "" && ""+includesvcn8+"" == "YES") {
+        o = f.ProcedureCode;
+        o.length = 1;
+        o[0].value = "";
+        o[0].text = "(Please select)";
+      }
+      for (var x = 1; x <= procc; x++) {
+        proc[x][1] = results[x][1];
+        proc[x][2] = results[x][2];
+        proc[x][3] = 0;
+        if (numericjis(results[x][3])) {
+          proc[x][3] = cdbljis(results[x][3]);
+        }
+        proc[x][4] = results[x][4];
+        proc[x][5] = results[x][5];
+        proc[x][6] = results[x][6];
+        proc[x][7] = results[x][7];
+        proc[x][8] = results[x][8];
+        proc[x][9] = results[x][9];
+      }
+      // we need to pull in master insurance contracts information to get proper rates....
+      ///PULLDATA SELECT PSP.SERVICECODE,PSP.UNITRATE,PSP.ADMINRATE,PCP.CONTRACTSTARTS,PCP.CONTRACTENDS AS [RAW],PCP.PAYSOURCE,PCP.PROVIDER,CASE WHEN MS.GROUPING='MILEAGE' THEN 'M' ELSE '' END FROM PROVIDERSERVICEPRIVATE AS PSP,PROVIDERCONTRACTPRIVATE AS PCP,MASTERSERVICE AS MS WHERE PCP.DOCSERNO=PSP.PARENTDOCSERNO AND PCP.DOCREVNO=' 0 ' AND PCP.PRIVATEPROVIDER='||PRIVATEPROVIDER||' AND PSP.SERVICECODE=MS.CODE AND MS.PROGRESSNOTESERVICE='X' ORDER BY PAYSOURCE DESC,PROVIDER DESC
+      // procr 1=code 2=rate 3-adminrate 4-start 5-end 6-paysource 7-provider, 8 -type 'M' mileage
+      procr = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        procr[xgvt] = new Array(8);
+      }
+      procrc = totalelements;
+      for (var x=1; x<=procrc; x++) {
+        procr[x][1]=results[x][1];
+        procr[x][2]=results[x][2];
+        procr[x][3]=results[x][3];
+        if (procr[x][2]!="") {procr[x][2]=cdbljis(procr[x][2])} else {procr[x][2]=0}
+        if (procr[x][3]!="") {procr[x][3]=cdbljis(procr[x][3])} else {procr[x][3]=0}
+        procr[x][4]=cdatejis(results[x][4]);
+        procr[x][5]=cdatejis(results[x][5]);
+        procr[x][6]=results[x][6];
+        procr[x][7]=results[x][7];
+        procr[x][8]=results[x][8]; // m for milages...
+      }
+
+      ///PULLDATA SELECT INSURANCE,PROCEDURECODE,SUM(CAST(QTYTOBILL AS FLOAT)) FROM CASENOTEDETAIL WHERE CLIENTNUMBER='||CLIENTNUMBER||' AND DOCREVNO=' 0 ' AND ISNUMERIC(QTYTOBILL) AND DOCSERNO<>'||SCREENPARM DOCSERNO||' GROUP BY INSURANCE,PROCEDURECODE UNION SELECT INSURANCE,PROCEDUREMILEAGE,SUM(CAST(MILEAGE AS FLOAT)) FROM CASENOTEDETAIL WHERE CLIENTNUMBER='||CLIENTNUMBER||' AND DOCREVNO=' 0 ' AND ISNUMERIC(MILEAGE) AND DOCSERNO<>'||SCREENPARM DOCSERNO||' GROUP BY INSURANCE,PROCEDUREMILEAGE
+      svcarray = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        svcarray[xgvt] = new Array(3);
+      }
+      svcc = totalelements;
+      for (var x = 1; x <= svcc; x++) {
+        svcarray[x][1] = results[x][1];
+        svcarray[x][2] = results[x][2];
+        svcarray[x][3] = cdbljis(results[x][3]);
+      }
+      //         o.value=""+includesvcn36+""
+      ///PULLDATA select code,description,unitrate,unitdefinition,InsuranceFormOnly,RateLevel1a from medicaldentalbillingcodes where grouping='MILEAGE' And PrivateProvider='||PRIVATEPROVIDER||' order by ordering
+      procm = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        procm[xgvt] = new Array(6);
+      }
+      proccm = totalelements;
+      var o;
+      if (""+includesvcn38+"" == "") {
+        o = f.ProcedureMileage;
+        o.length = 1;
+        o[0].value = "";
+        o[0].text = "(Please select)";
+      }
+      for (var x = 1; x <= proccm; x++) {
+        procm[x][1] = results[x][1];
+        procm[x][2] = results[x][2];
+        procm[x][3] = 0;
+        if (numericjis(results[x][3])) {
+          procm[x][3] = cdbljis(results[x][3]);
+        }
+        procm[x][4] = results[x][4];
+        procm[x][5] = results[x][5];
+        procm[x][6] = 0;
+        if (numericjis(results[x][6])) {
+          procm[x][6] = cdbljis(results[x][6]);
+        }
+      }
+      //         o.value=""+includesvcn38+""
+      ///PULLDATA select jjinsurancedetail.DOCSERNO,jjinsurancedetail.companyname,jjinsurancedetail.policyidentifier,jjinsurancedetail.startdate,jjinsurancedetail.enddate,insurancecontracts.insuranceform,paysources.type,paysources.class,jjinsurancedetail.authorizationnumber,jjinsurancedetail.serviceauthorizationdetail,paysources.code from jjinsurancedetail left join insurancecontracts on insurancecontracts.code=jjinsurancedetail.companyname left join paysources on paysources.code=insurancecontracts.customerid where clientnumber='||CLIENTNUMBER||' AND DOCREVNO=' 0 '
+      ins = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        ins[xgvt] = new Array(11);
+      }
+      insc = totalelements;
+      insfullc = 0;
+      var o = f.Insurance;
+      o.length = 1;
+      o[0].value = "";
+      o[0].text = "(Please select)";
+      for (var x = 1; x <= insc; x++) {
+        ins[x][1] = results[x][1];
+        ins[x][2] = results[x][2];
+        ins[x][3] = results[x][3];
+        ins[x][4] = cdatejis("1/1/1900");
+        ins[x][5] = cdatejis("12/31/2099");
+        if (datejis(results[x][4])) {
+          ins[x][4] = cdatejis(results[x][4]);
+        }
+        if (datejis(results[x][5])) {
+          ins[x][5] = cdatejis(results[x][5]);
+        }
+        ins[x][6] = results[x][6];
+
+        ins[x][7] = results[x][7];
+
+        ins[x][8] = results[x][8];
+
+        ins[x][9] = results[x][9];
+
+        ins[x][10] = results[x][10];
+        ins[x][11] = results[x][11];
+        // now let's delve into the service detail.....
+        if (ins[x][10]!="") {
+          sc = 0;
+          insl=ins[x][10];
+          if (rightjis(insl,1)==";") {insl=leftjis(insl,lenjis(insl)-1)}
+          svcallow = insl + ",,,,,,,;z";
+          //      alert(svcallow);
+          var svcallow2 = svcallow + ",,,,,,;z";
+          while (svcallow != "z") {
+            var tt = instrjis(svcallow, ";");
+            var g1 = leftjis(svcallow, tt - 1)+",,,,,,";
+            svcallow = midjis(svcallow, tt + 1);
+            var svc = "";
+            var units = "";
+            var ext = "";
+            var rate = "";
+            provider="";
+            clientresp="";
+            copay="";
+            writeoff="";
+            clresp="";
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              svc = leftjis(g1, tt - 1);
+              g1 = midjis(g1, tt + 1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              units = leftjis(g1, tt - 1);
+              g1 = midjis(g1, tt + 1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              ext = leftjis(g1, tt - 1);
+              g1 = midjis(g1, tt + 1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              rate = leftjis(g1, tt - 1);
+              g1=midjis(g1,tt+1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              provider = leftjis(g1, tt - 1);
+              g1=midjis(g1,tt+1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              clientresp = leftjis(g1, tt - 1);
+              g1=midjis(g1,tt+1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              copay = leftjis(g1, tt - 1);
+              g1=midjis(g1,tt+1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              writeoff = leftjis(g1, tt - 1);
+              g1=midjis(g1,tt+1);
+            }
+            tt = instrjis(g1, ",");
+            if (tt != 0) {
+              clresp = leftjis(g1, tt - 1);
+              g1=midjis(g1,tt+1);
+            }
+            if (svc != "" || provider!="") {
+              insfullc = insfullc + 1;
+              insfull[insfullc]=new Array(14);
+              insfull[insfullc][1]=ins[x][1];
+              insfull[insfullc][2]=ins[x][4];
+              insfull[insfullc][3]=ins[x][5];
+              insfull[insfullc][4]=ins[x][9];
+              insfull[insfullc][5]=ins[x][11];
+              insfull[insfullc][6]=svc;
+              insfull[insfullc][7]=units;
+              insfull[insfullc][8]=ext;
+              insfull[insfullc][9]=rate;
+              insfull[insfullc][10]=provider;
+              clientrespp="";
+              copayp="";
+              if (rightjis(clientresp,1)=="%") {clientrespp="%"; clientresp=leftjis(clientresp,lenjis(clientresp)-1);}
+              if (rightjis(copay,1)=="%") {copayp="%"; copay=leftjis(copay,lenjis(copay)-1);}
+              if (!numericjis(clientresp)) {clientresp="0"}
+              if (!numericjis(copay)) {copay="0"}
+              insfull[insfullc][11]=formatnumberjis(cdbljis(clientresp),2)+clientrespp;
+              insfull[insfullc][12]=formatnumberjis(cdbljis(copay),2)+copayp;
+              insfull[insfullc][13]=writeoff;
+              insfull[insfullc][14]=clresp;
+              txd="";
+              for (xgvt=1; xgvt<=13; xgvt++) {
+                txd=txd+cstrjis(xgvt)+": "+cstrjis(insfull[insfullc][xgvt])+"\n";
+              }
+              //                  alert("dser/start/end/auth/paysource/svc/units/ext/rate/provider/resp/copay/writeoff: "+txd);
+            }
+          }
+        }
+      }
+
+      curinsvalue = ""+includesvcn26+"";
+      setinsurance();
+      setrate();
+      setratem();
+      show_gvtQtyToBill();
+      if (""+includesvcn18+"" == "ON") {
+        if (""+includesvcn14+"" == "PRINTFORMAT") {
+          document.getElementById("PrivateNoteSection").style.display = "none";
+        } else {
+          if (""+includesvcn21+"" != ""+includesvcn10+"" && ""+includesvcn39+"" != ""+includesvcn10+"") {
+            document.getElementById("PrivateNoteSection").style.display = "none";
+          }
+        }
+      }
+
+      // the following 6 lines of commented code may be deleted once testing of PDF emails is completed - Ray
+      //If LCASE(""+includesvcn10+"") = "bill-lowther" Or LCASE(""+includesvcn10+"") = "ray-scott" Then
+      //   document.getelementbyid("spanEmailPDF").style.display = ""
+      //Else
+      //   document.getelementbyid("spanEmailPDF").style.display = "none"
+      //   f.elements("NOTIFYOtherPDF").checked = false
+      //End If
+      //$$$
+      //         If f.elements("AutoEmailSentDate").value = "" Then
+      //             document.getelementbyid("CaseworkerPDFEmail").value ="//LOADFIELDS SELECT TOP 1 ReferralPersonEmail FROM Q_ReferralIn WHERE ClientNumber = '^^CLIENTNUMBER^^' AND ReferralPersonEmail IS NOT NULL AND UPPER(ReferralSource) IN ('DFCS','DJJ','COURT') ORDER BY DateInitReferral DESC////LOADCURRENTALWAYS (0)//"
+      //         End If
+      document.getElementById("NOTIFYOtherPDF").checked = false;
+
+      var Ctrl;
+      var invnum;
+      var prtnum;
+      var acctmsg;
+      if (""+includesvcn3+"" == "") {
+        //New form
+        document.getElementById("PrivateComment").checked = true;
+        if (""+includesvcn40+"" != "") {
+          Ctrl = document.getElementById("Server");
+          try {
+            Ctrl.length = 2;
+            Ctrl.options[0].value = ""+includesvcn40+"";
+            Ctrl.options[0].text = ""+includesvcn25+", "+includesvcn24+"";
+            if(""+includesvcn41+""!="" && ""+includesvcn42+""!="") {
+              Ctrl.options[0].text = Ctrl.options[0].text + " : Pay Level: "+includesvcn41+""+includesvcn42+"";
+            }
+            Ctrl.selectedIndex = 0;
+            Ctrl.options[1].value = "";
+            Ctrl.options[1].text = "(type and press enter)";
+          } catch(e) {
+            Ctrl.value=includesvcn40;
+            Ctrl2=document.getElementById("_Serverajax")
+            Ctrl2.value=includesvcn25+", "+includesvcn24;
+            if(""+includesvcn41+""!="" && ""+includesvcn42+""!="") {
+              Ctrl2.value = Ctrl2.value + " : Pay Level: "+includesvcn41+""+includesvcn42+"";
+            }
+          }
+        }
+      } else {
+        if(f.PrimaryDiagnosisDesc.value == "" && "||FIELDVALUE CWLocked||"==""){
+          f.PrimaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|DSMV_IVPrimary|CLEANJS||";
+          if (f.PrimaryDiagnosisDesc.value=="") {
+            f.PrimaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|ICD_9Primary|CLEANJS||";
+          }
+        }
+        if(f.SecondaryDiagnosisDesc.value == "" && "||FIELDVALUE CWLocked||"==""){
+          f.SecondaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|DSMV_IVSecondary|CLEANJS||";
+          if (f.SecondaryDiagnosisDesc.value=="") {
+            f.SecondaryDiagnosisDesc.value = "||LOADCLIENTVALUEALWAYS|AXISDIAGNOSIS|ICD_9Secondary|CLEANJS||";
+          }
+        }
+        if (""+includesvcn13+"" == "Yes") {
+          document.getElementById("SupervisorSection").style.display = "";
+          document.getElementById("_SUBBTTN").style.display = "none";
+          document.getElementById("_SUBBTTN2").value = "Close";
+          //                       ' Added at Bill's request 1/25/11
+          if (lcasejis(""+includesvcn10+"") != "bill-lowther" && lcasejis(""+includesvcn10+"")!="chris-freund") {
+            //document.getElementById("_B2").style.display = "none";
+          }
+          document.getElementById("_B3").style.display = "none";
+          document.getElementById("EmailSection").style.display = "none";
+          document.getElementById("LockVerbage").style.display = "none";
+          document.getElementById("SIGNATURE").style.display = "none";
+          document.getElementById("SupervisorComments").disabled = true;
+
+          invnum = ""+includesvcn43+"";
+          prtnum = ""+includesvcn44+"";
+          acctmsg = "";
+          if (accountflag) {
+            document.getElementById("accountspan").style.display = "";
+            document.getElementById("OverrideRatespan").style.display = "";
+            document.getElementById("OverrideRateAdminspan").style.display = "";
+            document.getElementById("_SUBBTTN").style.display = "";
+            f.elements["_AUTOINVOICE"].checked = false;
+            if (invnum == "") {
+              acctmsg = "This casenote has not been billed yet";
+            } else {
+              if (prtnum == "") {
+                acctmsg = "Casenote has been billed but has yet to be printed, inv: " + invnum;
+              } else {
+                acctmsg = "Casenote billed (" + invnum + ") and printed (" + prtnum + ")";
+              }
+            }
+            document.getElementById("SupervisorComments").disabled = false;
+          }
+          document.getElementById("accountspan2").innerHTML = acctmsg;
+        } else {
+          if (""+includesvcn9+"" == "Yes") {
+            document.getElementById("SupervisorSection").style.display = "";
+            document.getElementById("SupervisorSection").style.display = "";
+            if (""+includesvcn45+"" != ""+includesvcn10+"" && instrjis(ucasejis(""+includesvcn30+""), "CASE WORKER OR SOCIAL WORKER SUPERVISION") == 0) {
+              document.getElementById("_SUBBTTN").style.display = "none";
+              document.getElementById("_SUBBTTN2").value = "Close";
+              //                                       ' Added at Bill's request 1/25/11
+              if (lcasejis(""+includesvcn10+"") != "bill-lowther" && lcasejis(""+includesvcn10+"")!="chris-freund") {
+                //document.getElementById("_B2").style.display = "none";
+              }
+              document.getElementById("_B3").style.display = "none";
+              document.getElementById("EmailSection").style.display = "none";
+              document.getElementById("LockVerbage").style.display = "none";
+              document.getElementById("SIGNATURE").style.display = "none";
+              document.getElementById("SupervisorComments").disabled = true;
+              document.getElementById("REJECT").style.display = "none";
+              document.getElementById("REJECT").value = "OFF";
+            }
+          }
+          if (supflag == 1) {
+            document.getElementById("Rejectspan").style.display = "";
+          } else {
+            document.getElementById("Rejectspan").style.display = "none";
+          }
+        }
+      }
+      // code here, IF createoninitial signature is set, & we are editing, the show accountspan...
+      if (includesvcn7=="1" && includesvcn47=="YES" && includesvcn43!="") {
+        document.getElementById("accountspan").style.display="";  //unhide to allow check to invoice...
+      }
+      //code here 11/27/2013 to always make sure save/close is not hidden for accounting group:
+      if (accountflag) {document.getElementById("_SUBBTTN").style.display = ""; document.getElementById("SIGNATURE").style.display = "";}
+      document.getElementById("SupervisorSectionHeader").value = "&nbsp;<b>DFCS No.:</b> "+includesvcn46+"";
+      document.getElementById("SupervisorSectionInfo").innerHTML = document.getElementById("SupervisorSectionHeader").value;
+      setbillable();
+      checkHideAll();
+      if (""+includesvcn8+"" == "YES") {
+        //              msgbox "We are using the billig module"
+      } else {
+        for (var x = 2; x <= 5; x++) {
+          try {
+            document.getElementById("billingoptspan" + cstrjis(x)).style.display = "none";
+          } catch(e) {}
+        }
+      }
+      try {postadditionalsetup();} catch(e) {}
+
+      return functionreturnvalue;
+    }
+    // end of StartUp() function
+    
+    
+    
+
+
+    var totalelements = 0;
+    ///PULLDATA SELECT Q_CaseNoteDetail.ContactDate, Q_CaseNoteDetail.ContactTime, Q_CaseNoteDetail.StartTimeAMPM, Q_CaseNoteDetail.EndTime, Q_CaseNoteDetail.EndTimeAMPM, Q_CaseNoteDetail.Server, Q_ClientTable.LastName + ', ' + Q_ClientTable.FirstName From Q_CaseNoteDetail Inner Join Q_ClientTable on Q_CaseNoteDetail.ClientNumber=Q_ClientTable.ClientNumber Where ContactDate = '||FIELDVALUE ContactDate||' And ContactTime<>'' and EndTime<>'' And Q_CaseNoteDetail.DocSerNo<>'||FIELDVALUE DOCSERNO||' And Server='||FIELDVALUE SERVER||'
+    if (totalelements > 0) {
+      NumOverLapData = totalelements;
+      OverLapData = new Array(totalelements);
+      for (var xgvt = 1; xgvt <= totalelements; xgvt++) {
+        OverLapData[xgvt] = new Array(7);
+      }
+      for (var tx = 1; tx <= totalelements; tx++) {
+        for (var ty = 1; ty <= 7; ty++) {
+          OverLapData[tx][ty] = results[tx][ty];
+        }
+      }
+    }
+
+    function repairpdf() {
+      if ("||SCREENPARM REPAIRPDF||"=="") {return}
+      f = document.forms[0];
+      buildhtml();
+
+      var t = new String(f._RENDEREDHTML.value);
+      var tts = t.indexOf("BEGINOFPRINT")+15;
+      var tte = t.indexOf("ENDOFPRINT")-5;
+
+      t = t.substr(tts,tte-tts);
+
+      var tUP = new String(t);
+      tUP = tUP.toUpperCase();
+      tts = tUP.indexOf("CLICK HERE TO ADD SOMEONE TO THE LIST");
+      if(tts >= 0){
+        t = t.substr(0,tts) + t.substr(tts+37);
+      }
+
+      tUP = String(t.toUpperCase());
+      tts = tUP.indexOf("(150 CHARACTER LIMIT)");
+      if(tts >= 0){
+        t = t.substr(0,tts) + t.substr(tts+21);
+      }
+
+      tUP = String(t.toUpperCase());
+      tts = tUP.indexOf("(SELECT ALL THAT APPLY)");
+      if(tts >= 0){
+        t = t.substr(0,tts) + t.substr(tts+23);
+      }
+
+
+      tUP = String(t.toUpperCase());
+      tts = tUP.indexOf("(CTRL + CLICK TO SELECT ALL THAT APPLY)");
+      if(tts >= 0){
+        t = t.substr(0,tts) + t.substr(tts+39);
+      }
+
+      var tx="<ht"+"ml>\n\n<he"+"ad>\n\n";
+      tx=tx+"<style media=\"all\" type=\"text/css\">@import \"../css/allprint.css\";</style>\n";
+      tx=tx+"</head>\n<bo"+"dy>\n";
+      tx=tx+"<form>" + t + "</form>\n</bo"+"dy>\n";
+      tx=tx+"</ht"+"ml>\n";
+      f._RENDEREDHTML.value = tx;
+
+      f.FUNCTION.value="REPAIRPDF";
+      f.CONFIRMSCREEN.value="SAVECONFIRMFIXPDF";
+      f.target="";
+      f.submit();
+    }
+
+    function marksigned() {
+      if ("||SCREENPARM MARKSIGNED||"=="") {return}
+      // mark the case note signed, & save it.  part of accounting sign off function.....
+      document.forms[0].SIGNATURE.value="||SCREENPARM MARKSIGNED||";
+      submitit();
+    }
+
+    function waterfallset() {
+      f=document.forms[0];
+      if (f.WATERFALLBILL.checked==false) {return}
+      f.CLIENTRESPONSIBLEAMOUNT.value="||FIELDVALUE CLIENTRESPONSIBLEAMOUNT||";
+      f.CLIENTPAYMENT.value="||FIELDVALUE CLIENTPAYMENT||";
+      f.METHODCHECK.value="||FIELDVALUE METHODCHECK||";
+      f.CLIENTWRITEOFF.value="||FIELDVALUE CLIENTWRITEOFF||";
+      f.CLIENTWRITEOFFCODE.value="||FIELDVALUE CLIENTWRITEOFFCODE||";
+    }
+
+    function waterfallcheck(o) {
+      f=document.forms[0];
+      if (f.WATERFALLBILL.checked==false) {return}
+      alert("Because you are waterfalling this bill to another pay source, you cannot change any of the client responsible nor copay amounts");
+      f.WATERFALLBILL.focus();
+    }
+
+    function haut(idt) {
+      if (document.getElementById(idt).scrollTop > 0) aug(idt);
+    }
+    function aug(idt) {
+      var h = parseInt(document.getElementById(idt).style.height);
+      document.getElementById(idt).style.height = h + 10 +"px";
+      haut(idt);
+    }
+    function toptext(idt) {
+      document.getElementById(idt).scrollTop = 100000;
+      haut(idt);
+    }
+
+    function flagbilling() {
+      needbilling=true;
+    }
+
+    function SetFormNameOther() {
+      functionreturnvalue=null;
+      var f=document.forms[0];
+      if (f.FORMNAME.value == "" || f.FORMNAME.value !="00") {
+        f.FormNameOther.value = "";
+        document.getElementById("FormNameOther").style.display = "none";
+      } else {
+        if (f.FORMNAME.value == "00") {
+          document.getElementById("FormNameOther").style.display = "";
+        }
+      }
+      return functionreturnvalue;
+    }
+
+    function pullgoals(c,target,blank) {
+      var f=document.forms[0];
+      var fieldvalue = $(c).val();
+      document.getElementById(blank).style.display = 'none';
+      if(fieldvalue == '') {
+        document.getElementById(target).style.display = 'none';
+        document.getElementById(target + 'Repop').value = '';
+        return;
+      }
+      var sql="SELECT longdescription, interventiondesc1, interventiondesc2, interventiondesc3, interventiondesc4, interventiondesc5, interventiondesc6, interventiondesc7 from goal where docrevno=' 0 ' and docserno='" + fieldvalue + "'";
+      sql=escape(sql);
+      var fullhlink="genfunc.exe?FULLFUNCTION^PULLDATA|IDENTIFIER(" + target + ")|JAVASCRIPT(MULTIARRAY)|ERROR(SUPPRESS)|SQL("+sql+")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(popgoals)|SUBMITTIME(" + Date() + ")^";
+      parent.fvalidate.location=fullhlink;
+      return;
+    }
+
+    //Steve
+    function popgoals(numelementsper,totalelements,identifier,results) {
+      var functionreturnvalue = null;
+      var f = document.forms[0];
+      var t = '';
+      document.getElementById(identifier).style.display = '';
+      if(typeof results[1][1] != 'undefined' && results[1][1] != '') {
+        t = t + '<b>||CaseNoteGoalDESCRIPTION||</b> ' + results[1][1] + '<br>';
+      }//else {
+      //t = t + 'No Client Statement for this Goal'
+      //}
+      if(identifier == 'GoalPrimary') {
+        document.getElementById("GoalPrimary").style.display = "none";
+        t = t + "<table border=\"0\" width=\"100%\">";
+        for(var x = 2; x <= numelementsper; x++){
+          if(typeof results[1][x] != 'undefined' && results[1][x] != '')  {
+            t = t + "<tr><td><input type=\"check"+"box\" na"+"me=\"_SelectPrimaryIntervention" + (x-1) + "\" class=\"GoalPrimary\" value=\"PrimInt" + (x-1) + "\" data-secintervention=\"" + results[1][x] + "\" onclick=\"SetGoaldomaincasenote('"+identifier+"')\"><b>||CaseNoteIntervention||</b> " + results[1][x] + "</td></tr>";
+            document.getElementById("GoalPrimary").style.display = "";
+          }
+        }
+      }
+
+      if(identifier == 'GoalSecondary') {
+        document.getElementById("GoalSecondary").style.display = "none";
+        t = t + "<table border=\"0\" width=\"100%\">";
+        for(var x = 2; x <= numelementsper; x++){
+          if(typeof results[1][x] != 'undefined' && results[1][x] != '')  {
+            t = t + "<tr><td><input type=\"check"+"box\" na"+"me=\"_SelectSecondaryIntervention" + (x-1) + "\" class=\"GoalSecondary\" value=\"SecondaryInt" + (x-1) + "\" data-secintervention=\"" + results[1][x] + "\" onclick=\"SetGoaldomaincasenote('"+identifier+"')\"><b>||CaseNoteIntervention||</b> " + results[1][x] + "</td></tr>";
+            document.getElementById("GoalSecondary").style.display = "";
+          }
+        }
+      }
+      document.getElementById(identifier + "Interventions").innerHTML = t + '</table>';
+      document.getElementById(identifier + 'Repop').value = t + '</table>';
+      document.getElementById('Text' + identifier).value = t + '</table>';
+      return functionreturnvalue;
+    }
+
+    function pullobjectives(c,target) {
+      var functionreturnvalue = null;
+      var f = document.forms[0];
+      var fieldvalue = $(c).val();
+      if(fieldvalue == '') {
+        document.getElementById(target).style.display = 'none';
+        return functionreturnvalue;
+      }
+      var sql="SELECT taskreview, TASK from ResSerPlnTasks where docrevno=' 0 ' and docserno='" + fieldvalue + "'";
+      sql=escape(sql);
+      var fullhlink="genfunc.exe?FULLFUNCTION^PULLDATA|IDENTIFIER(" + target + ")|JAVASCRIPT(MULTIARRAY)|ERROR(SUPPRESS)|SQL("+sql+")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(popobjectives)|SUBMITTIME("+rightjis(cstrjis(Date()),5)+")^";
+      parent.fvalidate.location=fullhlink;
+      return;
+    }
+
+    //Steve
+    function popobjectives(numelementsper,totalelements,identifier,results) {
+      var functionreturnvalue = null;
+      var f = document.forms[0];
+      var t = ''
+      document.getElementById(identifier).style.display = 'none';
+      if(typeof results[1][2] != 'undefined' && results[1][2] != '')  {
+        t = t + '<br><br><b>Review of Short Term Goal : </b> ' + results[1][2];
+      }
+      document.getElementById(identifier).style.display = '';
+      document.getElementById(identifier).innerHTML = t;
+    } 
+
+    function SetObjectives(GoalField,ObjField){
+      var functionreturnvalue = null;
+      var f = document.forms[0];
+      var totalelements = 0;
+      ///PULLDATA Select obj.DocSerNo, d.Description + ' / '+gt.description AS [Description], g.DocSerNo from goal g INNER JOIN Domain d ON g.goaldomain=d.code INNER JOIN ResSerPlnTasks obj ON g.DocSerNo = obj.ParentDocSerNo AND obj.DateEnded IS NULL AND obj.DOCREVNO=' 0 ' LEFT JOIN ShortTermGoal GT ON obj.goaltype=gt.code WHERE g.DOCREVNO=' 0 '  AND g.ParentDocSerNo='||SP TXPLANCURRENT||' order by g.DocSerNo, d.Description
+      if(GoalField.value == "" || totalelements == 0){
+        f.elements[ObjField].length = 1;
+        return functionreturnvalue;
+      }
+      var Ctrl = f.elements[ObjField];
+      Ctrl.length = 1;
+      for(var x = 1; x <= totalelements; x++){
+        if(results[x][3] == GoalField.value){
+          Ctrl.length = Ctrl.length + 1;
+          Ctrl.options[Ctrl.length - 1].value = results[x][1];
+          Ctrl.options[Ctrl.length - 1].text = results[x][2];
+        }
+      }
+      if(Ctrl.length > 1){
+        Ctrl.options[0].text = "(Please select)";
+      } else {
+        Ctrl.options[0].text = "(Not Objectives To Select)";
+      }
+      return functionreturnvalue;
+    }
+
+    function SetGoaldomaincasenote(identifier){
+      var functionreturnvalue = null;
+      var f = document.forms[0];
+      var TheSection = new String(document.getElementById('Text' + identifier).value);
+      var TheName = "";
+      var tt = -1;
+      identifier = identifier.substr(4);
+      for(var x = 20; x <= f.elements.length - 20; x++){
+        TheName = f.elements[x].name;
+        if(TheName.indexOf("_Select" + identifier + "Intervention") >= 0){
+          if(f.elements[x].checked){
+            tt = TheSection.indexOf(TheName);
+            tts = TheSection.substr(0,tt);
+            tte = TheSection.substr(tt + TheName.length + 1);
+            TheSection = tts + TheName + "\" checked " + tte;
+          }
+        }
+      }
+      document.getElementById("Goal" + identifier + 'Repop').value = TheSection;
+      //f.TxPlanRelatedComments.value = TheSection;
+      return functionreturnvalue;
+    }
+    
+    function checkHideAll() {
+    	var f = document.forms[0];
+        if (f.ContactType.value=="03"){
+         document.getElementById("location").style.display = "";
+          } else {
+            document.getElementById("location").style.display = "none";
+          }
+          
+          if (f.ServiceSite.value=="99"){
+         document.getElementById("otherlocation").style.display = "";
+          } else {
+            document.getElementById("otherlocation").style.display = "none";
+          }
+          
+          if (f.ServiceSite.value=="101"){
+         document.getElementById("otherorganization").style.display = "";
+          } else {
+            document.getElementById("otherorganization").style.display = "none";
+          }
+    
+    }
+
+  </script>
+
+  <script language="JavaScript" src="script/IncludeCaseNoteDetailV33.js">
+  </script>
+
+  <script language="VBScript">
+  </script>
+
+  <body onload="StartUp(); setmultiselect('ContactName'); CheckLifeSkills(); OpenSafetyTable(); CheckServiceForm(); setmultiselectOLD('CASENOTETYPE'); setmultiselectOLD('LIFESKILL'); setdefaulttype(); setqty(); repairpdf(); checklimits(); marksigned();">
+    ||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+    ||INCLUDE CASENOTEDETAILCUSTOM.HTM|ALLOWMISSING=TRUE||
+    <form action="genfunc.exe" method="post" enctype="multipart/form-data" target="fvalidate">
+      <input type="hidden" name="FUNCTION" value="SAVE" />
+      <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+      <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+      <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+      <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+      <input type="hidden" name="TABLENAME" value="CaseNoteDetail" />
+      <input type="hidden" name="VISITDT" value="||DATE||" />
+      <input type="hidden" name="VISITTM" value="||TIME||" />
+      <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+      <input type="hidden" name="SUMMATION" value="||SCREENPARM SUMMATION||" />
+      <input type="hidden" name="FACM" value="||FIELDVALUE FACM||" />
+      <input type="hidden" name="AUTOCLOSE" value="YES">
+      <input type="hidden" name="B2" value="||FIELDVALUE B2||" />
+      <input type="hidden" name="CWLockedBy" id="CWLockedBy" value="||FIELDVALUE CWLOCKEDBy||">
+      <input type="hidden" name="CWLocked" id="CWLocked" value="||FIELDVALUE CWLOCKED||">
+      <input type="hidden" name="CWLockedDate" id="CWLockedDate" value="||FIELDVALUE CWLockedDate||">
+      <input type="hidden" name="CWLockedTime" id="CWLockedTime" value="||FIELDVALUE CWLockedTime||">
+      <input type="hidden" name="SUPLockedBy" id="SUPLockedBy" value="||FIELDVALUE SUPLockedBy||">
+      <input type="hidden" name="SUPLocked" id="SUPLocked" value="||FIELDVALUE SUPLOCKED||">
+      <input type="hidden" name="SUPLockedDate" id="SUPLockedDate" value="||FIELDVALUE SUPLockedDate||">
+      <input type="hidden" name="SUPLockedTime" id="SUPLockedTime" value="||FIELDVALUE SUPLockedTime||">
+      <input type="hidden" name="CWRejectDate" id="CWRejectDate" value="||FIELDVALUE CWRejectDate||">
+      <input type="hidden" name="CWRejectTime" id="CWRejectTime" value="||FIELDVALUE CWRejectTime||">
+      <input type="hidden" name="SupervisorSectionHeader" id="SupervisorSectionHeader" value="||FIELDVALUE SUPERVISORSECTIONHEADER||">
+      <input type="hidden" name="_NOPRINTBUTTON" value="YES">
+      <input type="hidden" name="_RENDEREDHTML" value="||||" />
+      <input type="hidden" name="_BODY" value="Thank you for allowing us to provide services to your children and families." />
+      <input type="hidden" name="_OVERRIDEMEDICALBILLINGTABLE" value="CASENOTEDETAIL">
+      <input type="hidden" name="REBILLINSURANCE" value="ON">
+      <input type="hidden" name="_EXT1">
+      <input type="hidden" name="_EXT2">
+      <input type="hidden" name="_SERVICE1">
+      <input type="hidden" name="_SERVICE2">
+      <input type="hidden" name="_QTY1">
+      <input type="hidden" name="_QTY2">
+      <input type="hidden" name="_UNTPRC1">
+      <input type="hidden" name="_UNTPRC2">
+      <input type="hidden" name="_DESC1">
+      <input type="hidden" name="_DESC2">
+      <input type="hidden" name="_PEXT1">
+      <input type="hidden" name="_PEXT2">
+      <input type="hidden" name="_PADJ1">
+      <input type="hidden" name="_PADJ2">
+      <input type="hidden" name="_PRATE1">
+      <input type="hidden" name="_PRATE2">
+      <input type="hidden" name="_PASSPROVIDER1">
+      <input type="hidden" name="_PASSAMT1">
+      <input type="hidden" name="DATE">
+      <input type="hidden" name="INV_DATE">
+      <input type="hidden" name="AutoEmailSentDate">
+      <input type="hidden" name="_REJECTINVOICE">
+      <input type="hidden" name="TXPLANDOCSERNO" value="||SP TXPLANCURRENT||">
+
+      <span style="display: none"><input type="text" size="10" name="MILEAGEEXTENSION">
+        <input type="text" size="10" name="CLINICALEXTENSION">
+        <input type="text" size="10" name="PARENTDOCSERNO">
+        <input type="text" size="10" name="FUNDINGSOURCE">
+      </span>
+      <!--BEGINOFPRINT-->
+      ||CASENOTETRTEXT||<br>
+      ||CASENOTETRVIDEO||
+      <h2 align="center">Client Case Notes</h2>
+      <h3 align="center">||CLIENTNAME|| (||CLIENTNUMBER||)</h3>
+      <div class="extrawidecol">
+        <div class="deflist">
+          <div id="_gvtCaseNoteInformation" class="term">||FIELDTAG CaseNoteInformation||Case Note Information||ENDFIELDTAG||</div>
+          <div class="def highlighted">
+            <ul>
+              <li id="_gvtR1Billable" class="StartupHighlight"><strong>||FIELDTAG R1Billable||Billable||ENDFIELDTAG|| : </strong><input type="radio" name="R1Billable" value="Yes" onclick="setbillable()">Yes&nbsp;&nbsp; <input type="radio" name="R1Billable" value="No" onclick="setbillable()">No</li>
+              <li><strong>||FIELDTAG ContactDate||Date of Service||ENDFIELDTAG|| : </strong><input type="text" name="ContactDate" size="8" onblur="validdatenoblankAny(this); setinsurance()" onChange="GetOverlapData()" class="jdatepicker"></li>
+              <li id="_gvtCONTACTTIME"><span class="StartupHighlight"><strong>||FIELDTAG CONTACTTIME||Start Time||ENDFIELDTAG|| : </strong><span id="CONTACTTIMEspan">&nbsp;</span><input type="text" name="CONTACTTIME" id="CONTACTTIME" class="jtimepicker" size="6" onChange="StartTimeblur(); flagbilling();"><a href="javascript:void poptime('CONTACTTIME')" style="display:none"><img border=1 src="images/dropdown.png"></a>
+                <select style="display: none" name="StartTimeAMPM" size="1" onChange="StartTimeblur()">
+                  <option value=""></option>
+                </select>
+                &nbsp;&nbsp;&nbsp; 
+                <b>||FIELDTAG EndTime||Stop Time||ENDFIELDTAG|| :</b>&nbsp;<span id="EndTimespan">&nbsp;</span><input type="text" name="EndTime" class="jtimepicker" size="6" onChange="EndTimeblur(); flagbilling();" id="EndTime"><a href="javascript:void poptime('EndTime')" style="display:none"><img border=1 src="images/dropdown.png"></a>
+                <select style="display: none" name="EndTimeAMPM" size="1" onChange="EndTimeblur();">
+                  <option value=""></option>
+                </select>
+                </span>
+                &nbsp;&nbsp;
+                <b>||FIELDTAG TotMinutes||Duration||ENDFIELDTAG|| :</b> <input type="text" name="TotMinutes" size="2" readonly="readonly"> min&nbsp;&nbsp;&nbsp;
+                <input type="text" name="_durationHours" size="2" readonly="readonly"> hours</li>
+              <li style="display: none"><strong>||FIELDTAG TimeSpentInGroup||Time In Group||ENDFIELDTAG|| : </strong><input type="text" name="TimeSpentInGroup" id="TimeSpentInGroup" size="5" onChange="CheckDuration(this)"> Min</li>
+
+              <li style="display: none"><strong>Visit This Week:</strong><select size="1" name="VisitThisWeek">
+                <option value="||SELECT CODE, Description FROM VISITTHISWEEK Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE VISITTHISWEEK||</li>
+
+              <li style="display: none"><strong>||FIELDTAG TimeSpentAlone||Time Alone||ENDFIELDTAG|| : </strong><input type="text" name="TimeSpentAlone" id="TimeSpentAlong" size="5" onChange="CheckDuration(this)"> Min</li>
+              <li id="_gvtApptMissed"><strong>||FIELDTAG ApptMissed||Appointment Missed||ENDFIELDTAG|| : </strong>
+                <table><tr><td valign="top"><input type="checkbox" name="ApptMissed" value="Yes" /></td>
+                  <td>&nbsp;&nbsp;&nbsp;</td>
+                  <td valign="top" id="_gvtMissedReason"><b>||FIELDTAG MissedReason||Reason Missed||ENDFIELDTAG|| : </b><br>
+                    <select name="MissedReason" size="1">
+                      <option value="||||">(Please select)</option>
+                      <option value="No Show">No Show</option>
+                      <option value="Cancellation">Cancellation</option>
+                      <option value="Rescheduled">Rescheduled</option>
+                      <option value="Other">Other</option></select></td>
+                  <td>&nbsp;&nbsp;&nbsp;</td>
+                  <td valign="top" id="_gvtMissedDetails"><b>||FIELDTAG MissedDetails||Details of Missed Visit||ENDFIELDTAG|| : </b><br>
+                    <textarea name="MissedDetails" style="width: 250px; height: 40px" id="MissedDetails" class="autoexpand"></textarea>
+                  </td></tr></table></li>
+            </ul>
+          </div>
+          <div id="_gvtCaseNoteInformationHeader" class="term">||FIELDTAG CaseNoteInformationHeader||Case Note Information||ENDFIELDTAG||</div>
+          <div class="def">
+            <ul>
+              <li>&nbsp;</li>
+
+              <li id="_gvtBriefDescription"><strong>||FIELDTAG BriefDescription||General Comments||ENDFIELDTAG|| : </strong><textarea name="BriefDescription" style="width: 700px; height: 45px" id="BriefDescription" class="autoexpand"></textarea></li>
+
+              <li id="_gvtServer"><strong>||FIELDTAG Server||Service Provided By||ENDFIELDTAG|| : </strong>
+                <select size="1" name="Server" id="Server" onchange="setrate();GetOverlapData()">
+                  <option value="||SELECT TOP 50 EMPLOYEENUMBER, [EmployeeName] FROM Q_HRFORM WHERE (LASTNAME LIKE '^^TYPEVALUE^^*' or FirstName LIKE '^^TYPEVALUE^^*') and privateprovider='^^PRIVATEPROVIDER^^' and EmpStatus='Active' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [EmployeeName] FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE Server^^'||" selected="selected">||CHOICETABLESEARCH||</option>
+                </select>||STARTSTRIP|| <a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(HRFormDynamicEntry)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(||SESSIONID||)|TARGETDROPDOWN(DDCareManager)|SETVALUE(TARGETDROPDOWN)|TARGETDDFIELD(Server)|SETVALUE(TARGETDDFIELD)')">Click Here to Add Someone to the List</a>||ENDSTRIP||
+              </li>
+
+              <li id="_gvtServerType"><strong>||FIELDTAG ServerType||Professional Level of Service||ENDFIELDTAG|| : </strong><select size="1" name="ServerType">
+                <option value="||SELECT CODE, Description FROM SERVERTYPE where (status = 'active' or status = '') Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE SERVERTYPE||</li>
+
+              <li id="_gvtTypeofService"><strong>||FIELDTAG ServiceFormServices||Type of Service||ENDFIELDTAG|| : </strong><select size="1" name="Service">
+                <option value="||SELECT CODE, DESCRIPTION FROM SERVICEFORMSERVICES WHERE (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE Service^^') and privateprovider='^^PRIVATEPROVIDER^^' ORDER BY Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE SERVICEFORMSERVICES||</li>
+
+              <li><strong>||FIELDTAG ContactType||Type of Contact||ENDFIELDTAG|| : </strong><select size="1" name="ContactType" onchange="checkHideAll()">
+                <option value="||Select Code, Description From ContactType Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE CONTACTTYPE^^') and privateprovider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE CONTACTTYPE||</li>
+            </ul>
+            <ul>
+            <li><strong>||FIELDTAG ContactWith||Contact With||ENDFIELDTAG||: </strong>
+              <input type="radio" name="ContactWith"  value="Client" /> Client 
+              <input type="radio" name="ContactWith"  value="Family Member" /> Family Member
+              <input type="radio" name="ContactWith"  value="Referral Source" /> Referral Source 
+              <input type="radio" name="ContactWith"  value="Collateral Contact" /> Collateral Contact
+              
+              </li>
+              <li><strong>||FIELDTAG ContactInitiatedBy||Contact Initiated By||ENDFIELDTAG||: </strong>
+              <input type="radio" name="ContactInitiatedBy"  value="Staff Member" /> Staff Member 
+              <input type="radio" name="ContactInitiatedBy"  value="Client" /> Client
+              <input type="radio" name="ContactInitiatedBy"  value="Family Member" /> Family Member
+              <input type="radio" name="ContactInitiatedBy"  value="Referral Source" /> Referral Source 
+              <input type="radio" name="ContactInitiatedBy"  value="Collateral Contact" /> Collateral Contact
+              
+              </li>
+              
+          </ul>
+            
+            <ul>
+              <li id="_gvtInsurance"><strong>||FIELDTAG Insurance||Funding||ENDFIELDTAG|| : </strong><select size="1" name="Insurance" onchange="setinsurance(); setrate(); flagbilling();">
+                <option value=""></option>
+                </select></li>
+              <li><strong>||FIELDTAG ProviderService||Provider||ENDFIELDTAG|| : </strong><select size="1" name="PROVIDERSERVICE" onchange="setinsurance(); setrate(); checklimits(); flagbilling();">
+                <option value="">(please select)</option>
+                </select>
+              </li>
+              <li id="_gvtProcedureCode"><strong>||FIELDTAG ProcedureCode||Procedure Code||ENDFIELDTAG|| : </strong><select size="1" name="ProcedureCode" onchange="setrate(); checklimits(); flagbilling();" style="font-size: 12px">
+                <option value="||SELECT CODE,DESCRIPTION FROM MEDICALDENTALBILLINGCODES Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE ProcedureCode^^') And PrivateProvider='^^PRIVATEPROVIDER^^' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE MASTERSERVICE||</li>
+              <span id="billingoptspan2">
+                <li id="_gvtQtyToBill" style="display: none"><strong>||FIELDTAG QtyToBill||Qty to Bill||ENDFIELDTAG|| : </strong><input type="text" size="3" name="QtyToBill" onchange="resetclientresp(); setrate(); flagbilling();"> UOM: <span id="uomspan">&nbsp;</span></li>
+              </span>
+             <span id="location" style="display: none"> <li id="_gvtServiceSite" class="location" ><strong>||FIELDTAG ServiceSite||Location||ENDFIELDTAG|| : </strong><select size="1" name="ServiceSite" onchange="checkHideAll()">
+                <option value="||Select Code, Description From SERVICESITE Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE SERVICESITE^^') and privateprovider='^^PRIVATEPROVIDER^^'  Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE SERVICESITE||
+               </li></span>
+                <span id="otherlocation" style="display: none"><li><strong>||FIELDTAG otherlocation||Other Location||ENDFIELDTAG|| : </strong><input type="text" size="20" name="other_location" ></li></span>
+                <span id="otherorganization" style="display: none"><li><strong>||FIELDTAG otherorganization||Other Organization||ENDFIELDTAG|| : </strong><input type="text" size="20" name="other_organization" ></li></span>
+              <span id="billingoptspan3">
+                <span id="EmployeePayRows2">
+                  <li><strong>&nbsp;</strong>&nbsp;</li>
+                  <span style="display: ">
+                    <span id="gvtMileage">
+                      <li id="_gvtMileage"><strong>||FIELDTAG Mileage||Mileage||ENDFIELDTAG||</strong> : <input type="text" name="Mileage" size="5" onFocus="this.blur()" value="||Mileage||" /></li> 
+                    </span>
+                    <span id="gvtProcedureMileage">
+                      <li id="_gvtProcedureMileage"><strong>||FIELDTAG ProcedureMileage||Mileage code||ENDFIELDTAG||</strong> :
+                        <select size="1" name="ProcedureMileage" onchange="setratem()">
+                          <option value=""></option>
+                        </select></li>
+                    </span>
+                  </span>
+                  <li style="display: none"><strong>||FIELDTAG EnteredBy||Entered By||ENDFIELDTAG|| : </strong><input type="text" name="EnteredBy" size="25" onfocus="document.forms(0).SIGNATURE.focus()" value="||USERID||" /> ||STARTSTRIP||(UserID of Person responsible for this communication)||ENDSTRIP||</li>
+                  <li style="display: none"><strong>||FIELDTAG EnteredTime||Date/Time||ENDFIELDTAG|| : </strong><input type="text" name="EnteredTime" size="25" onfocus="document.forms(0).SIGNATURE.focus()" value="||DATE|| ||TIME||" /></li>
+                  <li style="display: none"><strong>||FIELDTAG ApprovedBy||Approved By||ENDFIELDTAG|| : </strong><input type="text" name="_ApprovedBy" size="25" onfocus="document.forms(0).SIGNATURE.focus()" />
+                    ||FIELDTAG ApprovedTime||on||ENDFIELDTAG||<input type="text" name="_ApprovedTime" size="25" onfocus="document.forms(0).SIGNATURE.focus()" /></li>
+                  <li id="_gvtOverrideRate"><span id="OverrideRatespan" style="display: none"><strong>||FIELDTAG OverrideRate||Override Rate||ENDFIELDTAG|| : </strong><input type="text" size="8" name="OVERRIDERATE" onblur="setrate()"> (only specify a number here to override normal billing rate)</span></li>
+                  <li id="_gvtInsuranceBalance"><strong>||FIELDTAG InsuranceBalance||Amt of Service||ENDFIELDTAG|| : </strong><input type="text" size="8" name="INSURANCEBALANCE" onblur="calctotal();" onchange=" flagbilling();"><span> Payment by Fund Src at time of Svc: <input type="text" size="5" name="INSURANCEPAYMENT" onblur="calctotal()">Method: <select size="1" name="INSURANCEPAYMETHOD">
+                    <option value="">(please select)</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Check">Check</option>
+                    <option value="Credit Card">Credit Card</option>
+                    </select> Chk/Auth#: <input type="text" name="INSURANCEMETHODCHECK" size="5" ></span></li>
+                  <li><strong>&nbsp;</strong>Amt to write off at time of service: <input type="text" name="INSURANCEWRITEOFF" size="6" value="0" onblur="calctotal()" onfocus="waterfallcheck(this)" onchange="flagbilling();" > Reason: <select size="1" name="INSURANCEWRITEOFFCODE" onfocus="waterfallcheck(this)">
+                    <option value="||SELECT CODE,[DESC]+' ('+CODE+')' FROM ADJUSTMENTCODES WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='ACTIVE' OR CODE='^^FIELDVAVLUE CODE^^') ORDER BY [DESC]||">||CHOICETABLESQLD||</option>
+                    </select></li>
+                  <li><strong>Prim. Payor Bal: </strong><span id="insurancebalancespan">0.00</span> (This is the balance after payments and writeoffs to the primary payor)</li>
+                  <li><strong>Create Walkout:</strong><input type="checkbox" value="ON" name="_CREATEWALKOUTP"> (check to create walkout statement as this casenote is saved)</li>
+                  <li><span id="OverrideRateAdminspan"><strong>||FIELDTAG OverrideRateAdmin||Override Admin Rate||ENDFIELDTAG|| : </strong><input type="text" size="8" name="OVERRIDERATEADMIN" onblur="setrate()" onchange="flagbilling()"> (only specify a number here to override normal admin rate)</span></li>
+                  <li><strong>||FIELDTAG PassThrough||Pass Through||ENDFIELDTAG|| : </strong><input type="text" size="8" name="PASSTHROUGH" onblur="calctotal()"></li>
+                  <li><strong>||FIELDTAG SERVICEDATE||Inv. Post Date||ENDFIELDTAG|| : </strong><input type="text" name="SERVICEDATE" size="8" class="jdatepicker"> (leave blank to use the current date)</li>
+                </span>
+              </span>
+            </ul>
+          </div>
+        </div>
+        <span id="_gvtSecondaryPayorInformation">
+          <span id="CoPayInformationSpan">
+
+            <div class="term">Secondary Payor Information</div>
+            <div class="def highlighted">
+              <ul>
+                <li id="spanwaterfall" style="display: none"><strong>Waterfall Bill:</strong><input type="checkbox" value="ON" name="WATERFALLBILL" onclick="waterfallset()"> (Transfer insurance balance (if any) to new insurance and keep old insurance detail.  Leave unchecked to totally clear out old insurance.)</li>
+                <li><strong>Resp. Party:</strong><select name="CLIENTRESPPARTY" size="1" onchange="flagbilling();">
+                  <option value="||SELECT 'CL'+CLIENT.CLIENTNUMBER,CLIENT.LASTNAME+', '+client.FIRSTNAME+' [CL'+client.CLIENTNUMBER+']' from RELATIONSHIP,CLIENT where relationship.[number]=client.CLIENTNUMBER and relationship.DOCREVNO=' 0 ' and client.DOCREVNO=' 0 ' and relationship.CLIENTNUMBER='^^CLIENTNUMBER^^' AND RELATIONSHIP.[NUMBER]!='^^CLIENTNUMBER^^'||>||CHOICETABLESQLD|(Client receiving service)||</option>
+                                 </select></li>
+                                 <li><strong>Responsible Amt:</strong><input type="text" name="CLIENTRESPONSIBLEAMOUNT" size="6" value="0" onfocus="waterfallcheck(this)" onblur="calctotal()" onchange="flagbilling()"> (amount not billed to insurance)</li>
+         <li><strong>Payment Amt:</strong><input type="text" name="CLIENTPAYMENT" size="6" value="0"  onfocus="waterfallcheck(this)" onblur="calctotal()" onchange="flagbilling()"> Method of Payment: <select size="1" name="PAYMETHOD">
+           <option value="">(please select)</option>
+                           <option value="Cash">Cash</option>
+                                               <option value="Check">Check</option>
+                                                                    <option value="Credit Card">Credit Card</option>
+                                                                                               </select> Check or Auth #: <input type="text" name="METHODCHECK" size="10" onfocus="waterfallcheck(this)" ></li>
+         <li><strong>Write Off:</strong><input type="text" name="CLIENTWRITEOFF" size="6" value="0" onblur="calctotal()" onfocus="waterfallcheck(this)" onchange="flagbilling()" > Reason: <select size="1" name="CLIENTWRITEOFFCODE" onfocus="waterfallcheck(this)" onchange="flagbilling()">
+           <option value="||SELECT CODE,[DESC]+' ('+CODE+')' FROM ADJUSTMENTCODES WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='ACTIVE' OR CODE='^^FIELDVAVLUE CODE^^') ORDER BY [DESC]||">||CHOICETABLESQLD||</option>
+           </select></li>
+         <li><strong>Balance:</strong><span id="spanclientbalance">&nbsp;</span></li>
+                                                                  <input type="hidden" name="REBILLCOPAY" value="ON">
+                                                                                                                    <input type="hidden" name="RESPCLIENT" value="||CLIENTNUMBER||">
+         <li><strong>Create Walkout:</strong><input type="checkbox" value="ON" name="_CREATEWALKOUT"> (check to create walkout statement as this casenote is saved)</li>
+
+                                                                                                    <hr>
+                                                                                                    <li><strong>Resp. Party 2:</strong><select name="CLIENTRESPPARTY2" size="1" onchange="flagbilling()">
+          <option value="||SELECT 'CL'+CLIENT.CLIENTNUMBER,CLIENT.LASTNAME+', '+client.FIRSTNAME+' [CL'+client.CLIENTNUMBER+']' from RELATIONSHIP,CLIENT where relationship.[number]=client.CLIENTNUMBER and relationship.DOCREVNO=' 0 ' and client.DOCREVNO=' 0 ' and relationship.CLIENTNUMBER='^^CLIENTNUMBER^^' AND RELATIONSHIP.[NUMBER]!='^^CLIENTNUMBER^^'||>||CHOICETABLESQLD|(None)||</option>
+                  </select></li>
+                <li><strong>Responsible Amt 2:</strong><input type="text" name="CLIENTRESPONSIBLEAMOUNT2" size="6" value="0" onfocus="waterfallcheck(this)" onblur="calctotal()" onchange="flagbilling()"></li>
+                <li><strong>Payment Amt 2:</strong><input type="text" name="CLIENTPAYMENT2" size="6" value="0"  onfocus="waterfallcheck(this)" onblur="calctotal()" onchange="flagbilling()"> Method of Payment: <select size="1" name="PAYMETHOD2">
+                  <option value="">(please select)</option>
+                  <option value="Cash">Cash</option>
+                  <option value="Check">Check</option>
+                  <option value="Credit Card">Credit Card</option>
+                  </select> Check or Auth # 2: <input type="text" name="METHODCHECK2" size="10" onfocus="waterfallcheck(this)" ></li>
+                <li><strong>Write Off 2:</strong><input type="text" name="CLIENTWRITEOFF2" size="6" value="0" onblur="calctotal()" onfocus="waterfallcheck(this)" onchange="flagbilling()" > Reason: <select size="1" name="CLIENTWRITEOFFCODE2" onfocus="waterfallcheck(this)" onchange="flagbilling()">
+                  <option value="||SELECT CODE,[DESC]+' ('+CODE+')' FROM ADJUSTMENTCODES WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='ACTIVE' OR CODE='^^FIELDVAVLUE CODE^^') ORDER BY [DESC]||">||CHOICETABLESQLD||</option>
+                  </select></li>
+                <li><strong>Balance 2:</strong><span id="spanclientbalance2">&nbsp;</span></li>
+                <li><strong>Create Walkout:</strong><input type="checkbox" value="ON" name="_CREATEWALKOUT2"> (check to create walkout statement as this casenote is saved)</li>
+                <hr>
+
+              </ul>
+            </div>
+          </span>
+        </span>
+
+
+        <span id="_gvtMileageLog">
+          <div id="MileageSection1">
+            <div class="term">||FIELDTAG MileageLog||Mileage Log||ENDFIELDTAG||</div>
+            <div class="def highlighted">||INCLUDESUMMATION SummationFLBodyMileage||</div>
+          </div>
+
+          <div id="HourSection1" style="display: none">
+            <div id="_gvtHourLog" class="term">||FIELDTAG HourLog||Hour Log||ENDFIELDTAG||</div>
+            <div class="def">||INCLUDESUMMATION SummationFLBodyTimeLog||</div>
+          </div>
+        </span>
+
+        ||STARTSTRIP||
+        <span id="billingoptspan4">
+          <div class="extrawidecol" id="EmployeePayRows1">
+            <div id="_gvtHistorySection" class="term">||FIELDTAG HistorySection||History Section||ENDFIELDTAG||</div>
+            <div class="def">
+              <ul>
+                <span style="display: none">
+                  <li style="display: none"><strong>&nbsp;</strong>(Please note, this section is exposed for development only and would normally be viewable only by accounting</li>
+                  <li ><strong>Rate : </strong><input type="text" size="6" name="CLINICIANRATE" onfocus="this.blur()" onblur="calcemployee()"></li>
+                  <li ><strong>Clinical Total : </strong><input type="text" size="6" name="CLINICIANTOTAL" onblur="calcemployee()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Adjustment: <select size="1" name="AdjustmentRate" onchange="calcemployee()">
+                    <option value="100">0%</option>
+                    <option value="75">25%</option>
+                    <option value="50">50%</option>
+                    <option value="25">75%</option>
+                    <option value="0">100%</option>
+                    </select></li>
+                  <li id="MileageSection2" style="display: none"><strong>Mileage Rate : </strong><input type="text" size="6" name="CLINICIANMILEAGERATE" onblur="calcemployee()"></li>
+                  <li id="MileageSection3" style="display: none"><strong>Mileage Total : </strong><input type="text" size="6" name="CLINICIANMILEAGEEXTENSION" onblur="calcemployee()"></li>
+                </span>
+                <span id="ImportantHistory">
+                  <li><strong>||FIELDTAG ImportantHistory||Important History||ENDFIELDTAG|| : </strong><span id="historyspan">&nbsp;</span></li>
+                </span>
+              </ul>
+            </div>
+          </div>
+        </span>
+
+        <div class="deflist" id="_gvtTreatmentPlanGoals">
+          <div class="term">||FIELDTAG TreatmentPlanGoals||Treatment Plan Goals Tied To Case Note||ENDFIELDTAG||</div>
+          <div class="def">
+
+            <table border="0" cellspacing="2" cellpadding="2" width="100%" colspan="20">
+              <tr>
+                <td width="100%" colspan="20"><strong>||FIELDTAG SpecificGoals||Select the specific goals addressed during your current session:||ENDFIELDTAG||</strong></td>
+              </tr>
+              <tr>
+                <td width="25%" colspan="5" valign="top" align="right"><b>||FIELDTAG PrimaryGoalAddressed||Primary Goal # and Focus Domain||ENDFIELDTAG|| : </b></td>
+                <td width="75%" colspan="15"><select name="Goaldomaincasenoteprimary" size="1" onChange="SetObjectives(this,'GoalTypecasenoteprimary');pullgoals(this,'GoalPrimary','ObjectivePrimary')">
+                  <option value="||SELECT g.DocSerNo, CONVERT(varchar(3),g.goalnumber) + ' - ' + d.description AS [Description] from goal g INNER JOIN DOMAIN d on g.goaldomain=d.code WHERE g.DOCREVNO=' 0 ' AND ((g.ActCompDate IS NULL AND g.ParentDocSerNo='^^SP TXPLANCURRENT^^') or g.DocSerNo='^^FIELDVALUE Goaldomaincasenoteprimary^^') order by CONVERT(varchar(3),g.goalnumber) + ' - ' + d.description||">||CHOICETABLESQLD||</option>
+                  </select></td>
+              </tr>
+              <tr id="GoalPrimary" style="display:none">
+                <td width="25%" colspan="5">&nbsp;</td>
+                <td width="75%" colspan="15"><span id="GoalPrimaryInterventions">||FIELDVALUE GoalPrimaryRepop||</span></td>
+              </tr>
+              <tr id="_gvtShortTermGoals">
+                <td width="25%" colspan="5" valign="top" align="right"><b>||FIELDTAG ShortTermGoals||Primary Short Term Goals||ENDFIELDTAG|| : </b></td>
+                <td width="75%" colspan="15"><select name="GoalTypecasenoteprimary" size="1" onchange="pullobjectives(this,'ObjectivePrimary')">
+                  <option value="||Select obj.DocSerNo, d.Description + ' / '+gt.Description AS [Description] from goal g INNER JOIN Domain d ON g.goaldomain=d.code INNER JOIN ResSerPlnTasks obj ON g.DocSerNo = obj.ParentDocSerNo AND obj.DOCREVNO=' 0 ' LEFT JOIN ShortTermGoal GT ON obj.goaltype=gt.code WHERE g.DOCREVNO=' 0 ' And obj.ParentDocSerNo != '' AND ((obj.ParentDocSerNo='^^FIELDVALUE Goaldomaincasenoteprimary^^' AND obj.DateEnded IS NULL) Or obj.DocSerNo = '^^FIELDVALUE GoalTypecasenoteprimary^^') order by g.DocSerNo, d.Description||">||CHOICETABLESQLD||</option>
+                  </select>
+                  <span id="ObjectivePrimary" style="display:none"><strong>||DESCRIPTION||</strong>&nbsp;||LOADFIELDS SELECT taskreview, TASK from ResSerPlnTasks where docrevno=' 0 ' and docserno='^^FIELDVALUE GoalTypecasenoteprimary^^'||||LOADCURRENTALWAYS (0)||<br><br>
+                    <strong>||FIELDTAG ReviewofPrimaryShortTermGoal||Review of Short Term Goal:||ENDFIELDTAG|| </strong>&nbsp;||LOADCURRENTALWAYS (1)||</span><br>
+              </span></td>
+            </tr>
+          </table>
+        <span style="display:none">
+          <textarea name="TextGoalPrimary" id="TextGoalPrimary" style="width: 450px; height: 20px"class="autoexpand"></textarea>
+          <textarea name="GoalPrimaryRepop" id="GoalPrimaryRepop" style="width: 450px; height: 20px"class="autoexpand"></textarea>
+        </span>        
+
+        <span id="_gvtSecondaryPrimaryGoal">         
+          <br><br>
+          <table border="0" cellspacing="2" cellpadding="2" width="100%" colspan="20">
+            <tr>
+              <td width="25%" colspan="5" valign="top" align="right"><b>||FIELDTAG SecondaryPrimaryGoalAddressed||Secondary Goal # and Focus Domain||ENDFIELDTAG|| : </b></td>
+              <td width="75%" colspan="15"><select name="Goaldomaincasenotesecondary" size="1" onChange="SetObjectives(this,'GoalTypecasenotesecondary');pullgoals(this,'GoalSecondary','ObjectiveSecondary')">
+                <option value="||SELECT g.DocSerNo, CONVERT(varchar(3),g.goalnumber) + ' - ' + d.description AS [Description] from goal g INNER JOIN DOMAIN d on g.goaldomain=d.code WHERE g.DOCREVNO=' 0 ' AND ((g.ActCompDate IS NULL AND g.ParentDocSerNo='^^SP TXPLANCURRENT^^') or g.DocSerNo='^^FIELDVALUE Goaldomaincasenotesecondary^^') order by CONVERT(varchar(3),g.goalnumber) + ' - ' + d.description||">||CHOICETABLESQLD||</option>
+                </select></td>
+            </tr>
+            <tr id="GoalSecondary" style="display:none">
+              <td width="25%" colspan="5">&nbsp;</td>
+              <td width="75%" colspan="15"><span id="GoalSecondaryInterventions">||FIELDVALUE GoalSecondaryRepop||</span></td>
+            </tr>
+            <tr id="_gvtSecondaryShortTermGoals">
+              <td width="25%" colspan="5" valign="top" align="right"><b>||FIELDTAG SecondaryShortTermGoal||Secondary Short Term Goals||ENDFIELDTAG|| : </b></td>
+              <td width="75%" colspan="15"><select name="GoalTypecasenotesecondary" size="1" onchange="pullobjectives(this,'ObjectiveSecondary')">
+                <option value="||Select obj.DocSerNo, d.Description + ' / '+gt.Description AS [Description] from goal g INNER JOIN Domain d ON g.goaldomain=d.code INNER JOIN ResSerPlnTasks obj ON g.DocSerNo = obj.ParentDocSerNo AND obj.DOCREVNO=' 0 ' LEFT JOIN ShortTermGoal GT ON obj.goaltype=gt.code WHERE g.DOCREVNO=' 0 ' And obj.ParentDocSerNo != '' AND ((obj.ParentDocSerNo='^^FIELDVALUE Goaldomaincasenotesecondary^^' AND obj.DateEnded IS NULL) Or obj.DocSerNo = '^^FIELDVALUE GoalTypecasenotesecondary^^') order by g.DocSerNo, d.Description||">||CHOICETABLESQLD||</option>
+                </select>
+                <span id="ObjectiveSecondary" style="display:none"><strong>||DESCRIPTION||</strong>&nbsp;||LOADFIELDS SELECT taskreview, TASK from ResSerPlnTasks where docrevno=' 0 ' and docserno='^^FIELDVALUE GoalTypecasenotesecondary^^'||||LOADCURRENTALWAYS (0)||<br>
+                  <strong><br>||FIELDTAG ReviewofShortTermGoal||Review of Short Term Goal:||ENDFIELDTAG||</strong>&nbsp;||LOADCURRENTALWAYS (1)||</span><br>
+            </span></td>
+          </tr>
+        </table>
+
+      <span style="display:none">
+        <textarea name="TextGoalSecondary" id="TextGoalSecondary" style="width: 450px; height: 20px"class="autoexpand"></textarea>
+        <textarea name="GoalSecondaryRepop" id="GoalSecondaryRepop" style="width: 450px; height: 20px"class="autoexpand"></textarea>
+      </span>
+      <br><br>
+      <table border="0" cellspacing="2" cellpadding="2" width="100%" colspan="20">
+        <tr>
+          <td id="_gvtRemarks" width="100%" colspan="20"><b>||FIELDTAG TxPlanRelatedComments||Tx/Service/Care Plan related comments||ENDFIELDTAG|| : </b><br><textarea name="TxPlanRelatedComments" style="width: 900px; height: 65px" id="TxPlanRelatedComments" class="autoexpand"></textarea></td>
+        </tr>
+      </table> 
+      </div>
+    </div>
+
+
+  <span id="_gvtCaseNoteApplicationPersonsPresentSection">
+    <div class="leftcol">
+      <div id="_gvtCaseNoteApplication" class="term">||FIELDTAG CaseNoteApplication||Case Note Application||ENDFIELDTAG||</div>
+      <div id="_gvtSourceDestinationDocument" class="def highlighted">
+        <ul>
+          <li><b>||FIELDTAG SourceDestinationDocument||Source / Destination document||ENDFIELDTAG|| : </b></li>
+          ||STARTSTRIP||<li>(Ctrl + click to select all that apply)</li>||ENDSTRIP||
+
+          <li><select multiple="multiple" size="9" name="_CASENOTETYPE">
+            <option value="||Select Code, Description From CASENOTESOURCE Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE _CASENOTETYPE^^') and privateprovider='^^PRIVATEPROVIDER^^' Order By Description||">||CHOICETABLESQLD||</option>
+            </select> 
+            <span id="_choiceconfig" style="display: none"><a href="javascript:void openconfigure('CASENOTESOURCE')"><img src="images/gear_small.png"></a></span><input type="text" name="CASENOTETYPE" style="display: none" value="||TYPE TEXT 200||" /> <input type="text" name="CASENOTETYPES" style="display: none" value="||TYPE MEMO||" /></li>
+        </ul>
+      </div>
+    </div>
+
+    ||ENDSTRIP||
+
+    <div class="rightcol">    
+      <div id="_gvtPersonsPresent" class="term">||FIELDTAG PersonsPresent||Persons Present||ENDFIELDTAG||</div>
+      <div class="def highlighted">
+        <ul id="_gvtClientsPresentList">
+          <li>||STARTSTRIP||<b> ||FIELDTAG ContactName||(Select all that apply)||ENDFIELDTAG||<br /></b>||ENDSTRIP||</li>
+          <li><span id="ContactNamePrint"><select multiple="multiple" size="10" name="_ContactName" id="_ContactName" onChange="setList('ContactName')">
+            <option value="||SELECT Distinct Client.[ClientNumber], [CLIENT].LASTName + ', ' + [CLIENT].FIRSTName + '  (' + RelationType + ')', [CLIENT].LASTName,[CLIENT].FIRSTName FROM Relationship Inner Join [CLIENT] on Relationship.Number=[CLIENT].ClientNumber LEFT JOIN RelationType ON Relationship.RelationType = RelationType.Code WHERE RelationshipStatus = 'Active' And Relationship.DocrevNo=' 0 ' and [CLIENT].DOCREVNO=' 0 ' AND Relationship.CLIENTNUMBER='^^CLIENTNUMBER^^' ORDER BY [CLIENT].LASTName,[CLIENT].FIRSTName||">||CHOICETABLESQLD||</option>
+            </select>||STARTSTRIP|| <span id="_gvtAddClientContact"><input type="button" name="_AddClientContact" onclick="newcontact()" value="Add New Contact" /><br /></span>
+            ||ENDSTRIP||</span></li>
+        </ul>
+      </div>
+    </div>
+  </span>
+
+  <span id="_gvtClinicalInformation">
+    <div class="term">||FIELDTAG ClinicalInformation||Clinical Information||ENDFIELDTAG||</div>
+    <div class="def highlighted">
+      <ul>
+        <li id="_gvtPrimaryServed"><strong>||FIELDTAG PrimaryServed||Primary Diagnosis||ENDFIELDTAG|| : </strong><input type="checkbox" name="PrimaryServed" value="ON" /> <input type="text" name="PrimaryDiagnosisDesc" size="90" /></li>
+        <li id="_gvtSecondaryServed"><strong>||FIELDTAG SecondaryServed||Secondary Diagnosis||ENDFIELDTAG|| : </strong><input type="checkbox" name="SecondaryServed" value="ON" /> <input type="text" name="SecondaryDiagnosisDesc" size="90" /></li>
+      </ul>
+    </div>
+  </span>
+  <span id="Page1" Style="display: none">
+    Page 1 of 3 - 
+    ||CLIENTNAME|| (||LOADFIELDS SELECT '(' + IDNUMBER + ')' FROM CLIENTPASSPORT WHERE CLIENTNUMBER='^^CLIENTNUMBER^^' AND CLIENTNUMBER<>'' AND DOCREVNO=' 0 ' AND IDNUMBERTYPE='Medicaid'||||LOADCURRENTALWAYS (0)||)
+
+    <span style="page-break-before: always">&nbsp;</span>
+  </span> 
+
+  <div class="deflist" id="_gvtRemarks">
+    <div class="term">||FIELDTAG CaseNoteDescription||Case Note Description||ENDFIELDTAG||</div>
+    <div class="def">
+      <ul>
+
+        <li id="_gvtRemarks"><b>||FIELDTAG Remarks||Goal||ENDFIELDTAG||:</b><br><textarea name="Remarks" style="width: 900px; height: 65px" id="Remarks" class="autoexpand"></textarea></li>
+      </ul>
+    </div>
+  </div>
+
+  <span style="display: none">
+    <div class="deflist" id="_gvtBIRP">
+      <div class="term">||FIELDTAG BIRP||BIRP||ENDFIELDTAG||</div>
+      <div class="def">
+        <ul>
+          <li id="_gvtChildFunctioning"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ChildFunctioning||a. Behavior||ENDFIELDTAG||</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <textarea name="_ChildFunctioning" style="width: 500px; height: 45px" id="_ChildFunctioning" class="autoexpand"></textarea>
+          </li>
+          <li id="_gvtAdultFunctioning"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG AdultFunctioning||b. Intervention||ENDFIELDTAG||</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <textarea name="_AdultFunctioning" style="width: 500px; height: 45px" id="_AdultFunctioning" class="autoexpand"></textarea>
+          </li>
+          <li id="_gvtParentingPractices"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ParentingPractices||c. Response||ENDFIELDTAG||</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <textarea name="_ParentingPractices" style="width: 500px; height: 45px" id="_ParentingPractices" class="autoexpand"></textarea>
+          </li>
+          <li id="_gvtParentingDiscPractices"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ParentingDiscPractices||d. Plan||ENDFIELDTAG||</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <textarea name="_ParentingDiscPractices" style="width: 500px; height: 45px" id="_ParentingDiscPractices" class="autoexpand"></textarea>
+          </li>
+          <li id="_gvtProgressTowardGoal"><strong>||FIELDTAG ProgressTowardGoal||Progress Toward Goal||ENDFIELDTAG||</strong> : <select name="ProgressTowardGoal" size="1">
+            <option value="||SELECT CODE, Description FROM PROGRESSTORWARDGOAL Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE PROGRESSTORWARDGOAL||</li>
+          <li id="_gvtLevelOfCompliance"><strong>||FIELDTAG LevelOfCompliance||Level of Compliance||ENDFIELDTAG||</strong> : <select name="LevelOfCompliance" size="1">
+            <option value="||SELECT CODE, Description FROM LEVELOFCOMPLIANCE Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE LEVELOFCOMPLIANCE||</li>
+        </ul>
+      </div>
+    </div>
+  </span>
+  <span>
+    <div class="deflist" > 
+      <div id="_gvtVisualObservations" class="term">||FIELDTAG VisualObservations||Visual Observations||ENDFIELDTAG||</div>
+      <div class="def highlighted">
+        <ul>
+          <li id="_gvtAffect"><strong>||FIELDTAG Affect||Affect||ENDFIELDTAG|| : </strong><select name="Affect" size="1">
+            <option value="||SELECT CODE, Description FROM AFFECT Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE AFFECT||</li>
+
+          <li id="_gvtEyeContact"><strong>||FIELDTAG EyeContact||Eye Contact||ENDFIELDTAG|| : </strong><select name="EyeContact" size="1">
+            <option value="||SELECT CODE, Description FROM EYECONTACT Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE EYECONTACT||</li>
+
+          <li id="_gvtAppearance"><strong>||FIELDTAG Appearance||Appearance||ENDFIELDTAG|| : </strong><select name="Appearance" size="1">
+            <option value="||SELECT CODE, Description FROM APPEARANCE Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE APPEARANCE||</li>
+
+          <li id="_gvtMood"><strong>||FIELDTAG Mood||Mood||ENDFIELDTAG|| : </strong><select name="Mood" size="1">
+            <option value="||SELECT CODE, Description FROM MOOD Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE MOOD||</li>
+
+          <li id="_gvtJudgement"><strong>||FIELDTAG Judgement||Judgement||ENDFIELDTAG|| : </strong><select name="Judgement" size="1">
+            <option value="||SELECT CODE, Description FROM JUDGEMENT Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE JUDGEMENT||</li>
+        </ul>
+      </div>
+    </div>
+
+  </span>
+  <span id="_gvtInformationDomains">
+    <div class="deflist">
+      <div class="term">||FIELDTAG InformationDomains||Information Domains||ENDFIELDTAG||</div>
+      <div class="def">
+        <ul>
+          <li id="_gvtChildFunctioning"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ChildFunctioning||a. Child Functioning||ENDFIELDTAG||</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="ChildFunctioning" style="width: 500px; height: 45px" id="ChildFunctioning" onkeyup="javascript: haut(this.id)" onfocus="javascript: toptext(this.id)"></textarea></li>
+          <li id="_gvtAdultFunctioning"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG AdultFunctioning||b. Adult Functioning||ENDFIELDTAG||</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="AdultFunctioning" style="width: 500px; height: 45px" id="AdultFunctioning" onkeyup="javascript: haut(this.id)" onfocus="javascript: toptext(this.id)"></textarea></li>
+          <li id="_gvtParentingPractices"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ParentingPractices||c. Parent/Caregiver Parenting Practices (exclude disciplinary practices)||ENDFIELDTAG||</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="ParentingPractices" style="width: 500px; height: 45px" id="ParentingPractices" onkeyup="javascript: haut(this.id)" onfocus="javascript: toptext(this.id)"></textarea></li>
+          <li id="_gvtParentingDiscPractices"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ParentingDiscPractices||d. Parent/Caregiver Disciplinary Practices||ENDFIELDTAG||</b><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="ParentingDiscPractices" style="width: 500px; height: 45px" id="ParentingDiscPractices" onkeyup="javascript: haut(this.id)" onfocus="javascript: toptext(this.id)"></textarea></li>
+        </ul>
+      </div>
+    </div>
+  </span>
+  <span id="_gvtWellbeingConcernsHeader">
+    <div class="deflist">
+      <div class="term">||FIELDTAG WellbeingConcernsHeader||Wellbeing Concerns||ENDFIELDTAG||</div>
+      <div class="def highlighted">
+        <ul>
+          <li id="_gvtWellbeingConcerns"><b>||FIELDTAG WellbeingConcerns||Document any child wellbeing concerns that became apparent during this visit.||ENDFIELDTAG||</b><br>
+            &nbsp;&nbsp;&nbsp;<textarea name="WellbeingConcerns" style="width: 500px; height: 45px" id="WellbeingConcerns" class="autoexpand"></textarea></li>
+        </ul>
+      </div>
+    </div>
+  </span>
+  <span id="_gvtDecisionsAndResourcesHeader">
+    <div class="deflist">
+      <div class="term">||FIELDTAG DecisionsAndResourcesHeader||Decisions and Resources||ENDFIELDTAG||</div>
+      <div class="def">
+        <ul>
+          <li><b>||FIELDTAG DecisionsAndResources||What decisions were made/actions occurred and why? What resources were identified/engaged?||ENDFIELDTAG||</b><br>
+            &nbsp;&nbsp;&nbsp;<textarea name="DecisionsAndResources" style="width: 500px; height: 45px" id="DecisionsAndResources" class="autoexpand"></textarea></li>
+        </ul>
+      </div>
+    </div>
+  </span>
+  <span id="Page2" style="display: none">
+    Page 2 of 3 - 
+    ||CLIENTNAME|| (||LOADFIELDS SELECT '(' + IDNUMBER + ')' FROM CLIENTPASSPORT WHERE CLIENTNUMBER='^^CLIENTNUMBER^^' AND CLIENTNUMBER<>'' AND DOCREVNO=' 0 ' AND IDNUMBERTYPE='Medicaid'||||LOADCURRENTALWAYS (0)||)
+
+    <span style="page-break-before: always">&nbsp;</span>
+  </span>
+  <div id="_gvtSafetyConcerns"><!--Start Of Safety Concerns Section-->
+    ||STARTDISPLAY|ALWAYS|x^^FIELDVALUE R1SafetyConcerns^^|xYes||||ENDDISPLAY||
+    <div class="term">||FIELDTAG SafetyConcerns||Safety Concerns||ENDFIELDTAG||</div>
+    <div class="def highlighted">
+      <table width="100%">
+        <tbody>
+          <tr>
+            <td align="center" width="100%"><font size="3"><b>||FIELDTAG R1SafetyConcerns||Are there any Safety Concerns in the Home||ENDFIELDTAG||: 
+              <input type="radio" name="R1SafetyConcerns" onclick="OpenSafetyTable()" value="No" /> No 
+              <input type="radio" name="R1SafetyConcerns" onclick="OpenSafetyTable()" value="Yes" /> Yes</b></font></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="SafetyConcernsTable" style="display: none">
+        <table width="100%">
+          <tbody>
+            <tr><span id="_gvtUnableToAssess">
+              <td valign="top" width="2%"><input type="checkbox" name="UnableToAssess" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG UnableToAssess||Unable to assess||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvSuspAbuseNeglectt">
+                <td valign="top" width="2%"><input type="checkbox" name="SuspAbuseNeglect" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG SuspAbuseNeglect||Suspicion of abuse or neglect||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvFamAboutToFleet">
+              <td valign="top" width="2%"><input type="checkbox" name="FamAboutToFlee" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG FamAboutToFlee||Family is about to flee||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtChildFearfulOfHHMembers">
+                <td valign="top" width="2%"><input type="checkbox" name="ChildFearfulOfHHMembers" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG ChildFearfulOfHHMembers||Child fearful of household members||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtSubstAbByPrimCGorChild">
+              <td valign="top" width="2%"><input type="checkbox" name="SubstAbByPrimCGorChild" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG SubstAbByPrimCGorChild||Current substance abuse by primary caregiver/child||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtNoUtilitiesOrFood">
+                <td valign="top" width="2%"><input type="checkbox" name="NoUtilitiesOrFood" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG NoUtilitiesOrFood||Home has no utilities or food||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtChngInHHComp">
+              <td valign="top" width="2%"><input type="checkbox" name="ChngInHHComp" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG ChngInHHComp||Change in household composition||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtHospOrDeathOfPrimCG">
+                <td valign="top" width="2%"><input type="checkbox" name="HospOrDeathOfPrimCG" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG HospOrDeathOfPrimCG||Hospitalization or death of primiary caregiver/child||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtSerInjOfPrimCG">
+              <td valign="top" width="2%"><input type="checkbox" name="SerInjOfPrimCG" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG SerInjOfPrimCG||Serious injury/illness/accident of primary caregiver/child||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtPsychCommByHHMember">
+                <td valign="top" width="2%"><input type="checkbox" name="PsychCommByHHMember" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG PsychCommByHHMember||Recent Voluntary or involuntary psychiatric commitment of household member||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtHHMemRecentVictimOfAssault">
+              <td valign="top" width="2%"><input type="checkbox" name="HHMemRecentVictimOfAssault" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG HHMemRecentVictimOfAssault||Household member recently a victim of assault or other crime||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtBirthOfChild">
+                <td valign="top" width="2%"><input type="checkbox" name="BirthOfChild" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG BirthOfChild||Birth of child||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtChildInImmedDangerOfHarm">
+              <td valign="top" width="2%"><input type="checkbox" name="ChildInImmedDangerOfHarm" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG ChildInImmedDangerOfHarm||Household environment hazards are present and place the child in immediate danger of serious harm||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtSuicideAttemptByPrimCG">
+                <td valign="top" width="2%"><input type="checkbox" name="SuicideAttemptByPrimCG" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG SuicideAttemptByPrimCG||Suicide attempt(s) by primary caregiver/child||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtFamLostHousing">
+              <td valign="top" width="2%"><input type="checkbox" name="FamLostHousing" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG FamLostHousing||Family has lost their housing||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtArrestOfPrimCG">
+                <td valign="top" width="2%"><input type="checkbox" name="ArrestOfPrimCG" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG ArrestOfPrimCG||Arrest/incarceration of primary caregiver||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtPregnancyCGChild">
+              <td valign="top" width="2%"><input type="checkbox" name="PregnancyCGChild" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG PregnancyCGChild||Pregnancy of primary caregiver/child||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtPsychSympOfCGChild">
+                <td valign="top" width="2%"><input type="checkbox" name="PsychSympOfCGChild" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG PsychSympOfCGChild||Severe psychological symptoms present and untreated of the primary caregiver/child||ENDFIELDTAG||</td>
+              </span>
+            </tr>
+            <tr><span id="_gvtCGHHMemThreatToChild">
+              <td valign="top" width="2%"><input type="checkbox" name="CGHHMemThreatToChild" value="ON" /></td>
+              <td valign="top" width="48%">||FIELDTAG CGHHMemThreatToChild||Caregiver/household member is threatening to harm the child||ENDFIELDTAG||</td>
+              </span>
+              <span id="_gvtSafetyConcernOther">
+                <td valign="top" width="2%"><input type="checkbox" name="SafetyConcernOther" value="ON" /></td>
+                <td valign="top" width="48%">||FIELDTAG SafetyConcernOther||Other||ENDFIELDTAG|| : <input type="text" size="25" name="OtherSafetyConcern"/></td>
+              </span>
+            </tr>
+            <tr>
+              <td align="center" width="100%" colspan="4"><font size="3"><b>This list is not exhaustive but should be considered a guide for issues that may impact the client's safety and potential issues that should be considered during a home visit.</b></font></td>
+            </tr>
+          </tbody>
+        </table>
+        <span id="_gvtSafetyConcernDescription">
+          <ul>
+            <li>||FIELDTAG SafetyConcernDescription||Please Describe the Safety Concern; Who is involved; and How the Concern is being Addressed:||ENDFIELDTAG||</li>
+            <li><textarea name="SafetyConcernDescription" style="width: 500px; height: 45px" id="SafetyConcernDescription" class="autoexpand"></textarea></li>
+          </ul>
+        </span> 
+      </div>
+    </div><!--End Of Safety Concerns Section-->
+    </span>    
+  <ul>
+    <span id="_gvtNextHomeVisitDateTimeSection">
+      <li><span id="_gvtNextHomeVisitDate"><b>||FIELDTAG NextHomeVisitDate||Date of Next Home Visit||ENDFIELDTAG|| : </b>
+        <input type="text" name="NextHomeVisitDate" size="8" onChange="validdate(this);FutureDate()"
+               value="||LOADFIELDS SELECT MAX(NextHomeVisitDate) FROM CaseNoteDetail WHERE (NextHomeVisitDate > getDate() OR DATEDIFF(day,NextHomeVisitDate,getDate()) = 0) AND ClientNumber='^^CLIENTNUMBER^^' And DocRevNo=' 0 '||||LOADCURRENTVALUE (0)||" class="jdatepicker"/></span>
+        <span id="gvtNextHomeVisitTime">
+          ||FIELDTAG NextHomeVisitTime||Start Time||ENDFIELDTAG|| : </strong><input type="text" name="NextHomeVisitTime" class="jtimepicker" size="5" onblur="NextHomeVisitTimeblur()"><span id="NextHomeVisitTimespan">&nbsp;</span><a href="javascript:void poptime('NextHomeVisitTime')" style="display:none"><img border=1 src="images/dropdown.png"></a>
+        <select name="NextHomeVisitAMPM" size="1" onblur="NextHomeVisitTimeblur()" style="display: none;">
+          <option value="AM">AM</option>
+          <option value="PM">PM</option></select></span></li>
+  </span>  
+</ul>   
+</div>
+
+
+<span id="PrivateNoteSection">
+  <div id="_gvtBackOfficeNotes" class="term">||FIELDTAG BackOfficeNotes||Back Office Notes||ENDFIELDTAG||</div>
+  <div class="def">
+    <div id="_gvtAdditionalCaseNote">
+      <ul>
+        ||STARTSTRIP||<li >||FIELDTAG AdditionalCaseNote||(Remains private, does not print)||ENDFIELDTAG||&nbsp;<input type="checkbox" name="PrivateComment" id="PrivateComment" value="ON" style="display:none" /></li>||ENDSTRIP||
+        <li><textarea name="AdditionalCaseNote" style="width: 500px; height: 45px" id="AdditionalCaseNote" class="autoexpand"></textarea></li>
+      </ul>
+    </div>
+  </div>
+</span>
+<div id="_gvtLifeSkillsAddressedHeader" class="term">||FIELDTAG LifeSkillsAddressedHeader||Life Skills Addressed||ENDFIELDTAG||</div>
+<div class="def highlighted">
+  <ul>
+    ||STARTSTRIP||<span id="LifeSkillsRow">
+    <li id="_gvtLifeSkillsAddressed"><strong>||FIELDTAG LifeSkillsAddressed||Check To Display||ENDFIELDTAG|| : </strong><input type="checkbox" name="LifeSkillsAddressed" onclick="CheckLifeSkills()" value="ON" /> Life Skills were addressed.</li>
+    </span>||ENDSTRIP||
+    <li id="_gvtLIFESKILL" style="display: none">||STARTSTRIP||<strong>||FIELDTAG LIFESKILL||Life Skills||ENDFIELDTAG|| : </strong>||ENDSTRIP||<span id="LifeSkillsPrint">&nbsp;</span>
+      <span id="LifeSkillsPrint2"></span>||STARTSTRIP||<select multiple="multiple" size="13" name="_LIFESKILL" id="_LIFESKILL" onChange="setList('LIFESKILL')">
+      <option value="||Select code, Description From LIFESKILL Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE _LIFESKILL^^')  and privateprovider='^^PRIVATEPROVIDER^^' Order by Description||">||CHOICETABLESQLD||</option>
+      </select><input type="text" name="LIFESKILL" id="LIFESKILL" style="display: none" value="||TYPE TEXT 200||" /><input type="text" name="LIFESKILLS" style="display: none" value="||TYPE MEMO||" />||ENDSTRIP||</li>
+    <li id="_gvtLifeSkillsComments" style="display: none"><strong>||FIELDTAG LifeSkillsComments||Comments||ENDFIELDTAG|| : </strong><textarea name="LifeSkillsComments" style="width: 500px; height: 45px" id="LifeSkillsComments" onkeyup="javascript: haut(this.id)" onfocus="javascript: toptext(this.id)"></textarea></li>
+  </ul>
+</div>
+</div> 
+
+<div class="deflist" id="_gvtAttachedFile">
+  <div class="term">||FIELDTAG BackOfficeNotes||Attached Document||ENDFIELDTAG||</div>
+  <div class="def">
+    <ul>
+      <li><strong>||FIELDTAG File||Uploaded File||ENDFIELDTAG|| : </strong><input type="file" name="file" class="textfield" size="16"></li>
+      <li id="_gvtFORMNAME"><strong>||FIELDTAG FORMNAME||Document Type||ENDFIELDTAG|| : </strong>
+        <select name="FORMNAME" size="1" onChange="SetFormNameOther()">
+          <option value="||Select Distinct Code, Description From SCANFORMTYPE, SecurityGroupsMembers Where GroupMember = '^^USERID^^' And (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE FORMNAME^^') and privateprovider='^^PRIVATEPROVIDER^^' And (CharIndex(GroupName,Cast(GroupList As VarChar(500))) &gt; 0 Or Cast(GroupList As VarChar(10)) = '' or GroupList Is Null) Order By Description||">||CHOICETABLESQLD||</option>
+        </select>||CONFIGURE SCANFORMTYPE||&nbsp;&nbsp;<input type="text" size="20" name="FormNameOther" style="display: none" id="FormNameOther">
+      </li>
+    </ul>
+  </div>
+</div>
+
+||STARTSTRIP||
+<span id="pagefootersection">
+  <p></p>
+
+  <div id="EmailSection">
+    <div id="_gvtEmailNotification" class="term">||FIELDTAG EmailNotification||Email Notification||ENDFIELDTAG||</div>
+    <div class="def">
+      <table border="0" width="100%" id="EmailTable" style="border-collapse: collapse" bordercolor="#111111" cellpadding="0" cellspacing="0">
+        <tr id="_gvtNotifySupervisor">
+          <td width="30%" align="right"><font size="2">||FIELDTAG NotifySupervisor||Notify Supervisor via Email||ENDFIELDTAG||</font></td>
+          <td width="70%">&nbsp;<input type="checkbox" name="NotifySupervisor" value="ON" style="border: 1px solid #FF0000">&nbsp;<input type="text" name="SupervisorEmail" size="40" onFocus="blur(this)" value="||USERIDSUPEMAIL||"></td>
+        </tr>
+        <tr id="_gvtNotifyCaseWorker">
+          <td width="30%" align="right"><font size="2">||FIELDTAG NotifyCaseWorker||Notify Clinician via Email||ENDFIELDTAG||</font></td>
+          <td width="70%">&nbsp;<input type="checkbox" name="NotifyCaseWorker" value="ON" style="border: 1px solid #FF0000">&nbsp;<input type="text" name="CaseWorkerEmail" size="40" onFocus="blur(this)" value="||LOADFIELDS Select Email From UserId Where UserId.UserID='^^USERID^^'||||LOADCURRENTVALUE (0)||"></td>
+        </tr>
+        <tr id="_gvtNotifyDHS" style="display: none">
+          <td width="30%" align="right"><font face="Arial" size="2">||FIELDTAG NotifyDHS||Notify DFCS via Email||ENDFIELDTAG||</font></td>
+          <td width="70%">&nbsp;<input type="checkbox" name="NotifyDHS" value="ON" style="border: 1px solid #FF0000">&nbsp;<input type="text" name="DHSEmail" size="40"></td>
+        </tr>
+        <tr id="_gvtNOTIFYOther">
+          <td width="30%" align="right"><font size="2">||FIELDTAG NOTIFYOther||Other Email Notification||ENDFIELDTAG||</font></td>
+          <td width="70%"><font face="Arial" size="2">&nbsp;<input type="checkbox" name="NOTIFYOther" value="ON" style="border: 1px solid #FF0000">&nbsp;Check 
+            here to notify</font>&nbsp;<input type="text" name="OtherMailAddress" size="50"></td>
+        </tr>
+        <tr id="_gvtEmailComments">
+          <td width="30%" align="right"><font size="2">||FIELDTAG EmailComments||Comments||ENDFIELDTAG||</font></td>
+          <td width="70%"><textarea name="EmailComments" style="width: 500px; height: 45px" id="EmailComments" class="autoexpand"></textarea></td>
+        </tr>
+
+        <tr id="_gvtNOTIFICATIONINFORMATION">
+          <td width="30%" align="right"><font size="2">||FIELDTAG NOTIFICATIONINFORMATION||Notification History||ENDFIELDTAG||</font></td>
+          <td width="70%"><textarea rows="4" name="NOTIFICATIONINFORMATION" cols="80" class="autoexpand"></textarea></td>
+        </tr>
+      </table>
+      <span id="_gvtNOTIFYOtherPDF" style="display:none" >
+        <table>
+          <tr>
+            <td width="30%" align="right"><font size="2">||FIELDTAG NOTIFYOtherPDF||Email PDF Link||ENDFIELDTAG||</font></td>
+            <td width="70%"><font size="2" face="Arial">&nbsp;<input type="checkbox" name="NOTIFYOtherPDF" id="NOTIFYOtherPDF" style="border: 1px solid #FF0000" value="ON" />&nbsp;
+              Check here to notify</font>&nbsp;<input type="text" name="CaseworkerPDFEmail" size="50" onBlur="FormatEmail(this)" /></td>
+          </tr>
+        </table>
+      </span>
+    </div>
+  </div>
+
+
+  <ul id="PrivateNoteRow" style="display: none">
+    <li id="_gvtPrivate"><strong>||FIELDTAG Private||Keep Note Private||ENDFIELDTAG|| : </strong><input type="checkbox" name="PRIVATE" value="ON" /></li>
+  </ul>
+  <ul style="display: none">
+    <li style="display: none"><input type="text" name="ContactNames" id="ContactNames" style="display: none" value="||TYPE MEMO||" /></li>
+    <li style="display: none"><input type="text" name="ContactName" id="ContactName"style="display: none" value="||TYPE MEMO||" /></li>
+    <li style="display: none"><textarea rows="5" cols="60" name="ContactInteractions"></textarea></li>
+  </ul>
+
+  <div id="ServiceFormRow" style="display: none">
+    <div id="_gvtServices" class="term">||FIELDTAG Services||Services||ENDFIELDTAG||</div>
+    <div class="def">
+      <ul>
+        <li id="_gvtUnit"><strong>||FIELDTAG Unit||Unit||ENDFIELDTAG|| : </strong><select size="1" name="Unit">
+          <option value="||SELECT DISTINCT PROVIDER.PROVIDERCODE,PROVIDER.PROVIDERNAME FROM PROVIDER WHERE SiteProvider='Yes' and PROVIDER.DOCREVNO=' 0 ' AND PROVIDERSTATUS='ACTIVE' ORDER BY PROVIDERNAME||" selected="selected">||CHOICETABLESQLD||</option>
+          </select></li>
+      </ul>
+    </div>||ENDSTRIP||
+  </div>
+
+  <div id="SupervisorSection" style="display: none">
+    <div id="_gvtSupervisorAccounting" class="term">||FIELDTAG SupervisorAccounting||Supervisor/Accounting||ENDFIELDTAG||</div>
+    <div class="def">
+      <ul>
+        <li style="display: none"><span id="SupervisorSectionInfo">&nbsp;</span></li>
+      </ul>
+      <ul style="display: none" id="accountspan">
+        <span id="autoinvoicespan"><li id="_gvtAUTOINVOICE"><strong>||FIELDTAG AUTOINVOICE||Bill/Adjust||ENDFIELDTAG|| : </strong><input type="checkbox" name="_AUTOINVOICE" id="_AUTOINVOICE" value="ON"> <span id="accountspan2">&nbsp/</span></li></span>
+        <li id="_gvtSUPREJECT"><strong>||FIELDTAG SUPREJECT||Reject||ENDFIELDTAG|| : </strong><input type="checkbox" name="_SUPREJECT" value="ON">(Check this to send this back to supervisor) </li>
+      </ul>
+      <ul>
+        <span id="Rejectspan" style="display: none">
+          <li id="_gvtReject"><strong>||FIELDTAG Reject||Reject||ENDFIELDTAG|| : </strong><input type="checkbox" name="REJECT" id="REJECT" value="ON">(Check this to send this back to clinician)</li>
+        </span>
+        <li id="_gvtSupervisorComments"><strong>||FIELDTAG SupervisorComments||Comments||ENDFIELDTAG||: </strong><textarea rows="7" cols="60" name="SupervisorComments" id="SupervisorComments"></textarea>
+          ||STARTSTRIP||<img height="22" width="23" align="top" onclick="ExpandText('SupervisorComments')" style="cursor: pointer" tppabs="images/ExpandButton.jpg" alt="" src="images/ExpandButton.jpg" />||ENDSTRIP||</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="_gvtInteractions" class="term" style="display: none">||FIELDTAG Interactions||Interactions||ENDFIELDTAG||</div>
+  <div class="def" style="display: none"><span id="ContactNameList">&nbsp;</span></div>
+
+
+
+  <span id="billingoptspan5">
+    <div id="NoteStatusSection">
+      <div class="term">||FIELDTAG ||Case Note Status||ENDFIELDTAG||</div>
+      <div class="def highlighted">
+        <ul>
+          <li id="_gvtClinicianApproved"><strong>||FIELDTAG ClinicianApproved||Clinician Approved||ENDFIELDTAG|| : </strong><b>&nbsp;||FIELDVALUE CWLockedBy||&nbsp;&nbsp;||FIELDVALUE CWLockedDate||&nbsp;||FIELDVALUE CWLockedTime||</b></li>
+          <li id="_gvtSupervisorApproved"><strong>||FIELDTAG SupervisorApproved||Supervisor Approved||ENDFIELDTAG|| : </strong><b>&nbsp;||FIELDVALUE SUPLockedBy||&nbsp;&nbsp;||FIELDVALUE SupLockedDate||</b></li>
+          <li id="_gvtRejected"><strong>||FIELDTAG Rejected||Rejected||ENDFIELDTAG|| : </strong><b>&nbsp;||FIELDVALUE CWRejectDate||&nbsp;||FIELDVALUE CWRejectTime||</b></li>
+          <li id="_gvtInvoiced"><strong>||FIELDTAG Invoiced||Invoiced||ENDFIELDTAG|| : </strong><b>||LOADFIELDS Select Inv_Date From INVOICE Where Cust_PO = '^^FIELDVALUE DOCSERNO^^' And Cust_PO<>''||||LOADCURRENTALWAYS (0)||</b></li>
+            </ul>
+          </div>
+      </div>
+      </span>
+
+    ||STARTSTRIP||
+    <div align="center" id="_gvtSignature"><input type="button" name="_SUBBTTN1" id="_SUBBTTN1" onclick="submititstayopen()" value="Quick Save" /> <input type="button" name="_SUBBTTN" id="_SUBBTTN" onclick="submitit()" value="Save/Close" /> <input type="button" name="_SUBBTTN2" id="_SUBBTTN2" onclick="closeit()" value="Close/No Save" /> <span id="_gvtScheduleButton"><input type="button" name="_B3" id="_B3" onclick="scheduleit()" value="Schedule" /></span> <span id="DeleteMsg">&nbsp;</span><input type="button" name="_B2" id="_B2" onclick="deleteit()" value="Delete" style="display:none" /> <span style="display: none"><input type="button" name="_B4" id="_B4" onclick="unlockit()" value="Back out Billing and Unlock" style="display: none" /></span><br />
+      <font size="1">||Signatures||<br />
+      </font>
+      <span id="LockVerbage"><b><font color="#ff0000" size="3">&nbsp;||FIELDTAG Signature||To Lock This Case Note, Enter Your Password Here :||ENDFIELDTAG||</font></b></span><br />
+      <input type="password" name="SIGNATURE" id="SIGNATURE" style="border-width: 2px; border-color: black" /></div>
+    ||ENDSTRIP||</span>
+
+  <span id="Page3" style="display: none">
+    Page 3 of 3 - 
+    ||CLIENTNAME|| ||LOADFIELDS SELECT '(' + IDNUMBER + ')' FROM CLIENTPASSPORT WHERE CLIENTNUMBER='^^CLIENTNUMBER^^' AND CLIENTNUMBER<>'' AND DOCREVNO=' 0 ' AND IDNUMBERTYPE='Medicaid'||||LOADCURRENTALWAYS (0)||
+  </span>
+    <span id="MileageForPrintSection" style="display: none">
+      <span style="page-break-before: always">&nbsp;</span>
+      <div id="_gvtMileageLogForPrint" class="term">||FIELDTAG MileageLogForPrint||Mileage Log||ENDFIELDTAG||</div>
+      <div class="def">
+        <div id="MileageForPrint"></div>
+      </div>
+    </span>
+
+    <span id="CaseWorkerSignature" style="display: none">
+      <table border="0" width="100%">
+        <tr>
+          <td width="100%" align="left">||SIGNATUREIMAGE ^^SP CWSIGNED^^||</td>
+        </tr>
+        <tr>
+          <td width="100%" align="left"><h3>Electronically Signed</h3></td>
+        </tr>
+        <tr>
+          <td width="100%" align="left"><h3>||SP CWCredentials||</h3></td>
+        </tr>
+        <tr>
+          <td width="100%"><h3>On : ||SP CWLockedDate|| ||SP CWLockedTime||</h3></td>
+        </tr>
+      </table>
+    </span>
+
+    <span id="SupervisorSignature" style="display: none">
+      <table border="0" width="100%">
+        <tr>
+          <td width="100%" align="left">||SIGNATUREIMAGE ^^SP SUPSIGNED^^||</td>
+        </tr>
+        <tr>
+          <td width="100%" align="left"><h3>Electronically Signed</h3></td>
+        </tr>
+        <tr>
+          <td width="100%" align="left"><h3>||SP SUPCredentials||</h3></td>
+        </tr>
+        <tr>
+          <td width="100%"><h3>On : ||SP SUPLockedDate|| ||SP SUPLockedTime||</h3></td>
+        </tr>
+      </table>
+    </span>
+    <!--ENDOFPRINT-->
+    </form>
+    <div id="savewaitspan" align="center" style="display: none"><img src="images/PleaseWait.gif"></div>
+    <span id="extpulldataform">
+      <form action="genfunc.exe" target="fvalidate" name="pulldataform" method="POST">
+        <input type="hidden" name="FUNCTION" value="PULLDATA">
+        <input type="hidden" name="SQL" value="">
+        <input type="hidden" name="IDENTIFIER" value="">
+        <input type="hidden" name="ERROR" value="SUPRESS">
+        <input type="hidden" name="POPULATEFUNCTION" value="">
+        <input type="hidden" name="JAVASCRIPT" value="MULTIARRAY">
+        <input type="hidden" name="SESSIONID" value="S||SESSIONID||">
+      </form></span>
+
+    </body>
+  </html>

@@ -751,7 +751,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldclient_needs qclient_needs">
-    <div class="col12 fldclient_needs qclient_needs"><span class="qclient_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_needs required-field-label"><label class="label-top">Client Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qclient_needs"><select size="15" name="client_needs" onchange="updateReportFields(['ere_client_needs']);checkhideall()" multiple>
+    <div class="col12 fldclient_needs qclient_needs"><span class="qclient_needs required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_needs required-field-label"><label class="label-top">Client Needs<br>(Hold down Ctrl to select multiple)</label></span><span class="qclient_needs"><select size="15" name="client_needs" id="ere_client_needs" onchange="updateReportFields(['ere_client_needs']);checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_client_needs] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE client_needs^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ere_client_needs||
    <!-- FIELDOVERRIDE(client_needs,10,200) -->

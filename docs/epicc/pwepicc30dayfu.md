@@ -33,3 +33,21 @@ quick_submit_enabled: false
 last_updated: 2025-08-04
 status: active
 ---
+
+# EPICC Thirty-Day Follow-Up
+
+## YAML Notes
+
+## Operational Context
+
+## Field Matrix
+
+## Embedded Summation Blocks
+
+## JavaScript Notes
+
+## Cross References
+
+## Changelog
+
+- **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_THIRTY_DAY` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.

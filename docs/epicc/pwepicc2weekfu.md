@@ -50,4 +50,5 @@ status: active
 
 ## Changelog
 
+- **2025-08-15**: Adds conditional question `why_not_meet_prog_eligibility_two_week` when program participation option 002 Ineligible, Does Not Meet Project Criteria is selected. Adds radio button option to  `mat_prescribed_physician_appt_two_week`, Unable To Contact Client Or Treatment Agency. Adds presenting_notes_two_week to the bottom of the form.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_TWO_WEEK` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.

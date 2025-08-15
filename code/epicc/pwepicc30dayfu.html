@@ -39,6 +39,7 @@ function startup() {
     // For client_attend_intake_appt_thirty_day and intake_appt_date_thirty_day we still want to keep the data from these columns. They have been removed from the form due to the questions being added to the PWSUBroadTreatmentAgency Summation. Do not remove data from the table.
     // setrequire('client_attend_intake_appt_thirty_day');
     // setrequire('intake_appt_date_thirty_day');
+    setrequire('intake_conducted_appt_date_thirty_day');
     setrequire('rc_only_client_attend_first_appt_coach_thirty_day');
     setrequire('mat_prescribed_physician_thirty_day');
     setrequire('what_mat_physician_appt_thirty_day');
@@ -48,6 +49,7 @@ function startup() {
     setrequire('client_status_thirty_day');
     setrequire('date_transferred_reengagement_specialist_thirty_day');
     setrequire('preg_post_part_thirty_day');
+    setrequire('why_not_meet_prog_eligibility_thirty_day');
 
 	checkhideall();
 
@@ -61,14 +63,15 @@ function checkhideall() {
    checkhide(f.treatment_path_thirty_day,"rc_only_last_date_communication_thirty_day","Recovery Coach Only");
 //    checkhide(f.treatment_path_thirty_day,"client_attend_intake_appt_thirty_day","MAT,Non-MAT Treatment");
 //    checkhide(f.treatment_path_thirty_day,"intake_appt_date_thirty_day","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_thirty_day,"mat_prescribed_physician_thirty_day","MAT,Non-MAT Treatment");
+   checkhide(f.treatment_path_thirty_day,"mat_prescribed_physician_thirty_day","MAT");
    checkhide(f.treatment_path_thirty_day,"intake_conducted_appt_date_thirty_day","MAT,Non-MAT Treatment");
    checkhide(f.mat_prescribed_physician_thirty_day,"what_mat_physician_appt_thirty_day","Yes");
    checkhide(f.program_participation_thirty_day,"preg_post_part_thirty_day","015");
    checkhide(f.program_participation_thirty_day,"if_transfer_what_region_thirty_day","010");
    checkhide(f.program_participation_thirty_day,"if_transfer_contact_transfer_region_success_thirty_day","010");
    checkhide(f.program_participation_thirty_day,"client_status_thirty_day","016,010");
-   checkhide(f.client_status_thirty_day,"date_transferred_reengagement_specialist_thirty_day","Transfer to Re-Engagement Specialist");
+   checkhide(f.client_status_thirty_day,"date_transferred_reengagement_specialist_thirty_day","Transfer To Re-Engagement Specialist");
+   checkhide(f.program_participation_thirty_day,"why_not_meet_prog_eligibility_thirty_day","002");
 
 }
 
@@ -308,6 +311,8 @@ function validateform(scope='all') {
   if (!hiddenfield('if_transfer_contact_transfer_region_success_thirty_day') && gvtfieldvalue('if_transfer_contact_transfer_region_success_thirty_day')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_thirty_day");}
   if (!hiddenfield('client_status_thirty_day') && gvtfieldvalue('client_status_thirty_day')=='') {edesc=edesc+`Must specify a value for Status\n`; seterror("client_status_thirty_day");}
   if (!hiddenfield('date_transferred_reengagement_specialist_thirty_day') && gvtfieldvalue('date_transferred_reengagement_specialist_thirty_day')=='') {edesc=edesc+`Must specify a value for Date of Transfer to Re-Engagement Specialist\n`; seterror("date_transferred_reengagement_specialist_thirty_day");}
+  if (!hiddenfield('why_not_meet_prog_eligibility_thirty_day') && gvtfieldvalue('why_not_meet_prog_eligibility_thirty_day')=='') {edesc=edesc+`Must specify a value for Why does the client not meet program eligibility?\n`; seterror("why_not_meet_prog_eligibility_thirty_day");}
+  if (!hiddenfield('intake_conducted_appt_date_thirty_day') && gvtfieldvalue('intake_conducted_appt_date_thirty_day')=='') {edesc=edesc+`Must specify a value for Date of Intake Conducted\n`; seterror("intake_conducted_appt_date_thirty_day");}
 
     return edesc;
 }
@@ -580,7 +585,7 @@ function updatesignatures(){
   </div> -->
  <div class="entire">
     <div class="col12 fldintake_conducted_appt_date_thirty_day qintake_conducted_appt_date_thirty_day">
-    <div class="col12 fldintake_conducted_appt_date_thirty_day qintake_conducted_appt_date_thirty_day"><span class="qintake_conducted_appt_date_thirty_day"><label class="label-top">||FIELDTAG intake_conducted_appt_date_thirty_day||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_thirty_day"><input type="radio" name="intake_conducted_appt_date_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldintake_conducted_appt_date_thirty_day qintake_conducted_appt_date_thirty_day"><span class="qintake_conducted_appt_date_thirty_day">||PWRequiredFieldRequiredText||</span><span class="qintake_conducted_appt_date_thirty_day required-field-label"><label class="label-top">||FIELDTAG intake_conducted_appt_date_thirty_day||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_thirty_day"><input type="radio" name="intake_conducted_appt_date_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -600,7 +605,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldmat_prescribed_physician_thirty_day qmat_prescribed_physician_thirty_day">
-    <div class="col12 fldmat_prescribed_physician_thirty_day qmat_prescribed_physician_thirty_day"><span class="qmat_prescribed_physician_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_thirty_day required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_thirty_day||Was MAT Prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_thirty_day"><input type="radio" name="mat_prescribed_physician_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldmat_prescribed_physician_thirty_day qmat_prescribed_physician_thirty_day"><span class="qmat_prescribed_physician_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_thirty_day required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_thirty_day||Was MAT Prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_thirty_day"><input type="radio" name="mat_prescribed_physician_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_thirty_day" value="Unable To Contact Client Or Treatment Agency" onclick="checkhideall()" >Unable To Contact Client Or Treatment Agency&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -639,14 +644,19 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day">
-    <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day"><span class="qclient_status_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_thirty_day required-field-label"><label class="label-top">||FIELDTAG client_status_thirty_day||Status||ENDFIELDTAG||</label></span><span class="qclient_status_thirty_day"><input type="radio" name="client_status_thirty_day" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Services Being Terminated" onclick="checkhideall()" >Services Being Terminated&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Transfer to Re-Engagement Specialist" onclick="checkhideall()" >Transfer to Re-Engagement Specialist&nbsp;&nbsp;
+    <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day"><span class="qclient_status_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_thirty_day required-field-label"><label class="label-top">||FIELDTAG client_status_thirty_day||Status||ENDFIELDTAG||</label></span><span class="qclient_status_thirty_day"><input type="radio" name="client_status_thirty_day" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Services Being Terminated" onclick="checkhideall()" >Services Being Terminated&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Transfer To Re-Engagement Specialist" onclick="checkhideall()" >Transfer To Re-Engagement Specialist&nbsp;&nbsp;
 <!-- FIELDOVERRIDE(client_status_thirty_day,10,36) -->
 </span></div>
      </div>
   </div>
+     <div class="entire">
+    <div class="col12 fldwhy_not_meet_prog_eligibility_thirty_day qwhy_not_meet_prog_eligibility_thirty_day">
+    <div class="col12 fldwhy_not_meet_prog_eligibility_thirty_day qwhy_not_meet_prog_eligibility_thirty_day"><span class="qwhy_not_meet_prog_eligibility_thirty_day"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_thirty_day||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_thirty_day"><input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day">
-    <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day"><span class="qdate_transferred_reengagement_specialist_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_thirty_day required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_thirty_day||Date of Transfer to Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_thirty_day"><input type="text" name="date_transferred_reengagement_specialist_thirty_day" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day"><span class="qdate_transferred_reengagement_specialist_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_thirty_day required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_thirty_day||Date of Transfer To Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_thirty_day"><input type="text" name="date_transferred_reengagement_specialist_thirty_day" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -669,6 +679,14 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+  </div>
+   <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpresenting_notes_thirtyd qpresenting_notes_thirtyd">
+    <div class="col12 fldpresenting_notes_thirtyd qpresenting_notes_thirtyd"><span class="qpresenting_notes_thirtyd"><label class="label-top">||FIELDTAG presenting_notes_thirtyd||Presenting Notes||ENDFIELDTAG||</label></span><span class="qpresenting_notes_thirtyd"><textarea name="presenting_notes_thirtyd" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
 
 </div>

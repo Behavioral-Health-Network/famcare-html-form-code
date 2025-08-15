@@ -50,4 +50,5 @@ status: active
 
 ## Changelog
 
+- **2025-08-15**: PWEPICC3MONTHFU: Adds `why_not_meet_prog_eligibility_three_month` as a conditional question when program participation option 002 Ineligible, Does Not Meet Program Criteria is selected. Makes `why_not_meet_prog_eligibility_three_month` and `intake_conducted_appt_date_three_month` required questions. Adds `presenting_notes_threem` at the bottom of the form.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_THREE_MONTH` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.

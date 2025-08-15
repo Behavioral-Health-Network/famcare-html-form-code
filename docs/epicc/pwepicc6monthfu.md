@@ -50,5 +50,6 @@ status: active
 
 ## Changelog
 
+- **2025-08-15**: Adds radio button option for mat_prescribed_physician_appt_six_month, Unable To Contact Client Or Treatment Agency.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_SIX_MONTH` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.
 - **2025-08-12**: Restored 'Not Engaged' as an active program participation value after consulting with Carla.  

@@ -49,3 +49,5 @@ status: active
 ## Cross References
 
 ## Changelog
+
+- **2025-08-15**: Removes client_on_outreach_list. Question no longer needed. Makes `ems_fire_district_place_referral_in_transit`, `emergency_response_call`, and `suboxone_ems` conditional upon 073 and 015.Adds open text field for `other_ems_fire_district`. It is a conditional questions when Other EMS/Fire District is selected for Which EMS/Fire District?

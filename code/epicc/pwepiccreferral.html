@@ -40,12 +40,13 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('epicc_referring_agency');
     setrequire('community_referral_source');
     setrequire('specify_other_referring_agency');
-    setrequire('client_on_outreach_list');
+    // Removed on 08/07/2025 based on Jennifer saying this question is no longer needed
+    // setrequire('client_on_outreach_list');
     setrequire('ems_fire_district_place_referral_in_transit');
     setrequire('client_age_14_17');
     setrequire('ems_involved_ref');
     setrequire('ems_fire_district');
-    setrequire('leo_involved_referral');
+    // setrequire('leo_involved_referral');
     setrequire('epicc_program_participation_referral');
     setrequire('housing_status_referral');
     // Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly.
@@ -54,6 +55,7 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('who_administered_suboxone');
     setrequire('milligrams_suboxone');
     setrequire('ems_transport_to_hospital');
+    setrequire('other_ems_fire_district');
   
 
 	checkhideall();
@@ -69,9 +71,9 @@ function checkhideall() {
    checkhide(f.community_referral_source,"specify_other_referring_agency","020");
    checkhide(f.community_referral_source,"shelter","030");
    checkhide(f.ems_involved_ref,"ems_fire_district","Yes");
-   checkhide(f.epicc_referring_agency,"ems_fire_district_place_referral_in_transit","073");
-   checkhide(f.epicc_referring_agency,"emergency_response_call","073");
-   checkhide(f.epicc_referring_agency,"suboxone_ems","073");
+   checkhide(f.epicc_referring_agency,"ems_fire_district_place_referral_in_transit","015,073");
+   checkhide(f.epicc_referring_agency,"emergency_response_call","015,073");
+   checkhide(f.epicc_referring_agency,"suboxone_ems","015,073");
    checkhide(f.suboxone_ems,'why_not_suboxone_ems','No');
    checkhide(f.suboxone_ems,"who_administered_suboxone","Yes");
    checkhide(f.suboxone_ems,"milligrams_suboxone","Yes");
@@ -79,6 +81,7 @@ function checkhideall() {
    checkhide(f.client_age_14_17,"parent_caregiver_present_ref_or_notified","Yes");
    checkhide(f.epicc_program_participation_referral,"ineligible_reason","002");
    checkhide(f.client_enrolled_su_before,"list_all_ada","Yes");
+   checkhide(f.ems_fire_district,"other_ems_fire_district","019");
 
 }
 
@@ -313,11 +316,11 @@ function validateform(scope='all') {
   if (!hiddenfield('epicc_referring_agency') && gvtfieldvalue('epicc_referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Agency\n`; seterror("epicc_referring_agency");}
   if (!hiddenfield('community_referral_source') && gvtfieldvalue('community_referral_source')=='') {edesc=edesc+`Must specify a value for Select Community Referral Source\n`; seterror("community_referral_source");}
   if (!hiddenfield('specify_other_referring_agency') && gvtfieldvalue('specify_other_referring_agency')=='') {edesc=edesc+`Must specify a value for If Other, Specify Agency\n`; seterror("specify_other_referring_agency");}
-  if (!hiddenfield('client_on_outreach_list') && gvtfieldvalue('client_on_outreach_list')=='') {edesc=edesc+`Must specify a value for Is client on the outreach list?\n`; seterror("client_on_outreach_list");}
+  // if (!hiddenfield('client_on_outreach_list') && gvtfieldvalue('client_on_outreach_list')=='') {edesc=edesc+`Must specify a value for Is client on the outreach list?\n`; seterror("client_on_outreach_list");}
   if (!hiddenfield('ems_fire_district_place_referral_in_transit') && gvtfieldvalue('ems_fire_district_place_referral_in_transit')=='') {edesc=edesc+`Must specify a value for Did EMS/Fire District place referral while in transit? \n`; seterror("ems_fire_district_place_referral_in_transit");}
   if (!hiddenfield('client_age_14_17') && gvtfieldvalue('client_age_14_17')=='') {edesc=edesc+`Must specify a value for Is client age 14-17?\n`; seterror("client_age_14_17");}
   if (!hiddenfield('ems_involved_ref') && gvtfieldvalue('ems_involved_ref')=='') {edesc=edesc+`Must specify a value for Was EMS involved with this referral?\n`; seterror("ems_involved_ref");}
-  if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
+  // if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
   if (!hiddenfield('epicc_program_participation_referral') && gvtfieldvalue('epicc_program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("epicc_program_participation_referral");}
   // Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly.
   if (!hiddenfield('suboxone_ems') && gvtfieldvalue('suboxone_ems')=='') {edesc=edesc+`Must specify a value for Suboxone administered by EMS?\n`; seterror("suboxone_ems");}
@@ -326,6 +329,7 @@ function validateform(scope='all') {
   if (!hiddenfield('milligrams_suboxone') && gvtfieldvalue('milligrams_suboxone')=='') {edesc=edesc+`Must specify a value for Milligrams of Suboxone?\n`; seterror("milligrams_suboxone");}
   if (!hiddenfield('ems_transport_to_hospital') && gvtfieldvalue('ems_transport_to_hospital')=='') {edesc=edesc+`Must specify a value for What hospital are they being transported to?\n`; seterror("ems_transport_to_hospital");}
   if (!hiddenfield('ems_fire_district') && gvtfieldvalue('ems_fire_district')=='') {edesc=edesc+`Must specify a value for EMS/Fire District\n`; seterror("ems_fire_district");}
+  if (!hiddenfield('other_ems_fire_district') && gvtfieldvalue('other_ems_fire_district')=='') {edesc=edesc+`Must specify a value for Other EMS/Fire District\n`; seterror("other_ems_fire_district");}
     return edesc;
 }
 
@@ -621,14 +625,15 @@ function updatesignatures(){
     <div class="col4 fldshelter qshelter"><span class="qshelter"><label class="label-top">||FIELDTAG shelter||Shelter||ENDFIELDTAG||</label></span><span class="qshelter"><input type="text" name="shelter" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
-   <div class="entire">
+  <!-- Removed on 8/7/25 based on Jennifer saying this question is no longer needed -->
+   <!-- <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
    <div class="entire">
     <div class="col4 qclient_on_outreach_list">
     <div class="col4 fldclient_on_outreach_list qclient_on_outreach_list"><span class="qclient_on_outreach_list required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_on_outreach_list required-field-label"><label class="label-top">||FIELDTAG client_on_outreach_list||Is client on the outreach list?||ENDFIELDTAG||</label></span><span class="qclient_on_outreach_list"><input type="radio" name="client_on_outreach_list" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_on_outreach_list" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-  </div>
+  </div> -->
    <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
@@ -657,14 +662,14 @@ function updatesignatures(){
   <div class="entire">
 <div class="col12 term">Law Enforcement/Police Custody</div>
 </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col4 qleo_involved_referral">
     <div class="col4 fldleo_involved_referral qleo_involved_referral"><span class="qleo_involved_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qleo_involved_referral required-field-label"><label class="label-top">||FIELDTAG leo_involved_referral||Was law enforcement involved with this referral? ||ENDFIELDTAG||</label></span><span class="qleo_involved_referral"><input type="radio" name="leo_involved_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="leo_involved_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col4 qin_police_custody">
     <div class="col4 fldin_police_custody qin_police_custody"><span class="qin_police_custody"><label class="label-top">||FIELDTAG in_police_custody||Is client in police custody? ||ENDFIELDTAG||</label></span><span class="qin_police_custody"><input type="radio" name="in_police_custody" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="in_police_custody" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -697,6 +702,12 @@ function updatesignatures(){
      </div>
     </div>
  <div class="entire">
+    <div class="col4 qother_ems_fire_district">
+    <div class="col4 fldother_ems_fire_district qother_ems_fire_district"><span class="qother_ems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qother_ems_fire_district required-field-label"><label class="label-top">||FIELDTAG other_ems_fire_district||Other EMS/Fire District||ENDFIELDTAG||</label></span><span class="qother_ems_fire_district"><input type="text" name="other_ems_fire_district" size="20" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>    
+ <div class="entire">
     <div class="col6 qems_fire_district_place_referral_in_transit">
     <div class="col6 fldems_fire_district_place_referral_in_transit qems_fire_district_place_referral_in_transit"><span class="qems_fire_district_place_referral_in_transit required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district_place_referral_in_transit required-field-label"><label class="label-top">||FIELDTAG ems_fire_district_place_referral_in_transit||Did EMS/Fire District place referral while in transit? ||ENDFIELDTAG||</label></span><span class="qems_fire_district_place_referral_in_transit"><input type="radio" name="ems_fire_district_place_referral_in_transit" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_fire_district_place_referral_in_transit" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
@@ -714,7 +725,7 @@ function updatesignatures(){
   </div>
    <div class="entire">
     <div class="col6 qsuboxone_ems">
-    <div class="col6 fldsuboxone_ems qsuboxone_ems"><span class="qsuboxone_ems required-label">||PWRequiredFieldRequiredText||</span><span class="qsuboxone_ems required-field-label"><label class="label-top">||FIELDTAG suboxone_ems||Was suboxone administered by EMS?||ENDFIELDTAG||</label></span><span class="qsuboxone_ems"><input type="radio" name="suboxone_ems" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="suboxone_ems" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 fldsuboxone_ems qsuboxone_ems"><span class="qsuboxone_ems required-label">||PWRequiredFieldRequiredText||</span><span class="qsuboxone_ems required-field-label"><label class="label-top">||FIELDTAG suboxone_ems||Was suboxone administered by EMS?||ENDFIELDTAG||</label></span><span class="qsuboxone_ems"><input type="radio" name="suboxone_ems" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="suboxone_ems" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="suboxone_ems" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
      <div class="entire">
@@ -724,10 +735,11 @@ function updatesignatures(){
     <div class="col6 fldwhy_not_suboxone_ems qwhy_not_suboxone_ems"><span class="qwhy_not_suboxone_ems"><label class="label-top">||FIELDTAG why_not_suboxone_ems||Why was suboxone not administered?||ENDFIELDTAG||</label></span><span class="qwhy_not_suboxone_ems"><select size="1"  name="why_not_suboxone_ems" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="EMS District Does Not Carry Suboxone">EMS District Does Not Carry Suboxone</option>
-<option value="COWS Score Too Low">COWS Score Too Low</option>
-<option value="Person Not In Withdrawl, No COWS Score Taken">Person Not In Withdrawl, No COWS Score Taken</option>
+<option value="Already Received Suboxone">Already Received Suboxone</option>
+<option value="COWS Score Too Low/Did Not Meet Withdrawal Scale">COWS Score Too Low Or Did Not Meet Withdrawal Scale</option>
+<option value="No Overdose/Not In Withdrawal">No Overdose Or Not In Withdrawal</option>
 <option value="Person Took Methadone Within 48 Hours">Person Took Methadone Within 48 Hours</option>
-<option value="Narcan Was Used; Suboxone Not Appropriate">Narcan Was Used; Suboxone Not Appropriate</option>
+<option value="Narcan Was Used; Suboxone Not Appropriate">Narcan Was Used Or Suboxone Not Appropriate</option>
 <option value="Person Declined">Person Declined</option>
 <option value="Short Transport Time">Short Transport Time</option>
 <option value="Other">Other</option>

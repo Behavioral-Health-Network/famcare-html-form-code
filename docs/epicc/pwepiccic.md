@@ -111,18 +111,19 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 ## Changelog
 
-- **2025-08-01:** Updates `epicc_program_participation` code '011' to description 'Services Transferred To ERE' to update the program name from 'LINCS IO'.
-- **2025-07-30:** Refactors 0206 pivot fields and deprecates Notes column. Commentary relocated here.
-- **2025-07-18:** Adds Southeast region to `if_transfer_what_region_ic` LOV.
-- **2025-02-28:** Updates `epicc_program_participation` master table to remove 'Enrolled With EPICC' and replace it with 'Eligible For Services' after discussion with EPICC leadership team. The intention was to help clarify the distinction between enrollment with EPICC and enrollment with a treatment agency.
-- **2025-02-08:** Updates headers and instructional text for the summations. Moved Housing Status summation to above the Payor Source summation to ensure consistency in layout across all program forms.
-- **2024-12-31:** Adds 'Unknown' value to pregnancy field response options because Recovery Coaches may not know the answer to this question.
-- **2024-12-02:** Changes `program_participation_*` fields to use a master table `epicc_program_participation`.
-- **2024-11-30:** `ic_successful` removed from the form. The program participation field handles this logic.
-- **2024-11-19:** Converts `epicc_opioids_of_use` to use a master table instead of using an independent checkbox field. It needs a conditional question to specify 'Other' opioids if that option is selected.
-- **2024-11-19:** Adds 'Not Appliable' option to `consent_cric_referral_ic` to allow for instances where the client is already covered by insurance. We need to distinish 'NA' values from 'No' values to ensure accurate reporting.
-- **2024-11-19:** Removes Recovery Coach summation. The Program Worker field on PROVIDERPLACEMENT is to be used in its place.
-- **2024-11-18:** Renames independent checkboxes under 0206 for audit clarity.
-- **2024-10-16:** Adds pregnancy question. It had recently been added to the form in ETO, and the decision was reached to leave it on the form.
-- **2024-10-15:** Removes `coach_ic` for Recovery Coach performing Initial Contact and adds a summation instead.
-- **2024-10-15:** Removes `agency_ic` for agency of Recovery Coach and adds a summation instead.
+- **2025-08-12**: Disables 'Already Enrolled In SUD Services' program participation value due to ongoing concerns on the part of the EPICC leadership that Recovery Coaches were misusing this value and would likely continue to do so despite retraining efforts.
+- **2025-08-01**: Updates `epicc_program_participation` code '011' to description 'Services Transferred To ERE' to update the program name from 'LINCS IO'.
+- **2025-07-30**: Refactors 0206 pivot fields and deprecates Notes column. Commentary relocated here.
+- **2025-07-18**: Adds Southeast region to `if_transfer_what_region_ic` LOV.
+- **2025-02-28**: Updates `epicc_program_participation` master table to remove 'Enrolled With EPICC' and replace it with 'Eligible For Services' after discussion with EPICC leadership team. The intention was to help clarify the distinction between enrollment with EPICC and enrollment with a treatment agency.
+- **2025-02-08**: Updates headers and instructional text for the summations. Moved Housing Status summation to above the Payor Source summation to ensure consistency in layout across all program forms.
+- **2024-12-31**: Adds 'Unknown' value to pregnancy field response options because Recovery Coaches may not know the answer to this question.
+- **2024-12-02**: Changes `program_participation_*` fields to use a master table `epicc_program_participation`.
+- **2024-11-30**: `ic_successful` removed from the form. The program participation field handles this logic.
+- **2024-11-19**: Converts `epicc_opioids_of_use` to use a master table instead of using an independent checkbox field. It needs a conditional question to specify 'Other' opioids if that option is selected.
+- **2024-11-19**: Adds 'Not Appliable' option to `consent_cric_referral_ic` to allow for instances where the client is already covered by insurance. We need to distinish 'NA' values from 'No' values to ensure accurate reporting.
+- **2024-11-19**: Removes Recovery Coach summation. The Program Worker field on PROVIDERPLACEMENT is to be used in its place.
+- **2024-11-18**: Renames independent checkboxes under 0206 for audit clarity.
+- **2024-10-16**: Adds pregnancy question. It had recently been added to the form in ETO, and the decision was reached to leave it on the form.
+- **2024-10-15**: Removes `coach_ic` for Recovery Coach performing Initial Contact and adds a summation instead.
+- **2024-10-15**: Removes `agency_ic` for agency of Recovery Coach and adds a summation instead.

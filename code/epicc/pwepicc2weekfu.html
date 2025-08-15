@@ -50,6 +50,7 @@ function startup() {
     setrequire('client_status_two_week');
     setrequire('date_transferred_reengagement_specialist_two_week');
     setrequire('preg_post_part_two_week');
+    setrequire('why_not_meet_prog_eligibility_two_week');
 
 	checkhideall();
 
@@ -69,9 +70,10 @@ function checkhideall() {
    checkhide(f.mat_prescribed_physician_appt_two_week,"what_mat_physician_appt_two_week","Yes");
    checkhide(f.program_participation_two_week,"if_transfer_what_region_two_week","010");
    checkhide(f.program_participation_two_week,"if_transfer_contact_transfer_region_success_two_week","010");
-   checkhide(f.program_participation_two_week,"client_status_two_week","016,010");
+   checkhide(f.program_participation_two_week,"client_status_two_week","016");
    checkhide(f.client_status_two_week,"date_transferred_reengagement_specialist_two_week","Transfer to Re-Engagement Specialist");
    checkhide(f.program_participation_two_week,"preg_post_part_two_week","015");
+   checkhide(f.program_participation_two_week,"why_not_meet_prog_eligibility_two_week","002");
 
 }
 
@@ -315,6 +317,7 @@ function validateform(scope='all') {
   if (!hiddenfield('if_transfer_contact_transfer_region_success_two_week') && gvtfieldvalue('if_transfer_contact_transfer_region_success_two_week')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_two_week");}
   if (!hiddenfield('client_status_two_week') && gvtfieldvalue('client_status_two_week')=='') {edesc=edesc+`Must specify a value for Status\n`; seterror("client_status_two_week");}
   if (!hiddenfield('date_transferred_reengagement_specialist_two_week') && gvtfieldvalue('date_transferred_reengagement_specialist_two_week')=='') {edesc=edesc+`Must specify a value for Date of Transfer to Re-Engagement Specialist\n`; seterror("date_transferred_reengagement_specialist_two_week");}
+  if (!hiddenfield('why_not_meet_prog_eligibility_two_week') && gvtfieldvalue('why_not_meet_prog_eligibility_two_week')=='') {edesc=edesc+`Must specify a value for Why does the client not meet program eligibility?\n`; seterror("why_not_meet_prog_eligibility_two_week");}
 
     return edesc;
 }
@@ -603,7 +606,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldmat_prescribed_physician_appt_two_week qmat_prescribed_physician_appt_two_week">
-    <div class="col12 fldmat_prescribed_physician_appt_two_week qmat_prescribed_physician_appt_two_week"><span class="qmat_prescribed_physician_appt_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_two_week required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_two_week||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_two_week"><input type="radio" name="mat_prescribed_physician_appt_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldmat_prescribed_physician_appt_two_week qmat_prescribed_physician_appt_two_week"><span class="qmat_prescribed_physician_appt_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_two_week required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_two_week||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_two_week"><input type="radio" name="mat_prescribed_physician_appt_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_two_week" value="Unable To Contact Client Or Treatment Agency" onclick="checkhideall()" >Unable To Contact Client Or Treatment Agency&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -637,9 +640,14 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldclient_status_two_week qclient_status_two_week">
-    <div class="col12 fldclient_status_two_week qclient_status_two_week"><span class="qclient_status_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_two_week required-field-label"><label class="label-top">||FIELDTAG client_status_two_week||Status||ENDFIELDTAG||</label></span><span class="qclient_status_two_week"><input type="radio" name="client_status_two_week" value="Outreaching " onclick="checkhideall()" >Outreaching &nbsp;&nbsp;<input type="radio" name="client_status_two_week" value="Services Being Terminated " onclick="checkhideall()" >Services Being Terminated &nbsp;&nbsp;<input type="radio" name="client_status_two_week" value="Transfer to Re-Engagement Specialist" onclick="checkhideall()" >Transfer to Re-Engagement Specialist&nbsp;&nbsp;
+    <div class="col12 fldclient_status_two_week qclient_status_two_week"><span class="qclient_status_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_two_week required-field-label"><label class="label-top">||FIELDTAG client_status_two_week||Status||ENDFIELDTAG||</label></span><span class="qclient_status_two_week"><input type="radio" name="client_status_two_week" value="Outreaching " onclick="checkhideall()" >Outreaching &nbsp;&nbsp;<input type="radio" name="client_status_two_week" value="Services Being Terminated" onclick="checkhideall()" >Services Being Terminated&nbsp;&nbsp;<input type="radio" name="client_status_two_week" value="Transfer To Re-Engagement Specialist" onclick="checkhideall()" >Transfer to Re-Engagement Specialist&nbsp;&nbsp;
 <!-- FIELDOVERRIDE(client_status_two_week,10,36) -->
 </span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldwhy_not_meet_prog_eligibility_two_week qwhy_not_meet_prog_eligibility_two_week">
+    <div class="col12 fldwhy_not_meet_prog_eligibility_two_week qwhy_not_meet_prog_eligibility_two_week"><span class="qwhy_not_meet_prog_eligibility_two_week"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_two_week||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_two_week"><input type="radio" name="why_not_meet_prog_eligibility_two_week" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_two_week" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_two_week" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -681,6 +689,14 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+  </div>
+   <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpresenting_notes_two_week qpresenting_notes_two_week">
+    <div class="col12 fldpresenting_notes_two_week qpresenting_notes_two_week"><span class="qpresenting_notes_two_week"><label class="label-top">||FIELDTAG presenting_notes_two_week||Presenting Notes||ENDFIELDTAG||</label></span><span class="qpresenting_notes_two_week"><textarea name="presenting_notes_two_week" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
 
 </div>

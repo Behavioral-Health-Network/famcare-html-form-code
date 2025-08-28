@@ -44,6 +44,8 @@ function startup() {
     setrequire('num_er_visits_past_three_months_three_month');
     setrequire('num_hosp_past_three_months_three_month');
     setrequire('num_leo_contacts_past_three_months_three_month');
+    setrequire('TiedEnrollment');
+
 
 	checkhideall();
 
@@ -292,7 +294,7 @@ function validateform(scope='all') {
   if (!hiddenfield('num_er_visits_past_three_months_three_month') && gvtfieldvalue('num_er_visits_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_er_visits_past_three_months_three_month");}
   if (!hiddenfield('num_hosp_past_three_months_three_month') && gvtfieldvalue('num_hosp_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_three_month");}
   if (!hiddenfield('num_leo_contacts_past_three_months_three_month') && gvtfieldvalue('num_leo_contacts_past_three_months_three_month')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_three_month");}
-
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
 
@@ -529,6 +531,17 @@ function updatesignatures(){
 <div class="deflist">
 <div class="entire">
 </div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -643,7 +656,7 @@ function updatesignatures(){
     <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
     Signature: <input type="password" name="SIGNATURE" /><br />
     <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
-    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
     <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
     <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
 ||ENDSTRIP||

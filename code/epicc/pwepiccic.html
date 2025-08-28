@@ -140,21 +140,29 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
     setrequire('epicc_pro_or_core_ic');
     setrequire('program_participation_ic');
     setrequire('treatment_path_ic');
+    setrequire('treatment_path_ic_unknown');
     setrequire('who_initiated_referral');
     setrequire('community_referral_source_ic');
     setrequire('type_contact_ic');
     setrequire('consent_crc_referral_ic');
     setrequire('epicc_opioids_of_use');
     setrequire('overdose_event_referral');
+		setrequire('overdose_event_referral_unknown');
     setrequire('overdose_location');
     setrequire('first_overdose');
     setrequire('num_past_overdoses');
     setrequire('most_recent_past_overdose_date');
+    setrequire('most_recent_past_overdose_date_unknown');
     setrequire('su_treatment_past_twelve_mos');
+		setrequire('su_treatment_past_twelve_mos_unknown');
     setrequire('current_su_treatment');
+		setrequire('current_su_treatment_unknown');
     setrequire('opioid_prescription_long_term_pain_mgmt');
+		setrequire('opioid_prescription_long_term_pain_mgmt_unknown');
     setrequire('ever_prescription_mat_not_referral');
+		setrequire('ever_prescription_mat_not_referral_unknown');
     setrequire('current_script_mat_type');
+		setrequire('current_script_mat_not_referral_unknown');
     setrequire('mat_initiated_hospital');
     setrequire('what_mat_initiated_hospital');
     setrequire('what_mat_script_discharge');
@@ -163,7 +171,9 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
     setrequire('if_other_specify');
     setrequire('narcan_distributed');
     setrequire('preg_post_part_ic');
+		setrequire('preg_post_part_ic_unknown');
     setrequire('veteran_status');
+    setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -219,6 +229,16 @@ function checkhideall() {
    checkhide(f.reason_oe_not_provided,"if_other_specify","Other");
    checkhide(f.narcan_distributed,"reason_narcan_not_distributed","No");
    checkhide(f.reason_narcan_not_distributed,"no_narcan_exp","Other");
+   checkhide(f.most_recent_past_overdose_date,"most_recent_past_overdose_date_unknown","Unknown");
+   checkhide(f.treatment_path_ic,"treatment_path_ic_unknown","Unknown");
+	 checkhide(f.overdose_event_referral,"overdose_event_referral_unknown","Unknown");
+	 checkhide(f.su_treatment_past_twelve_mos,"su_treatment_past_twelve_mos_unknown","Unknown");
+	 checkhide(f.current_su_treatment,"current_su_treatment_unknown","Unknown");
+	 checkhide(f.opioid_prescription_long_term_pain_mgmt,"opioid_prescription_long_term_pain_mgmt_unknown","Unknown");
+	 checkhide(f.ever_prescription_mat_not_referral,"ever_prescription_mat_not_referral_unknown","Unknown");
+	 checkhide(f.current_script_mat_not_referral,"current_script_mat_not_referral_unknown","Unknown");
+	 checkhide(f.preg_post_part_ic,"preg_post_part_ic_unknown","Unknown");
+
 
 }
 
@@ -478,8 +498,17 @@ function validateform(scope='all') {
   if (!hiddenfield('narcan_distributed') && gvtfieldvalue('narcan_distributed')=='') {edesc=edesc+`Must specify a value for Was Narcan Distributed?\n`; seterror("narcan_distributed");}
   if (!hiddenfield('preg_post_part_ic') && gvtfieldvalue('preg_post_part_ic')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant or postpartum?\n`; seterror("preg_post_part_ic");}
   if (!hiddenfield('veteran_status') && gvtfieldvalue('veteran_status')=='') {edesc=edesc+`Must specify a value for Is client a veteran?\n`; seterror("veteran_status");}
-
-    return edesc;
+  if (!hiddenfield('most_recent_past_overdose_date_unknown') && gvtfieldvalue('most_recent_past_overdose_date_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("most_recent_past_overdose_date_unknown");}  
+  if (!hiddenfield('treatment_path_ic_unknown') && gvtfieldvalue('treatment_path_ic_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("treatment_path_ic_unknown");}
+  if (!hiddenfield('overdose_event_referral_unknown') && gvtfieldvalue('overdose_event_referral_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("overdose_event_referral_unknown");}
+  if (!hiddenfield('su_treatment_past_twelve_mos_unknown') && gvtfieldvalue('su_treatment_past_twelve_mos_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("su_treatment_past_twelve_mos_unknown");}
+  if (!hiddenfield('current_su_treatment_unknown') && gvtfieldvalue('current_su_treatment_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("current_su_treatment_unknown");}
+  if (!hiddenfield('opioid_prescription_long_term_pain_mgmt_unknown') && gvtfieldvalue('opioid_prescription_long_term_pain_mgmt_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("opioid_prescription_long_term_pain_mgmt_unknown");}
+  if (!hiddenfield('ever_prescription_mat_not_referral_unknown') && gvtfieldvalue('ever_prescription_mat_not_referral_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("ever_prescription_mat_not_referral_unknown");}
+  if (!hiddenfield('current_script_mat_not_referral_unknown') && gvtfieldvalue('current_script_mat_not_referral_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("current_script_mat_not_referral_unknown");}
+  if (!hiddenfield('preg_post_part_ic_unknown') && gvtfieldvalue('preg_post_part_ic_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("preg_post_part_ic_unknown");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");} 
+   return edesc;
 }
 
 function gvtfieldvalue(fldname) {
@@ -782,6 +811,17 @@ function updatesignatures(){
     <div class="deflist">
         <div class="entire">
         </div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -852,7 +892,12 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
-  </div>
+</div>
+   <div class="entire">
+   <div class="col6 fldtreatment_path_ic_unknown qtreatment_path_ic_unknown">
+   <div class="col6 fldtreatment_path_ic_unknown qtreatment_path_ic_unknown"><span class="qtreatment_path_ic_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_ic_unknown required-field-label"><label class="label-top">||FIELDTAG treatment_path_ic_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qtreatment_path_ic_unknown"><textarea name="treatment_path_ic_unknown" class="autoexpand"></textarea></span></div>
+   </div>
+</div>
 <div class="entire">
 <div class="col12 term">Active Treatment Agency</div>
 </div>
@@ -962,6 +1007,14 @@ function updatesignatures(){
     <div class="col12 fldoverdose_event_referral qoverdose_event_referral"><span class="qoverdose_event_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_event_referral required-field-label"><label class="label-top">||FIELDTAG overdose_event_referral||Was the referral placed due to an overdose event (Not soley a severe use disorder or withdrawal?)||ENDFIELDTAG||</label></span><span class="qoverdose_event_referral"><input type="radio" name="overdose_event_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="overdose_event_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="overdose_event_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+   <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+</div>
+   <div class="entire">
+   <div class="col6 fldoverdose_event_referral_unknown qoverdose_event_referral_unknown">
+   <div class="col6 fldoverdose_event_referral_unknown qoverdose_event_referral_unknown"><span class="qoverdose_event_referral_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_event_referral_unknown required-field-label"><label class="label-top">||FIELDTAG overdose_event_referral_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qoverdose_event_referral_unknown"><textarea name="overdose_event_referral_unknown" class="autoexpand"></textarea></span></div>
+   </div>
+</div>
  <div class="entire">
     <div class="col12 fldoverdose_location qoverdose_location">
     <div class="col12 fldoverdose_location qoverdose_location"><span class="qoverdose_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoverdose_location required-field-label"><label class="label-top">||FIELDTAG overdose_location||Location of Overdose||ENDFIELDTAG||</label></span><span class="qoverdose_location"><input type="radio" name="overdose_location" value="Home/Residence" onclick="checkhideall()" >Home/Residence &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Treatment Facility" onclick="checkhideall()" >Treatment Facility&nbsp;&nbsp;<input type="radio" name="overdose_location" value="Public Place (i.e., Parking Lot, Gas station, etc.)" onclick="checkhideall()" >Public Place (i.e., Parking Lot, Gas station, etc.) &nbsp;&nbsp;<input type="radio" name="overdose_location" value="Other" onclick="checkhideall()" >Other &nbsp;&nbsp;
@@ -988,14 +1041,20 @@ function updatesignatures(){
     <div class="col12 fldmost_recent_past_overdose_date qmost_recent_past_overdose_date">
     <div class="col12 fldmost_recent_past_overdose_date qmost_recent_past_overdose_date"><span class="qmost_recent_past_overdose_date required-label">||PWRequiredFieldRequiredText||</span><span class="qmost_recent_past_overdose_date required-field-label"><label class="label-top">||FIELDTAG most_recent_past_overdose_date||When was most recent past overdose? Do not include referral overdose||ENDFIELDTAG||</label></span><span class="qmost_recent_past_overdose_date"><select size="1"  name="most_recent_past_overdose_date" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Past 3 Months ">Past 3 Months </option>
-<option value="Past 6 Months ">Past 6 Months </option>
-<option value="Past Year ">Past Year </option>
-<option value="Past 2 – 5 Years ">Past 2 – 5 Years </option>
-<option value="6 – 10 Years Ago ">6 – 10 Years Ago </option>
-<option value="11+ Years Ago ">11+ Years Ago </option>
+<option value="Past 3 Months">Past 3 Months</option>
+<option value="Past 6 Months">Past 6 Months</option>
+<option value="Past Year ">Past Year</option>
+<option value="Past 2 – 5 Years">Past 2 – 5 Years</option>
+<option value="6 – 10 Years Ago">6 – 10 Years Ago</option>
+<option value="11+ Years Ago">11+ Years Ago</option>
+<option value="Unknown">Unknown</option>
 
 </select></span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col6 fldmost_recent_past_overdose_date_unknown qmost_recent_past_overdose_date_unknown">
+    <div class="col6 fldmost_recent_past_overdose_date_unknown qmost_recent_past_overdose_date_unknown"><span class="qmost_recent_past_overdose_date_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qmost_recent_past_overdose_date_unknown required-field-label"><label class="label-top">||FIELDTAG most_recent_past_overdose_date_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qmost_recent_past_overdose_date_unknown"><textarea name="most_recent_past_overdose_date_unknown" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">
@@ -1003,11 +1062,21 @@ function updatesignatures(){
     <div class="col12 fldsu_treatment_past_twelve_mos qsu_treatment_past_twelve_mos"><span class="qsu_treatment_past_twelve_mos required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_treatment_past_twelve_mos required-field-label"><label class="label-top">||FIELDTAG su_treatment_past_twelve_mos||Has client been in substance use treatment within the past 12 months?||ENDFIELDTAG||</label></span><span class="qsu_treatment_past_twelve_mos"><input type="radio" name="su_treatment_past_twelve_mos" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="su_treatment_past_twelve_mos" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="su_treatment_past_twelve_mos" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+   <div class="entire">
+      <div class="col6 fldsu_treatment_past_twelve_mos_unknown qsu_treatment_past_twelve_mos_unknown">
+      <div class="col6 fldsu_treatment_past_twelve_mos_unknown qsu_treatment_past_twelve_mos_unknown"><span class="qsu_treatment_past_twelve_mos_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_treatment_past_twelve_mos_unknown required-field-label"><label class="label-top">||FIELDTAG su_treatment_past_twelve_mos_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qsu_treatment_past_twelve_mos_unknown"><textarea name="su_treatment_past_twelve_mos_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+	 </div>
  <div class="entire">
     <div class="col12 fldcurrent_su_treatment qcurrent_su_treatment">
     <div class="col12 fldcurrent_su_treatment qcurrent_su_treatment"><span class="qcurrent_su_treatment required-label">||PWRequiredFieldRequiredText||</span><span class="qcurrent_su_treatment required-field-label"><label class="label-top">||FIELDTAG current_su_treatment||Is client currently receiving substance use treatment?||ENDFIELDTAG||</label></span><span class="qcurrent_su_treatment"><input type="radio" name="current_su_treatment" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="current_su_treatment" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="current_su_treatment" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+   <div class="entire">
+      <div class="col6 fldcurrent_su_treatment_unknown qcurrent_su_treatment_unknown">
+      <div class="col6 fldcurrent_su_treatment_unknown qcurrent_su_treatment_unknown"><span class="qcurrent_su_treatment_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qcurrent_su_treatment_unknown required-field-label"><label class="label-top">||FIELDTAG current_su_treatment_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qcurrent_su_treatment_unknown"><textarea name="current_su_treatment_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+		</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -1016,10 +1085,26 @@ function updatesignatures(){
     <div class="col12 fldopioid_prescription_long_term_pain_mgmt qopioid_prescription_long_term_pain_mgmt"><span class="qopioid_prescription_long_term_pain_mgmt required-label">||PWRequiredFieldRequiredText||</span><span class="qopioid_prescription_long_term_pain_mgmt required-field-label"><label class="label-top">||FIELDTAG opioid_prescription_long_term_pain_mgmt||Does client have an opioid prescription/is client being treated for long term pain management?||ENDFIELDTAG||</label></span><span class="qopioid_prescription_long_term_pain_mgmt"><input type="radio" name="opioid_prescription_long_term_pain_mgmt" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="opioid_prescription_long_term_pain_mgmt" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="opioid_prescription_long_term_pain_mgmt" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+     <div class="entire">
+      <div class="col6 fldopioid_prescription_long_term_pain_mgmt_unknown qopioid_prescription_long_term_pain_mgmt_unknown">
+      <div class="col6 fldopioid_prescription_long_term_pain_mgmt_unknown qopioid_prescription_long_term_pain_mgmt_unknown"><span class="qopioid_prescription_long_term_pain_mgmt_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qopioid_prescription_long_term_pain_mgmt_unknown required-field-label"><label class="label-top">||FIELDTAG opioid_prescription_long_term_pain_mgmt_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qopioid_prescription_long_term_pain_mgmt_unknown"><textarea name="opioid_prescription_long_term_pain_mgmt_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+			</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldever_prescription_mat_not_referral qever_prescription_mat_not_referral">
     <div class="col12 fldever_prescription_mat_not_referral qever_prescription_mat_not_referral"><span class="qever_prescription_mat_not_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qever_prescription_mat_not_referral required-field-label"><label class="label-top">||FIELDTAG ever_prescription_mat_not_referral||Has client ever had a prescription for MAT?||ENDFIELDTAG||</label></span><span class="qever_prescription_mat_not_referral"><input type="radio" name="ever_prescription_mat_not_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ever_prescription_mat_not_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="ever_prescription_mat_not_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
+  </div>
+ <div class="entire">
+   <div class="col6 fldever_prescription_mat_not_referral_unknown qever_prescription_mat_not_referral_unknown">
+   <div class="col6 fldever_prescription_mat_not_referral_unknown qever_prescription_mat_not_referral_unknown"><span class="qever_prescription_mat_not_referral_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qever_prescription_mat_not_referral_unknown required-field-label"><label class="label-top">||FIELDTAG ever_prescription_mat_not_referral_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qever_prescription_mat_not_referral_unknown"><textarea name="ever_prescription_mat_not_referral_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+ </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 fldcurrent_script_mat_not_referral qcurrent_script_mat_not_referral">
@@ -1034,6 +1119,11 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
+   <div class="entire">
+   <div class="col6 fldcurrent_script_mat_not_referral_unknown qcurrent_script_mat_not_referral_unknown">
+   <div class="col6 fldcurrent_script_mat_not_referral_unknown qcurrent_script_mat_not_referral_unknown"><span class="qcurrent_script_mat_not_referral_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qcurrent_script_mat_not_referral_unknown required-field-label"><label class="label-top">||FIELDTAG current_script_mat_not_referral_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qcurrent_script_mat_not_referral_unknown"><textarea name="current_script_mat_not_referral_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+			</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -1104,6 +1194,14 @@ function updatesignatures(){
     <div class="col12 fldpreg_post_part_ic qpreg_post_part_ic"><span class="qpreg_post_part_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qpreg_post_part_ic required-field-label"><label class="label-top">||FIELDTAG preg_post_part_ic||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_ic"><input type="radio" name="preg_post_part_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_ic" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+<div class="entire">
+   <div class="col6 fldpreg_post_part_ic_unknown qpreg_post_part_ic_unknown">
+   <div class="col6 fldpreg_post_part_ic_unknown qpreg_post_part_ic_unknown"><span class="qpreg_post_part_ic_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qpreg_post_part_ic_unknown required-field-label"><label class="label-top">||FIELDTAG preg_post_part_ic_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qpreg_post_part_ic_unknown"><textarea name="preg_post_part_ic_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+			</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>  
  <div class="entire">
     <div class="col12 fldveteran_status qveteran_status">
     <div class="col12 fldveteran_status qveteran_status"><span class="qveteran_status required-label">||PWRequiredFieldRequiredText||</span><span class="qveteran_status required-field-label"><label class="label-top">||FIELDTAG veteran_status||Is client a veteran?||ENDFIELDTAG||</label></span><span class="qveteran_status"><input type="radio" name="veteran_status" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="veteran_status" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>

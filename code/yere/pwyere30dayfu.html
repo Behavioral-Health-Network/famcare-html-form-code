@@ -42,6 +42,8 @@ function startup() {
     setrequire('residency_change_type_thirty_day');
     setrequire('residency_change_address_existing_barrier_service_plan_goal_thirty_day');
     setrequire('school_change_thirty_day');
+    setrequire('TiedEnrollment');
+    
 	checkhideall();
 
   if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
@@ -290,7 +292,8 @@ function validateform(scope='all') {
   if (!hiddenfield('residency_change_type_thirty_day') && gvtfieldvalue('residency_change_type_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_thirty_day");}
   if (!hiddenfield('residency_change_address_existing_barrier_service_plan_goal_thirty_day') && gvtfieldvalue('residency_change_address_existing_barrier_service_plan_goal_thirty_day')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan goal?\n`; seterror("residency_change_address_existing_barrier_service_plan_goal_thirty_day");}
   if (!hiddenfield('school_change_thirty_day') && gvtfieldvalue('school_change_thirty_day')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_thirty_day");}
-    return edesc;
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+  return edesc;
 }
 
 function gvtfieldvalue(fldname) {
@@ -524,6 +527,17 @@ function updatesignatures(){
 <div class="deflist">
 <div class="entire">
 </div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldpathway_date qpathway_date">
     <div class="col12 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

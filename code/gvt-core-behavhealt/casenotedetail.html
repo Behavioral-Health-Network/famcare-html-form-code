@@ -1150,6 +1150,21 @@
           <div id="_gvtCaseNoteInformation" class="term">||FIELDTAG CaseNoteInformation||Case Note Information||ENDFIELDTAG||</div>
           <div class="def highlighted">
             <ul>
+            <div class="entire">
+              <div class="col3 qTiedEnrollment">
+                <span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span>
+                <span class="qTiedEnrollment required-field-label">
+                  <label class="label-right">Select Pathway Assignment</label>
+                </span>
+              </div>
+              <div class="col9 qTiedEnrollment">
+                <span class="qTiedEnrollment">
+                  <select size="1" name="TiedEnrollment" onchange="checkhideall()">
+                    <option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+                  </select>
+                </span>
+              </div>
+            </div>
               <li id="_gvtR1Billable" class="StartupHighlight"><strong>||FIELDTAG R1Billable||Billable||ENDFIELDTAG|| : </strong><input type="radio" name="R1Billable" value="Yes" onclick="setbillable()">Yes&nbsp;&nbsp; <input type="radio" name="R1Billable" value="No" onclick="setbillable()">No</li>
               <li><strong>||FIELDTAG ContactDate||Date of Service||ENDFIELDTAG|| : </strong><input type="text" name="ContactDate" size="8" onblur="validdatenoblankAny(this); setinsurance()" onChange="GetOverlapData()" class="jdatepicker"></li>
               <li id="_gvtCONTACTTIME"><span class="StartupHighlight"><strong>||FIELDTAG CONTACTTIME||Start Time||ENDFIELDTAG|| : </strong><span id="CONTACTTIMEspan">&nbsp;</span><input type="text" name="CONTACTTIME" id="CONTACTTIME" class="jtimepicker" size="6" onChange="StartTimeblur(); flagbilling();"><a href="javascript:void poptime('CONTACTTIME')" style="display:none"><img border=1 src="images/dropdown.png"></a>

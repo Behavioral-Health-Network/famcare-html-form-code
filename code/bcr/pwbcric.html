@@ -50,6 +50,7 @@ function startup() {
     setrequire('EDUCATIONLEVEL');
     setrequire('bcr_prog_participation');
     setrequire('bcr_grant');
+    setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -314,7 +315,7 @@ function validateform(scope='all') {
   if (!hiddenfield('EDUCATIONLEVEL') && gvtfieldvalue('EDUCATIONLEVEL')=='') {edesc=edesc+`Must specify a value for Highest Level of Education\n`; seterror("EDUCATIONLEVEL");}
   if (!hiddenfield('bcr_prog_participation') && gvtfieldvalue('bcr_prog_participation')=='') {edesc=edesc+`Must specify a value for Program Participation at Initial Contact\n`; seterror("bcr_prog_participation");}
   if (!hiddenfield('bcr_grant') && gvtfieldvalue('bcr_grant')=='') {edesc=edesc+`Must specify a value for Which grant will the participant be covered by?\n`; seterror("bcr_grant");}
-
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
 
@@ -549,6 +550,16 @@ function updatesignatures(){
 <div class="deflist">
  <div class="entire">
     <div class="col12"><div align="Left"><img src="images/custom"></div></div>
+  </div>
+        <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">

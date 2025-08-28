@@ -55,6 +55,7 @@ $("#gvttimetime_of_call_ref").timepicker({  'step':1, 'scrollDefault': 'now'});
     setrequire('program_participation_referral');
     setrequire('ineligible_reason_referral');
     setrequire('housing_status_referral');
+    setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -320,7 +321,7 @@ function validateform(scope='all') {
   if (!hiddenfield('dd_status') && gvtfieldvalue('dd_status')=='') {edesc=edesc+`Must specify a value for DD Status\n`; seterror("dd_status");}
   if (!hiddenfield('program_participation_referral') && gvtfieldvalue('program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_referral");}
   if (!hiddenfield('ineligible_reason_referral') && gvtfieldvalue('ineligible_reason_referral')=='') {edesc=edesc+`Must specify a value for Reason Ineligible\n`; seterror("ineligible_reason_referral");}
-
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
 
@@ -583,6 +584,17 @@ function updatesignatures(){
 <div class="deflist">
 <div class="entire">
 </div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col6 qpathway_date">
     <div class="col6 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

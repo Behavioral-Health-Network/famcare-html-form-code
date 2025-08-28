@@ -36,6 +36,10 @@ function startup() {
 	}
             setrequire('Pathway_Date');
     setrequire('reengagement_specialist');
+    setrequire('follow_up_form_reengagement')
+    setrequire('status_reengagement');
+    setrequire('TiedEnrollment');
+
 
 	checkhideall();
 
@@ -276,7 +280,9 @@ function validateform(scope='all') {
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('reengagement_specialist') && gvtfieldvalue('reengagement_specialist')=='') {edesc=edesc+`Must specify a value for Re-Engagement Specialist Name\n`; seterror("reengagement_specialist");}
-
+  if( !hiddenfield('follow_up_form_reengagement') && gvtfieldvalue('follow_up_form_reengagement')=='') {edesc=edesc+`Must specify a value for Follow Up Form Re-Engagement\n`; seterror("follow_up_form_reengagement");}
+  if( !hiddenfield('status_reengagement') && gvtfieldvalue('status_reengagement')=='') {edesc=edesc+`Must specify a value for Status Re-Engagement\n`; seterror("status_reengagement");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
 
@@ -510,6 +516,18 @@ function updatesignatures(){
 <div class="deflist">
 <div class="entire">
 </div>
+
+
+       <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div> 
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
@@ -525,7 +543,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldfollow_up_form_reengagement qfollow_up_form_reengagement">
-    <div class="col12 fldfollow_up_form_reengagement qfollow_up_form_reengagement"><span class="qfollow_up_form_reengagement"><label class="label-top">||FIELDTAG follow_up_form_reengagement||Follow-Up Forms||ENDFIELDTAG||</label></span><span class="qfollow_up_form_reengagement"><input type="radio" name="follow_up_form_reengagement" value="Two Week" onclick="checkhideall()" >Two Week&nbsp;&nbsp;<input type="radio" name="follow_up_form_reengagement" value="Thirty Day" onclick="checkhideall()" >Thirty Day&nbsp;&nbsp;</span></div>
+    <div class="col12 fldfollow_up_form_reengagement qfollow_up_form_reengagement"><span class="qfollow_up_form_reengagement required-label">||PWRequiredFieldRequiredText||</span><span class="qfollow_up_form_reengagement required-field-label"><label class="label-top">||FIELDTAG follow_up_form_reengagement||Follow-Up Forms||ENDFIELDTAG||</label></span><span class="qfollow_up_form_reengagement"><input type="radio" name="follow_up_form_reengagement" value="Two Week" onclick="checkhideall()" >Two Week&nbsp;&nbsp;<input type="radio" name="follow_up_form_reengagement" value="Thirty Day" onclick="checkhideall()" >Thirty Day&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -545,7 +563,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldstatus_reengagement qstatus_reengagement">
-    <div class="col12 fldstatus_reengagement qstatus_reengagement"><span class="qstatus_reengagement"><label class="label-top">||FIELDTAG status_reengagement||Status||ENDFIELDTAG||</label></span><span class="qstatus_reengagement"><input type="radio" name="status_reengagement" value="Continue Re-Engagement" onclick="checkhideall()" >Continue Re-Engagement&nbsp;&nbsp;<input type="radio" name="status_reengagement" value="Client Terminated" onclick="checkhideall()" >Client Terminated&nbsp;&nbsp;</span></div>
+    <div class="col12 fldstatus_reengagement qstatus_reengagement"><span class="qstatus_reengagement required-label">||PWRequiredFieldRequiredText||</span><span class="qstatus_reengagement required-field-label"><label class="label-top">||FIELDTAG status_reengagement||Status||ENDFIELDTAG||</label></span><span class="qstatus_reengagement"><input type="radio" name="status_reengagement" value="Continue Re-Engagement" onclick="checkhideall()" >Continue Re-Engagement&nbsp;&nbsp;<input type="radio" name="status_reengagement" value="Client Terminated" onclick="checkhideall()" >Client Terminated&nbsp;&nbsp;</span></div>
      </div>
   </div>
 

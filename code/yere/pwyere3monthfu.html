@@ -146,6 +146,7 @@ function startup() {
     setrequire('type_of_attendance_truancy_issues_three_month');
     setrequire('school_discipline_suspension_three_month');
     setrequire('type_of_school_discipline_three_month');
+    setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -436,6 +437,8 @@ function validateform(scope='all') {
   if (!hiddenfield('school_change_three_month') && gvtfieldvalue('school_change_three_month')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_three_month");}
   if (!hiddenfield('attendance_truancy_issues_three_month') && gvtfieldvalue('attendance_truancy_issues_three_month')=='') {edesc=edesc+`Must specify a value for Has youth experienced any attendance/truancy issues in the past three months?\n`; seterror("attendance_truancy_issues_three_month");}
   if (!hiddenfield('school_discipline_suspension_three_month') && gvtfieldvalue('school_discipline_suspension_three_month')=='') {edesc=edesc+`Must specify a value for Has youth experienced any school discipline or suspensions in the past three months?\n`; seterror("school_discipline_suspension_three_month");}  
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+
   return edesc;
 }
 
@@ -741,6 +744,17 @@ function updatesignatures(){
 <div class="deflist">
 <div class="entire">
 </div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
  <div class="entire">
     <div class="col12 fldpathway_date qpathway_date">
     <div class="col12 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

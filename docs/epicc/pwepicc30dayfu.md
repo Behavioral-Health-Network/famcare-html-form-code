@@ -30,7 +30,7 @@ join_logic:
         - source: PWEPICC30DAYFU.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-04
+last_updated: 2025-08-25
 status: active
 ---
 
@@ -50,5 +50,6 @@ status: active
 
 ## Changelog
 
+- **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 -**2025-08-15**: Fixes typo in `why_not_meet_prog_eligibility_thirty_day` field name. Adds `why_not_meet_prog_eligibility_thirty_day`. Makes `intake_conducted_appt_date_thirty_day` and `why_not_meet_prog_eligibility_thirty_day` required questions. Updates typos in `client_status_thirty_day` and `date_transferred_reengagement_specialist_thirty_day`.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_THIRTY_DAY` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.

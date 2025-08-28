@@ -30,7 +30,7 @@ join_logic:
         - source: PWEPICCREFERRAL.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-04
+last_updated: 2025-08-25
 status: active
 ---
 
@@ -50,4 +50,5 @@ status: active
 
 ## Changelog
 
+- **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-08-15**: Removes client_on_outreach_list. Question no longer needed. Makes `ems_fire_district_place_referral_in_transit`, `emergency_response_call`, and `suboxone_ems` conditional upon 073 and 015.Adds open text field for `other_ems_fire_district`. It is a conditional questions when Other EMS/Fire District is selected for Which EMS/Fire District?

@@ -30,7 +30,7 @@ join_logic:
         - source: PWEPICCIC.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-02
+last_updated: 2025-08-25
 status: active
 ---
 
@@ -111,6 +111,7 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 ## Changelog
 
+- **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-08-15**: Adds radio button option for `mat_prescribed_physician_appt_six_month`, Unable To Contact Client Or Treatment Agency.
 - **2025-08-12**: Disables 'Already Enrolled In SUD Services' program participation value due to ongoing concerns on the part of the EPICC leadership that Recovery Coaches were misusing this value and would likely continue to do so despite retraining efforts.
 - **2025-08-01**: Updates `epicc_program_participation` code '011' to description 'Services Transferred To ERE' to update the program name from 'LINCS IO'.

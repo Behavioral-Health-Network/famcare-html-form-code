@@ -35,6 +35,7 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
+            setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -279,7 +280,7 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-
+     if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");} 
     return edesc;
 }
 
@@ -510,6 +511,18 @@ function updatesignatures(){
        </div>
        <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
     </div>
+
+
+       <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>   
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>

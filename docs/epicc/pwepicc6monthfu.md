@@ -2,9 +2,14 @@
 form_title: EPICC Six-Month Follow-Up
 form_file: code/pwepicc6monthfu.html
 table_name: PWEPICC6MONTHFOLLOWUP
-program: EPICC
+program_scope: single
+programs:
+  - epicc
+form_type: pathways-governed
 client_form: true
-pathway_form: true
+tags:
+  - pathway-event
+  - epicc-six-month-follow-up
 pathway_name: EPICC
 pathway_id: 55320240807113504583
 pathway_event: EPICC 6 Month
@@ -30,7 +35,7 @@ join_logic:
         - source: PWEPICC6MONTHFU.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-25
+last_updated: 2025-09-17
 status: active
 ---
 

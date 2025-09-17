@@ -2,11 +2,16 @@
 form_title: Complex Care Roster
 form_file: code/pwcomplexcareroster.html
 table_name: PWCOMPLEXCAREROSTER
-program: Complex Care
+program_scope: single
+programs:
+  - complex-care
+form_type: pathways-governed
 client_form: true
-pathway_form: true
-pathway_name: 
-pathway_id: 
+tags:
+  - pathway-event
+  - complex-care-roster
+pathway_name: Complex Care
+pathway_id: 55320240920114308822
 pathway_event: Complex Care Roster
 pathway_event_logic:
     start_period: 0 - D
@@ -30,7 +35,7 @@ join_logic:
         - source: PWCOMPLEXCAREROSTER.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-27
+last_updated: 2025-09-17
 status: active
 ---
 

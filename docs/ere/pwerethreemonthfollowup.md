@@ -2,11 +2,16 @@
 form_title: ERE Three Month Follow Up
 form_file: code/pwerethreemonthfollowup.html
 table_name: PWERETHREEMONTHFOLLOWUP
-program: ERE
+program_scope: single
+programs:
+  - ere
+form_type: pathways-governed
 client_form: true
-pathway_form: true
+tags:
+  - pathway-event
+  - ere-three-month-follow-up
 pathway_name: ERE
-pathway_id: 
+pathway_id: 55320250326123001961
 pathway_event: ERE 3 Month
 pathway_event_logic:
     start_period: 90 - D
@@ -30,7 +35,7 @@ join_logic:
         - source: PWERETHREEMONTHFOLLOWUP.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-25
+last_updated: 2025-09-17
 status: active
 ---
 

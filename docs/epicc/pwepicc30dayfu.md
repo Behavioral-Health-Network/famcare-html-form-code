@@ -2,9 +2,14 @@
 form_title: EPICC Thirty-Day Follow-Up
 form_file: code/pwepicc30dayfu.html
 table_name: PWEPICC30DAYFOLLOWUP
-program: EPICC
+program_scope: single
+programs:
+  - epicc
+form_type: pathways-governed
 client_form: true
-pathway_form: true
+tags:
+  - pathway-event
+  - epicc-thirty-day-follow-up
 pathway_name: EPICC
 pathway_id: 55320240807113504583
 pathway_event: EPICC 30 Day
@@ -30,7 +35,7 @@ join_logic:
         - source: PWEPICC30DAYFU.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-25
+last_updated: 2025-09-17
 status: active
 ---
 

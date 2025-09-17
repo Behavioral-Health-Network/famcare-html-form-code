@@ -2,11 +2,16 @@
 form_title: ERE Behavioral Health Service
 form_file: code/pwerebehavioralhealthservice.html
 table_name: PWEREBEHAVIORALHEALTHSERVICE
-program: ERE
+program_scope: single
+programs:
+  - ere
+form_type: pathways-governed
 client_form: true
-pathway_form: true
+tags:
+  - pathway-event
+  - ere-bhs
 pathway_name: ERE
-pathway_id: 
+pathway_id: 55320250326123001961
 pathway_event: ERE Behavioral Health Service
 pathway_event_logic:
     start_period: 0 - D
@@ -30,7 +35,7 @@ join_logic:
         - source: PWEREBEHAVIORALHEALTHSERVICE.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-25
+last_updated: 2025-09-17
 status: active
 ---
 

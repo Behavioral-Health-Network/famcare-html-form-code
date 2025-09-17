@@ -2,9 +2,14 @@
 form_title: EPICC Initial Contact
 form_file: code/pwepiccic.html
 table_name: PWEPICCINITIALCONTACT
-program: EPICC
+program_scope: single
+programs:
+  - epicc
+form_type: pathways-governed
 client_form: true
-pathway_form: true
+tags:
+  - pathway-event
+  - epicc-initial-contact
 pathway_name: EPICC
 pathway_id: 55320240807113504583
 pathway_event: EPICC Initial Contact
@@ -39,7 +44,6 @@ status: active
 ## YAML Notes
 
 - `client_form: true` distinguishes forms tied to individual clients.
-- `pathway_form: true` flags forms governed by Pathway Event logic.
 - `pathway_event_dependency` is extensible and can be omitted for non-Pathway forms.
 - `serial_logic.join_targets` allows one to document expected joins.
 - `signature_tracking: true` is retained at vendor request but is discouraged in practice since signing forms locks them.

@@ -2,23 +2,19 @@
 form_title: EPICC SOR Pilot CES Client Contact
 form_file: code/pwepiccorpilotcescc.html
 table_name: PWEPICCSORPILOTCESCLIENTCONTACT
-program: EPICC
+program_scope: single
+programs:
+  - epicc
+form_type: pathways-standalone
 client_form: true
-pathway_form: false
+tags:
+  - standalone-form
+  - epicc-sor-ces-client-contact
 pathway_name: EPICC
-pathway_id: 
-pathway_event: 
-pathway_event_logic:
-    start_period: 
-    end_period: 
-    early_period: 
-    late_period: 
-    recurring_period: 
-    lag_period: 
-    number_occurrences: 
-    depends_on: 
-    completion_check_table: 
-date_field: 
+pathway_id: 55320240807113504583
+pathway_event: null
+pathway_event_logic: null
+date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
@@ -30,7 +26,7 @@ join_logic:
         - source: table_name: PWEPICCSORPILOTCESCLIENTCONTACT.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-21
+last_updated: 2025-09-17
 status: active
 ---
 

@@ -2,9 +2,14 @@
 form_title: EPICC Referral
 form_file: code/pwepiccreferral.html
 table_name: PWEPICCREFERRAL
-program: EPICC
+program_scope: single
+programs:
+  - epicc
+form_type: pathways-governed
 client_form: true
-pathway_form: true
+tags:
+  - pathways-event
+  - epicc-referral
 pathway_name: EPICC
 pathway_id: 55320240807113504583
 pathway_event: EPICC Referral
@@ -30,7 +35,7 @@ join_logic:
         - source: PWEPICCREFERRAL.CLIENT_NUMBER
           target: PATHWAYEVENTCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-08-25
+last_updated: 2025-09-17
 status: active
 ---
 

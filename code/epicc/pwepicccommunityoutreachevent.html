@@ -1,0 +1,871 @@
+<html>
+
+<head>
+<title>EPICC Community Outreach Event</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(EDUCATION_MATERIALS,10,10) -->
+<!-- FIELDOVERRIDE(FOOD_AND_WATER),10,10) -->
+<!-- FIELDOVERRIDE(HYGIENE_PRODUCTS,10,10) -->
+<!-- FIELDOVERRIDE(NALOXONE,10,10) -->
+<!-- FIELDOVERRIDE(TOILETRIES,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+ <!-- CLincludes was moved before the initial script because the values needed to be defined before the JavaScript script started. We need some of these defined values so that the address information copied over from the CLIENT form will work properly.--> -->
+<script>
+var CLincludesv1 = "||CURRCWUSERID||";
+var CLincludesv2 = "||EXTCASEWORKER||";
+var CLincludesv3 = "||CASEWORKER||";
+var CLincludesv4 = "||TRBLSOCWORKER||";
+var CLincludesv5 = "||CPSWORKER||";
+var CLincludesv6 = "||SESSIONID||";
+var CLincludesv7 = "||ADDRESSVALIDATIONKEY||";
+var CLincludesv8 = "||SUPERFLAG||";
+var CLincludesv9 = "||ORGNAME||";
+var CLincludesv10 = "||CLIENTNUMBER||";
+var CLincludesv11 = "||DATE||";
+var CLincludesv13 = "||SCREENPARM OPTION||";
+var CLincludesv15 = "||CAPCLIENTNAMES||";
+var CLincludesv16 = "||DOCSERNO||";
+var CLincludesv17 = "||FIELDVALUE CLIENTINDICATOR||";
+var CLincludesv20 = "||ACCESSFORM||";
+var CLincludesv21 = "||FIELDVALUE RISKLEVEL||";
+var CLincludesv22 = "||FIELDVALUE SECURITYLEVEL||";
+var CLincludesv23 = "||SP OPTION||";
+var CLincludesv24 = "||FIELDVALUE PROVIDERCODECLIENT||";
+var CLincludesv25 = "||FIELDVALUE PROVTYPE||";
+var CLincludesv26 = "||TIME||";
+var CLincludesv32 = "||FIELDVALUE COUNTY||";
+var CLincludesv33 = "||FIELDVALUE COMMITTINGCOUNTY||";
+</script>
+<script language="JavaScript" src="script/IncludeClient2.js"></script>
+
+<script language="JavaScript">
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#yere_mh_concerns, #yere_type_trauma_reported, #yere_substance_use_history, #yere_type_of_school_discipline'); // Add more IDs as needed
+
+
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
+
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
+
+//     if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
+
+// Start observing the document body for changes
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#epicc_materials_distributed', listenerSetup);
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+        //   f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+    setrequire('community_outreach_event_type');
+    setrequire('community_outreach_event_type_other');
+    setrequire('community_outreach_materials_distributed');
+    setrequire('community_outreach_materials_distributed_other');
+    setrequire('community_outreach_location');
+    setrequire('STREET');
+    setrequire('CITY');
+    setrequire('STATE');
+    setrequire('COUNTY');
+    setrequire('ZIP');
+    setrequire('LATITUDE');
+    setrequire('LONGITUDE');
+    
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#epicc_materials_distributed'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.community_outreach_event_type,"community_outreach_event_type_other","Other");
+   checkhide(f.community_outreach_materials_distributed,"community_outreach_materials_distributed_other","008");
+   console.log("Selected values for community_outreach_materials_distributed:", vl);
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('community_outreach_event_type') && gvtfieldvalue('community_outreach_event_type')=='') {edesc=edesc+`Must specify a value for Event Type\n`; seterror("community_outreach_event_type");}
+  if (!hiddenfield('community_outreach_event_type_other') && gvtfieldvalue('community_outreach_event_type_other')=='') {edesc=edesc+`Must specify a value for Other Event Type\n`; seterror("community_outreach_event_type_other");}
+  if (!hiddenfield('community_outreach_materials_distributed') && gvtfieldvalue('community_outreach_materials_distributed')=='') {edesc=edesc+`Must specify a value for Outreach Materials Distributed\n`; seterror("community_outreach_materials_distributed");}
+  if (!hiddenfield('community_outreach_materials_distributed_other') && gvtfieldvalue('community_outreach_materials_distributed_other')=='') {edesc=edesc+`Must specify a value for Other Materials Distributed\n`; seterror("community_outreach_materials_distributed_other");}
+  if (!hiddenfield('community_outreach_location') && gvtfieldvalue('community_outreach_location')=='') {edesc=edesc+`Must specify a value for Location of Outreach\n`; seterror("community_outreach_location");}
+  if (!hiddenfield('STREET') && gvtfieldvalue('STREET')=='') {edesc=edesc+`Must specify a value for Street\n`; seterror("STREET");}
+  if (!hiddenfield('CITY') && gvtfieldvalue('CITY')=='') {edesc=edesc+`Must specify a value for City\n`; seterror("CITY");}
+  if (!hiddenfield('STATE') && gvtfieldvalue('STATE')=='') {edesc=edesc+`Must specify a value for State\n`; seterror("STATE");} 
+  if (!hiddenfield('COUNTY') && gvtfieldvalue('COUNTY')=='') {edesc=edesc+`Must specify a value for County\n`; seterror("COUNTY");}
+  if (!hiddenfield('ZIP') && gvtfieldvalue('ZIP')=='') {edesc=edesc+`Must specify a value for ZIP\n`; seterror("ZIP");}
+  if (!hiddenfield('LATITUDE') && gvtfieldvalue('LATITUDE')=='') {edesc=edesc+`Must specify a value for Latitude\n`; seterror("LATITUDE");}
+  if (!hiddenfield('LONGITUDE') && gvtfieldvalue('LONGITUDE')=='') {edesc=edesc+`Must specify a value for Longitude\n`; seterror("LONGITUDE");} 
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+  // Force update of report fields before submission
+    updateReportFields([
+      'epicc_materials_distributed'
+          // add other dropdown IDs here as needed
+   ]);
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+
+// function quicksubmitit() {
+//	errdesc=validateform();
+//	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+// Client form functions
+  function findplaces() {
+       f=document.forms[0];
+        if (f.LATITUDE.value=="" || f.LONGITUDE.value=="") {
+           alert("Cannot display map until latitude and longitude are retrieved.  Please enter a valid address and click 'Retrieve'");
+           return;
+        }
+        var lat=f.LATITUDE.value;
+        var long=f.LONGITUDE.value;
+        var info="Client home location";
+        var overlays="||LOADFIELDS SELECT dbo.udf_CheckedPlaceCodes() AS [Codes]||||LOADCURRENTALWAYS (0)||";
+        var pinradius="5";
+        var circleradius="0";
+
+        urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GeoMapWithOverlays)|LATITUDE("+lat+")|LONGITUDE("+long+")|INFO("+info+")|OVERLAYS("+escape(overlays)+")|PINRADIUS("+escape(pinradius)+")|CIRCLERADIUS("+escape(circleradius)+")|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+        openhyperlink(urlfunc);
+
+  }
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['epicc_materials_distributed', 'table2', 'table3'].
+ */
+
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWEPICCCommunityOutreachEvent" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields -->
+    <input type="hidden" name="coe_ed_materials" value="||FIELDVALUE coe_ed_materials||" class="report-field value-009" data-source="epicc_materials_distributed">
+    <input type="hidden" name="coe_food_water" value="||FIELDVALUE coe_food_water||" class="report-field value-013" data-source="epicc_materials_distributed">
+    <input type="hidden" name="coe_hygeine_products" value="||FIELDVALUE coe_hygeine_products||" class="report-field value-011" data-source="epicc_materials_distributed">
+    <input type="hidden" name="coe_naloxone" value="||FIELDVALUE coe_naloxone||" class="report-field value-010" data-source="epicc_materials_distributed">
+    <input type="hidden" name="coe_toiletries" value="||FIELDVALUE coe_toiletries||" class="report-field value-012" data-source="epicc_materials_distributed">
+    <input type="hidden" name="coe_other" value="||FIELDVALUE coe_other||" class="report-field value-008" data-source="epicc_materials_distributed">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>EPICC Community Outreach Event</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcommunity_outreach_event_type qcommunity_outreach_event_type">
+    <div class="col12 fldcommunity_outreach_event_type qcommunity_outreach_event_type"><span class="qcommunity_outreach_event_type required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_outreach_event_type required-field-label"><label class="label-top">||FIELDTAG community_outreach_event_type||Event Type||ENDFIELDTAG||</label></span><span class="qcommunity_outreach_event_type"><input type="radio" name="community_outreach_event_type" value="Street Outreach" onclick="checkhideall()" >Street Outreach<br><input type="radio" name="community_outreach_event_type" value="Tabling Event" onclick="checkhideall()" >Tabling Event<br><input type="radio" name="community_outreach_event_type" value="Training Event" onclick="checkhideall()" >Training Event<br><input type="radio" name="community_outreach_event_type" value="Other" onclick="checkhideall()" >Other</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcommunity_outreach_event_type_other qcommunity_outreach_event_type_other">
+    <div class="col12 fldcommunity_outreach_event_type_other qcommunity_outreach_event_type_other"><span class="qcommunity_outreach_event_type_other required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_outreach_event_type_other required-field-label"><label class="label-top">||FIELDTAG community_outreach_event_type_other||Other Event Type||ENDFIELDTAG||</label></span><span class="qcommunity_outreach_event_type_other"><input type="text" name="community_outreach_event_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcommunity_outreach_materials_distributed qcommunity_outreach_materials_distributed">
+    <div class="col12 fldcommunity_outreach_materials_distributed qcommunity_outreach_materials_distributed"><span class="qcommunity_outreach_materials_distributed required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_outreach_materials_distributed required-field-label"><label class="label-top">Outreach Materials Distributed<br>(Hold down Ctrl to select multiple)</label></span><span class="qcommunity_outreach_materials_distributed"><select size="8" name="community_outreach_materials_distributed" id="epicc_materials_distributed" onchange="updateReportFields(['epicc_materials_distributed']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_materials_distributed] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE community_outreach_materials_distributed^^') and epicc_outreach_events='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_materials_distributed||
+
+<!-- FIELDOVERRIDE(community_outreach_materials_distributed,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcommunity_outreach_materials_distributed_other qcommunity_outreach_materials_distributed_other">
+    <div class="col12 fldcommunity_outreach_materials_distributed_other qcommunity_outreach_materials_distributed_other"><span class="qcommunity_outreach_materials_distributed_other required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_outreach_materials_distributed_other required-field-label"><label class="label-top">||FIELDTAG community_outreach_materials_distributed_other||Other Materials Distributed||ENDFIELDTAG||</label></span><span class="qcommunity_outreach_materials_distributed_other"><input type="text" name="community_outreach_materials_distributed_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcommunity_outreach_location qcommunity_outreach_location">
+    <div class="col12 fldcommunity_outreach_location qcommunity_outreach_location"><span class="qcommunity_outreach_location required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_outreach_location required-field-label"><label class="label-top">||FIELDTAG community_outreach_location||Location of Outreach||ENDFIELDTAG||</label></span><span class="qcommunity_outreach_location"><input type="text" name="community_outreach_location" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldnotes_coe qnotes_coe">
+    <div class="col12 fldnotes_coe qnotes_coe"><span class="qnotes_coe"><label class="label-top">||FIELDTAG notes_coe||Event Notes||ENDFIELDTAG||</label></span><span class="qnotes_coe"><textarea name="notes_coe" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+<div class="col12 term">Event Address Information</div>
+</div>
+  <!-- <span id="_gvtContactSection">
+       <div class="term DisplaySection" onclick="ExpandFormSection('ContactHideDisplay')">||FIELDTAG ContactSection||Event Address Information||ENDFIELDTAG||</div>
+       <div class="def NotDisplayed" id="ContactHideDisplay"> -->
+          <ul>
+           <li id="_gvtStreet"><strong>||FIELDTAG Street||Street||ENDFIELDTAG|| : </strong><input type="text" name="STREET" size="40" onChange="getlatlong()" /></li>
+             <li id="_gvtCity"><strong>||FIELDTAG City||City||ENDFIELDTAG|| : </strong><input type="text" name="CITY" size="25" onChange="getlatlong()" /></li>
+             <li id="_gvtState"><strong>||FIELDTAG State||State||ENDFIELDTAG|| : </strong><select size="1" name="STATE" onchange="GetCountyList()" onChange="getlatlong()">
+                        <option value="||SELECT Code, Description From StatesUS Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE STATE^^') and code in(^^SetCountyTable^^) Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select></li>
+             <li id="_gvtCounty"><strong>||FIELDTAG County||County||ENDFIELDTAG|| : </strong><select size="1" name="COUNTY" onChange="getlatlong()">
+                  <option value="||Select Code, Description From Counties Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE COUNTY^^') AND (State='^^FIELDVALUE STATE^^' OR (State='^^TOPPROVIDERSTATE^^' and '^^FIELDVALUE DOCSERNO^^'='')) Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                  </select>
+             </li>
+             <li id="_gvtZIP"><strong>||FIELDTAG ZIP||ZIP||ENDFIELDTAG|| : </strong><input type="text" name="ZIP" size="14" onChange="getlatlong()" />                
+             </li>
+             ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||
+             <li><strong><a href="javascript:void getlatlong()">Retrieve latitude/longitude</a></strong>
+                       Latitude: <input type="text" name="LATITUDE" onfocus="this.blur()">
+                       Longitude: <input type="text" name="LONGITUDE" onfocus="this.blur()">
+                       <a href="javascript:void showmapAdjust()">Show on map</a>
+             </li>
+             ||ENDDISPLAY||
+             ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||
+                   <li id="_gvtFindPlaces"><strong>&nbsp;&nbsp;</strong><a href="javascript:void findplaces()">||MapPlaceTypeLabel||</a></li>
+             ||ENDDISPLAY||
+          </ul>
+<div class="entire">
+<div class="col12 term"></div>
+</div>
+<!-- </span>
+
+</div>
+</div> -->
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

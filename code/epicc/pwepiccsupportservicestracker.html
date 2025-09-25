@@ -1,0 +1,1453 @@
+<html>
+
+<head>
+<title>EPICC Support Services Tracker</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(BEHAVIORAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(PHYSICAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(SOCIAL_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(MATERNAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(HOUSING,10,10) -->
+<!-- FIELDOVERRIDE(SUPPORTIVE_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(INDIVIDUAL_PEER_SUPPORT,10,10) -->
+<!-- FIELDOVERRIDE(GROUP_PEER_SUPPORT,10,10) -->
+<!-- FIELDOVERRIDE(SUBSTANCE_USE_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(CMHC_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(PRIMARY_CARE)-->
+<!-- FIELDOVERRIDE(DENTAL_CARE)-->
+<!-- FIELDOVERRIDE(FOOD)-->
+<!-- FIELDOVERRIDE(CLOTHING)-->
+<!-- FIELDOVERRIDE(HYGIENE)-->
+<!-- FIELDOVERRIDE(UTILITY_ASSISTANCE)-->
+<!-- FIELDOVERRIDE(CHILD_CARE)-->
+<!-- FIELDOVERRIDE(DEVELOPMENTAL_DISABILITY_SERVICES)-->
+<!-- FIELDOVERRIDE(DOMESTIC_VIOLENCE_ASSISTANCE)-->
+<!-- FIELDOVERRIDE(PREGNANCY_RESOURCES)-->
+<!-- FIELDOVERRIDE(PRE_POST_NATAL_CARE)-->
+<!-- FIELDOVERRIDE(SHELTER_HOUSING)-->
+<!-- FIELDOVERRIDE(RECOVERY_HOUSING)-->
+<!-- FIELDOVERRIDE(RESPITE_HOUSING)-->
+<!-- FIELDOVERRIDE(TRANSITIONAL_HOUSING)-->
+<!-- FIELDOVERRIDE(HOMELESS_SERVICES)-->
+<!-- FIELDOVERRIDE(OTHER)-->
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#bcr_presenting_concerns, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_housing_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
+
+    
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
+
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
+
+//     if (dropdowns.length > 0) {
+// Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
+
+// Start observing the document body for changes
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#epicc_support_services_type', listenerSetup);    
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+        // B3 is correlated with the Quick Submit funtion which is being disabled.
+        //   f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+    setrequire('support_services_referral_type');
+    setrequire('support_service_other_type');
+    setrequire('support_service_other_agency');
+    setrequire('support_service_other_agency_other');
+    setrequire('behavioral_health_type');
+    setrequire('behavioral_health_type_other');
+    setrequire('cmhc_services_agency');
+    setrequire('cmhc_services_agency_other');
+    setrequire('group_peer_support_agency');
+    setrequire('group_peer_support_agency_other');
+    setrequire('individual_peer_support_agency');
+    setrequire('individual_peer_support_agency_other');
+    setrequire('substance_use_services_agency');
+    setrequire('substance_use_services_agency_other');
+    setrequire('behavioral_health_other_agency');
+    setrequire('behavioral_health_other_agency_other');
+    setrequire('physical_health_type');
+    setrequire('physical_health_type_other');
+    setrequire('primary_care');
+    setrequire('primary_care_other');
+    setrequire('dental_care');
+    setrequire('dental_care_other');
+    setrequire('ph_other_agency');
+    setrequire('ph_other_agency_other');
+    setrequire('social_services_type');
+    setrequire('social_services_type_other');
+    setrequire('food_agency');
+    setrequire('food_agency_other');
+    setrequire('clothing_agency');
+    setrequire('clothing_agency_other');
+    setrequire('hygiene_agency');
+    setrequire('hygiene_agency_other');
+    setrequire('utility_assistance_agency');
+    setrequire('utility_assistance_agency_other');
+    setrequire('child_care_agency');
+    setrequire('child_care_agency_other');
+    setrequire('developmental_disability_agency');
+    setrequire('developmental_disability_agency_other');
+    setrequire('domestic_violence_agency');
+    setrequire('domestic_violence_agency_other');
+    setrequire('ss_other_agency');
+    setrequire('ss_other_agency_other');
+    setrequire('maternal_health_type');
+    setrequire('maternal_health_type_other');
+    setrequire('pregnancy_resources_agency');
+    setrequire('pregnancy_resources_agency_other');
+    setrequire('pre_post_natal_care_agency');
+    setrequire('mh_other_agency');
+    setrequire('mh_other_agency_other');
+    setrequire('housing_type');
+    setrequire('housing_type_other');
+    setrequire('shelter_housing_agency');
+    setrequire('shelter_housing_agency_other');
+    setrequire('recovery_housing_agency');
+    setrequire('respite_housing_agency');
+    setrequire('respite_housing_agency_other');
+    setrequire('transitional_housing_agency');
+    setrequire('transitional_housing_agency_other');
+    setrequire('homeless_services_agency');
+    setrequire('homeless_services_agency_other');
+    setrequire('housing_other_agency');
+    setrequire('housing_other_agency_other');
+    setrequire('supportive_services_type');
+    setrequire('supportive_services_agency');
+    setrequire('supportive_services_agency_other');
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#epicc_support_services_type'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.support_services_referral_type,"behavioral_health_type","001");
+   checkhide(f.support_services_referral_type,"support_service_other_type","027");
+   checkhide(f.support_services_referral_type,"support_service_other_agency","027");
+   checkhide(f.support_service_other_agency,"support_service_other_agency_other","046");
+   checkhide(f.behavioral_health_type,"behavioral_health_type_other","027");
+   checkhide(f.behavioral_health_type,"cmhc_services_agency","010");
+   checkhide(f.cmhc_services_agency,"cmhc_services_agency_other","046");
+   checkhide(f.behavioral_health_type,"group_peer_support_agency","008");
+   checkhide(f.group_peer_support_agency,"group_peer_support_agency_other","046");
+   checkhide(f.behavioral_health_type,"individual_peer_support_agency","007");
+   checkhide(f.individual_peer_support_agency,"individual_peer_support_agency_other","046");
+   checkhide(f.behavioral_health_type,"substance_use_services_agency","009");
+   checkhide(f.substance_use_services_agency,"substance_use_services_agency_other","046");
+   checkhide(f.behavioral_health_type,"behavioral_health_other_agency","027");
+   checkhide(f.behavioral_health_other_agency,"behavioral_health_other_agency_other","046");
+   checkhide(f.support_services_referral_type,"physical_health_type","002");
+   checkhide(f.physical_health_type,"physical_health_type_other","027");
+   checkhide(f.physical_health_type,"primary_care","011");
+   checkhide(f.primary_care,"primary_care_other","046");
+   checkhide(f.physical_health_type,"dental_care","012");
+   checkhide(f.dental_care,"dental_care_other","046");
+   checkhide(f.physical_health_type,"ph_other_agency","027");
+   checkhide(f.ph_other_agency,"ph_other_agency_other","046");
+   checkhide(f.support_services_referral_type,"social_services_type","003");
+   checkhide(f.social_services_type,"social_services_type_other","027");
+   checkhide(f.social_services_type,"food_agency","013");
+   checkhide(f.food_agency,"food_agency_other","046");
+   checkhide(f.social_services_type,"clothing_agency","014");
+   checkhide(f.clothing_agency,"clothing_agency_other","046");
+   checkhide(f.social_services_type,"hygiene_agency","015");
+   checkhide(f.hygiene_agency,"hygiene_agency_other","046");
+   checkhide(f.social_services_type,"utility_assistance_agency","016");
+   checkhide(f.utility_assistance_agency,"utility_assistance_agency_other","046");
+   checkhide(f.social_services_type,"child_care_agency","017");
+   checkhide(f.child_care_agency,"child_care_agency_other","046");
+   checkhide(f.social_services_type,"developmental_disability_agency","018");
+   checkhide(f.developmental_disability_agency,"developmental_disability_agency_other","046");
+   checkhide(f.social_services_type,"domestic_violence_agency","019");
+   checkhide(f.domestic_violence_agency,"domestic_violence_agency_other","046");
+   checkhide(f.social_services_type,"ss_other_agency","027");
+   checkhide(f.ss_other_agency,"ss_other_agency_other","046");
+   checkhide(f.support_services_referral_type,"maternal_health_type","004");
+   checkhide(f.maternal_health_type,"maternal_health_type_other","027");
+   checkhide(f.maternal_health_type,"pregnancy_resources_agency","020");
+   checkhide(f.pregnancy_resources_agency,"pregnancy_resources_agency_other","046");
+   checkhide(f.maternal_health_type,"pre_post_natal_care_agency","021");
+   checkhide(f.pre_post_natal_care_agency,"pre_post_natal_care_agency_other","046");
+   checkhide(f.maternal_health_type,"mh_other_agency","027");
+   checkhide(f.mh_other_agency,"mh_other_agency_other","046");
+   checkhide(f.support_services_referral_type,"housing_type","005");
+   checkhide(f.housing_type,"housing_type_other","027");
+   checkhide(f.housing_type,"shelter_housing_agency","022");
+   checkhide(f.shelter_housing_agency,"shelter_housing_agency_other","046");
+   checkhide(f.housing_type,"recovery_housing_agency","023");
+   checkhide(f.recovery_housing_agency,"recovery_housing_agency_other","046");
+   checkhide(f.housing_type,"respite_housing_agency","024");
+   checkhide(f.respite_housing_agency,"respite_housing_agency_other","046");
+   checkhide(f.housing_type,"transitional_housing_agency","025");
+   checkhide(f.transitional_housing_agency,"transitional_housing_agency_other","046");
+   checkhide(f.housing_type,"homeless_services_agency","026");
+   checkhide(f.homeless_services_agency,"homeless_services_agency_other","046");
+   checkhide(f.housing_type,"housing_other_agency","027");
+   checkhide(f.housing_other_agency,"housing_other_agency_other","046");
+   checkhide(f.support_services_referral_type,"supportive_services_type","006");
+   checkhide(f.support_services_referral_type,"supportive_services_agency","006");
+   checkhide(f.supportive_services_agency,"supportive_services_agency_other","046");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('support_services_referral_type') && gvtfieldvalue('support_services_referral_type')=='') {edesc=edesc+`Must specify a value for epicc_support_services_type\n`; seterror("support_services_referral_type");}
+  if (!hiddenfield('support_service_other_type') && gvtfieldvalue('support_service_other_type')=='') {edesc=edesc+`Must specify a value for Other Support Service Type\n`; seterror("support_service_other_type");}
+  if( !hiddenfield('support_service_other_agency') && gvtfieldvalue('support_service_other_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Other Support Services\n`; seterror("support_service_other_agency");}
+  if (!hiddenfield('support_service_other_agency_other') && gvtfieldvalue('support_service_other_agency_other')=='') {edesc=edesc+`Must specify a value for Other Support Service Agency\n`; seterror("support_service_other_agency_other");}
+  if (!hiddenfield('behavioral_health_type') && gvtfieldvalue('behavioral_health_type')=='') {edesc=edesc+`Must specify a value for Behavioral Health\n`; seterror("behavioral_health_type");}
+  if (!hiddenfield('behavioral_health_type_other') && gvtfieldvalue('behavioral_health_type_other')=='') {edesc=edesc+`Must specify a value for Other Behavioral Health Type\n`; seterror("behavioral_health_type_other");}
+  if (!hiddenfield('cmhc_services_agency') && gvtfieldvalue('cmhc_services_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for CMHC Services\n`; seterror("cmhc_services_agency");}
+  if (!hiddenfield('cmhc_services_agency_other') && gvtfieldvalue('cmhc_services_agency_other')=='') {edesc=edesc+`Must specify a value for Other CMHC Agency\n`; seterror("cmhc_services_agency_other");}
+  if (!hiddenfield('group_peer_support_agency') && gvtfieldvalue('group_peer_support_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Group Peer Support\n`; seterror("group_peer_support_agency");}
+  if (!hiddenfield('group_peer_support_agency_other') && gvtfieldvalue('group_peer_support_agency_other')=='') {edesc=edesc+`Must specify a value for Other Group Peer Support Agency\n`; seterror("group_peer_support_agency_other");}
+  if (!hiddenfield('individual_peer_support_agency') && gvtfieldvalue('individual_peer_support_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Individual Peer Support\n`; seterror("individual_peer_support_agency");}
+  if (!hiddenfield('individual_peer_support_agency_other') && gvtfieldvalue('individual_peer_support_agency_other')=='') {edesc=edesc+`Must specify a value for Other Individual Peer Support Agency\n`; seterror("individual_peer_support_agency_other");}
+  if (!hiddenfield('substance_use_services_agency') && gvtfieldvalue('substance_use_services_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Substance Use Services\n`; seterror("substance_use_services_agency");}
+  if (!hiddenfield('substance_use_services_agency_other') && gvtfieldvalue('substance_use_services_agency_other')=='') {edesc=edesc+`Must specify a value for Other Substance Use Service Agency\n`; seterror("substance_use_services_agency_other");}
+  if (!hiddenfield('behavioral_health_other_agency') && gvtfieldvalue('behavioral_health_other_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Other Behavioral Health Services\n`; seterror("behavioral_health_other_agency");}
+  if (!hiddenfield('behavioral_health_other_agency_other') && gvtfieldvalue('behavioral_health_other_agency_other')=='') {edesc=edesc+`Must specify a value for Other Behavioral Health Service Agency\n`; seterror("behavioral_health_other_agency_other");}
+  if (!hiddenfield('physical_health_type') && gvtfieldvalue('physical_health_type')=='') {edesc=edesc+`Must specify a value for Physical Health\n`; seterror("physical_health_type");}
+  if (!hiddenfield('physical_health_type_other') && gvtfieldvalue('physical_health_type_other')=='') {edesc=edesc+`Must specify a value for Other Physical Health Type\n`; seterror("physical_health_type_other");}
+  if (!hiddenfield('primary_care') && gvtfieldvalue('primary_care')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Primary Care Services\n`; seterror("primary_care");}
+  if (!hiddenfield('primary_care_other') && gvtfieldvalue('primary_care_other')=='') {edesc=edesc+`Must specify a value for Other Primary Care Agency\n`; seterror("primary_care_other");}
+  if (!hiddenfield('dental_care') && gvtfieldvalue('dental_care')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Dental Care Services\n`; seterror("dental_care");}
+  if (!hiddenfield('dental_care_other') && gvtfieldvalue('dental_care_other')=='') {edesc=edesc+`Must specify a value for Other Dental Care Agency\n`; seterror("dental_care_other");}
+  if (!hiddenfield('ph_other_agency') && gvtfieldvalue('ph_other_agency')=='') {edesc=edesc+`Must specify a value for Other Physical Health Agency Referred to\n`; seterror("ph_other_agency");}
+  if (!hiddenfield('ph_other_agency_other') && gvtfieldvalue('ph_other_agency_other')=='') {edesc=edesc+`Must specify a value for Other Physical Health Agency\n`; seterror("ph_other_agency_other");}
+  if (!hiddenfield('social_services_type') && gvtfieldvalue('social_services_type')=='') {edesc=edesc+`Must specify a value for Social Services\n`; seterror("social_services_type");}
+  if (!hiddenfield('social_services_type_other') && gvtfieldvalue('social_services_type_other')=='') {edesc=edesc+`Must specify a value for Other Social Services Type\n`; seterror("social_services_type_other");}
+  if (!hiddenfield('food_agency') && gvtfieldvalue('food_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Food\n`; seterror("food_agency");}
+  if (!hiddenfield('food_agency_other') && gvtfieldvalue('food_agency_other')=='') {edesc=edesc+`Must specify a value for Other Food Agency\n`; seterror("food_agency_other");}
+  if (!hiddenfield('clothing_agency') && gvtfieldvalue('clothing_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Clothing\n`; seterror("clothing_agency");}
+  if (!hiddenfield('clothing_agency_other') && gvtfieldvalue('clothing_agency_other')=='') {edesc=edesc+`Must specify a value for Other Clothing Agency\n`; seterror("clothing_agency_other");}
+  if (!hiddenfield('hygiene_agency') && gvtfieldvalue('hygiene_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Hygiene Assistance\n`; seterror("hygiene_agency");}
+  if (!hiddenfield('hygiene_agency_other') && gvtfieldvalue('hygiene_agency_other')=='') {edesc=edesc+`Must specify a value for Other Hygiene Agency\n`; seterror("hygiene_agency_other");}
+  if (!hiddenfield('utility_assistance_agency') && gvtfieldvalue('utility_assistance_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Utility Assistance\n`; seterror("utility_assistance_agency");}
+  if (!hiddenfield('utility_assistance_agency_other') && gvtfieldvalue('utility_assistance_agency_other')=='') {edesc=edesc+`Must specify a value for Other Utility Assistance Agency\n`; seterror("utility_assistance_agency_other");}
+  if (!hiddenfield('child_care_agency') && gvtfieldvalue('child_care_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Child Care\n`; seterror("child_care_agency");}
+  if (!hiddenfield('child_care_agency_other') && gvtfieldvalue('child_care_agency_other')=='') {edesc=edesc+`Must specify a value for Other Child Care Agency\n`; seterror("child_care_agency_other");}
+  if (!hiddenfield('developmental_disability_agency') && gvtfieldvalue('developmental_disability_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Developmental Disability Services\n`; seterror("developmental_disability_agency");}
+  if (!hiddenfield('developmental_disability_agency_other') && gvtfieldvalue('developmental_disability_agency_other')=='') {edesc=edesc+`Must specify a value for Other Developmental Disability Agency\n`; seterror("developmental_disability_agency_other");}
+  if (!hiddenfield('domestic_violence_agency') && gvtfieldvalue('domestic_violence_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to fo Domestic Violence Assistance\n`; seterror("domestic_violence_agency");}
+  if (!hiddenfield('domestic_violence_agency_other') && gvtfieldvalue('domestic_violence_agency_other')=='') {edesc=edesc+`Must specify a value for Other Domestic Violence Agency\n`; seterror("domestic_violence_agency_other");}
+  if (!hiddenfield('ss_other_agency') && gvtfieldvalue('ss_other_agency')=='') {edesc=edesc+`Must specify a value for Social Services Other Agency\n`; seterror("ss_other_agency");}
+  if (!hiddenfield('ss_other_agency_other') && gvtfieldvalue('ss_other_agency_other')=='') {edesc=edesc+`Must specify a value for Other Social Services Agency\n`; seterror("ss_other_agency_other");}
+  if (!hiddenfield('maternal_health_type') && gvtfieldvalue('maternal_health_type')=='') {edesc=edesc+`Must specify a value for Maternal Health\n`; seterror("maternal_health_type");}
+  if (!hiddenfield('maternal_health_type_other') && gvtfieldvalue('maternal_health_type_other')=='') {edesc=edesc+`Must specify a value for Other Maternal Health Type\n`; seterror("maternal_health_type_other");}
+  if (!hiddenfield('pregnancy_resources_agency') && gvtfieldvalue('pregnancy_resources_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Pregnancy Resources\n`; seterror("pregnancy_resources_agency");}
+  if (!hiddenfield('pregnancy_resources_agency_other') && gvtfieldvalue('pregnancy_resources_agency_other')=='') {edesc=edesc+`Must specify a value for Other Pregnancy Resource Agency\n`; seterror("pregnancy_resources_agency_other");}
+  if (!hiddenfield('pre_post_natal_care_agency') && gvtfieldvalue('pre_post_natal_care_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Pre and Post-Natal Care\n`; seterror("pre_post_natal_care_agency");}
+  if (!hiddenfield('mh_other_agency') && gvtfieldvalue('mh_other_agency')=='') {edesc=edesc+`Must specify a value for Maternal Health Other Agency\n`; seterror("mh_other_agency");}
+  if (!hiddenfield('mh_other_agency_other') && gvtfieldvalue('mh_other_agency_other')=='') {edesc=edesc+`Must specify a value for Other Maternal Health Agency\n`; seterror("mh_other_agency_other");}
+  if (!hiddenfield('housing_type') && gvtfieldvalue('housing_type')=='') {edesc=edesc+`Must specify a value for Housing\n`; seterror("housing_type");}
+  if (!hiddenfield('housing_type_other') && gvtfieldvalue('housing_type_other')=='') {edesc=edesc+`Must specify a value for Other Housing Type\n`; seterror("housing_type_other");}
+  if (!hiddenfield('shelter_housing_agency') && gvtfieldvalue('shelter_housing_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Shelter Housing\n`; seterror("shelter_housing_agency");}
+  if (!hiddenfield('shelter_housing_agency_other') && gvtfieldvalue('shelter_housing_agency_other')=='') {edesc=edesc+`Must specify a value for Other Shelter Housing Agency\n`; seterror("shelter_housing_agency_other");}
+  if (!hiddenfield('recovery_housing_agency') && gvtfieldvalue('recovery_housing_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Recovery Housing\n`; seterror("recovery_housing_agency");}
+  if (!hiddenfield('respite_housing_agency') && gvtfieldvalue('respite_housing_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Respite Housing\n`; seterror("respite_housing_agency");}
+  if (!hiddenfield('respite_housing_agency_other') && gvtfieldvalue('respite_housing_agency_other')=='') {edesc=edesc+`Must specify a value for Other Respite Housing Agency\n`; seterror("respite_housing_agency_other");}
+  if (!hiddenfield('transitional_housing_agency') && gvtfieldvalue('transitional_housing_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Transitional Housing\n`; seterror("transitional_housing_agency");}
+  if (!hiddenfield('transitional_housing_agency_other') && gvtfieldvalue('transitional_housing_agency_other')=='') {edesc=edesc+`Must specify a value for Other Transitional Housing Agency\n`; seterror("transitional_housing_agency_other");}
+  if (!hiddenfield('homeless_services_agency') && gvtfieldvalue('homeless_services_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Homeless Services\n`; seterror("homeless_services_agency");}
+  if (!hiddenfield('homeless_services_agency_other') && gvtfieldvalue('homeless_services_agency_other')=='') {edesc=edesc+`Must specify a value for Other Homless Services Agency\n`; seterror("homeless_services_agency_other");}
+  if (!hiddenfield('housing_other_agency') && gvtfieldvalue('housing_other_agency')=='') {edesc=edesc+`Must specify a value for Other Housing Agency Referred to\n`; seterror("housing_other_agency");}
+  if (!hiddenfield('housing_other_agency_other') && gvtfieldvalue('housing_other_agency_other')=='') {edesc=edesc+`Must specify a value for Other Housing Agency\n`; seterror("housing_other_agency_other");}
+  if (!hiddenfield('supportive_services_type') && gvtfieldvalue('supportive_services_type')=='') {edesc=edesc+`Must specify a value for Type of Supportive Service\n`; seterror("supportive_services_type");}
+  if (!hiddenfield('supportive_services_agency') && gvtfieldvalue('supportive_services_agency')=='') {edesc=edesc+`Must specify a value for Agency Referred to for Supportive Services\n`; seterror("supportive_services_agency");}
+  if (!hiddenfield('supportive_services_agency_other') && gvtfieldvalue('supportive_services_agency_other')=='') {edesc=edesc+`Must specify a value for Other Supportive Services Agency\n`; seterror("supportive_services_agency_other");}
+
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+     // Force update of report fields before submission
+   updateReportFields([
+    'epicc_support_services_type',
+    // add other dropdown IDs here as needed
+  ]);
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+// **Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['bcr_type_ref_placed', 'bcr_ref_placed_bh_subtype', 'table3'].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWEPICCSupportServicesTracker" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields-->
+    <input type="hidden" name="ss_behavioral_health" value="||FIELDVALUE ss_behavioral_health||" class="report-field value-001" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_physical_health" value="||FIELDVALUE ss_physical_health||" class="report-field value-002" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_social_services" value="||FIELDVALUE ss_social_services||" class="report-field value-003" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_maternal_health" value="||FIELDVALUE ss_maternal_health||" class="report-field value-004" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_housing" value="||FIELDVALUE ss_housing||" class="report-field value-005" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_supportive_services" value="||FIELDVALUE ss_supportive_services||" class="report-field value-006" data-source="epicc_support_services_type">
+    <input type="hidden" name="bh_individual_peer_support" value="||FIELDVALUE bh_individual_peer_support||" class="report-field value-007" data-source="epicc_support_services_type">
+    <input type="hidden" name="bh_group_peer_support" value="||FIELDVALUE bh_group_peer_support||" class="report-field value-008" data-source="epicc_support_services_type">
+    <input type="hidden" name="bh_substance_use_services" value="||FIELDVALUE bh_substance_use_services||" class="report-field value-009" data-source="epicc_support_services_type">
+    <input type="hidden" name="bh_cmhc_services" value="||FIELDVALUE bh_cmhc_services||" class="report-field value-010" data-source="epicc_support_services_type">
+    <input type="hidden" name="bh_other" value="||FIELDVALUE bh_other||" class="report-field value-027" data-source="epicc_support_services_type">
+    <input type="hidden" name="ph_primary_care" value="||FIELDVALUE ph_primary_care||" class="report-field value-011" data-source="epicc_support_services_type">
+    <input type="hidden" name="ph_dental_care" value="||FIELDVALUE ph_dental_care||" class="report-field value-012" data-source="epicc_support_services_type">
+    <input type="hidden" name="ph_other" value="||FIELDVALUE ph_other||" class="report-field value-027" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_food" value="||FIELDVALUE ss_food||" class="report-field value-013" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_clothing" value="||FIELDVALUE ss_clothing||" class="report-field value-014" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_hygiene" value="||FIELDVALUE ss_hygiene||" class="report-field value-015" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_utility_assistance" value="||FIELDVALUE ss_utility_assistance||" class="report-field value-016" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_child_care" value="||FIELDVALUE ss_child_care||" class="report-field value-017" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_developmental_disability" value="||FIELDVALUE ss_developmental_disability||" class="report-field value-018" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_domestic_violence" value="||FIELDVALUE ss_domestic_violence||" class="report-field value-019" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_other" value="||FIELDVALUE ss_other||" class="report-field value-027" data-source="epicc_support_services_type">
+    <input type="hidden" name="mh_pregnancy_resources" value="||FIELDVALUE mh_pregnancy_resources||" class="report-field value-020" data-source="epicc_support_services_type">
+    <input type="hidden" name="mh_pre_post_natal_care" value="||FIELDVALUE mh_pre_post_natal_care||" class="report-field value-021" data-source="epicc_support_services_type">
+    <input type="hidden" name="mh_other" value="||FIELDVALUE mh_other||" class="report-field value-027" data-source="epicc_support_services_type">
+    <input type="hidden" name="h_shelter_housing" value="||FIELDVALUE h_shelter_housing||" class="report-field value-022" data-source="epicc_support_services_type">
+    <input type="hidden" name="h_recovery_housing" value="||FIELDVALUE h_recovery_housing||" class="report-field value-023" data-source="epicc_support_services_type">
+    <input type="hidden" name="h_respite_housing" value="||FIELDVALUE h_respite_housing||" class="report-field value-024" data-source="epicc_support_services_type">
+    <input type="hidden" name="h_transitional_housing" value="||FIELDVALUE h_transitional_housing||" class="report-field value-025" data-source="epicc_support_services_type">
+    <input type="hidden" name="h_homeless_services" value="||FIELDVALUE h_homeless_services||" class="report-field value-026" data-source="epicc_support_services_type">
+    <input type="hidden" name="h_other" value="||FIELDVALUE h_other||" class="report-field value-027" data-source="epicc_support_services_type">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>EPICC Support Services Tracker</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsupport_services_referral_type qsupport_services_referral_type">
+    <div class="col12 fldsupport_services_referral_type qsupport_services_referral_type"><span class="qsupport_services_referral_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsupport_services_referral_type required-field-label"><label class="label-top"><br>(Hold down Ctrl to select multiple)</label></span><span class="qsupport_services_referral_type"><select size="8" name="support_services_referral_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE support_services_referral_type^^') AND support_service_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_services_type||
+
+<!-- FIELDOVERRIDE(support_services_referral_type,10,200) -->
+</span></div>
+     </div>
+  </div>
+
+ <div class="entire">
+    <div class="col12 fldsupport_service_other_type qsupport_service_other_type">
+    <div class="col12 fldsupport_service_other_type qsupport_service_other_type"><span class="qsupport_service_other_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsupport_service_other_type required-field-label"><label class="label-top">||FIELDTAG support_service_other_type||Other Type of Support Services||ENDFIELDTAG||</label></span><span class="qsupport_service_other_type"><input type="text" name="support_service_other_type" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldsupport_service_other_agency qsupport_service_other_agency">
+    <div class="col12 fldsupport_service_other_agency qsupport_service_other_agency"><span class="qsupport_service_other_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsupport_service_other_agency required-field-label"><label class="label-top">Agency Referred to for Other Support Services</label></span><span class="qsupport_service_other_agency"><select size="1" name="support_service_other_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE support_service_other_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldsupport_service_other_agency_other qsupport_service_other_agency_other">
+    <div class="col12 fldsupport_service_other_agency_other qsupport_service_other_agency_other"><span class="qsupport_service_other_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qsupport_service_other_agency_other required-field-label"><label class="label-top">||FIELDTAG support_service_other_agency_other||Other Support Service Agency||ENDFIELDTAG||</label></span><span class="qsupport_service_other_agency_other"><input type="text" name="support_service_other_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbehavioral_health_type qbehavioral_health_type">
+    <div class="col12 fldbehavioral_health_type qbehavioral_health_type"><span class="qbehavioral_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_type required-field-label"><label class="label-top">Behavioral Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qbehavioral_health_type"><select size="8" name="behavioral_health_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE behavioral_health_type^^') AND bh_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_services_type||
+
+<!-- FIELDOVERRIDE(behavioral_health_type,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbehavioral_health_type_other qbehavioral_health_type_other">
+    <div class="col12 fldbehavioral_health_type_other qbehavioral_health_type_other"><span class="qbehavioral_health_type_other required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_type_other required-field-label"><label class="label-top">||FIELDTAG behavioral_health_type_other||Other Behavioral Health Type||ENDFIELDTAG||</label></span><span class="qbehavioral_health_type_other"><input type="text" name="behavioral_health_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcmhc_services_agency qcmhc_services_agency">
+    <div class="col12 fldcmhc_services_agency qcmhc_services_agency"><span class="qcmhc_services_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qcmhc_services_agency required-field-label"><label class="label-top">Agency Referred to for CMHC Services</label></span><span class="qcmhc_services_agency"><select size="1" name="cmhc_services_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_services_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcmhc_services_agency_other qcmhc_services_agency_other">
+    <div class="col12 fldcmhc_services_agency_other qcmhc_services_agency_other"><span class="qcmhc_services_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qcmhc_services_agency_other required-field-label"><label class="label-top">||FIELDTAG cmhc_services_agency_other||Other CMHC Agency||ENDFIELDTAG||</label></span><span class="qcmhc_services_agency_other"><input type="text" name="cmhc_services_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldgroup_peer_support_agency qgroup_peer_support_agency">
+    <div class="col12 fldgroup_peer_support_agency qgroup_peer_support_agency"><span class="qgroup_peer_support_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qgroup_peer_support_agency required-field-label"><label class="label-top">Agency Referred to for Group Peer Support</label></span><span class="qgroup_peer_support_agency"><select size="1" name="group_peer_support_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE group_peer_support_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldgroup_peer_support_agency_other qgroup_peer_support_agency_other">
+    <div class="col12 fldgroup_peer_support_agency_other qgroup_peer_support_agency_other"><span class="qgroup_peer_support_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qgroup_peer_support_agency_other required-field-label"><label class="label-top">||FIELDTAG group_peer_support_agency_other||Other Group Peer Support Agency||ENDFIELDTAG||</label></span><span class="qgroup_peer_support_agency_other"><input type="text" name="group_peer_support_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldindividual_peer_support_agency qindividual_peer_support_agency">
+    <div class="col12 fldindividual_peer_support_agency qindividual_peer_support_agency"><span class="qindividual_peer_support_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qindividual_peer_support_agency required-field-label"><label class="label-top">Agency Referred to for Individual Peer Support</label></span><span class="qindividual_peer_support_agency"><select size="1" name="individual_peer_support_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE individual_peer_support_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldindividual_peer_support_agency_other qindividual_peer_support_agency_other">
+    <div class="col12 fldindividual_peer_support_agency_other qindividual_peer_support_agency_other"><span class="qindividual_peer_support_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qindividual_peer_support_agency_other required-field-label"><label class="label-top">||FIELDTAG individual_peer_support_agency_other||Other Individual Peer Support Agency||ENDFIELDTAG||</label></span><span class="qindividual_peer_support_agency_other"><input type="text" name="individual_peer_support_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsubstance_use_services_agency qsubstance_use_services_agency">
+    <div class="col12 fldsubstance_use_services_agency qsubstance_use_services_agency"><span class="qsubstance_use_services_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_services_agency required-field-label"><label class="label-top">Agency Referred to for Substance Use Services</label></span><span class="qsubstance_use_services_agency"><select size="1" name="substance_use_services_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE substance_use_services_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsubstance_use_services_agency_other qsubstance_use_services_agency_other">
+    <div class="col12 fldsubstance_use_services_agency_other qsubstance_use_services_agency_other"><span class="qsubstance_use_services_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qsubstance_use_services_agency_other required-field-label"><label class="label-top">||FIELDTAG substance_use_services_agency_other||Other Substance Use Service Agency||ENDFIELDTAG||</label></span><span class="qsubstance_use_services_agency_other"><input type="text" name="substance_use_services_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbehavioral_health_other_agency qbehavioral_health_other_agency">
+    <div class="col12 fldbehavioral_health_other_agency qbehavioral_health_other_agency"><span class="qbehavioral_health_other_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_other_agency required-field-label"><label class="label-top">Agency Referred to for Other Behavioral Health Services</label></span><span class="qbehavioral_health_other_agency"><select size="1" name="behavioral_health_other_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE behavioral_health_other_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbehavioral_health_other_agency_other qbehavioral_health_other_agency_other">
+    <div class="col12 fldbehavioral_health_other_agency_other qbehavioral_health_other_agency_other"><span class="qbehavioral_health_other_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_other_agency_other required-field-label"><label class="label-top">||FIELDTAG behavioral_health_other_agency_other||Other Behavioral Health Service Agency||ENDFIELDTAG||</label></span><span class="qbehavioral_health_other_agency_other"><input type="text" name="behavioral_health_other_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldphysical_health_type qphysical_health_type">
+    <div class="col12 fldphysical_health_type qphysical_health_type"><span class="qphysical_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qphysical_health_type required-field-label"><label class="label-top">Physical Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qphysical_health_type"><select size="8" name="physical_health_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE physical_health_type^^') AND ph_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_services_type||
+
+<!-- FIELDOVERRIDE(physical_health_type,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldphysical_health_type_other qphysical_health_type_other">
+    <div class="col12 fldphysical_health_type_other qphysical_health_type_other"><span class="qphysical_health_type_other required-label">||PWRequiredFieldRequiredText||</span><span class="qphysical_health_type_other required-field-label"><label class="label-top">||FIELDTAG physical_health_type_other||Other Physical Health Type||ENDFIELDTAG||</label></span><span class="qphysical_health_type_other"><input type="text" name="physical_health_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldprimary_care qprimary_care">
+    <div class="col12 fldprimary_care qprimary_care"><span class="qprimary_care required-label">||PWRequiredFieldRequiredText||</span><span class="qprimary_care required-field-label"><label class="label-top">Agency Referred to for Primary Care Services</label></span><span class="qprimary_care"><select size="1" name="primary_care" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE primary_care^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+
+<!-- FIELDOVERRIDE(primary_care,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldprimary_care_other qprimary_care_other">
+    <div class="col12 fldprimary_care_other qprimary_care_other"><span class="qprimary_care_other required-label">||PWRequiredFieldRequiredText||</span><span class="qprimary_care_other required-field-label"><label class="label-top">||FIELDTAG primary_care_other||Other Primary Care Agency||ENDFIELDTAG||</label></span><span class="qprimary_care_other"><input type="text" name="primary_care_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddental_care qdental_care">
+    <div class="col12 flddental_care qdental_care"><span class="qdental_care required-label">||PWRequiredFieldRequiredText||</span><span class="qdental_care required-field-label"><label class="label-top">Agency Referred to for Dental Care Services</label></span><span class="qdental_care"><select size="1" name="dental_care" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dental_care^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddental_care_other qdental_care_other">
+    <div class="col12 flddental_care_other qdental_care_other"><span class="qdental_care_other required-label">||PWRequiredFieldRequiredText||</span><span class="qdental_care_other required-field-label"><label class="label-top">||FIELDTAG dental_care_other||Other Dental Care Agency||ENDFIELDTAG||</label></span><span class="qdental_care_other"><input type="text" name="dental_care_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldph_other_agency qph_other_agency">
+    <div class="col12 fldph_other_agency qph_other_agency"><span class="qph_other_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qph_other_agency required-field-label"><label class="label-top">Other Physical Health Agency Referred to</label></span><span class="qph_other_agency"><select size="1" name="ph_other_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ph_other_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldph_other_agency_other qph_other_agency_other">
+    <div class="col12 fldph_other_agency_other qph_other_agency_other"><span class="qph_other_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qph_other_agency_other required-field-label"><label class="label-top">||FIELDTAG ph_other_agency_other||Other Physical Health Agency||ENDFIELDTAG||</label></span><span class="qph_other_agency_other"><input type="text" name="ph_other_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsocial_services_type qsocial_services_type">
+    <div class="col12 fldsocial_services_type qsocial_services_type"><span class="qsocial_services_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsocial_services_type required-field-label"><label class="label-top">Social Services<br>(Hold down Ctrl to select multiple)</label></span><span class="qsocial_services_type"><select size="8" name="social_services_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE social_services_type^^') AND ss_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_services_type||
+
+<!-- FIELDOVERRIDE(social_services_type,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsocial_services_type_other qsocial_services_type_other">
+    <div class="col12 fldsocial_services_type_other qsocial_services_type_other"><span class="qsocial_services_type_other required-label">||PWRequiredFieldRequiredText||</span><span class="qsocial_services_type_other required-field-label"><label class="label-top">||FIELDTAG social_services_type_other||Other Social Services Type||ENDFIELDTAG||</label></span><span class="qsocial_services_type_other"><input type="text" name="social_services_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldfood_agency qfood_agency">
+    <div class="col12 fldfood_agency qfood_agency"><span class="qfood_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qfood_agency required-field-label"><label class="label-top">Agency Referred to for Food</label></span><span class="qfood_agency"><select size="1" name="food_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE food_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+
+<!-- FIELDOVERRIDE(food_agency,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldfood_agency_other qfood_agency_other">
+    <div class="col12 fldfood_agency_other qfood_agency_other"><span class="qfood_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qfood_agency_other required-field-label"><label class="label-top">||FIELDTAG food_agency_other||Other Food Agency||ENDFIELDTAG||</label></span><span class="qfood_agency_other"><input type="text" name="food_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldclothing_agency qclothing_agency">
+    <div class="col12 fldclothing_agency qclothing_agency"><span class="qclothing_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qclothing_agency required-field-label"><label class="label-top">Agency Referred to for Clothing</label></span><span class="qclothing_agency"><select size="1" name="clothing_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE clothing_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldclothing_agency_other qclothing_agency_other">
+    <div class="col12 fldclothing_agency_other qclothing_agency_other"><span class="qclothing_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qclothing_agency_other required-field-label"><label class="label-top">||FIELDTAG clothing_agency_other||Other Clothing Agency||ENDFIELDTAG||</label></span><span class="qclothing_agency_other"><input type="text" name="clothing_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhygiene_agency qhygiene_agency">
+    <div class="col12 fldhygiene_agency qhygiene_agency"><span class="qhygiene_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qhygiene_agency required-field-label"><label class="label-top">Agency Referred to for Hygiene Assistance</label></span><span class="qhygiene_agency"><select size="1" name="hygiene_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE hygiene_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhygiene_agency_other qhygiene_agency_other">
+    <div class="col12 fldhygiene_agency_other qhygiene_agency_other"><span class="qhygiene_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qhygiene_agency_other required-field-label"><label class="label-top">||FIELDTAG hygiene_agency_other||Other Hygiene Agency||ENDFIELDTAG||</label></span><span class="qhygiene_agency_other"><input type="text" name="hygiene_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldutility_assistance_agency qutility_assistance_agency">
+    <div class="col12 fldutility_assistance_agency qutility_assistance_agency"><span class="qutility_assistance_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qutility_assistance_agency required-field-label"><label class="label-top">Agency Referred to for Utility Assistance</label></span><span class="qutility_assistance_agency"><select size="1" name="utility_assistance_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE utility_assistance_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldutility_assistance_agency_other qutility_assistance_agency_other">
+    <div class="col12 fldutility_assistance_agency_other qutility_assistance_agency_other"><span class="qutility_assistance_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qutility_assistance_agency_other required-field-label"><label class="label-top">||FIELDTAG utility_assistance_agency_other||Other Utility Assistance Agency||ENDFIELDTAG||</label></span><span class="qutility_assistance_agency_other"><input type="text" name="utility_assistance_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldchild_care_agency qchild_care_agency">
+    <div class="col12 fldchild_care_agency qchild_care_agency"><span class="qchild_care_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qchild_care_agency required-field-label"><label class="label-top">Agency Referred to for Child Care</label></span><span class="qchild_care_agency"><select size="1" name="child_care_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE child_care_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldchild_care_agency_other qchild_care_agency_other">
+    <div class="col12 fldchild_care_agency_other qchild_care_agency_other"><span class="qchild_care_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qchild_care_agency_other required-field-label"><label class="label-top">||FIELDTAG child_care_agency_other||Other Child Care Agency||ENDFIELDTAG||</label></span><span class="qchild_care_agency_other"><input type="text" name="child_care_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddevelopmental_disability_agency qdevelopmental_disability_agency">
+    <div class="col12 flddevelopmental_disability_agency qdevelopmental_disability_agency"><span class="qdevelopmental_disability_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qdevelopmental_disability_agency required-field-label"><label class="label-top">Agency Referred to for Developmental Disability Services</label></span><span class="qdevelopmental_disability_agency"><select size="1" name="developmental_disability_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE developmental_disability_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddevelopmental_disability_agency_other qdevelopmental_disability_agency_other">
+    <div class="col12 flddevelopmental_disability_agency_other qdevelopmental_disability_agency_other"><span class="qdevelopmental_disability_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qdevelopmental_disability_agency_other required-field-label"><label class="label-top">||FIELDTAG developmental_disability_agency_other||Other Developmental Disability Agency||ENDFIELDTAG||</label></span><span class="qdevelopmental_disability_agency_other"><input type="text" name="developmental_disability_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddomestic_violence_agency qdomestic_violence_agency">
+    <div class="col12 flddomestic_violence_agency qdomestic_violence_agency"><span class="qdomestic_violence_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qdomestic_violence_agency required-field-label"><label class="label-top">Agency Referred to fo Domestic Violence Assistance</label></span><span class="qdomestic_violence_agency"><select size="1" name="domestic_violence_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE domestic_violence_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddomestic_violence_agency_other qdomestic_violence_agency_other">
+    <div class="col12 flddomestic_violence_agency_other qdomestic_violence_agency_other"><span class="qdomestic_violence_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qdomestic_violence_agency_other required-field-label"><label class="label-top">||FIELDTAG domestic_violence_agency_other||Other Domestic Violence Agency||ENDFIELDTAG||</label></span><span class="qdomestic_violence_agency_other"><input type="text" name="domestic_violence_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldss_other_agency qss_other_agency">
+    <div class="col12 fldss_other_agency qss_other_agency"><span class="qss_other_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qss_other_agency required-field-label"><label class="label-top">Social Services Other Agency</label></span><span class="qss_other_agency"><select size="1" name="ss_other_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ss_other_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldss_other_agency_other qss_other_agency_other">
+    <div class="col12 fldss_other_agency_other qss_other_agency_other"><span class="qss_other_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qss_other_agency_other required-field-label"><label class="label-top">||FIELDTAG ss_other_agency_other||Other Social Services Agency||ENDFIELDTAG||</label></span><span class="qss_other_agency_other"><input type="text" name="ss_other_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldmaternal_health_type qmaternal_health_type">
+    <div class="col12 fldmaternal_health_type qmaternal_health_type"><span class="qmaternal_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qmaternal_health_type required-field-label"><label class="label-top">Maternal Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qmaternal_health_type"><select size="4" name="maternal_health_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE maternal_health_type^^') AND mh_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_services_type||
+
+<!-- FIELDOVERRIDE(maternal_health_type,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldmaternal_health_type_other qmaternal_health_type_other">
+    <div class="col12 fldmaternal_health_type_other qmaternal_health_type_other"><span class="qmaternal_health_type_other required-label">||PWRequiredFieldRequiredText||</span><span class="qmaternal_health_type_other required-field-label"><label class="label-top">||FIELDTAG maternal_health_type_other||Other Maternal Health Type||ENDFIELDTAG||</label></span><span class="qmaternal_health_type_other"><input type="text" name="maternal_health_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpregnancy_resources_agency qpregnancy_resources_agency">
+    <div class="col12 fldpregnancy_resources_agency qpregnancy_resources_agency"><span class="qpregnancy_resources_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qpregnancy_resources_agency required-field-label"><label class="label-top">Agency Referred to for Pregnancy Resources</label></span><span class="qpregnancy_resources_agency"><select size="1" name="pregnancy_resources_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE pregnancy_resources_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpregnancy_resources_agency_other qpregnancy_resources_agency_other">
+    <div class="col12 fldpregnancy_resources_agency_other qpregnancy_resources_agency_other"><span class="qpregnancy_resources_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qpregnancy_resources_agency_other required-field-label"><label class="label-top">||FIELDTAG pregnancy_resources_agency_other||Other Pregnancy Resource Agency||ENDFIELDTAG||</label></span><span class="qpregnancy_resources_agency_other"><input type="text" name="pregnancy_resources_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpre_post_natal_care_agency qpre_post_natal_care_agency">
+    <div class="col12 fldpre_post_natal_care_agency qpre_post_natal_care_agency"><span class="qpre_post_natal_care_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qpre_post_natal_care_agency required-field-label"><label class="label-top">Agency Referred to for Pre and Post-Natal Care</label></span><span class="qpre_post_natal_care_agency"><select size="1" name="pre_post_natal_care_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE pre_post_natal_care_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpre_post_natal_care_agency_other qpre_post_natal_care_agency_other">
+    <div class="col12 fldpre_post_natal_care_agency_other qpre_post_natal_care_agency_other"><span class="qpre_post_natal_care_agency_other"><label class="label-top">||FIELDTAG pre_post_natal_care_agency_other||Other Pre and Post-Natal Care Agency||ENDFIELDTAG||</label></span><span class="qpre_post_natal_care_agency_other"><input type="text" name="pre_post_natal_care_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldmh_other_agency qmh_other_agency">
+    <div class="col12 fldmh_other_agency qmh_other_agency"><span class="qmh_other_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_other_agency required-field-label"><label class="label-top">Maternal Health Other Agency</label></span><span class="qmh_other_agency"><select size="1" name="mh_other_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_other_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldmh_other_agency_other qmh_other_agency_other">
+    <div class="col12 fldmh_other_agency_other qmh_other_agency_other"><span class="qmh_other_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_other_agency_other required-field-label"><label class="label-top">||FIELDTAG mh_other_agency_other||Other Maternal Health Agency||ENDFIELDTAG||</label></span><span class="qmh_other_agency_other"><input type="text" name="mh_other_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhousing_type qhousing_type">
+    <div class="col12 fldhousing_type qhousing_type"><span class="qhousing_type required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_type required-field-label"><label class="label-top">Housing<br>(Hold down Ctrl to select multiple)</label></span><span class="qhousing_type"><select size="8" name="housing_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE housing_type^^') AND housing='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_services_type||
+
+<!-- FIELDOVERRIDE(housing_type,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhousing_type_other qhousing_type_other">
+    <div class="col12 fldhousing_type_other qhousing_type_other"><span class="qhousing_type_other required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_type_other required-field-label"><label class="label-top">||FIELDTAG housing_type_other||Other Housing Type||ENDFIELDTAG||</label></span><span class="qhousing_type_other"><input type="text" name="housing_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldshelter_housing_agency qshelter_housing_agency">
+    <div class="col12 fldshelter_housing_agency qshelter_housing_agency"><span class="qshelter_housing_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qshelter_housing_agency required-field-label"><label class="label-top">Agency Referred to for Shelter Housing</label></span><span class="qshelter_housing_agency"><select size="1" name="shelter_housing_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE shelter_housing_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldshelter_housing_agency_other qshelter_housing_agency_other">
+    <div class="col12 fldshelter_housing_agency_other qshelter_housing_agency_other"><span class="qshelter_housing_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qshelter_housing_agency_other required-field-label"><label class="label-top">||FIELDTAG shelter_housing_agency_other||Other Shelter Housing Agency||ENDFIELDTAG||</label></span><span class="qshelter_housing_agency_other"><input type="text" name="shelter_housing_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldrecovery_housing_agency qrecovery_housing_agency">
+    <div class="col12 fldrecovery_housing_agency qrecovery_housing_agency"><span class="qrecovery_housing_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qrecovery_housing_agency required-field-label"><label class="label-top">Agency Referred to for Recovery Housing</label></span><span class="qrecovery_housing_agency"><select size="1" name="recovery_housing_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE recovery_housing_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldrecovery_housing_agency_other qrecovery_housing_agency_other">
+    <div class="col12 fldrecovery_housing_agency_other qrecovery_housing_agency_other"><span class="qrecovery_housing_agency_other"><label class="label-top">||FIELDTAG recovery_housing_agency_other||Other Recovery Housing Agency||ENDFIELDTAG||</label></span><span class="qrecovery_housing_agency_other"><input type="text" name="recovery_housing_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldrespite_housing_agency qrespite_housing_agency">
+    <div class="col12 fldrespite_housing_agency qrespite_housing_agency"><span class="qrespite_housing_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qrespite_housing_agency required-field-label"><label class="label-top">Agency Referred to for Respite Housing</label></span><span class="qrespite_housing_agency"><select size="1" name="respite_housing_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE respite_housing_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldrespite_housing_agency_other qrespite_housing_agency_other">
+    <div class="col12 fldrespite_housing_agency_other qrespite_housing_agency_other"><span class="qrespite_housing_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qrespite_housing_agency_other required-field-label"><label class="label-top">||FIELDTAG respite_housing_agency_other||Other Respite Housing Agency||ENDFIELDTAG||</label></span><span class="qrespite_housing_agency_other"><input type="text" name="respite_housing_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldtransitional_housing_agency qtransitional_housing_agency">
+    <div class="col12 fldtransitional_housing_agency qtransitional_housing_agency"><span class="qtransitional_housing_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qtransitional_housing_agency required-field-label"><label class="label-top">Agency Referred to for Transitional Housing</label></span><span class="qtransitional_housing_agency"><select size="1" name="transitional_housing_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE transitional_housing_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldtransitional_housing_agency_other qtransitional_housing_agency_other">
+    <div class="col12 fldtransitional_housing_agency_other qtransitional_housing_agency_other"><span class="qtransitional_housing_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qtransitional_housing_agency_other required-field-label"><label class="label-top">||FIELDTAG transitional_housing_agency_other||Other Transitional Housing Agency||ENDFIELDTAG||</label></span><span class="qtransitional_housing_agency_other"><input type="text" name="transitional_housing_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhomeless_services_agency qhomeless_services_agency">
+    <div class="col12 fldhomeless_services_agency qhomeless_services_agency"><span class="qhomeless_services_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_services_agency required-field-label"><label class="label-top">Agency Referred to for Homeless Services</label></span><span class="qhomeless_services_agency"><select size="1" name="homeless_services_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE homeless_services_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhomeless_services_agency_other qhomeless_services_agency_other">
+    <div class="col12 fldhomeless_services_agency_other qhomeless_services_agency_other"><span class="qhomeless_services_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_services_agency_other required-field-label"><label class="label-top">||FIELDTAG homeless_services_agency_other||Other Homless Services Agency||ENDFIELDTAG||</label></span><span class="qhomeless_services_agency_other"><input type="text" name="homeless_services_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhousing_other_agency qhousing_other_agency">
+    <div class="col12 fldhousing_other_agency qhousing_other_agency"><span class="qhousing_other_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_other_agency required-field-label"><label class="label-top">Other Housing Agency Referred to</label></span><span class="qhousing_other_agency"><select size="1" name="housing_other_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE housing_other_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhousing_other_agency_other qhousing_other_agency_other">
+    <div class="col12 fldhousing_other_agency_other qhousing_other_agency_other"><span class="qhousing_other_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_other_agency_other required-field-label"><label class="label-top">||FIELDTAG housing_other_agency_other||Other Housing Agency||ENDFIELDTAG||</label></span><span class="qhousing_other_agency_other"><input type="text" name="housing_other_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsupportive_services_type qsupportive_services_type">
+    <div class="col12 fldsupportive_services_type qsupportive_services_type"><span class="qsupportive_services_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsupportive_services_type required-field-label"><label class="label-top">||FIELDTAG supportive_services_type||Type of Supportive Service||ENDFIELDTAG||</label></span><span class="qsupportive_services_type"><input type="text" name="supportive_services_type" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsupportive_services_agency qsupportive_services_agency">
+    <div class="col12 fldsupportive_services_agency qsupportive_services_agency"><span class="qsupportive_services_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsupportive_services_agency required-field-label"><label class="label-top">Agency Referred to for Supportive Services</label></span><span class="qsupportive_services_agency"><select size="1" name="supportive_services_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_service_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE supportive_services_agency^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_support_service_agencies||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsupportive_services_agency_other qsupportive_services_agency_other">
+    <div class="col12 fldsupportive_services_agency_other qsupportive_services_agency_other"><span class="qsupportive_services_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qsupportive_services_agency_other required-field-label"><label class="label-top">||FIELDTAG supportive_services_agency_other||Other Supportive Services Agency||ENDFIELDTAG||</label></span><span class="qsupportive_services_agency_other"><input type="text" name="supportive_services_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsst_notes qsst_notes">
+    <div class="col12 fldsst_notes qsst_notes"><span class="qsst_notes"><label class="label-top">||FIELDTAG sst_notes||Notes||ENDFIELDTAG||</label></span><span class="qsst_notes"><textarea name="sst_notes" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- **Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

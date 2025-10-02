@@ -51,6 +51,11 @@ function startup() {
     setrequire('preg_post_part_thirty_day');
     setrequire('why_not_meet_prog_eligibility_thirty_day');
     setrequire('TiedEnrollment');
+    setrequire('transfer_type_thirty_day');
+    setrequire('reason_not_participating_thirty_day');
+    setrequire('reason_not_attending_sud_tx_thirty_day');
+    setrequire('other_reason_not_attending_sud_tx_thirty_day');
+    setrequire('attending_sud_tx_verify_thirty_day');
 
 	checkhideall();
 
@@ -60,21 +65,145 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.treatment_path_thirty_day,"rc_only_client_attend_first_appt_coach_thirty_day","Recovery Coach Only");
-   checkhide(f.treatment_path_thirty_day,"rc_only_last_date_communication_thirty_day","Recovery Coach Only");
+  //     checkhide(f.treatment_path_thirty_day,"rc_only_client_attend_first_appt_coach_thirty_day","Recovery Coach Only");
+  //  checkhide(f.treatment_path_thirty_day,"rc_only_last_date_communication_thirty_day","Recovery Coach Only");
 //    checkhide(f.treatment_path_thirty_day,"client_attend_intake_appt_thirty_day","MAT,Non-MAT Treatment");
 //    checkhide(f.treatment_path_thirty_day,"intake_appt_date_thirty_day","MAT,Non-MAT Treatment");
    checkhide(f.treatment_path_thirty_day,"mat_prescribed_physician_thirty_day","MAT");
-   checkhide(f.treatment_path_thirty_day,"intake_conducted_appt_date_thirty_day","MAT,Non-MAT Treatment");
+  //  checkhide(f.treatment_path_thirty_day,"intake_conducted_appt_date_thirty_day","MAT,Non-MAT Treatment");
    checkhide(f.mat_prescribed_physician_thirty_day,"what_mat_physician_appt_thirty_day","Yes");
    checkhide(f.program_participation_thirty_day,"preg_post_part_thirty_day","015");
-   checkhide(f.program_participation_thirty_day,"if_transfer_what_region_thirty_day","010");
-   checkhide(f.program_participation_thirty_day,"if_transfer_contact_transfer_region_success_thirty_day","010");
-   checkhide(f.program_participation_thirty_day,"client_status_thirty_day","016,010");
+  //  checkhide(f.program_participation_thirty_day,"if_transfer_what_region_thirty_day","010");
+  //  checkhide(f.program_participation_thirty_day,"if_transfer_contact_transfer_region_success_thirty_day","010");
+  //  checkhide(f.program_participation_thirty_day,"client_status_thirty_day","016,010");
    checkhide(f.client_status_thirty_day,"date_transferred_reengagement_specialist_thirty_day","Transfer To Re-Engagement Specialist");
-   checkhide(f.program_participation_thirty_day,"why_not_meet_prog_eligibility_thirty_day","002");
+  //  checkhide(f.program_participation_thirty_day,"why_not_meet_prog_eligibility_thirty_day","002");
+  checkhide(f.reason_not_attending_sud_tx_thirty_day,"other_reason_not_attending_sud_tx_thirty_day","Other");
+  checkhide(f.reason_not_participating_thirty_day,"why_not_meet_prog_eligibility_thirty_day","Doesn't Meet Program Criteria");
 
 }
+
+// Get the selected value of a radio group or the value of a select
+function getVal(name) {
+  const checked = document.querySelector(`input[name="${name}"]:checked`);
+  if (checked) return checked.value;
+  const sel = document.querySelector(`select[name="${name}"]`);
+  return sel ? sel.value : "";
+}
+
+function showField(name, show = true) {
+  document.querySelectorAll(`.fld${name}`).forEach(el => {
+    if (show) {
+      el.style.display = "block";
+    } else {
+      // Only clear if it was visible and is now being hidden
+      if (el.style.display !== "none") {
+        el.querySelectorAll("input, select, textarea").forEach(inp => {
+          if (inp.type === "radio" || inp.type === "checkbox") {
+            inp.checked = false;
+          } else {
+            inp.value = "";
+          }
+        });
+      }
+      el.style.display = "none";
+    }
+  });
+}
+
+// Reset radios inside hidden wrappers
+function resetHidden(name) {
+  document.querySelectorAll(`.fld${name} input[type="radio"]`).forEach(inp => {
+    if (inp.offsetParent === null) inp.checked = false;
+  });
+}
+
+
+function updateThirtyDayForm() {
+  const programVal   = getVal("program_participation_thirty_day");
+  const attendingVal = getVal("attending_sud_tx_verify_thirty_day");
+  const treatmentVal = getVal("treatment_path_thirty_day");
+  const intakeVal    = getVal("intake_conducted_appt_date_thirty_day");
+  const transferVal  = getVal("transfer_type_thirty_day");
+
+  // 1) Shared field: Treatment Path — visible if:
+  //    - program = 023, OR
+  //    - program = 005 AND attending = Yes
+  const showTP = (programVal === "023") || (programVal === "005" && attendingVal === "Yes");
+  showField("treatment_path_thirty_day", showTP);
+
+  // Also manage option visibility based on program
+  if (programVal === "023") {
+    // Show all options
+    ["tp_mat_span","tp_nonmat_span","tp_rc_span"].forEach(id => {
+      const span = document.getElementById(id);
+      if (!span) return;
+      span.style.display = "inline-block";
+      const input = span.querySelector('input[type="radio"]');
+      if (input) input.required = true; // group required
+      span.classList.add("required");
+    });
+  } else if (programVal === "005" && attendingVal === "Yes") {
+    // Only MAT + Non-MAT allowed
+    const vis = { tp_mat_span: true, tp_nonmat_span: true, tp_rc_span: false };
+    Object.entries(vis).forEach(([id, shouldShow]) => {
+      const span = document.getElementById(id);
+      if (!span) return;
+      span.style.display = shouldShow ? "inline-block" : "none";
+      const input = span.querySelector('input[type="radio"]');
+      if (input) {
+        if (!shouldShow && input.checked) input.checked = false;
+        input.required = shouldShow; // make the group required via the visible radios
+      }
+      if (shouldShow) span.classList.add("required"); else span.classList.remove("required");
+    });
+  } else {
+    // Not visible, nothing else to do here
+    ["tp_mat_span","tp_nonmat_span","tp_rc_span"].forEach(id => {
+      const span = document.getElementById(id);
+      if (span) span.style.display = "none";
+    });
+  }
+
+  // 2) Program 023 nested rules
+  // Intake question only when program = 023 and treatment = MAT or Non‑MAT
+  const showIntake023 = (programVal === "023") && (treatmentVal === "MAT" || treatmentVal === "Non-MAT Treatment");
+  showField("intake_conducted_appt_date_thirty_day", showIntake023);
+
+  // Reason not attending (only if intake = No in the 023 + MAT/Non‑MAT flow)
+  const showReasonNotAttending = showIntake023 && (intakeVal === "No");
+  showField("reason_not_attending_sud_tx_thirty_day", showReasonNotAttending);
+
+  // RC follow-ups only when program = 023 and treatment = RC Only
+  const showRCFollowUps = (programVal === "023") && (treatmentVal === "Recovery Coach Only");
+  showField("rc_only_client_attend_first_appt_coach_thirty_day", showRCFollowUps);
+  showField("rc_only_last_date_communication_thirty_day", showRCFollowUps);
+
+  // 3) Program 024
+  showField("reason_not_participating_thirty_day", programVal === "024");
+
+  // 4) Program 022 and nested transfer
+  const showTransferType = (programVal === "022");
+  showField("transfer_type_thirty_day", showTransferType);
+  const showRegion = showTransferType && (transferVal === "Regional Transfer");
+  showField("if_transfer_what_region_thirty_day", showRegion);
+  showField("if_transfer_contact_transfer_region_success_thirty_day", showRegion);
+
+  // 5) Program 005 top-level
+  const showAttendingVerify = (programVal === "005");
+  showField("attending_sud_tx_verify_thirty_day", showAttendingVerify);
+  showField("client_status_thirty_day", showAttendingVerify);
+
+  // In 005 workflow we explicitly do NOT show intake or reason_not_attending via this logic
+  if (programVal === "005") {
+    showField("intake_conducted_appt_date_thirty_day", false);
+    showField("reason_not_attending_sud_tx_thirty_day", false);
+    // RC follow-ups are 023-only; ensure hidden here
+    showField("rc_only_client_attend_first_appt_coach_thirty_day", false);
+    showField("rc_only_last_date_communication_thirty_day", false);
+  }
+}
+
 
 function addEventListeners(){
   // find all elements with required class and add event listener to 
@@ -315,6 +444,11 @@ function validateform(scope='all') {
   if (!hiddenfield('why_not_meet_prog_eligibility_thirty_day') && gvtfieldvalue('why_not_meet_prog_eligibility_thirty_day')=='') {edesc=edesc+`Must specify a value for Why does the client not meet program eligibility?\n`; seterror("why_not_meet_prog_eligibility_thirty_day");}
   if (!hiddenfield('intake_conducted_appt_date_thirty_day') && gvtfieldvalue('intake_conducted_appt_date_thirty_day')=='') {edesc=edesc+`Must specify a value for Date of Intake Conducted\n`; seterror("intake_conducted_appt_date_thirty_day");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+  if (!hiddenfield('transfer_type_thirty_day') && gvtfieldvalue('transfer_type_thirty_day')=='') {edesc=edesc+`Must specify a value for Type of Transfer\n`; seterror("transfer_type_thirty_day");}
+  if (!hiddenfield('reason_not_participating_thirty_day') && gvtfieldvalue('reason_not_participating_thirty_day')=='') {edesc=edesc+`Must specify a value for Reason for Not Participating\n`; seterror("reason_not_participating_thirty_day");}
+  if (!hiddenfield('reason_not_attending_sud_tx_thirty_day') && gvtfieldvalue('reason_not_attending_sud_tx_thirty_day')=='') {edesc=edesc+`Must specify a value for Reason for Not Attending SUD Treatment\n`; seterror("reason_not_attending_sud_tx_thirty_day");}
+  if (!hiddenfield('other_reason_not_attending_sud_tx_thirty_day') && gvtfieldvalue('other_reason_not_attending_sud_tx_thirty_day')=='') {edesc=edesc+`Must specify a value for Other Reason for Not Attending SUD Treatment\n`; seterror("other_reason_not_attending_sud_tx_thirty_day");}
+  if (!hiddenfield('attending_sud_tx_verify_thirty_day') && gvtfieldvalue('attending_sud_tx_verify_thirty_day')=='') {edesc=edesc+`Must specify a value for Attending SUD Treatment?\n`; seterror("attending_sud_tx_verify_thirty_day");}
     return edesc;
 }
 
@@ -512,9 +646,7 @@ function updatesignatures(){
 <script language="VBScript">
 </script>
 
-||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
-
-<body onLoad="startup()">
+<body onload="startup(); checkhideall(); updateThirtyDayForm()">
 <!-- Field Override Area -->
 
 <form action="genfunc.exe" method="post" enctype="multipart/form-data">
@@ -564,19 +696,100 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
+  <div class="entire">
+<div class="col12 term">Program Participation</div>
+</div>
  <div class="entire">
-    <div class="col12 fldtreatment_path_thirty_day qtreatment_path_thirty_day">
-    <div class="col12 fldtreatment_path_thirty_day qtreatment_path_thirty_day"><span class="qtreatment_path_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_thirty_day required-field-label"><label class="label-top">||FIELDTAG treatment_path_thirty_day||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_thirty_day"><input type="radio" name="treatment_path_thirty_day" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_thirty_day" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_thirty_day" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
+    <div class="col12 fldprogram_participation_thirty_day qprogram_participation_thirty_day">
+    <div class="col12 fldprogram_participation_thirty_day qprogram_participation_thirty_day"><span class="qprogram_participation_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_thirty_day required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_thirty_day"><select size="1" name="program_participation_thirty_day" onchange="checkhideall(); updateThirtyDayForm()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_thirty_day^^') and thirty_day_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_program_participation||
+</span></div>
+     </div>
+  </div>
+       <div class="entire">
+    <div class="col12 fldattending_sud_tx_verify_thirty_day qattending_sud_tx_verify_thirty_day">
+    <div class="col12 fldattending_sud_tx_verify_thirty_day qattending_sud_tx_verify_thirty_day"><span class="qattending_sud_tx_verify_thirty_day"><label class="label-top">||FIELDTAG attending_sud_tx_verify_thirty_day||Can you verify if a client is attending SUD Treatment at an agency at this time?||ENDFIELDTAG||</label></span><span class="qattending_sud_tx_verify_thirty_day"><input type="radio" name="attending_sud_tx_verify_thirty_day" value="Yes" onclick="updateThirtyDayForm()"> Yes&nbsp;&nbsp;<input type="radio" name="attending_sud_tx_verify_thirty_day" value="No" onclick="updateThirtyDayForm()"> No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
+    <div class="col12 fldpreg_post_part_thirty_day qpreg_post_part_thirty_day">
+    <div class="col12 fldpreg_post_part_thirty_day qpreg_post_part_thirty_day"><span class="qpreg_post_part_thirty_day"><label class="label-top">||FIELDTAG preg_post_part_thirty_day||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_thirty_day"><input type="radio" name="preg_post_part_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_thirty_day" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col12 fldtransfer_type_thirty_day qtransfer_type_thirty_day">
+    <div class="col12 fldtransfer_type_thirty_day qtransfer_type_thirty_day"><span class="qtransfer_type_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_thirty_day required-field-label"><label class="label-top">||FIELDTAG transfer_type_thirty_day||Type of Transfer||ENDFIELDTAG||</label></span><span class="qtransfer_type_thirty_day"><input type="radio" name="transfer_type_thirty_day" value="Regional Transfer" onclick="updateThirtyDayForm()" >Regional Transfer&nbsp;&nbsp;<input type="radio" name="transfer_type_thirty_day" value="Services Transfered To ERE" onclick="updateThirtyDayForm()" >Services Transfered To ERE&nbsp;&nbsp;<input type="radio" name="transfer_type_thirty_day" value="Services Transfered To Youth ERE Program" onclick="updateThirtyDayForm()" >Services Transfered To Youth ERE Program&nbsp;&nbsp;<input type="radio" name="transfer_type_thirty_day" value="Transfer To BEACN" onclick="updateThirtDayForm()" >Transfer To BEACN&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldif_transfer_what_region_thirty_day qif_transfer_what_region_thirty_day">
+    <div class="col12 fldif_transfer_what_region_thirty_day qif_transfer_what_region_thirty_day"><span class="qif_transfer_what_region_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_thirty_day required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_thirty_day||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_thirty_day"><input type="radio" name="if_transfer_what_region_thirty_day" value="Southwest" onclick="updateThirtyDayForm()" >Southwest&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="Southeast" onclick="updateThirtyDayForm()" >Southeast&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="Central" onclick="updateThirtyDayForm()" >Central&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="West" onclick="updateThirtyDayForm()" >West&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="Lake" onclick="updateThirtyDayForm()" >Lake&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldif_transfer_contact_transfer_region_success_thirty_day qif_transfer_contact_transfer_region_success_thirty_day">
+    <div class="col12 fldif_transfer_contact_transfer_region_success_thirty_day qif_transfer_contact_transfer_region_success_thirty_day"><span class="qif_transfer_contact_transfer_region_success_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_contact_transfer_region_success_thirty_day required-field-label"><label class="label-top">||FIELDTAG if_transfer_contact_transfer_region_success_thirty_day||Was contact with transferring region successful?||ENDFIELDTAG||</label></span><span class="qif_transfer_contact_transfer_region_success_thirty_day"><input type="radio" name="if_transfer_contact_transfer_region_success_thirty_day" value="Yes" onclick="updateThirtyDayForm()" >Yes&nbsp;&nbsp;<input type="radio" name="if_transfer_contact_transfer_region_success_thirty_day" value="No" onclick="updateThirtyDayForm()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day">
+    <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day"><span class="qclient_status_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_thirty_day required-field-label"><label class="label-top">||FIELDTAG client_status_thirty_day||Status||ENDFIELDTAG||</label></span><span class="qclient_status_thirty_day"><input type="radio" name="client_status_thirty_day" value="Outreaching" onclick="updateThirtyDayForm()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Recommend Termination" onclick="updateThirtyDayForm()" >Recommend Termination&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Recommend Transfer To Re-Engagement Specialist" onclick="updateThirtyDayForm()" >Recommend Transfer To Re-Engagement Specialist&nbsp;&nbsp;
+<!-- FIELDOVERRIDE(client_status_thirty_day,10,36) -->
+</span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col12 fldreason_not_participating_thirty_day qreason_not_participating_thirty_day">
+    <div class="col12 fldreason_not_participating_thirty_day qreason_not_participating_thirty_day"><span class="qreason_not_participating_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_participating_thirty_day required-field-label"><label class="label-top">||FIELDTAG reason_not_participating_thirty_day||Reason for not Participating||ENDFIELDTAG||</label></span><span class="qmreason_not_participating_thirty_day"><select size="1"  name="reason_not_participating_thirty_day" onchange="checkhideall(); updateThirtyDayForm()" >
+<option value="">(please select)</option>
+<option value="Client Deceased">Client Deceased</option>
+<option value="Client Declined EPICC Services">Client Declined EPICC Services</option>
+<option value="Client In Jail/Incarcerated">Client In Jail/Incarcerated</option>
+<option value="Doesn't Meet Program Criteria">Doesn't Meet Program Criteria</option>
+<option value="Not Clinically Appropriate">Not Clinically Appropriate</option>
+
+</select></span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col12 fldwhy_not_meet_prog_eligibility_thirty_day qwhy_not_meet_prog_eligibility_thirty_day">
+    <div class="col12 fldwhy_not_meet_prog_eligibility_thirty_day qwhy_not_meet_prog_eligibility_thirty_day"><span class="qwhy_not_meet_prog_eligibility_thirty_day"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_thirty_day||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_thirty_day"><input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day">
+    <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day"><span class="qdate_transferred_reengagement_specialist_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_thirty_day required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_thirty_day||Date of Transfer To Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_thirty_day"><input type="text" name="date_transferred_reengagement_specialist_thirty_day" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldtreatment_path_thirty_day qtreatment_path_thirty_day">
+    <div class="col12 fldtreatment_path_thirty_day qtreatment_path_thirty_day"><span class="qtreatment_path_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_thirty_day required-field-label"><label class="label-top">||FIELDTAG treatment_path_thirty_day||Treatment Path||ENDFIELDTAG||</label></span>
+        <div id="treatment_path_container">
+  <span id="tp_mat_span">
+    <input type="radio" name="treatment_path_thirty_day" value="MAT" onclick="checkhideall(); updateThirtyDayForm()" id="tp_mat"> MAT
+  </span>
+  <span id="tp_nonmat_span">
+    <input type="radio" name="treatment_path_thirty_day" value="Non-MAT Treatment" onclick="checkhideall(); updateThirtyDayForm()" id="tp_nonmat"> Non-MAT Treatment
+  </span>
+  <span id="tp_rc_span">
+    <input type="radio" name="treatment_path_thirty_day" value="Recovery Coach Only" onclick="checkhideall(); updateThirtyDayForm()" id="tp_rc"> Recovery Coach Only
+  </span>
+  <!-- <span id="tp_declined_span">
+    <input type="radio" name="treatment_path_thirty_day" value="Client Declined SUD Treatment Services" onclick="checkhideall(); updateThirtyDayForm()" id="tp_declined"> Client Declined SUD Treatment Services
+  </span> -->
+</div>
+     </div>
+  </div>
+ </div>
+ <div class="entire">
     <div class="col12 fldrc_only_client_attend_first_appt_coach_thirty_day qrc_only_client_attend_first_appt_coach_thirty_day">
-    <div class="col12 fldrc_only_client_attend_first_appt_coach_thirty_day qrc_only_client_attend_first_appt_coach_thirty_day"><span class="qrc_only_client_attend_first_appt_coach_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_thirty_day required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_thirty_day||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_thirty_day"><input type="radio" name="rc_only_client_attend_first_appt_coach_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldrc_only_client_attend_first_appt_coach_thirty_day qrc_only_client_attend_first_appt_coach_thirty_day"><span class="qrc_only_client_attend_first_appt_coach_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_thirty_day required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_thirty_day||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_thirty_day"><input type="radio" name="rc_only_client_attend_first_appt_coach_thirty_day" value="Yes" onclick="updateThirtyDayForm()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_thirty_day" value="No" onclick="checkhiupdateThirtyDayFormdeall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldrc_only_last_date_communication_thirty_day qrc_only_last_date_communication_thirty_day">
-    <div class="col12 fldrc_only_last_date_communication_thirty_day qrc_only_last_date_communication_thirty_day"><span class="qrc_only_last_date_communication_thirty_day"><label class="label-top">||FIELDTAG rc_only_last_date_communication_thirty_day||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_thirty_day"><input type="text" name="rc_only_last_date_communication_thirty_day" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col12 fldrc_only_last_date_communication_thirty_day qrc_only_last_date_communication_thirty_day"><span class="qrc_only_last_date_communication_thirty_day"><label class="label-top">||FIELDTAG rc_only_last_date_communication_thirty_day||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_thirty_day"><input type="text" name="rc_only_last_date_communication_thirty_day" size="20" onchange="updateThirtyDayForm()" class="jdatepicker"></span></div>
      </div>
   </div>
 <!-- For client_attend_intake_appt_thirty_day and intake_appt_date_thirty_day we still want to keep the data from these columns. They have been removed from the form due to the questions being added to the PWSUBroadTreatmentAgency Summation. Do not remove data from the table. -->
@@ -597,12 +810,32 @@ function updatesignatures(){
   </div> -->
  <div class="entire">
     <div class="col12 fldintake_conducted_appt_date_thirty_day qintake_conducted_appt_date_thirty_day">
-    <div class="col12 fldintake_conducted_appt_date_thirty_day qintake_conducted_appt_date_thirty_day"><span class="qintake_conducted_appt_date_thirty_day">||PWRequiredFieldRequiredText||</span><span class="qintake_conducted_appt_date_thirty_day required-field-label"><label class="label-top">||FIELDTAG intake_conducted_appt_date_thirty_day||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_thirty_day"><input type="radio" name="intake_conducted_appt_date_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldintake_conducted_appt_date_thirty_day qintake_conducted_appt_date_thirty_day"><span class="qintake_conducted_appt_date_thirty_day">||PWRequiredFieldRequiredText||</span><span class="qintake_conducted_appt_date_thirty_day required-field-label"><label class="label-top">||FIELDTAG intake_conducted_appt_date_thirty_day||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_thirty_day"><input type="radio" name="intake_conducted_appt_date_thirty_day" value="Yes" onclick="updateThirtyDayForm()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_thirty_day" value="No" onclick="updateThirtyDayForm()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
+     <div class="entire">
+    <div class="col12 fldreason_not_attending_sud_tx_thirty_day qreason_not_attending_sud_tx_thirty_day">
+    <div class="col12 fldreason_not_attending_sud_tx_thirty_day qreason_not_attending_sud_tx_thirty_day"><span class="qreason_not_attending_sud_tx_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_attending_sud_tx_thirty_day required-field-label"><label class="label-top">||FIELDTAG reason_not_attending_sud_tx_thirty_day||Why is client not attending SUD treatment at this time?||ENDFIELDTAG||</label></span><span class="qmreason_not_attending_sud_tx_thirty_day"><select size="1"  name="reason_not_attending_sud_tx_thirty_day" onchange="checkhideall(); updateThirtyDayForm()" >
+<option value="">(please select)</option>
+<option value="In Process Of Transfering To New Agency">In Process Of Transfering To New Agency</option>
+<option value="Agency Won't Take Client">Agency Won't Take Client</option>
+<option value="Client Still Hospitalized">Client Still Hospitalized</option>
+<option value="Family Issues">Family Issues</option>
+<option value="Court Appearance">Court Appearance</option>
+<option value="Other">Other</option>
+</select></span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldother_reason_not_attending_sud_tx_thirty_day qother_reason_not_attending_sud_tx_thirty_day">
+    <div class="col12 fldother_reason_not_attending_sud_tx_thirty_day qother_reason_not_attending_sud_tx_thirty_day"><span class="qother_reason_not_attending_sud_tx_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qother_reason_not_attending_sud_tx_thirty_day required-field-label"><label class="label-top">||FIELDTAG other_reason_not_attending_sud_tx_thirty_day||Explain Other Reason||ENDFIELDTAG||</label></span><span class="qother_reason_not_attending_sud_tx_thirty_day"><input type="text" name="other_reason_not_attending_sud_tx_thirty_day" size="40" onchange="checkhideall()"></span></div>
+     </div>
 <div class="entire">
 <div class="col12 term">Active Treatment Agency</div>
 </div>
@@ -626,49 +859,6 @@ function updatesignatures(){
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_thirty_day^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_types_mat||
 </span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Program Participation</div>
-</div>
- <div class="entire">
-    <div class="col12 fldprogram_participation_thirty_day qprogram_participation_thirty_day">
-    <div class="col12 fldprogram_participation_thirty_day qprogram_participation_thirty_day"><span class="qprogram_participation_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_thirty_day required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_thirty_day"><select size="1" name="program_participation_thirty_day" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_thirty_day^^') and thirty_day_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE epicc_program_participation||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldpreg_post_part_thirty_day qpreg_post_part_thirty_day">
-    <div class="col12 fldpreg_post_part_thirty_day qpreg_post_part_thirty_day"><span class="qpreg_post_part_thirty_day"><label class="label-top">||FIELDTAG preg_post_part_thirty_day||Is client currently pregnant or postpartum?||ENDFIELDTAG||</label></span><span class="qpreg_post_part_thirty_day"><input type="radio" name="preg_post_part_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_post_part_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_post_part_thirty_day" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldif_transfer_what_region_thirty_day qif_transfer_what_region_thirty_day">
-    <div class="col12 fldif_transfer_what_region_thirty_day qif_transfer_what_region_thirty_day"><span class="qif_transfer_what_region_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_thirty_day required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_thirty_day||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_thirty_day"><input type="radio" name="if_transfer_what_region_thirty_day" value="Southwest" onclick="checkhideall()" >Southwest &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="Southeast" onclick="checkhideall()" >Southeast &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="Central" onclick="checkhideall()" >Central &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="West" onclick="checkhideall()" >West &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_thirty_day" value="Lake" onclick="checkhideall()" >Lake &nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldif_transfer_contact_transfer_region_success_thirty_day qif_transfer_contact_transfer_region_success_thirty_day">
-    <div class="col12 fldif_transfer_contact_transfer_region_success_thirty_day qif_transfer_contact_transfer_region_success_thirty_day"><span class="qif_transfer_contact_transfer_region_success_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_contact_transfer_region_success_thirty_day required-field-label"><label class="label-top">||FIELDTAG if_transfer_contact_transfer_region_success_thirty_day||Was contact with transferring region successful?||ENDFIELDTAG||</label></span><span class="qif_transfer_contact_transfer_region_success_thirty_day"><input type="radio" name="if_transfer_contact_transfer_region_success_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="if_transfer_contact_transfer_region_success_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day">
-    <div class="col12 fldclient_status_thirty_day qclient_status_thirty_day"><span class="qclient_status_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_thirty_day required-field-label"><label class="label-top">||FIELDTAG client_status_thirty_day||Status||ENDFIELDTAG||</label></span><span class="qclient_status_thirty_day"><input type="radio" name="client_status_thirty_day" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Services Being Terminated" onclick="checkhideall()" >Services Being Terminated&nbsp;&nbsp;<input type="radio" name="client_status_thirty_day" value="Transfer To Re-Engagement Specialist" onclick="checkhideall()" >Transfer To Re-Engagement Specialist&nbsp;&nbsp;
-<!-- FIELDOVERRIDE(client_status_thirty_day,10,36) -->
-</span></div>
-     </div>
-  </div>
-     <div class="entire">
-    <div class="col12 fldwhy_not_meet_prog_eligibility_thirty_day qwhy_not_meet_prog_eligibility_thirty_day">
-    <div class="col12 fldwhy_not_meet_prog_eligibility_thirty_day qwhy_not_meet_prog_eligibility_thirty_day"><span class="qwhy_not_meet_prog_eligibility_thirty_day"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_thirty_day||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_thirty_day"><input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_thirty_day" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day">
-    <div class="col12 flddate_transferred_reengagement_specialist_thirty_day qdate_transferred_reengagement_specialist_thirty_day"><span class="qdate_transferred_reengagement_specialist_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_thirty_day required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_thirty_day||Date of Transfer To Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_thirty_day"><input type="text" name="date_transferred_reengagement_specialist_thirty_day" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">

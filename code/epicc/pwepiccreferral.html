@@ -57,6 +57,9 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('ems_transport_to_hospital');
     setrequire('other_ems_fire_district');
     setrequire('TiedEnrollment');
+    setrequire('ineligible_reason');
+    setrequire('ineligible_referral');
+    
   
 
 	checkhideall();
@@ -80,9 +83,10 @@ function checkhideall() {
    checkhide(f.suboxone_ems,"milligrams_suboxone","Yes");
    checkhide(f.epicc_referring_agency,"ems_transport_to_hospital","073");
    checkhide(f.client_age_14_17,"parent_caregiver_present_ref_or_notified","Yes");
-   checkhide(f.epicc_program_participation_referral,"ineligible_reason","002");
    checkhide(f.client_enrolled_su_before,"list_all_ada","Yes");
    checkhide(f.ems_fire_district,"other_ems_fire_district","019");
+  checkhide(f.epicc_program_participation_referral,"ineligible_referral","025");
+  checkhide(f.ineligible_referral,"ineligible_reason","Doesn't Meet Program Criteria");
 
 }
 
@@ -809,25 +813,49 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
+<!-- Ineligible Referral -->
+<div class="entire">
+  <div class="col12 fldineligible_referral qineligible_referral">
+    <span class="qineligible_referral required-label">||PWRequiredFieldRequiredText||</span>
+    <span class="qineligible_referral required-field-label"></span>
+    <label class="label-top">
+      ||FIELDTAG ineligible_referral||Reason Client is Ineligible at Referral||ENDFIELDTAG||
+    </label>
+    <span class="qineligible_referral">
+      <select size="1" name="ineligible_referral" onchange="checkhideall()">
+        <option value="">(please select)</option>
+        <option value="Client Deceased">Client Deceased</option>
+        <option value="Client Declined EPICC Services">Client Declined EPICC Services</option>
+        <option value="Client In Jail/Incarcerated">Client In Jail/Incarcerated</option>
+        <option value="Doesn't Meet Program Criteria">Doesn't Meet Program Criteria</option>
+        <option value="Not Clinically Appropriate">Not Clinically Appropriate</option>
+      </select>
+    </span>
   </div>
- <div class="entire">
-    <div class="col12 fldineligible_reason qineligible_reason">
-    <div class="col12 fldineligible_reason qineligible_reason"><span class="qineligible_reason"><label class="label-top">||FIELDTAG ineligible_reason||Criteria Not Met For Eligibility||ENDFIELDTAG||</label></span><span class="qineligible_reason"><select size="1"  name="ineligible_reason" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Not Age 18+">Not Age 18+</option>
-<option value="Not Opioid Overdose">Not Opioid Overdose</option>
-<option value="Active Opioid Prescription">Active Opioid Prescription</option>
-<option value="Existing MAT Prescription">Existing MAT Prescription</option>
-<option value="In Police Custody">In Police Custody</option>
-<option value="Already In SU Treatment">Already In SU Treatment</option>
-<option value="On DM3700/ADA-DM List">On DM3700/ADA-DM List</option>
-<option value="Does Not Reside In Region ">Does Not Reside In Region </option>
+</div>
 
-</select></span></div>
-     </div>
+<!-- Ineligible Reason -->
+<div class="entire">
+  <div class="col12 fldineligible_reason qineligible_reason">
+    <span class="qineligible_reason required-label">||PWRequiredFieldRequiredText||</span>
+    <span class="qineligible_reason required-field-label"></span>
+    <label class="label-top">
+      ||FIELDTAG ineligible_reason||Criteria Not Met For Eligibility||ENDFIELDTAG||
+    </label>
+    <span class="qineligible_reason">
+      <select size="1" name="ineligible_reason" onchange="checkhideall()">
+        <option value="">(please select)</option>
+        <option value="Under Age 14">Under Age 14</option>
+        <option value="Does Not Reside In Region">Not A Missouri Resident</option>
+        <option value="Non-Opioid User">Non-Opioid User</option>
+        <option value="Missouri Resident But Outside Eastern Region">
+          Missouri Resident But Outside Eastern Region
+        </option>
+      </select>
+    </span>
   </div>
+</div>
+
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>

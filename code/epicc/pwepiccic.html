@@ -174,6 +174,10 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
 		setrequire('preg_post_part_ic_unknown');
     setrequire('veteran_status');
     setrequire('TiedEnrollment');
+    setrequire('transfer_type_ic');
+    setrequire('status_unable_contact_transfer');
+    setrequire('reason_not_participating_ic');
+    setrequire('why_not_meet_prog_eligibility_ic');
 
 	checkhideall();
 
@@ -205,10 +209,10 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
 function checkhideall() {
    f=document.forms[0];
       checkhide(f.epicc_pro_or_core_ic,"how_client_found_out_about_program","CORE");
-   checkhide(f.program_participation_ic,"if_transfer_what_region_ic","010");
-   checkhide(f.program_participation_ic,"if_transfer_contact_transfer_region_success_ic","010");
-   checkhide(f.program_participation_ic,"status_unable_contact_transfer","005,010");
-   checkhide(f.program_participation_ic,"why_not_meet_prog_eligibility_ic","002");
+   checkhide(f.program_participation_ic,"transfer_type_ic","022");
+   checkhide(f.transfer_type_ic,"if_transfer_what_region_ic","Regional Transfer");
+   checkhide(f.transfer_type_ic,"if_transfer_contact_transfer_region_success_ic","Regional Transfer");
+   checkhide(f.program_participation_ic,"status_unable_contact_transfer","005");
    checkhide(f.why_not_meet_prog_eligibility_ic,"non_opioid_substance","Non-Opioid User");
    checkhide(f.program_participation_ic,"treatment_path_ic","019");
    checkhide(f.who_initiated_referral,"community_referral_source_ic","Community");
@@ -238,6 +242,8 @@ function checkhideall() {
 	 checkhide(f.ever_prescription_mat_not_referral,"ever_prescription_mat_not_referral_unknown","Unknown");
 	 checkhide(f.current_script_mat_not_referral,"current_script_mat_not_referral_unknown","Unknown");
 	 checkhide(f.preg_post_part_ic,"preg_post_part_ic_unknown","Unknown");
+    checkhide(f.program_participation_ic,"reason_not_participating_ic","024");
+    checkhide(f.reason_not_participating_ic,"why_not_meet_prog_eligibility_ic","Doesn't Meet Program Criteria");
 
 
 }
@@ -507,8 +513,12 @@ function validateform(scope='all') {
   if (!hiddenfield('ever_prescription_mat_not_referral_unknown') && gvtfieldvalue('ever_prescription_mat_not_referral_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("ever_prescription_mat_not_referral_unknown");}
   if (!hiddenfield('current_script_mat_not_referral_unknown') && gvtfieldvalue('current_script_mat_not_referral_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("current_script_mat_not_referral_unknown");}
   if (!hiddenfield('preg_post_part_ic_unknown') && gvtfieldvalue('preg_post_part_ic_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("preg_post_part_ic_unknown");}
-  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");} 
-   return edesc;
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+  if (!hiddenfield('transfer_type_ic') && gvtfieldvalue('transfer_type_ic')=='') {edesc=edesc+`Must specify a value for Transfer Type\n`; seterror("transfer_type_ic");}
+  if (!hiddenfield('status_unable_contact_transfer') && gvtfieldvalue('status_unable_contact_transfer')=='') {edesc=edesc+`Must specify a value for Status if Unable to Contact/Transfer\n`; seterror("status_unable_contact_transfer");}
+  if (!hiddenfield('reason_not_participating_ic') && gvtfieldvalue('reason_not_participating_ic')=='') {edesc=edesc+`Must specify a value for Reason Not Participating\n`; seterror("reason_not_participating_ic");} 
+  if (!hiddenfield('why_not_meet_prog_eligibility_ic') && gvtfieldvalue('why_not_meet_prog_eligibility_ic')=='') {edesc=edesc+`Must specify a value for Why doesn't client meet program eligibility?\n`; seterror("why_not_meet_prog_eligibility_ic");}
+  return edesc;
 }
 
 function gvtfieldvalue(fldname) {
@@ -860,6 +870,11 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
+   <div class="entire">
+   <div class="col12 fldtransfer_type_ic qtransfer_type_ic">
+   <div class="col12 fldtransfer_type_ic qtransfer_type_ic"><span class="qtransfer_type_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_ic required-field-label"><label class="label-top">||FIELDTAG transfer_type_ic||Type of Transfer||ENDFIELDTAG||</label></span><span class="qtransfer_type_ic"><input type="radio" name="transfer_type_ic" value="Regional Transfer" onclick="checkhideall()" >Regional Transfer&nbsp;&nbsp;<input type="radio" name="transfer_type_ic" value="Services Transfered To ERE" onclick="checkhideall()" >Services Transfered To ERE&nbsp;&nbsp;<input type="radio" name="transfer_type_ic" value="Services Transfered To Youth ERE Program" onclick="checkhideall()" >Services Transfered To Youth ERE Program&nbsp;&nbsp;<input type="radio" name="transfer_type_ic" value="Transfer To BEACN" onclick="checkhideall()" >Transfer To BEACN&nbsp;&nbsp;</span></div>
+   </div>
+  </div>
  <div class="entire">
     <div class="col12 fldif_transfer_what_region_ic qif_transfer_what_region_ic">
     <div class="col12 fldif_transfer_what_region_ic qif_transfer_what_region_ic"><span class="qif_transfer_what_region_ic"><label class="label-top">||FIELDTAG if_transfer_what_region_ic||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_ic"><input type="radio" name="if_transfer_what_region_ic" value="Southwest" onclick="checkhideall()" >Southwest&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_ic" value="Southeast" onclick="checkhideall()" >Southeast&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_ic" value="Central" onclick="checkhideall()" >Central&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_ic" value="West" onclick="checkhideall()" >West&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_ic" value="Lake" onclick="checkhideall()" >Lake&nbsp;&nbsp;</span></div>
@@ -872,12 +887,25 @@ function updatesignatures(){
   </div>
   <div class="entire">
    <div class="col12 fldstatus_unable_contact_transfer qstatus_unable_contact_transfer">
-   <div class="col12 fldstatus_unable_contact_transfer qstatus_unable_contact_transfer"><span class="qstatus_unable_contact_transfer"><label class="label-top">||FIELDTAG status_unable_contact_transfer||Status if Unable to Contact or Regional Transfer||ENDFIELDTAG||</label></span><span class="qstatus_unable_contact_transfer"><input type="radio" name="status_unable_contact_transfer" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="status_unable_contact_transfer" value="Client Services Being Terminated" onclick="checkhideall()" >Client Services Being Terminated&nbsp;&nbsp;<input type="radio" name="status_unable_contact_transfer" value="Client Continuing Services With Other Recovery Coach" onclick="checkhideall()" >Client Continuing Services With Other Recovery Coach&nbsp;&nbsp;</span></div>
+   <div class="col12 fldstatus_unable_contact_transfer qstatus_unable_contact_transfer"><span class="qstatus_unable_contact_transfer required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_ic required-field-label"></span><label class="label-top">||FIELDTAG status_unable_contact_transfer||Status if Unable to Contact or Regional Transfer||ENDFIELDTAG||</label><span class="qstatus_unable_contact_transfer"><input type="radio" name="status_unable_contact_transfer" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="status_unable_contact_transfer" value="Recommending Termination" onclick="checkhideall()" >Recommending Termination&nbsp;&nbsp;</span></div>
     </div>
  </div>
+    <div class="entire">
+    <div class="col12 fldreason_not_participating_ic qreason_not_participating_ic">
+    <div class="col12 fldreason_not_participating_ic qreason_not_participating_ic"><span class="qreason_not_participating_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_participating_ic required-field-label"><label class="label-top">||FIELDTAG reason_not_participating_ic||Reason for not Participating||ENDFIELDTAG||</label></span><span class="qmreason_not_participating_ic"><select size="1"  name="reason_not_participating_ic" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Client Deceased">Client Deceased</option>
+<option value="Client Declined EPICC Services">Client Declined EPICC Services</option>
+<option value="Client In Jail/Incarcerated">Client In Jail/Incarcerated</option>
+<option value="Doesn't Meet Program Criteria">Doesn't Meet Program Criteria</option>
+<option value="Not Clinically Appropriate">Not Clinically Appropriate</option>
+
+</select></span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12 fldwhy_not_meet_prog_eligibility_ic qwhy_not_meet_prog_eligibility_ic">
-    <div class="col12 fldwhy_not_meet_prog_eligibility_ic qwhy_not_meet_prog_eligibility_ic"><span class="qwhy_not_meet_prog_eligibility_ic"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_ic||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_ic"><input type="radio" name="why_not_meet_prog_eligibility_ic" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_ic" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_ic" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
+    <div class="col12 fldwhy_not_meet_prog_eligibility_ic qwhy_not_meet_prog_eligibility_ic"><span class="qwhy_not_meet_prog_eligibility_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_ic required-field-label"></span><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_ic||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label><span class="qwhy_not_meet_prog_eligibility_ic"><input type="radio" name="why_not_meet_prog_eligibility_ic" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_ic" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_ic" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

@@ -129,7 +129,12 @@ function waitForElement(selector, callback) {
 }
 
 // Initialize all dropdowns that trigger updateReportFields
-waitForElement('#epicc_support_services_type', listenerSetup);    
+waitForElement('#epicc_support_services_type', listenerSetup);
+waitForElement('#bh_support_services_type', listenerSetup);
+waitForElement('#ph_support_services_type', listenerSetup);
+waitForElement('#ss_support_services_type', listenerSetup);
+waitForElement('#mh_support_services_type', listenerSetup);
+waitForElement('#h_support_services_type', listenerSetup);    
 
 var genpdf='true';
 
@@ -228,7 +233,7 @@ function startup() {
 
    // Call the function with the names of the tables you want to process.
    // The table names are passed as an array. Add event listener for onchange to the dropdown
-  const dropdown = document.querySelectorAll('#epicc_support_services_type'); // Add more IDs as needed
+  const dropdown = document.querySelectorAll('#epicc_support_services_type, #bh_support_services_type, #ph_support_services_type, #ss_support_services_type, #mh_support_services_type, h_support_services_type'); // Add more IDs as needed
   
   dropdowns.forEach(dropdown => {
     if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
@@ -691,7 +696,7 @@ function submitit() {
 
      // Force update of report fields before submission
    updateReportFields([
-    'epicc_support_services_type',
+    'epicc_support_services_type','bh_support_services_type', 'ph_support_services_type', 'ss_support_services_type','mh_support_services_type', 'h_support_services_type'
     // add other dropdown IDs here as needed
   ]);
 
@@ -896,31 +901,32 @@ function updatesignatures(){
     <input type="hidden" name="ss_maternal_health" value="||FIELDVALUE ss_maternal_health||" class="report-field value-004" data-source="epicc_support_services_type">
     <input type="hidden" name="ss_housing" value="||FIELDVALUE ss_housing||" class="report-field value-005" data-source="epicc_support_services_type">
     <input type="hidden" name="ss_supportive_services" value="||FIELDVALUE ss_supportive_services||" class="report-field value-006" data-source="epicc_support_services_type">
-    <input type="hidden" name="bh_individual_peer_support" value="||FIELDVALUE bh_individual_peer_support||" class="report-field value-007" data-source="epicc_support_services_type">
-    <input type="hidden" name="bh_group_peer_support" value="||FIELDVALUE bh_group_peer_support||" class="report-field value-008" data-source="epicc_support_services_type">
-    <input type="hidden" name="bh_substance_use_services" value="||FIELDVALUE bh_substance_use_services||" class="report-field value-009" data-source="epicc_support_services_type">
-    <input type="hidden" name="bh_cmhc_services" value="||FIELDVALUE bh_cmhc_services||" class="report-field value-010" data-source="epicc_support_services_type">
-    <input type="hidden" name="bh_other" value="||FIELDVALUE bh_other||" class="report-field value-027" data-source="epicc_support_services_type">
-    <input type="hidden" name="ph_primary_care" value="||FIELDVALUE ph_primary_care||" class="report-field value-011" data-source="epicc_support_services_type">
-    <input type="hidden" name="ph_dental_care" value="||FIELDVALUE ph_dental_care||" class="report-field value-012" data-source="epicc_support_services_type">
-    <input type="hidden" name="ph_other" value="||FIELDVALUE ph_other||" class="report-field value-027" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_food" value="||FIELDVALUE ss_food||" class="report-field value-013" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_clothing" value="||FIELDVALUE ss_clothing||" class="report-field value-014" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_hygiene" value="||FIELDVALUE ss_hygiene||" class="report-field value-015" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_utility_assistance" value="||FIELDVALUE ss_utility_assistance||" class="report-field value-016" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_child_care" value="||FIELDVALUE ss_child_care||" class="report-field value-017" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_developmental_disability" value="||FIELDVALUE ss_developmental_disability||" class="report-field value-018" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_domestic_violence" value="||FIELDVALUE ss_domestic_violence||" class="report-field value-019" data-source="epicc_support_services_type">
-    <input type="hidden" name="ss_other" value="||FIELDVALUE ss_other||" class="report-field value-027" data-source="epicc_support_services_type">
-    <input type="hidden" name="mh_pregnancy_resources" value="||FIELDVALUE mh_pregnancy_resources||" class="report-field value-020" data-source="epicc_support_services_type">
-    <input type="hidden" name="mh_pre_post_natal_care" value="||FIELDVALUE mh_pre_post_natal_care||" class="report-field value-021" data-source="epicc_support_services_type">
-    <input type="hidden" name="mh_other" value="||FIELDVALUE mh_other||" class="report-field value-027" data-source="epicc_support_services_type">
-    <input type="hidden" name="h_shelter_housing" value="||FIELDVALUE h_shelter_housing||" class="report-field value-022" data-source="epicc_support_services_type">
-    <input type="hidden" name="h_recovery_housing" value="||FIELDVALUE h_recovery_housing||" class="report-field value-023" data-source="epicc_support_services_type">
-    <input type="hidden" name="h_respite_housing" value="||FIELDVALUE h_respite_housing||" class="report-field value-024" data-source="epicc_support_services_type">
-    <input type="hidden" name="h_transitional_housing" value="||FIELDVALUE h_transitional_housing||" class="report-field value-025" data-source="epicc_support_services_type">
-    <input type="hidden" name="h_homeless_services" value="||FIELDVALUE h_homeless_services||" class="report-field value-026" data-source="epicc_support_services_type">
-    <input type="hidden" name="h_other" value="||FIELDVALUE h_other||" class="report-field value-027" data-source="epicc_support_services_type">
+    <input type="hidden" name="ss_type_other" value="||FIELDVALUE ss_type_other||" class="report-field value-027" data-source="epicc_support_services_type">
+    <input type="hidden" name="bh_individual_peer_support" value="||FIELDVALUE bh_individual_peer_support||" class="report-field value-007" data-source="bh_support_services_type">
+    <input type="hidden" name="bh_group_peer_support" value="||FIELDVALUE bh_group_peer_support||" class="report-field value-008" data-source="bh_support_services_type">
+    <input type="hidden" name="bh_substance_use_services" value="||FIELDVALUE bh_substance_use_services||" class="report-field value-009" data-source="bh_support_services_type">
+    <input type="hidden" name="bh_cmhc_services" value="||FIELDVALUE bh_cmhc_services||" class="report-field value-010" data-source="bh_support_services_type">
+    <input type="hidden" name="bh_other" value="||FIELDVALUE bh_other||" class="report-field value-027" data-source="bh_support_services_type">
+    <input type="hidden" name="ph_primary_care" value="||FIELDVALUE ph_primary_care||" class="report-field value-011" data-source="ph_support_services_type">
+    <input type="hidden" name="ph_dental_care" value="||FIELDVALUE ph_dental_care||" class="report-field value-012" data-source="ph_support_services_type">
+    <input type="hidden" name="ph_other" value="||FIELDVALUE ph_other||" class="report-field value-027" data-source="ph_support_services_type">
+    <input type="hidden" name="ss_food" value="||FIELDVALUE ss_food||" class="report-field value-013" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_clothing" value="||FIELDVALUE ss_clothing||" class="report-field value-014" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_hygiene" value="||FIELDVALUE ss_hygiene||" class="report-field value-015" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_utility_assistance" value="||FIELDVALUE ss_utility_assistance||" class="report-field value-016" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_child_care" value="||FIELDVALUE ss_child_care||" class="report-field value-017" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_developmental_disability" value="||FIELDVALUE ss_developmental_disability||" class="report-field value-018" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_domestic_violence" value="||FIELDVALUE ss_domestic_violence||" class="report-field value-019" data-source="ss_support_services_type">
+    <input type="hidden" name="ss_other" value="||FIELDVALUE ss_other||" class="report-field value-027" data-source="ss_support_services_type">
+    <input type="hidden" name="mh_pregnancy_resources" value="||FIELDVALUE mh_pregnancy_resources||" class="report-field value-020" data-source="mh_support_services_type">
+    <input type="hidden" name="mh_pre_post_natal_care" value="||FIELDVALUE mh_pre_post_natal_care||" class="report-field value-021" data-source="mh_support_services_type">
+    <input type="hidden" name="mh_other" value="||FIELDVALUE mh_other||" class="report-field value-027" data-source="mh_support_services_type">
+    <input type="hidden" name="h_shelter_housing" value="||FIELDVALUE h_shelter_housing||" class="report-field value-022" data-source="h_support_services_type">
+    <input type="hidden" name="h_recovery_housing" value="||FIELDVALUE h_recovery_housing||" class="report-field value-023" data-source="h_support_services_type">
+    <input type="hidden" name="h_respite_housing" value="||FIELDVALUE h_respite_housing||" class="report-field value-024" data-source="h_support_services_type">
+    <input type="hidden" name="h_transitional_housing" value="||FIELDVALUE h_transitional_housing||" class="report-field value-025" data-source="h_support_services_type">
+    <input type="hidden" name="h_homeless_services" value="||FIELDVALUE h_homeless_services||" class="report-field value-026" data-source="h_support_services_type">
+    <input type="hidden" name="h_other" value="||FIELDVALUE h_other||" class="report-field value-027" data-source="h_support_services_type">
 <!--STARTOFPROVIDERFORM -->
     <h1><span>EPICC Support Services Tracker</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
@@ -945,7 +951,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldsupport_services_referral_type qsupport_services_referral_type">
-    <div class="col12 fldsupport_services_referral_type qsupport_services_referral_type"><span class="qsupport_services_referral_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsupport_services_referral_type required-field-label"><label class="label-top"><br>(Hold down Ctrl to select multiple)</label></span><span class="qsupport_services_referral_type"><select size="8" name="support_services_referral_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+    <div class="col12 fldsupport_services_referral_type qsupport_services_referral_type"><span class="qsupport_services_referral_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsupport_services_referral_type required-field-label"><label class="label-top">||FIELDTAG support_services_referral_type required-field-label"||Referral Type||ENDFIELDTAG||<br>(Hold down Ctrl to select multiple)</label></span><span class="qsupport_services_referral_type"><select size="8" name="support_services_referral_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE support_services_referral_type^^') AND support_service_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_support_services_type||
 
@@ -978,7 +984,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldbehavioral_health_type qbehavioral_health_type">
-    <div class="col12 fldbehavioral_health_type qbehavioral_health_type"><span class="qbehavioral_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_type required-field-label"><label class="label-top">Behavioral Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qbehavioral_health_type"><select size="8" name="behavioral_health_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+    <div class="col12 fldbehavioral_health_type qbehavioral_health_type"><span class="qbehavioral_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qbehavioral_health_type required-field-label"><label class="label-top">Behavioral Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qbehavioral_health_type"><select size="8" name="behavioral_health_type" id="bh_support_services_type" onchange="updateReportFields(['bh_support_services_type']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE behavioral_health_type^^') AND bh_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_support_services_type||
 
@@ -1064,7 +1070,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldphysical_health_type qphysical_health_type">
-    <div class="col12 fldphysical_health_type qphysical_health_type"><span class="qphysical_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qphysical_health_type required-field-label"><label class="label-top">Physical Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qphysical_health_type"><select size="8" name="physical_health_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+    <div class="col12 fldphysical_health_type qphysical_health_type"><span class="qphysical_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qphysical_health_type required-field-label"><label class="label-top">Physical Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qphysical_health_type"><select size="8" name="physical_health_type" id="ph_support_services_type" onchange="updateReportFields(['ph_support_services_type']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE physical_health_type^^') AND ph_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_support_services_type||
 
@@ -1126,7 +1132,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldsocial_services_type qsocial_services_type">
-    <div class="col12 fldsocial_services_type qsocial_services_type"><span class="qsocial_services_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsocial_services_type required-field-label"><label class="label-top">Social Services<br>(Hold down Ctrl to select multiple)</label></span><span class="qsocial_services_type"><select size="8" name="social_services_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+    <div class="col12 fldsocial_services_type qsocial_services_type"><span class="qsocial_services_type required-label">||PWRequiredFieldRequiredText||</span><span class="qsocial_services_type required-field-label"><label class="label-top">Social Services<br>(Hold down Ctrl to select multiple)</label></span><span class="qsocial_services_type"><select size="8" name="social_services_type" id="ss_support_services_type" onchange="updateReportFields(['ss_support_services_type']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE social_services_type^^') AND ss_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_support_services_type||
 
@@ -1253,7 +1259,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldmaternal_health_type qmaternal_health_type">
-    <div class="col12 fldmaternal_health_type qmaternal_health_type"><span class="qmaternal_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qmaternal_health_type required-field-label"><label class="label-top">Maternal Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qmaternal_health_type"><select size="4" name="maternal_health_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+    <div class="col12 fldmaternal_health_type qmaternal_health_type"><span class="qmaternal_health_type required-label">||PWRequiredFieldRequiredText||</span><span class="qmaternal_health_type required-field-label"><label class="label-top">Maternal Health<br>(Hold down Ctrl to select multiple)</label></span><span class="qmaternal_health_type"><select size="4" name="maternal_health_type" id="mh_support_services_type" onchange="updateReportFields(['mh_support_services_type']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE maternal_health_type^^') AND mh_type='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_support_services_type||
 
@@ -1313,7 +1319,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldhousing_type qhousing_type">
-    <div class="col12 fldhousing_type qhousing_type"><span class="qhousing_type required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_type required-field-label"><label class="label-top">Housing<br>(Hold down Ctrl to select multiple)</label></span><span class="qhousing_type"><select size="8" name="housing_type" id="epicc_support_services_type" onchange="updateReportFields(['epicc_support_services_type']); checkhideall();" multiple>
+    <div class="col12 fldhousing_type qhousing_type"><span class="qhousing_type required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_type required-field-label"><label class="label-top">Housing<br>(Hold down Ctrl to select multiple)</label></span><span class="qhousing_type"><select size="8" name="housing_type" id="h_support_services_type" onchange="updateReportFields(['h_support_services_type']); checkhideall();" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_support_services_type] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE housing_type^^') AND housing='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_support_services_type||
 

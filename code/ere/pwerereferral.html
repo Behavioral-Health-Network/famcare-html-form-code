@@ -561,7 +561,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldpatient_location_referral qpatient_location_referral">
-    <div class="col12 fldpatient_location_referral qpatient_location_referral"><span class="qpatient_location_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qpatient_location_referral required-field-label"><label class="label-top">||FIELDTAG patient_location_referral||Where was the patient located in the hospital?||ENDFIELDTAG||</label></span><span class="qpatient_location_referral"><input type="radio" name="patient_location_referral" value="Emergency Department" onclick="checkhideall()" >Emergency Department<br><input type="radio" name="patient_location_referral" value="Inpatient Phychiatric Unit" onclick="checkhideall()" >Inpatient Phychiatric Unit<br><input type="radio" name="patient_location_referral" value="Physical Health Unit" onclick="checkhideall()" >Physical Health Unit</span></div>
+    <div class="col12 fldpatient_location_referral qpatient_location_referral"><span class="qpatient_location_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qpatient_location_referral required-field-label"><label class="label-top">||FIELDTAG patient_location_referral||Where was the patient located in the hospital?||ENDFIELDTAG||</label></span><span class="qpatient_location_referral"><input type="radio" name="patient_location_referral" value="Emergency Department" onclick="checkhideall()" >Emergency Department<br><input type="radio" name="patient_location_referral" value="Inpatient Phychiatric Unit" onclick="checkhideall()" >Inpatient Psychiatric Unit<br><input type="radio" name="patient_location_referral" value="Urgent Care Or Crisis Community Center" onclick="checkhideall()" >Urgent Care Or Crisis Community Center<br><input type="radio" name="patient_location_referral" value="Other Hospital Unit" onclick="checkhideall()" >Other Hospital Unit<br><input type="radio" name="patient_location_referral" value="Other" onclick="checkhideall()" >Other<br></div>
      </div>
   </div>
  <div class="entire">
@@ -606,11 +606,13 @@ function updatesignatures(){
     <div class="col12 fldreferral_method qreferral_method">
     <div class="col12 fldreferral_method qreferral_method"><span class="qreferral_method required-label">||PWRequiredFieldRequiredText||</span><span class="qreferral_method required-field-label"><label class="label-top">||FIELDTAG referral_method||Method of Referral||ENDFIELDTAG||</label></span><span class="qreferral_method"><select size="1"  name="referral_method" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Adapt Onsite">Adapt On-Site</option>
+<option value="Adapt Client Access Specialist">Adapt Client Access Specialist</option>
 <option value="AnswerFirst">AnswerFirst</option>
-<option value="Compass Onsite">Compass On-Site</option>
-<option value="Data Identified">Data Identified</option>
-<option value="Direct by Hospital">Direct by Hospital</option>
+<option value="Compass Hospital Access Liaison">Compass Hospital Access Liaison</option>
+<option value="Other">Other</option>
+<!-- ***Removed per ERE request 9/16/2025 from Amy to remove Data Identified and Direct by Hospital as options and add an "Other" option. Changed Adapt On-Site and Compass On-Site to Adapt Client Access Specialist and Compass Hospital Access Liaison. -->
+<!-- <option value="Data Identified">Data Identified</option>
+<option value="Direct by Hospital">Direct by Hospital</option> -->
 
 </select></span></div>
      </div>

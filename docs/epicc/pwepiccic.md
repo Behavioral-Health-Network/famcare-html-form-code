@@ -115,6 +115,8 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 ## Changelog
 
+- **2025-10-01**: Updates the epicc_program_participation master table. Updates the conditional logic based on those options. Adds new question transfer_type_ic and reason_not_participating_ic.
+- **2025-09-18**: Changes Field Name of TiedEnrollment from Select Pathway Enrollment to Select Pathway Assignment
 - **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-08-15**: Adds radio button option for `mat_prescribed_physician_appt_six_month`, Unable To Contact Client Or Treatment Agency.
 - **2025-08-12**: Disables 'Already Enrolled In SUD Services' program participation value due to ongoing concerns on the part of the EPICC leadership that Recovery Coaches were misusing this value and would likely continue to do so despite retraining efforts.

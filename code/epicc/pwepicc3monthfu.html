@@ -37,17 +37,12 @@ function startup() {
             setrequire('Pathway_Date');
     setrequire('treatment_path_three_month');
     setrequire('rc_only_client_attend_first_appt_coach_three_month');
-    // All intake questions were moved to the PWBroadTreatmentAgency summation, so we are removing the requirement for these questions.
-    // client_attend_intake_appt_three_month and intake_appt_date_three_month are being removed from the form since these questions are going to be answered on the PWBroadTreatmentAgency summation. We do not want the data from these questions to be deleted from the table.
-    // setrequire('client_attend_intake_appt_three_month');
-    // setrequire('intake_appt_date_three_month');
     setrequire('mat_prescribed_physician_appt_three_month');
     setrequire('what_mat_physician_appt_three_month');
     setrequire('program_participation_three_month');
     setrequire('if_transfer_what_region_three_month');
     setrequire('if_transfer_contact_transfer_region_success_three_month');
     setrequire('client_status_three_month');
-    // setrequire('date_transferred_reengagement_specialist_three_month');
     setrequire('preg_post_part_three_month');
     setrequire('why_not_meet_prog_eligibility_three_month');
     setrequire('intake_conducted_appt_date_three_month');
@@ -57,6 +52,9 @@ function startup() {
     setrequire('reason_not_attending_sud_tx_three_month');
     setrequire('other_reason_not_attending_sud_tx_three_month');
     setrequire('attending_sud_tx_verify_three_month');
+    setrequire('treatment_path_three_month_unable_to_contact');
+    setrequire('mat_prescribed_physician_appt_three_month_unable_to_contact');
+    setrequire('what_mat_physician_appt_three_month_unable_to_contact');
 
 	checkhideall();
 
@@ -66,143 +64,29 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-  //     checkhide(f.treatment_path_three_month,"rc_only_client_attend_first_appt_coach_three_month","Recovery Coach Only");
-  //  checkhide(f.treatment_path_three_month,"rc_only_last_date_communication_three_month","Recovery Coach Only");
-   //All intake questions were moved to the SUBROADTREATMENTAGENCY summation
-//    checkhide(f.treatment_path_three_month,"client_attend_intake_appt_three_month","MAT,Non-MAT Treatment");
-  //  checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
-   checkhide(f.mat_prescribed_physician_appt_three_month,"what_mat_physician_appt_three_month","Yes");
+checkhide(f.program_participation_three_month,"preg_post_part_three_month","023");
+checkhide(f.program_participation_three_month,"treatment_path_three_month","023");
+   checkhide(f.treatment_path_three_month,"intake_conducted_appt_date_three_month","MAT,Non-MAT Treatment");
    checkhide(f.treatment_path_three_month,"mat_prescribed_physician_appt_three_month","MAT");
-   //All intake questions were moved to the SUBROADTREATMENTAGENCY summation
-//    checkhide(f.client_attend_intake_appt_three_month,"intake_appt_date_three_month","Yes");
-   checkhide(f.program_participation_three_month,"preg_post_part_three_month","015");
-  //  checkhide(f.program_participation_three_month,"if_transfer_what_region_three_month","010");
-  //  checkhide(f.program_participation_three_month,"if_transfer_contact_transfer_region_success_three_month","010");
-  //  checkhide(f.program_participation_three_month,"client_status_three_month","016,010");
-  //  checkhide(f.client_status_three_month,"date_transferred_reengagement_specialist_three_month","Transfer To Re-Engagement Specialist");
-   checkhide(f.reason_not_participating_three_month,"why_not_meet_prog_eligibility_three_month","Doesn't Meet Program Criteria");
-   checkhide(f.reason_not_attending_sud_tx_three_month,"other_reason_not_attending_sud_tx_three_month","Other");
-}
+      checkhide(f.reason_not_attending_sud_tx_three_month,"other_reason_not_attending_sud_tx_three_month","Other");
+   checkhide(f.treatment_path_three_month,"rc_only_client_attend_first_appt_coach_three_month","Recovery Coach Only");
+   checkhide(f.treatment_path_three_month,"rc_only_last_date_communication_three_month","Recovery Coach Only");
+    checkhide(f.intake_conducted_appt_date_three_month,"reason_not_attending_sud_tx_three_month","No");
 
-// Get the selected value of a radio group or the value of a select
-function getVal(name) {
-  const checked = document.querySelector(`input[name="${name}"]:checked`);
-  if (checked) return checked.value;
-  const sel = document.querySelector(`select[name="${name}"]`);
-  return sel ? sel.value : "";
-}
+   checkhide(f.program_participation_three_month,"reason_not_participating_three_month","024");
+      checkhide(f.reason_not_participating_three_month,"why_not_meet_prog_eligibility_three_month","Doesn't Meet Program Criteria");
 
-function showField(name, show = true) {
-  document.querySelectorAll(`.fld${name}`).forEach(el => {
-    if (show) {
-      el.style.display = "block";
-    } else {
-      // Only clear if it was visible and is now being hidden
-      if (el.style.display !== "none") {
-        el.querySelectorAll("input, select, textarea").forEach(inp => {
-          if (inp.type === "radio" || inp.type === "checkbox") {
-            inp.checked = false;
-          } else {
-            inp.value = "";
-          }
-        });
-      }
-      el.style.display = "none";
-    }
-  });
-}
+checkhide(f.program_participation_three_month,"transfer_type_three_month","022");
+   checkhide(f.transfer_type_three_month,"if_transfer_what_region_three_month","Regional Transfer");
+   checkhide(f.transfer_type_three_month,"if_transfer_contact_transfer_region_success_three_month","Regional Transfer");
 
+checkhide(f.program_participation_three_month,"client_status_three_month","005");
+checkhide(f.program_participation_three_month,"attending_sud_tx_verify_three_month","005");
+checkhide(f.attending_sud_tx_verify_three_month,"treatment_path_three_month_unable_to_contact","Yes");
+   checkhide(f.treatment_path_three_month_unable_to_contact,"mat_prescribed_physician_appt_three_month_unable_to_contact","MAT");
 
-// Reset radios inside hidden wrappers
-function resetHidden(name) {
-  document.querySelectorAll(`.fld${name} input[type="radio"]`).forEach(inp => {
-    if (inp.offsetParent === null) inp.checked = false;
-  });
-}
-
-function updateThreeMonthForm() {
-  const programVal   = getVal("program_participation_three_month");
-  const attendingVal = getVal("attending_sud_tx_verify_three_month");
-  const treatmentVal = getVal("treatment_path_three_month");
-  const intakeVal    = getVal("intake_conducted_appt_date_three_month");
-  const transferVal  = getVal("transfer_type_three_month");
-
-  // 1) Shared field: Treatment Path — visible if:
-  //    - program = 023, OR
-  //    - program = 005 AND attending = Yes
-  const showTP = (programVal === "023") || (programVal === "005" && attendingVal === "Yes");
-  showField("treatment_path_three_month", showTP);
-
-  // Also manage option visibility based on program
-  if (programVal === "023") {
-    // Show all options
-    ["tp_mat_span","tp_nonmat_span","tp_rc_span"].forEach(id => {
-      const span = document.getElementById(id);
-      if (!span) return;
-      span.style.display = "inline-block";
-      const input = span.querySelector('input[type="radio"]');
-      if (input) input.required = true; // group required
-      span.classList.add("required");
-    });
-  } else if (programVal === "005" && attendingVal === "Yes") {
-    // Only MAT + Non-MAT allowed
-    const vis = { tp_mat_span: true, tp_nonmat_span: true, tp_rc_span: false };
-    Object.entries(vis).forEach(([id, shouldShow]) => {
-      const span = document.getElementById(id);
-      if (!span) return;
-      span.style.display = shouldShow ? "inline-block" : "none";
-      const input = span.querySelector('input[type="radio"]');
-      if (input) {
-        if (!shouldShow && input.checked) input.checked = false;
-        input.required = shouldShow; // make the group required via the visible radios
-      }
-      if (shouldShow) span.classList.add("required"); else span.classList.remove("required");
-    });
-  } else {
-    // Not visible, nothing else to do here
-    ["tp_mat_span","tp_nonmat_span","tp_rc_span"].forEach(id => {
-      const span = document.getElementById(id);
-      if (span) span.style.display = "none";
-    });
-  }
-
-  // 2) Program 023 nested rules
-  // Intake question only when program = 023 and treatment = MAT or Non‑MAT
-  const showIntake023 = (programVal === "023") && (treatmentVal === "MAT" || treatmentVal === "Non-MAT Treatment");
-  showField("intake_conducted_appt_date_three_month", showIntake023);
-
-  // Reason not attending (only if intake = No in the 023 + MAT/Non‑MAT flow)
-  const showReasonNotAttending = showIntake023 && (intakeVal === "No");
-  showField("reason_not_attending_sud_tx_three_month", showReasonNotAttending);
-
-  // RC follow-ups only when program = 023 and treatment = RC Only
-  const showRCFollowUps = (programVal === "023") && (treatmentVal === "Recovery Coach Only");
-  showField("rc_only_client_attend_first_appt_coach_three_month", showRCFollowUps);
-  showField("rc_only_last_date_communication_three_month", showRCFollowUps);
-
-  // 3) Program 024
-  showField("reason_not_participating_three_month", programVal === "024");
-
-  // 4) Program 022 and nested transfer
-  const showTransferType = (programVal === "022");
-  showField("transfer_type_three_month", showTransferType);
-  const showRegion = showTransferType && (transferVal === "Regional Transfer");
-  showField("if_transfer_what_region_three_month", showRegion);
-  showField("if_transfer_contact_transfer_region_success_three_month", showRegion);
-
-  // 5) Program 005 top-level
-  const showAttendingVerify = (programVal === "005");
-  showField("attending_sud_tx_verify_three_month", showAttendingVerify);
-  showField("client_status_three_month", showAttendingVerify);
-
-  // In 005 workflow we explicitly do NOT show intake or reason_not_attending via this logic
-  if (programVal === "005") {
-    showField("intake_conducted_appt_date_three_month", false);
-    showField("reason_not_attending_sud_tx_three_month", false);
-    // RC follow-ups are 023-only; ensure hidden here
-    showField("rc_only_client_attend_first_appt_coach_three_month", false);
-    showField("rc_only_last_date_communication_three_month", false);
-  }
+   checkhide(f.mat_prescribed_physician_appt_three_month,"what_mat_physician_appt_three_month","Yes");
+   checkhide(f.mat_prescribed_physician_appt_three_month_unable_to_contact,"what_mat_physician_appt_three_month_unable_to_contact","Yes");
 }
 
 function addEventListeners(){
@@ -451,6 +335,9 @@ function validateform(scope='all') {
   if (!hiddenfield('reason_not_attending_sud_tx_three_month') && gvtfieldvalue('reason_not_attending_sud_tx_three_month')=='') {edesc=edesc+`Must specify a value for Reason Not Attending SUD Tx\n`; seterror("reason_not_attending_sud_tx_three_month");}
   if (!hiddenfield('other_reason_not_attending_sud_tx_three_month') && gvtfieldvalue('other_reason_not_attending_sud_tx_three_month')=='') {edesc=edesc+`Must specify a value for Other Reason Not Attending SUD Tx\n`; seterror("other_reason_not_attending_sud_tx_three_month");}
   if (!hiddenfield('attending_sud_tx_verify_three_month') && gvtfieldvalue('attending_sud_tx_verify_three_month')=='') {edesc=edesc+`Must specify a value for Attending SUD Tx\n`; seterror("attending_sud_tx_verify_three_month");}  
+  if (!hiddenfield('treatment_path_three_month_unable_to_contact') && gvtfieldvalue('treatment_path_three_month_unable_to_contact')=='') {edesc=edesc+`Must specify a value for Unable to Contact\n`; seterror("treatment_path_three_month_unable_to_contact");}
+  if (!hiddenfield('mat_prescribed_physician_appt_three_month_unable_to_contact') && gvtfieldvalue('mat_prescribed_physician_appt_three_month_unable_to_contact')=='') {edesc=edesc+`Must specify a value for Unable to Contact\n`; seterror("mat_prescribed_physician_appt_three_month_unable_to_contact");}
+  if (!hiddenfield('what_mat_physician_appt_three_month_unable_to_contact') && gvtfieldvalue('what_mat_physician_appt_three_month_unable_to_contact')=='') {edesc=edesc+`Must specify a value for Unable to Contact\n`; seterror("what_mat_physician_appt_three_month_unable_to_contact");} 
   return edesc;
 }
 
@@ -649,9 +536,8 @@ function updatesignatures(){
 
 <script language="VBScript">
 </script>
-
-
-<body onload="startup(); checkhideall(); updateThreeMonthForm()">
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<body onLoad="startup()">
 <!-- Field Override Area -->
 
 <form action="genfunc.exe" method="post" enctype="multipart/form-data">
@@ -703,7 +589,7 @@ function updatesignatures(){
   </div>
   <div class="entire">
     <div class="col12 fldprogram_participation_three_month qprogram_participation_three_month">
-    <div class="col12 fldprogram_participation_three_month qprogram_participation_three_month"><span class="qprogram_participation_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_three_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_three_month"><select size="1" name="program_participation_three_month" onchange="checkhideall(); updateThreeMonthForm()">
+    <div class="col12 fldprogram_participation_three_month qprogram_participation_three_month"><span class="qprogram_participation_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_three_month required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_three_month"><select size="1" name="program_participation_three_month" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_three_month^^') and three_month_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_program_participation||
 </span></div>
@@ -711,7 +597,7 @@ function updatesignatures(){
   </div>
        <div class="entire">
     <div class="col12 fldattending_sud_tx_verify_three_month qattending_sud_tx_verify_three_month">
-    <div class="col12 fldattending_sud_tx_verify_three_month qattending_sud_tx_verify_three_month"><span class="qattending_sud_tx_verify_three_month"><label class="label-top">||FIELDTAG attending_sud_tx_verify_three_month||Can you verify if a client is attending SUD Treatment at an agency at this time?||ENDFIELDTAG||</label></span><span class="qattending_sud_tx_verify_three_month"><input type="radio" name="attending_sud_tx_verify_three_month" value="Yes" onclick="updateThreeMonthForm()"> Yes&nbsp;&nbsp;<input type="radio" name="attending_sud_tx_verify_three_month" value="No" onclick="updateThreeMonthForm()"> No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldattending_sud_tx_verify_three_month qattending_sud_tx_verify_three_month"><span class="qattending_sud_tx_verify_three_month"><label class="label-top">||FIELDTAG attending_sud_tx_verify_three_month||Can you verify if a client is attending SUD Treatment at an agency at this time?||ENDFIELDTAG||</label></span><span class="qattending_sud_tx_verify_three_month"><input type="radio" name="attending_sud_tx_verify_three_month" value="Yes" onclick="checkhideall()"> Yes&nbsp;&nbsp;<input type="radio" name="attending_sud_tx_verify_three_month" value="No" onclick="checkhideall()"> No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -721,29 +607,29 @@ function updatesignatures(){
   </div>
      <div class="entire">
     <div class="col12 fldtransfer_type_three_month qtransfer_type_three_month">
-    <div class="col12 fldtransfer_type_three_month qtransfer_type_three_month"><span class="qtransfer_type_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_three_month required-field-label"><label class="label-top">||FIELDTAG transfer_type_three_month||Type of Transfer||ENDFIELDTAG||</label></span><span class="qtransfer_type_three_month"><input type="radio" name="transfer_type_three_month" value="Regional Transfer" onclick="updateThreeMonthForm()" >Regional Transfer&nbsp;&nbsp;<input type="radio" name="transfer_type_three_month" value="Services Transfered To ERE" onclick="updateThreeMonthForm()" >Services Transfered To ERE&nbsp;&nbsp;<input type="radio" name="transfer_type_three_month" value="Services Transfered To Youth ERE Program" onclick="updateThreeMonthForm()" >Services Transfered To Youth ERE Program&nbsp;&nbsp;<input type="radio" name="transfer_type_three_month" value="Transfer To BEACN" onclick="updateThreeMonthForm()" >Transfer To BEACN&nbsp;&nbsp;</span></div>
+    <div class="col12 fldtransfer_type_three_month qtransfer_type_three_month"><span class="qtransfer_type_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_three_month required-field-label"><label class="label-top">||FIELDTAG transfer_type_three_month||Type of Transfer||ENDFIELDTAG||</label></span><span class="qtransfer_type_three_month"><input type="radio" name="transfer_type_three_month" value="Regional Transfer" onclick="checkhideall()" >Regional Transfer&nbsp;&nbsp;<input type="radio" name="transfer_type_three_month" value="Services Transferred To ERE" onclick="checkhideall()" >Services Transferred To ERE&nbsp;&nbsp;<input type="radio" name="transfer_type_three_month" value="Services Transferred To Youth ERE Program" onclick="checkhideall()" >Services Transferred To Youth ERE Program&nbsp;&nbsp;<input type="radio" name="transfer_type_three_month" value="Transfer To BEACN" onclick="checkhideall()" >Transfer To BEACN&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldif_transfer_what_region_three_month qif_transfer_what_region_three_month">
-    <div class="col12 fldif_transfer_what_region_three_month qif_transfer_what_region_three_month"><span class="qif_transfer_what_region_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_three_month required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_three_month||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_three_month"><input type="radio" name="if_transfer_what_region_three_month" value="Southwest" onclick="updateThreeMonthForm()" >Southwest &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Southeast" onclick="updateThreeMonthForm()" >Southeast&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Central" onclick="updateThreeMonthForm()" >Central&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="West" onclick="updateThreeMonthForm()" >West&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Lake" onclick="updateThreeMonthForm()" >Lake&nbsp;&nbsp;</span></div>
+    <div class="col12 fldif_transfer_what_region_three_month qif_transfer_what_region_three_month"><span class="qif_transfer_what_region_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_three_month required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_three_month||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_three_month"><input type="radio" name="if_transfer_what_region_three_month" value="Southwest" onclick="checkhideall()" >Southwest &nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Southeast" onclick="checkhideall()" >Southeast&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Central" onclick="checkhideall()" >Central&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="West" onclick="checkhideall()" >West&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_three_month" value="Lake" onclick="checkhideall()" >Lake&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldif_transfer_contact_transfer_region_success_three_month qif_transfer_contact_transfer_region_success_three_month">
-    <div class="col12 fldif_transfer_contact_transfer_region_success_three_month qif_transfer_contact_transfer_region_success_three_month"><span class="qif_transfer_contact_transfer_region_success_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_contact_transfer_region_success_three_month required-field-label"><label class="label-top">||FIELDTAG if_transfer_contact_transfer_region_success_three_month||Was contact with transferring region successful?||ENDFIELDTAG||</label></span><span class="qif_transfer_contact_transfer_region_success_three_month"><input type="radio" name="if_transfer_contact_transfer_region_success_three_month" value="Yes" onclick="updateThreeMonthForm()" >Yes&nbsp;&nbsp;<input type="radio" name="if_transfer_contact_transfer_region_success_three_month" value="No" onclick="updateThreeMonthForm()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldif_transfer_contact_transfer_region_success_three_month qif_transfer_contact_transfer_region_success_three_month"><span class="qif_transfer_contact_transfer_region_success_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_contact_transfer_region_success_three_month required-field-label"><label class="label-top">||FIELDTAG if_transfer_contact_transfer_region_success_three_month||Was contact with transferring region successful?||ENDFIELDTAG||</label></span><span class="qif_transfer_contact_transfer_region_success_three_month"><input type="radio" name="if_transfer_contact_transfer_region_success_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="if_transfer_contact_transfer_region_success_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 
  <div class="entire">
     <div class="col12 fldclient_status_three_month qclient_status_three_month">
-    <div class="col12 fldclient_status_three_month qclient_status_three_month"><span class="qclient_status_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_three_month required-field-label"><label class="label-top">||FIELDTAG client_status_three_month||Status||ENDFIELDTAG||</label></span><span class="qclient_status_three_month"><input type="radio" name="client_status_three_month" value="Outreaching" onclick="updateThreeMonthForm()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_three_month" value="Recommend Termination" onclick="updateThreeMonthForm()" >Recommend Termination&nbsp;&nbsp;
+    <div class="col12 fldclient_status_three_month qclient_status_three_month"><span class="qclient_status_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_three_month required-field-label"><label class="label-top">||FIELDTAG client_status_three_month||Status||ENDFIELDTAG||</label></span><span class="qclient_status_three_month"><input type="radio" name="client_status_three_month" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_three_month" value="Recommend Termination" onclick="checkhideall()" >Recommend Termination&nbsp;&nbsp;
 </span></div>
      </div>
   </div>
    <div class="entire">
     <div class="col12 fldreason_not_participating_three_month qreason_not_participating_three_month">
-    <div class="col12 fldreason_not_participating_three_month qreason_not_participating_three_month"><span class="qreason_not_participating_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_participating_three_month required-field-label"><label class="label-top">||FIELDTAG reason_not_participating_three_month||Reason for not Participating||ENDFIELDTAG||</label></span><span class="qreason_not_participating_three_month"><select size="1"  name="reason_not_participating_three_month" onchange="checkhideall(); updateThreeMonthForm()" >
+    <div class="col12 fldreason_not_participating_three_month qreason_not_participating_three_month"><span class="qreason_not_participating_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_participating_three_month required-field-label"><label class="label-top">||FIELDTAG reason_not_participating_three_month||Reason for not Participating||ENDFIELDTAG||</label></span><span class="qreason_not_participating_three_month"><select size="1"  name="reason_not_participating_three_month" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Client Deceased">Client Deceased</option>
 <option value="Client Declined EPICC Services">Client Declined EPICC Services</option>
@@ -759,31 +645,16 @@ function updatesignatures(){
     <div class="col12 fldwhy_not_meet_prog_eligibility_three_month qwhy_not_meet_prog_eligibility_three_month"><span class="qwhy_not_meet_prog_eligibility_three_month"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_three_month||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_three_month"><input type="radio" name="why_not_meet_prog_eligibility_three_month" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_three_month" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_three_month" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
      </div>
   </div>
- <!-- <div class="entire">
-    <div class="col12 flddate_transferred_reengagement_specialist_three_month qdate_transferred_reengagement_specialist_three_month">
-    <div class="col12 flddate_transferred_reengagement_specialist_three_month qdate_transferred_reengagement_specialist_three_month"><span class="qdate_transferred_reengagement_specialist_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_three_month required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_three_month||Date of Transfer to Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_three_month"><input type="text" name="date_transferred_reengagement_specialist_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
  <div class="entire">
     <div class="col12 fldtreatment_path_three_month qtreatment_path_three_month">
-    <div class="col12 fldtreatment_path_three_month qtreatment_path_three_month"><span class="qtreatment_path_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_three_month required-field-label"><label class="label-top">||FIELDTAG treatment_path_three_month||Treatment Path||ENDFIELDTAG||</label></span>
-        <div id="treatment_path_container">
-  <span id="tp_mat_span">
-    <input type="radio" name="treatment_path_three_month" value="MAT" onclick="checkhideall(); updateThreeMonthForm()" id="tp_mat"> MAT
-  </span>
-  <span id="tp_nonmat_span">
-    <input type="radio" name="treatment_path_three_month" value="Non-MAT Treatment" onclick="checkhideall(); updateThreeMonthForm()" id="tp_nonmat"> Non-MAT Treatment
-  </span>
-  <span id="tp_rc_span">
-    <input type="radio" name="treatment_path_three_month" value="Recovery Coach Only" onclick="checkhideall(); updateThreeMonthForm()" id="tp_rc"> Recovery Coach Only
-  </span>
-  <!-- <span id="tp_declined_span">
-    <input type="radio" name="treatment_path_three_month" value="Client Declined SUD Treatment Services" onclick="checkhideall(); updateThreeMonthForm()" id="tp_declined"> Client Declined SUD Treatment Services
-  </span> -->
-</div>
+    <div class="col12 fldtreatment_path_three_month qtreatment_path_three_month"><span class="qtreatment_path_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_three_month required-field-label"><label class="label-top">||FIELDTAG treatment_path_three_month||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_three_month"><input type="radio" name="treatment_path_three_month" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_three_month" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_three_month" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
      </div>
   </div>
- </div>
+   <div class="entire">
+    <div class="col12 fldtreatment_path_three_month_unable_to_contact qtreatment_path_three_month_unable_to_contact">
+    <div class="col12 fldtreatment_path_three_month_unable_to_contact qtreatment_path_three_month_unable_to_contact"><span class="qtreatment_path_three_month_unable_to_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_three_month_unable_to_contact required-field-label"><label class="label-top">||FIELDTAG treatment_path_three_month_unable_to_contact||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_three_month_unable_to_contact"><input type="radio" name="treatment_path_three_month_unable_to_contact" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_three_month_unable_to_contact" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
 <div class="entire">
   <div class="col12 fldrc_only_client_attend_first_appt_coach_three_month qrc_only_client_attend_first_appt_coach_three_month">
     <span class="qrc_only_client_attend_first_appt_coach_three_month required-label">||PWRequiredFieldRequiredText||</span>
@@ -791,8 +662,8 @@ function updatesignatures(){
       <label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_three_month||Contact Since IC||ENDFIELDTAG||</label>
     </span>
     <span class="qrc_only_client_attend_first_appt_coach_three_month">
-      <input type="radio" name="rc_only_client_attend_first_appt_coach_three_month" value="Yes" onclick="updateThreeMonthForm()"> Yes&nbsp;&nbsp;
-      <input type="radio" name="rc_only_client_attend_first_appt_coach_three_month" value="No" onclick="updateThreeMonthForm()"> No&nbsp;&nbsp;
+      <input type="radio" name="rc_only_client_attend_first_appt_coach_three_month" value="Yes" onclick="checkhideall()"> Yes&nbsp;&nbsp;
+      <input type="radio" name="rc_only_client_attend_first_appt_coach_three_month" value="No" onclick="checkhideall()"> No&nbsp;&nbsp;
     </span>
   </div>
 </div>
@@ -803,25 +674,10 @@ function updatesignatures(){
       <label class="label-top">||FIELDTAG rc_only_last_date_communication_three_month||Date of Last Communication||ENDFIELDTAG||</label>
     </span>
     <span class="qrc_only_last_date_communication_three_month">
-      <input type="text" name="rc_only_last_date_communication_three_month" size="20" onchange="updateThreeMonthForm()" class="jdatepicker">
+      <input type="text" name="rc_only_last_date_communication_three_month" size="20" onchange="checkhideall()" class="jdatepicker">
     </span>
   </div>
 </div>
- <!-- <div class="entire">
-    <div class="col12 fldclient_attend_intake_appt_three_month qclient_attend_intake_appt_three_month">
-    <div class="col12 fldclient_attend_intake_appt_three_month qclient_attend_intake_appt_three_month"><span class="qclient_attend_intake_appt_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_three_month required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_three_month||Did client attend an intake appointment?||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_three_month"><select size="1"  name="client_attend_intake_appt_three_month" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Yes">Yes</option>
-<option value="No">No</option>
-
-</select></span></div>
-     </div>
-  </div> -->
- <!-- <div class="entire">
-    <div class="col12 fldintake_appt_date_three_month qintake_appt_date_three_month">
-    <div class="col12 fldintake_appt_date_three_month qintake_appt_date_three_month"><span class="qintake_appt_date_three_month"><label class="label-top">||FIELDTAG intake_appt_date_three_month||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_three_month"><input type="text" name="intake_appt_date_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
 <div class="entire">
   <div class="col12 fldintake_conducted_appt_date_three_month qintake_conducted_appt_date_three_month">
     <span class="qintake_conducted_appt_date_three_month required-label">||PWRequiredFieldRequiredText||</span>
@@ -829,8 +685,8 @@ function updatesignatures(){
       <label class="label-top">||FIELDTAG intake_conducted_appt_date_three_month||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label>
     </span>
     <span class="qintake_conducted_appt_date_three_month">
-      <input type="radio" name="intake_conducted_appt_date_three_month" value="Yes" onclick="updateThreeMonthForm()"> Yes&nbsp;&nbsp;
-      <input type="radio" name="intake_conducted_appt_date_three_month" value="No" onclick="updateThreeMonthForm()"> No&nbsp;&nbsp;
+      <input type="radio" name="intake_conducted_appt_date_three_month" value="Yes" onclick="checkhideall()"> Yes&nbsp;&nbsp;
+      <input type="radio" name="intake_conducted_appt_date_three_month" value="No" onclick="checkhideall()"> No&nbsp;&nbsp;
     </span>
   </div>
 </div>
@@ -841,7 +697,7 @@ function updatesignatures(){
       <label class="label-top">||FIELDTAG reason_not_attending_sud_tx_three_month||Why is client not attending SUD treatment at this time?||ENDFIELDTAG||</label>
     </span>
     <span class="qreason_not_attending_sud_tx_three_month">
-      <select size="1" name="reason_not_attending_sud_tx_three_month" onchange="checkhideall(); updateThreeMonthForm()">
+      <select size="1" name="reason_not_attending_sud_tx_three_month" onchange="checkhideall()">
         <option value="">(please select)</option>
         <option value="In Process Of Transfering To New Agency">In Process Of Transfering To New Agency</option>
         <option value="Agency Won't Take Client">Agency Won't Take Client</option>
@@ -881,6 +737,11 @@ function updatesignatures(){
     <div class="col12 fldmat_prescribed_physician_appt_three_month qmat_prescribed_physician_appt_three_month"><span class="qmat_prescribed_physician_appt_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_three_month required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_three_month||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_three_month"><input type="radio" name="mat_prescribed_physician_appt_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_three_month" value="Unable To Contact Client Or Treatment Agency" onclick="checkhideall()" >Unable To Contact Client Or Treatment Agency&nbsp;&nbsp;</span></div>
      </div>
   </div>
+   <div class="entire">
+    <div class="col12 fldmat_prescribed_physician_appt_three_month_unable_to_contact qmat_prescribed_physician_appt_three_month_unable_to_contact">
+    <div class="col12 fldmat_prescribed_physician_appt_three_month_unable_to_contact qmat_prescribed_physician_appt_three_month_unable_to_contact"><span class="qmat_prescribed_physician_appt_three_month_unable_to_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_three_month_unable_to_contact required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_three_month_unable_to_contact||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_three_month_unable_to_contact"><input type="radio" name="mat_prescribed_physician_appt_three_month_unable_to_contact" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_three_month_unable_to_contact" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_three_month_unable_to_contact" value="Unable To Contact Client Or Treatment Agency" onclick="checkhideall()" >Unable To Contact Client Or Treatment Agency&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12 fldwhat_mat_physician_appt_three_month qwhat_mat_physician_appt_three_month">
     <div class="col12 fldwhat_mat_physician_appt_three_month qwhat_mat_physician_appt_three_month"><span class="qwhat_mat_physician_appt_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_three_month required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_three_month"><select size="1" name="what_mat_physician_appt_three_month" onchange="checkhideall()">
@@ -889,10 +750,14 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
-<div class="entire">
-<div class="col12 term">Program Participation</div>
-</div>
-
+   <div class="entire">
+    <div class="col12 fldwhat_mat_physician_appt_three_month_unable_to_contact qwhat_mat_physician_appt_three_month_unable_to_contact">
+    <div class="col12 fldwhat_mat_physician_appt_three_month_unable_to_contact qwhat_mat_physician_appt_three_month_unable_to_contact"><span class="qwhat_mat_physician_appt_three_month_unable_to_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_three_month_unable_to_contact required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_three_month_unable_to_contact"><select size="1" name="what_mat_physician_appt_three_month_unable_to_contact" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_hree_month_unable_to_contact^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_types_mat||
+</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -904,12 +769,6 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
 <div class="col12 term">Payor Source</div>

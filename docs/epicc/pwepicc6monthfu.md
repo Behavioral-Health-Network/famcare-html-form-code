@@ -55,6 +55,9 @@ status: active
 
 ## Changelog
 
+- **2025-10-17**: Removes function updateSixMonthForm and anything and BHN added such as showfields(). Added `treatment_path_six_month_unable_to_contact`, `what_mat_physician_appt_six_month_unable_to_contact`, and `mat_prescribed_physician_appt_six_month_unable_to_contact`. This will allow for BHN to follow the new workflow that was created without having to modify checkhideall(), checkhide(), or create a new function to accomidate the complex conditional logic.
+- **2025-10-01**: Removed Client Declined SUD Treatment Services from treatment_path_six_month.
+- **2025-10-01**: Reorganizes the questions to make more sense and an easier work flow. Adds new questions reason_not_participating_six_month, reason_not_attending_sud_tx_six_month, other_reason_not_attending_sud_tx_six_month, and attending_sud_tx_verfy_six_month. Creates a new function called updateSixMonthForm to handle the more complex conditional logic and checkhideall still handles the simple x = x logic. Updates the onclick and onchanges where needed.
 - **2025-08-27**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-08-15**: Adds radio button option for mat_prescribed_physician_appt_six_month, Unable To Contact Client Or Treatment Agency.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_SIX_MONTH` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.

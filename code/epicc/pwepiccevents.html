@@ -172,7 +172,7 @@ function startup() {
     setrequire('inservice_hosp_location');
     setrequire('outreach_business');
     setrequire('inservice_ems_fire_location');
-    setrequire('outreach_emf_fire_location');
+    setrequire('outreach_ems_fire_location');
     setrequire('outreach_clinic');
     setrequire('outreach_hosp_location');
     setrequire('inservice_community');
@@ -235,7 +235,7 @@ function checkhideall() {
    checkhide(f.inservice_type,"inservice_hosp_location","Hospital");
    checkhide(f.outreaching_type,"outreach_business","Business");
    checkhide(f.inservice_type,"inservice_ems_fire_location","EMS/Fire District");
-   checkhide(f.outreaching_type,"outreach_emf_fire_location","EMS/Fire District");
+   checkhide(f.outreaching_type,"outreach_ems_fire_location","EMS/Fire District");
    checkhide(f.outreaching_type,"outreach_clinic","Clinic");
    checkhide(f.outreaching_type,"outreach_hosp_location","Hospital");
    checkhide(f.inservice_type,"inservice_community","Community");
@@ -498,7 +498,7 @@ function validateform(scope='all') {
   if (!hiddenfield('inservice_hosp_location') && gvtfieldvalue('inservice_hosp_location')=='') {edesc=edesc+`Must specify a value for Hospital Name\n`; seterror("inservice_hosp_location");}
   if (!hiddenfield('outreach_business') && gvtfieldvalue('outreach_business')=='') {edesc=edesc+`Must specify a value for Business Name\n`; seterror("outreach_business");}
   if (!hiddenfield('inservice_ems_fire_location') && gvtfieldvalue('inservice_ems_fire_location')=='') {edesc=edesc+`Must specify a value for EMS/Fire District Name\n`; seterror("inservice_ems_fire_location");}
-  if (!hiddenfield('outreach_emf_fire_location') && gvtfieldvalue('outreach_emf_fire_location')=='') {edesc=edesc+`Must specify a value for EMS/Fire District Name\n`; seterror("outreach_emf_fire_location");}
+  if (!hiddenfield('outreach_ems_fire_location') && gvtfieldvalue('outreach_ems_fire_location')=='') {edesc=edesc+`Must specify a value for EMS/Fire District Name\n`; seterror("outreach_ems_fire_location");}
   if (!hiddenfield('outreach_clinic') && gvtfieldvalue('outreach_clinic')=='') {edesc=edesc+`Must specify a value for Clinic Name\n`; seterror("outreach_clinic");}
   if (!hiddenfield('outreach_hosp_location') && gvtfieldvalue('outreach_hosp_location')=='') {edesc=edesc+`Must specify a value for Hospital Name\n`; seterror("outreach_hosp_location");}
   if (!hiddenfield('inservice_community') && gvtfieldvalue('inservice_community')=='') {edesc=edesc+`Must specify a value for Name of Location in the Community\n`; seterror("inservice_community");}
@@ -918,9 +918,9 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldoutreach_emf_fire_location qoutreach_emf_fire_location">
-    <div class="col12 fldoutreach_emf_fire_location qoutreach_emf_fire_location"><span class="qoutreach_emf_fire_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_emf_fire_location required-field-label"><label class="label-top">EMS/Fire District Name</label></span><span class="qoutreach_emf_fire_location"><select size="1" name="outreach_emf_fire_location" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE outreach_emf_fire_location^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+    <div class="col12 fldoutreach_ems_fire_location qoutreach_ems_fire_location">
+    <div class="col12 fldoutreach_ems_fire_location qoutreach_ems_fire_location"><span class="qoutreach_ems_fire_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_ems_fire_location required-field-label"><label class="label-top">EMS/Fire District Name</label></span><span class="qoutreach_ems_fire_location"><select size="1" name="outreach_ems_fire_location" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE outreach_ems_fire_location^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_ems_fire_district||
 </span></div>
      </div>

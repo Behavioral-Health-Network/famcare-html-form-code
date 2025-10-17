@@ -53,7 +53,9 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.bh_admission,"bh_admission_agency","Yes");
+    checkhide(f.admitted_to_services,"bh_admission","Yes");
+    checkhide(f.admitted_to_services,"su_admission","Yes");
+    checkhide(f.bh_admission,"bh_admission_agency","Yes");
    checkhide(f.bh_admission,"bh_admission_date","Yes");
    checkhide(f.su_admission,"su_admission_agency","Yes");
    checkhide(f.su_admission,"su_admission_date","Yes");

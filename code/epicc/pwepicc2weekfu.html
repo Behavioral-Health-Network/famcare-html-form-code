@@ -57,6 +57,9 @@ function startup() {
     setrequire('reason_not_attending_sud_tx_two_week');
     setrequire('other_reason_not_attending_sud_tx_two_week');
     setrequire('attending_sud_tx_verify_two_week');
+    setrequire('treatment_path_two_week_unable_to_contact');
+    setrequire('mat_prescribed_physician_two_week_unable_to_contact');
+    setrequire('what_mat_physician_appt_two_week_unable_to_contact');
     
     
 
@@ -69,191 +72,31 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
+checkhide(f.program_participation_two_week,"preg_post_part_two_week","023");
+checkhide(f.program_participation_two_week,"treatment_path_two_week","023");
+  checkhide(f.treatment_path_two_week,"intake_conducted_appt_date_two_week","MAT,Non-MAT Treatment");
+  checkhide(f.treatment_path_two_week,"mat_prescribed_physician_appt_two_week","MAT");
+    checkhide(f.reason_not_attending_sud_tx_two_week,"other_reason_not_attending_sud_tx_two_week","Other");
+  checkhide(f.treatment_path_two_week,"rc_only_client_attend_first_appt_coach_two_week","Recovery Coach Only");
+  checkhide(f.treatment_path_two_week,"rc_only_last_date_communication_two_week","Recovery Coach Only");
+    checkhide(f.intake_conducted_appt_date_two_week,"reason_not_attending_sud_tx_two_week","No");
 
+checkhide(f.program_participation_two_week,"reason_not_participating_two_week","024");
+  checkhide(f.reason_not_participating_two_week,"why_not_meet_prog_eligibility_two_week","Doesn't Meet Program Criteria");
 
-  //     checkhide(f.treatment_path_two_week,"rc_only_client_attend_first_appt_coach_two_week","Recovery Coach Only");
-  //  checkhide(f.treatment_path_two_week,"rc_only_last_date_communication_two_week","Recovery Coach Only");
-//All intake questions were moved to the SUBROADTREATMENTAGENCY summation
-//    checkhide(f.treatment_path_two_week,"client_attend_intake_appt_two_week","MAT,Non-MAT Treatment");
-//    checkhide(f.client_attend_intake_appt_two_week,"intake_appt_date_two_week","Yes");
-  //  checkhide(f.treatment_path_two_week,"intake_conducted_appt_date_two_week","MAT,Non-MAT Treatment");
-   checkhide(f.treatment_path_two_week,"mat_prescribed_physician_appt_two_week","MAT");
-   checkhide(f.mat_prescribed_physician_appt_two_week,"what_mat_physician_appt_two_week","Yes");
-  //  checkhide(f.program_participation_two_week,"transfer_type_two_week","022");
-  //  checkhide(f.transfer_type_two_week,"if_transfer_what_region_two_week","Regional Transfer");
-  //  checkhide(f.transfer_type_two_week,"if_transfer_contact_transfer_region_success_two_week","Regional Transfer");
-  //  checkhide(f.program_participation_two_week,"client_status_two_week","005");
-  //  checkhide(f.client_status_two_week,"date_transferred_reengagement_specialist_two_week","Transfer to Re-Engagement Specialist");
-   checkhide(f.program_participation_two_week,"preg_post_part_two_week","023");
-   checkhide(f.reason_not_participating_two_week,"why_not_meet_prog_eligibility_two_week","Doesn't Meet Program Criteria");
-  //  checkhide(f.program_participation_two_week,"reason_not_participating_two_week","024");
-  //  checkhide(f.program_participation_two_week,"treatment_path_two_week","023");
-   checkhide(f.reason_not_attending_sud_tx_two_week,"other_reason_not_attending_sud_tx_two_week","Other");
-  //  checkhide(f.intake_conducted_appt_date_two_week,"reason_not_attending_sud_tx_two_week","No");
-  //  checkhide(f.program_participation_two_week,"attending_sud_tx_verify_two_week","005");
-  //  checkhide(f.attending_sud_tx_verify_two_week,"treatment_path_two_week","Yes");
+checkhide(f.program_participation_two_week,"transfer_type_two_week","022");
+  checkhide(f.transfer_type_two_week,"if_transfer_what_region_two_week","Regional Transfer");
+  checkhide(f.transfer_type_two_week,"if_transfer_contact_transfer_region_success_two_week","Regional Transfer");
+
+checkhide(f.program_participation_two_week,"client_status_two_week","005");
+checkhide(f.program_participation_two_week,"attending_sud_tx_verify_two_week","005");
+  checkhide(f.attending_sud_tx_verify_two_week,"treatment_path_two_week_unable_to_contact","Yes");
+    checkhide(f.treatment_path_two_week_unable_to_contact,"mat_prescribed_physician_two_week_unable_to_contact","MAT");
+
+  checkhide(f.mat_prescribed_physician_appt_two_week,"what_mat_physician_appt_two_week","Yes");
+  checkhide(f.mat_prescribed_physician_two_week_unable_to_contact,"what_mat_physician_appt_two_week_unable_to_contact","Yes");
 
 }
-
-// Get the selected value of a radio group or the value of a select
-function getVal(name) {
-  const checked = document.querySelector(`input[name="${name}"]:checked`);
-  if (checked) return checked.value;
-  const sel = document.querySelector(`select[name="${name}"]`);
-  return sel ? sel.value : "";
-}
-
-function showField(name, show = true) {
-  document.querySelectorAll(`.fld${name}`).forEach(el => {
-    if (show) {
-      el.style.display = "block";
-    } else {
-      // Only clear if it was visible and is now being hidden
-      if (el.style.display !== "none") {
-        el.querySelectorAll("input, select, textarea").forEach(inp => {
-          if (inp.type === "radio" || inp.type === "checkbox") {
-            inp.checked = false;
-          } else {
-            inp.value = "";
-          }
-        });
-      }
-      el.style.display = "none";
-    }
-  });
-}
-
-
-// Reset radios inside hidden wrappers
-function resetHidden(name) {
-  document.querySelectorAll(`.fld${name} input[type="radio"]`).forEach(inp => {
-    if (inp.offsetParent === null) inp.checked = false;
-  });
-}
-
-
-/**
- * updateTwoWeekForm()
- * 
- * This function controls dynamic field visibility and validation logic for the EPICC Two-Week Follow-Up form.
- * It is triggered during form load or when key fields change, and applies conditional rendering based on program participation,
- * treatment path, intake status, and transfer type.
- * 
- * Logic Overview:
- * 
- * 1. Treatment Path visibility:
- *    - Shown if program = 023, or program = 005 AND attending = Yes.
- *    - For program 023: all treatment options (MAT, Non-MAT, RC) are visible and required.
- *    - For program 005 + attending = Yes: only MAT and Non-MAT are shown; RC is hidden and deselected if previously checked.
- *    - For all other cases: treatment options are hidden.
- * 
- * 2. Program 023 nested logic:
- *    - Intake appointment question is shown only if treatment = MAT or Non-MAT.
- *    - Reason for not attending is shown only if intake = No.
- *    - RC follow-up questions are shown only if treatment = Recovery Coach Only.
- * 
- * 3. Program 024:
- *    - Shows reason for not participating.
- * 
- * 4. Program 022:
- *    - Shows transfer type.
- *    - If transfer type = Regional Transfer, shows region and contact success fields.
- * 
- * 5. Program 005:
- *    - Shows attending verification and client status.
- *    - Explicitly hides intake and reason-not-attending fields.
- *    - Ensures RC follow-up fields are hidden (only relevant for program 023).
- * 
- * This function ensures that users only see and interact with fields relevant to their program participation and treatment path context,
- * reducing confusion and improving data integrity.
- */
-
-function updateTwoWeekForm() {
-  const programVal   = getVal("program_participation_two_week");
-  const attendingVal = getVal("attending_sud_tx_verify_two_week");
-  const treatmentVal = getVal("treatment_path_two_week");
-  const intakeVal    = getVal("intake_conducted_appt_date_two_week");
-  const transferVal  = getVal("transfer_type_two_week");
-
-  // 1) Shared field: Treatment Path — visible if:
-  //    - program = 023, OR
-  //    - program = 005 AND attending = Yes
-  const showTP = (programVal === "023") || (programVal === "005" && attendingVal === "Yes");
-  showField("treatment_path_two_week", showTP);
-
-  // Also manage option visibility based on program
-  if (programVal === "023") {
-    // Show all options
-    ["tp_mat_span","tp_nonmat_span","tp_rc_span"].forEach(id => {
-      const span = document.getElementById(id);
-      if (!span) return;
-      span.style.display = "inline-block";
-      const input = span.querySelector('input[type="radio"]');
-      if (input) input.required = true; // group required
-      span.classList.add("required");
-    });
-  } else if (programVal === "005" && attendingVal === "Yes") {
-    // Only MAT + Non-MAT allowed
-    const vis = { tp_mat_span: true, tp_nonmat_span: true, tp_rc_span: false };
-    Object.entries(vis).forEach(([id, shouldShow]) => {
-      const span = document.getElementById(id);
-      if (!span) return;
-      span.style.display = shouldShow ? "inline-block" : "none";
-      const input = span.querySelector('input[type="radio"]');
-      if (input) {
-        if (!shouldShow && input.checked) input.checked = false;
-        input.required = shouldShow; // make the group required via the visible radios
-      }
-      if (shouldShow) span.classList.add("required"); else span.classList.remove("required");
-    });
-  } else {
-    // Not visible, nothing else to do here
-    ["tp_mat_span","tp_nonmat_span","tp_rc_span"].forEach(id => {
-      const span = document.getElementById(id);
-      if (span) span.style.display = "none";
-    });
-  }
-
-  // 2) Program 023 nested rules
-  // Intake question only when program = 023 and treatment = MAT or Non‑MAT
-  const showIntake023 = (programVal === "023") && (treatmentVal === "MAT" || treatmentVal === "Non-MAT Treatment");
-  showField("intake_conducted_appt_date_two_week", showIntake023);
-
-  // Reason not attending (only if intake = No in the 023 + MAT/Non‑MAT flow)
-  const showReasonNotAttending = showIntake023 && (intakeVal === "No");
-  showField("reason_not_attending_sud_tx_two_week", showReasonNotAttending);
-
-  // RC follow-ups only when program = 023 and treatment = RC Only
-  const showRCFollowUps = (programVal === "023") && (treatmentVal === "Recovery Coach Only");
-  showField("rc_only_client_attend_first_appt_coach_two_week", showRCFollowUps);
-  showField("rc_only_last_date_communication_two_week", showRCFollowUps);
-
-  // 3) Program 024
-  showField("reason_not_participating_two_week", programVal === "024");
-
-  // 4) Program 022 and nested transfer
-  const showTransferType = (programVal === "022");
-  showField("transfer_type_two_week", showTransferType);
-  const showRegion = showTransferType && (transferVal === "Regional Transfer");
-  showField("if_transfer_what_region_two_week", showRegion);
-  showField("if_transfer_contact_transfer_region_success_two_week", showRegion);
-
-  // 5) Program 005 top-level
-  const showAttendingVerify = (programVal === "005");
-  showField("attending_sud_tx_verify_two_week", showAttendingVerify);
-  showField("client_status_two_week", showAttendingVerify);
-
-  // In 005 workflow we explicitly do NOT show intake or reason_not_attending via this logic
-  if (programVal === "005") {
-    showField("intake_conducted_appt_date_two_week", false);
-    showField("reason_not_attending_sud_tx_two_week", false);
-    // RC follow-ups are 023-only; ensure hidden here
-    showField("rc_only_client_attend_first_appt_coach_two_week", false);
-    showField("rc_only_last_date_communication_two_week", false);
-  }
-}
-
-
 
 function addEventListeners(){
   // find all elements with required class and add event listener to 
@@ -268,7 +111,6 @@ function addEventListeners(){
       ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
     }  else if ( ele.nodeName === "SPAN" ){
       ele.addEventListener( "click", checkChecked )
-    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
       ele.addEventListener( "change", checkTextOrSelect )
     } else if ( ele.type === "file" ) {
       ele.addEventListener( "change", checkFiles )
@@ -501,7 +343,10 @@ function validateform(scope='all') {
   if (!hiddenfield('reason_not_participating_two_week') && gvtfieldvalue('reason_not_participating_two_week')=='') {edesc=edesc+`Must specify a value for Reason for not participating in program\n`; seterror("reason_not_participating_two_week");}
   if (!hiddenfield('reason_not_attending_sud_tx_two_week') && gvtfieldvalue('reason_not_attending_sud_tx_two_week')=='') {edesc=edesc+`Must specify a value for Reason for not attending SUD treatment\n`; seterror("reason_not_attending_sud_tx_two_week");}
   if (!hiddenfield('other_reason_not_attending_sud_tx_two_week') && gvtfieldvalue('other_reason_not_attending_sud_tx_two_week')=='') {edesc=edesc+`Must specify a value for Other reason for not attending SUD treatment\n`; seterror("other_reason_not_attending_sud_tx_two_week");} 
-  
+  if (!hiddenfield('attending_sud_tx_verify_two_week') && gvtfieldvalue('attending_sud_tx_verify_two_week')=='') {edesc=edesc+`Must specify a value for Verify client is attending SUD treatment\n`; seterror("attending_sud_tx_verify_two_week");}
+  if (!hiddenfield('treatment_path_two_week_unable_to_contact') && gvtfieldvalue('treatment_path_two_week_unable_to_contact')=='') {edesc=edesc+`Must specify a value for Unable to contact client to determine treatment path\n`; seterror("treatment_path_two_week_unable_to_contact");}
+  if (!hiddenfield('mat_prescribed_physician_two_week_unable_to_contact') && gvtfieldvalue('mat_prescribed_physician_two_week_unable_to_contact')=='') {edesc=edesc+`Must specify a value for Unable to contact client to determine if MAT was prescribed\n`; seterror("mat_prescribed_physician_two_week_unable_to_contact");}
+  if (!hiddenfield('what_mat_physician_appt_two_week_unable_to_contact') && gvtfieldvalue('what_mat_physician_appt_two_week_unable_to_contact')=='') {edesc=edesc+`Must specify a value for Unable to contact client to determine type of MAT\n`; seterror("what_mat_physician_appt_two_week_unable_to_contact");}
   return edesc;
 }
 
@@ -606,7 +451,7 @@ function deleteit() {
 	f.submit();
 	return functionreturnvalue;
 }
-
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
 // function quicksubmitit() {
 // //	errdesc=validateform();
 // //	if (errdesc!="") {alert(errdesc); return;}
@@ -614,7 +459,7 @@ function deleteit() {
 // 	//***Error checking should be done here before a quick save
 // 	f._B1.style.display = "none";
 // 	f._B2.style.display = "none";
-// 	// f._B3.style.display = "none";
+// 	f._B3.style.display = "none";
 // 	document.getElementById("SaveButtons").style.display = "";
 // 	f.target = "fvalidate";
 // 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
@@ -649,7 +494,7 @@ function resetsave() {
 	//***Reset the form after a quick submit here
 	f._B1.style.display = "";
 	f._B2.style.display = "";
-	f._B3.style.display = "";
+	// f._B3.style.display = "";
 	document.getElementById("SaveButtons").style.display = "";
         $(':button').prop('disabled',false);
 	return functionreturnvalue;
@@ -699,10 +544,8 @@ function updatesignatures(){
 
 <script language="VBScript">
 </script>
-
-
-
-<body onload="startup(); checkhideall(); updateTwoWeekForm()">
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<body onload="startup()">
 <!-- Field Override Area -->
 
 <form action="genfunc.exe" method="post" enctype="multipart/form-data">
@@ -751,10 +594,9 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
-</div>
 <div class="entire">
     <div class="col12 fldprogram_participation_two_week qprogram_participation_two_week">
-    <div class="col12 fldprogram_participation_two_week qprogram_participation_two_week"><span class="qprogram_participation_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_two_week required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_two_week"><select size="1" name="program_participation_two_week" id="program_participation_two_week" onchange="checkhideall(); updateTwoWeekForm()">
+    <div class="col12 fldprogram_participation_two_week qprogram_participation_two_week"><span class="qprogram_participation_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_participation_two_week required-field-label"><label class="label-top">Program Participation</label></span><span class="qprogram_participation_two_week"><select size="1" name="program_participation_two_week" id="program_participation_two_week" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_participation_two_week^^') and two_week_fu = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_program_participation||
 </span></div>
@@ -762,7 +604,7 @@ function updatesignatures(){
   </div>
      <div class="entire">
     <div class="col12 fldattending_sud_tx_verify_two_week qattending_sud_tx_verify_two_week">
-    <div class="col12 fldattending_sud_tx_verify_two_week qattending_sud_tx_verify_two_week"><span class="qattending_sud_tx_verify_two_week"><label class="label-top">||FIELDTAG attending_sud_tx_verify_two_week||Can you verify if a client is attending SUD Treatment at an agency at this time?||ENDFIELDTAG||</label></span><span class="qattending_sud_tx_verify_two_week"><input type="radio" name="attending_sud_tx_verify_two_week" value="Yes" onclick="updateTwoWeekForm()"> Yes&nbsp;&nbsp;<input type="radio" name="attending_sud_tx_verify_two_week" value="No" onclick="updateTwoWeekForm()"> No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldattending_sud_tx_verify_two_week qattending_sud_tx_verify_two_week"><span class="qattending_sud_tx_verify_two_week"><label class="label-top">||FIELDTAG attending_sud_tx_verify_two_week||Can you verify if a client is attending SUD Treatment at an agency at this time?||ENDFIELDTAG||</label></span><span class="qattending_sud_tx_verify_two_week"><input type="radio" name="attending_sud_tx_verify_two_week" value="Yes" onclick="checkhideall()"> Yes&nbsp;&nbsp;<input type="radio" name="attending_sud_tx_verify_two_week" value="No" onclick="checkhideall()"> No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 
@@ -773,29 +615,29 @@ function updatesignatures(){
   </div>
    <div class="entire">
     <div class="col12 fldtransfer_type_two_week qtransfer_type_two_week">
-    <div class="col12 fldtransfer_type_two_week qtransfer_type_two_week"><span class="qtransfer_type_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_two_week required-field-label"><label class="label-top">||FIELDTAG transfer_type_two_week||Type of Transfer||ENDFIELDTAG||</label></span><span class="qtransfer_type_two_week"><input type="radio" name="transfer_type_two_week" value="Regional Transfer" onclick="updateTwoWeekForm()" >Regional Transfer&nbsp;&nbsp;<input type="radio" name="transfer_type_two_week" value="Services Transfered To ERE" onclick="updateTwoWeekForm()" >Services Transfered To ERE&nbsp;&nbsp;<input type="radio" name="transfer_type_two_week" value="Services Transfered To Youth ERE Program" onclick="updateTwoWeekForm()" >Services Transfered To Youth ERE Program&nbsp;&nbsp;<input type="radio" name="transfer_type_two_week" value="Transfer To BEACN" onclick="updateTwoWeekForm()" >Transfer To BEACN&nbsp;&nbsp;</span></div>
+    <div class="col12 fldtransfer_type_two_week qtransfer_type_two_week"><span class="qtransfer_type_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_type_two_week required-field-label"><label class="label-top">||FIELDTAG transfer_type_two_week||Type of Transfer||ENDFIELDTAG||</label></span><span class="qtransfer_type_two_week"><input type="radio" name="transfer_type_two_week" value="Regional Transfer" onclick="checkhideall()" >Regional Transfer&nbsp;&nbsp;<input type="radio" name="transfer_type_two_week" value="Services Transferred To ERE" onclick="checkhideall()" >Services Transferred To ERE&nbsp;&nbsp;<input type="radio" name="transfer_type_two_week" value="Services Transferred To Youth ERE Program" onclick="checkhideall()" >Services Transferred To Youth ERE Program&nbsp;&nbsp;<input type="radio" name="transfer_type_two_week" value="Transfer To BEACN" onclick="checkhideall()" >Transfer To BEACN&nbsp;&nbsp;</span></div>
      </div>
   </div>
 
  <div class="entire">
     <div class="col12 fldif_transfer_what_region_two_week qif_transfer_what_region_two_week">
-    <div class="col12 fldif_transfer_what_region_two_week qif_transfer_what_region_two_week"><span class="qif_transfer_what_region_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_two_week required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_two_week||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_two_week"><input type="radio" name="if_transfer_what_region_two_week" value="Southwest" onclick="updateTwoWeekForm()" >Southwest&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="Southeast" onclick="updateTwoWeekForm()" >Southeast&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="Central" onclick="updateTwoWeekForm()" >Central&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="West" onclick="updateTwoWeekForm()" >West&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="Lake" onclick="updateTwoWeekForm()" >Lake&nbsp;&nbsp;</span></div>
+    <div class="col12 fldif_transfer_what_region_two_week qif_transfer_what_region_two_week"><span class="qif_transfer_what_region_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_what_region_two_week required-field-label"><label class="label-top">||FIELDTAG if_transfer_what_region_two_week||What Region?||ENDFIELDTAG||</label></span><span class="qif_transfer_what_region_two_week"><input type="radio" name="if_transfer_what_region_two_week" value="Southwest" onclick="checkhideall()" >Southwest&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="Southeast" onclick="checkhideall()" >Southeast&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="Central" onclick="checkhideall()" >Central&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="West" onclick="checkhideall()" >West&nbsp;&nbsp;<input type="radio" name="if_transfer_what_region_two_week" value="Lake" onclick="checkhideall()" >Lake&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldif_transfer_contact_transfer_region_success_two_week qif_transfer_contact_transfer_region_success_two_week">
-    <div class="col12 fldif_transfer_contact_transfer_region_success_two_week qif_transfer_contact_transfer_region_success_two_week"><span class="qif_transfer_contact_transfer_region_success_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_contact_transfer_region_success_two_week required-field-label"><label class="label-top">||FIELDTAG if_transfer_contact_transfer_region_success_two_week||Was contact with transferring region successful?||ENDFIELDTAG||</label></span><span class="qif_transfer_contact_transfer_region_success_two_week"><input type="radio" name="if_transfer_contact_transfer_region_success_two_week" value="Yes" onclick="updateTwoWeekForm()" >Yes&nbsp;&nbsp;<input type="radio" name="if_transfer_contact_transfer_region_success_two_week" value="No" onclick="updateTwoWeekForm()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldif_transfer_contact_transfer_region_success_two_week qif_transfer_contact_transfer_region_success_two_week"><span class="qif_transfer_contact_transfer_region_success_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qif_transfer_contact_transfer_region_success_two_week required-field-label"><label class="label-top">||FIELDTAG if_transfer_contact_transfer_region_success_two_week||Was contact with transferring region successful?||ENDFIELDTAG||</label></span><span class="qif_transfer_contact_transfer_region_success_two_week"><input type="radio" name="if_transfer_contact_transfer_region_success_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="if_transfer_contact_transfer_region_success_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldclient_status_two_week qclient_status_two_week">
-    <div class="col12 fldclient_status_two_week qclient_status_two_week"><span class="qclient_status_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_two_week required-field-label"><label class="label-top">||FIELDTAG client_status_two_week||Status||ENDFIELDTAG||</label></span><span class="qclient_status_two_week"><input type="radio" name="client_status_two_week" value="Outreaching" onclick="updateTwoWeekForm()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_two_week" value="Recommend Termination" onclick="updateTwoWeekForm()" >Recommend Termination&nbsp;&nbsp;
+    <div class="col12 fldclient_status_two_week qclient_status_two_week"><span class="qclient_status_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_two_week required-field-label"><label class="label-top">||FIELDTAG client_status_two_week||Status||ENDFIELDTAG||</label></span><span class="qclient_status_two_week"><input type="radio" name="client_status_two_week" value="Outreaching" onclick="checkhideall()" >Outreaching&nbsp;&nbsp;<input type="radio" name="client_status_two_week" value="Recommend Termination" onclick="checkhideall()" >Recommend Termination&nbsp;&nbsp;
 </span></div>
      </div>
   </div>
    <div class="entire">
     <div class="col12 fldreason_not_participating_two_week qreason_not_participating_two_week">
-    <div class="col12 fldreason_not_participating_two_week qreason_not_participating_two_week"><span class="qreason_not_participating_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_participating_two_week required-field-label"><label class="label-top">||FIELDTAG reason_not_participating_two_week||Reason for not Participating||ENDFIELDTAG||</label></span><span class="qmreason_not_participating_two_week"><select size="1"  name="reason_not_participating_two_week" onchange="checkhideall(); updateTwoWeekForm()" >
+    <div class="col12 fldreason_not_participating_two_week qreason_not_participating_two_week"><span class="qreason_not_participating_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_participating_two_week required-field-label"><label class="label-top">||FIELDTAG reason_not_participating_two_week||Reason for not Participating||ENDFIELDTAG||</label></span><span class="qmreason_not_participating_two_week"><select size="1"  name="reason_not_participating_two_week" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Client Deceased">Client Deceased</option>
 <option value="Client Declined EPICC Services">Client Declined EPICC Services</option>
@@ -811,35 +653,19 @@ function updatesignatures(){
     <div class="col12 fldwhy_not_meet_prog_eligibility_two_week qwhy_not_meet_prog_eligibility_two_week"><span class="qwhy_not_meet_prog_eligibility_two_week"><label class="label-top">||FIELDTAG why_not_meet_prog_eligibility_two_week||Why does client not meet EPICC program criteria?||ENDFIELDTAG||</label></span><span class="qwhy_not_meet_prog_eligibility_two_week"><input type="radio" name="why_not_meet_prog_eligibility_two_week" value="Non-Opioid User" onclick="checkhideall()" >Non-Opioid User&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_two_week" value="Not A Missouri Resident" onclick="checkhideall()" >Not A Missouri Resident&nbsp;&nbsp;<input type="radio" name="why_not_meet_prog_eligibility_two_week" value="Missouri Resident But Outside Eastern Region" onclick="checkhideall()" >Missouri Resident But Outside Eastern Region&nbsp;&nbsp;</span></div>
      </div>
   </div>
- <!-- <div class="entire">
-    <div class="col12 flddate_transferred_reengagement_specialist_two_week qdate_transferred_reengagement_specialist_two_week">
-    <div class="col12 flddate_transferred_reengagement_specialist_two_week qdate_transferred_reengagement_specialist_two_week"><span class="qdate_transferred_reengagement_specialist_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_transferred_reengagement_specialist_two_week required-field-label"><label class="label-top">||FIELDTAG date_transferred_reengagement_specialist_two_week||Date of Transfer to Re-Engagement Specialist||ENDFIELDTAG||</label></span><span class="qdate_transferred_reengagement_specialist_two_week"><input type="text" name="date_transferred_reengagement_specialist_two_week" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
-
  <div class="entire">
     <div class="col12 fldtreatment_path_two_week qtreatment_path_two_week">
-    <div class="col12 fldtreatment_path_two_week qtreatment_path_two_week"><span class="qtreatment_path_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_two_week required-field-label"><label class="label-top">||FIELDTAG treatment_path_two_week||Treatment Path||ENDFIELDTAG||</label></span>
-        <div id="treatment_path_container">
-  <span id="tp_mat_span">
-    <input type="radio" name="treatment_path_two_week" value="MAT" onclick="checkhideall(); updateTwoWeekForm()" id="tp_mat"> MAT
-  </span>
-  <span id="tp_nonmat_span">
-    <input type="radio" name="treatment_path_two_week" value="Non-MAT Treatment" onclick="checkhideall(); updateTwoWeekForm()" id="tp_nonmat"> Non-MAT Treatment
-  </span>
-  <span id="tp_rc_span">
-    <input type="radio" name="treatment_path_two_week" value="Recovery Coach Only" onclick="checkhideall(); updateTwoWeekForm()" id="tp_rc"> Recovery Coach Only
-  </span>
-  <!-- <span id="tp_declined_span">
-    <input type="radio" name="treatment_path_two_week" value="Client Declined SUD Treatment Services" onclick="checkhideall(); updateTwoWeekForm()" id="tp_declined"> Client Declined SUD Treatment Services
-  </span> -->
-</div>
+    <div class="col12 fldtreatment_path_two_week qtreatment_path_two_week"><span class="qtreatment_path_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_two_week required-field-label"><label class="label-top">||FIELDTAG treatment_path_two_week||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_two_week"><input type="radio" name="treatment_path_two_week" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_two_week" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;<input type="radio" name="treatment_path_two_week" value="Recovery Coach Only" onclick="checkhideall()" >Recovery Coach Only&nbsp;&nbsp;</span></div>
      </div>
   </div>
- </div>
+   <div class="entire">
+    <div class="col12 fldtreatment_path_two_week_unable_to_contact qtreatment_path_two_week_unable_to_contact">
+    <div class="col12 fldtreatment_path_two_week_unable_to_contact qtreatment_path_two_week_unable_to_contact"><span class="qtreatment_path_two_week_unable_to_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qtreatment_path_two_week_unable_to_contact required-field-label"><label class="label-top">||FIELDTAG treatment_path_two_week_unable_to_contact||Treatment Path||ENDFIELDTAG||</label></span><span class="qtreatment_path_two_week_unable_to_contact"><input type="radio" name="treatment_path_two_week_unable_to_contact" value="MAT" onclick="checkhideall()" >MAT&nbsp;&nbsp;<input type="radio" name="treatment_path_two_week_unable_to_contact" value="Non-MAT Treatment" onclick="checkhideall()" >Non-MAT Treatment&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12 fldrc_only_client_attend_first_appt_coach_two_week qrc_only_client_attend_first_appt_coach_two_week">
     <div class="col12 fldrc_only_client_attend_first_appt_coach_two_week qrc_only_client_attend_first_appt_coach_two_week"><span class="qrc_only_client_attend_first_appt_coach_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_client_attend_first_appt_coach_two_week required-field-label"><label class="label-top">||FIELDTAG rc_only_client_attend_first_appt_coach_two_week||Contact Since IC||ENDFIELDTAG||</label></span><span class="qrc_only_client_attend_first_appt_coach_two_week"><input type="radio" name="rc_only_client_attend_first_appt_coach_two_week" value="Yes" onclick="updateTwoWeekForm()" >Yes&nbsp;&nbsp;<input type="radio" name="rc_only_client_attend_first_appt_coach_two_week" value="No" onclick="updateTwoWeekForm()" >No&nbsp;&nbsp;</span></div>
@@ -850,17 +676,6 @@ function updatesignatures(){
     <div class="col12 fldrc_only_last_date_communication_two_week qrc_only_last_date_communication_two_week"><span class="qrc_only_last_date_communication_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qrc_only_last_date_communication_two_week required-field-label"><label class="label-top">||FIELDTAG rc_only_last_date_communication_two_week||Date of Last Communication||ENDFIELDTAG||</label></span><span class="qrc_only_last_date_communication_two_week"><input type="text" name="rc_only_last_date_communication_two_week" size="20" onchange="updateTwoWeekForm()" class="jdatepicker"></span></div>
      </div>
   </div>
-  <!-- All intake questions were moved to the SUBROADTREATMENTAGENCY summation --> 
- <!-- <div class="entire">
-    <div class="col12 fldclient_attend_intake_appt_two_week qclient_attend_intake_appt_two_week">
-    <div class="col12 fldclient_attend_intake_appt_two_week qclient_attend_intake_appt_two_week"><span class="qclient_attend_intake_appt_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_attend_intake_appt_two_week required-field-label"><label class="label-top">||FIELDTAG client_attend_intake_appt_two_week||Did client attend an intake appointment? (NOTE: Regardless of if intake was actually conducted.)||ENDFIELDTAG||</label></span><span class="qclient_attend_intake_appt_two_week"><input type="radio" name="client_attend_intake_appt_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_attend_intake_appt_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldintake_appt_date_two_week qintake_appt_date_two_week">
-    <div class="col12 fldintake_appt_date_two_week qintake_appt_date_two_week"><span class="qintake_appt_date_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_appt_date_two_week required-field-label"><label class="label-top">||FIELDTAG intake_appt_date_two_week||Date of Intake Appointment||ENDFIELDTAG||</label></span><span class="qintake_appt_date_two_week"><input type="text" name="intake_appt_date_two_week" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div> -->
  <div class="entire">
     <div class="col12 fldintake_conducted_appt_date_two_week qintake_conducted_appt_date_two_week">
     <div class="col12 fldintake_conducted_appt_date_two_week qintake_conducted_appt_date_two_week"><span class="qintake_conducted_appt_date_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_conducted_appt_date_two_week required-field-label"><label class="label-top">||FIELDTAG intake_conducted_appt_date_two_week||Is client actively attending treatment at a SUD agency at this time?||ENDFIELDTAG||</label></span><span class="qintake_conducted_appt_date_two_week"><input type="radio" name="intake_conducted_appt_date_two_week" value="Yes" onclick="updateTwoWeekForm()" >Yes&nbsp;&nbsp;<input type="radio" name="intake_conducted_appt_date_two_week" value="No" onclick="updateTwoWeekForm()" >No&nbsp;&nbsp;</span></div>
@@ -910,10 +725,23 @@ function updatesignatures(){
     <div class="col12 fldmat_prescribed_physician_appt_two_week qmat_prescribed_physician_appt_two_week"><span class="qmat_prescribed_physician_appt_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_appt_two_week required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_appt_two_week||Was MAT prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_appt_two_week"><input type="radio" name="mat_prescribed_physician_appt_two_week" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_two_week" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_appt_two_week" value="Unable To Contact Client Or Treatment Agency" onclick="checkhideall()" >Unable To Contact Client Or Treatment Agency&nbsp;&nbsp;</span></div>
      </div>
   </div>
+     <div class="entire">
+    <div class="col12 fldmat_prescribed_physician_two_week_unable_to_contact qmat_prescribed_physician_two_week_unable_to_contact">
+    <div class="col12 fldmat_prescribed_physician_two_week_unable_to_contact qmat_prescribed_physician_two_week_unable_to_contact"><span class="qmat_prescribed_physician_two_week_unable_to_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_prescribed_physician_two_week_unable_to_contact required-field-label"><label class="label-top">||FIELDTAG mat_prescribed_physician_two_week_unable_to_contact||Was MAT Prescribed?||ENDFIELDTAG||</label></span><span class="qmat_prescribed_physician_two_week_unable_to_contact"><input type="radio" name="mat_prescribed_physician_two_week_unable_to_contact" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_two_week_unable_to_contact" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_prescribed_physician_two_week_unable_to_contact" value="Unable To Contact Client Or Treatment Agency" onclick="checkhideall()" >Unable To Contact Client Or Treatment Agency&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12 fldwhat_mat_physician_appt_two_week qwhat_mat_physician_appt_two_week">
     <div class="col12 fldwhat_mat_physician_appt_two_week qwhat_mat_physician_appt_two_week"><span class="qwhat_mat_physician_appt_two_week required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_two_week required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_two_week"><select size="1" name="what_mat_physician_appt_two_week" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_two_week^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_types_mat||
+</span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col12 fldwhat_mat_physician_appt_two_week_unable_to_contact qwhat_mat_physician_appt_two_week_unable_to_contact">
+    <div class="col12 fldwhat_mat_physician_appt_two_week_unable_to_contact qwhat_mat_physician_appt_two_week_unable_to_contact"><span class="qwhat_mat_physician_appt_two_week_unable_to_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_physician_appt_two_week_unable_to_contact required-field-label"><label class="label-top">Type of MAT</label></span><span class="qwhat_mat_physician_appt_two_week_unable_to_contact"><select size="1" name="what_mat_physician_appt_two_week_unable_to_contact" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_types_mat] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE what_mat_physician_appt_two_week_unable_to_contact^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE epicc_types_mat||
 </span></div>
      </div>

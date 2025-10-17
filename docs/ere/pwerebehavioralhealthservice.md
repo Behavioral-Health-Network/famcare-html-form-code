@@ -55,6 +55,7 @@ status: active
 
 ## Changelog
 
+- **2025-10-01**: Updates the conditional logic for su_admission and bh_admission to only show if admitted to services = yes.
 - **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-07-01**: Comments out all code for quicksubmitit and QuickSubmitReturn functions. This disables the Quick Submit option on the form, which allows users to save without answering all the required questions. Fixes issue with bh_admission_agency, wasn't filtering properly.
 - **2025-06-23**: Adds filter to bh_admission_agency and su_admission_agency to filter the master table to those for ERE.

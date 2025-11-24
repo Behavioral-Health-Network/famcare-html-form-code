@@ -9,7 +9,6 @@ form_type: pathways-governed
 client_form: true
 tags:
   - pathway-event
-  - complex-care-roster
 pathway_name: Complex Care
 pathway_id: 55320240920114308822
 pathway_event: Complex Care Roster
@@ -30,16 +29,16 @@ join_logic:
     - table: 
       join_type: inner
       on:
-        - source: PWCOMPLEXCAREROSTER.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWCOMPLEXCAREROSTER.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWCOMPLEXCAREROSTER.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: Q_CLIENT_BHN.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-09-17
+last_updated: 2025-11-05
 status: active
 ---
 
-# Comeplec Care Roster
+# Comeplex Care Roster
 
 ## YAML Notes
 
@@ -55,5 +54,9 @@ status: active
 
 ## Changelog
 
+- **2025-11-05**: Adds `date_added_cohort` field as a non-required input to allow for recording 'Cohort Selection Date'.
+- **2025-10-31**: Adds `complex_care_referral_source` field.
+- **2025-10-30**: Adds `dm3700_status` field.
+- **2025-10-28**: Changes the `WHERE` clause for `cmhc_agency` and `ada_su_agency` to filter to ERE instead of LINCS NAV.
 - **2025-08-27**: Comments out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
 - **2025-08-27**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.

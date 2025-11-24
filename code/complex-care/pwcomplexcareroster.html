@@ -35,11 +35,13 @@ function startup() {
 
 		}
 	}
-            setrequire('Pathway_Date');
+    setrequire('Pathway_Date');
     setrequire('program_assigned');
+    setrequire('complex_care_referral_source');
     setrequire('cmhc_status');
     setrequire('ada_su_status');
-	setrequire('TiedEnrollment');
+    setrequire('dm3700_status');
+	  setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -49,7 +51,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.cmhc_status,"cmhc_agency","001,002");
+   checkhide(f.cmhc_status,"cmhc_agency","001,002");
    checkhide(f.cmhc_agency,"other_cmhc_agency","006");
    checkhide(f.ada_su_status,"ada_su_agency","001,002");
    checkhide(f.ada_su_agency,"other_ada_su_agency","008");
@@ -282,7 +284,7 @@ function validateform(scope='all') {
        f.TESTRIGHTANSWERS.value=cstrjis(right);
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
-     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('program_assigned') && gvtfieldvalue('program_assigned')=='') {edesc=edesc+`Must specify a value for Program Assigned\n`; seterror("program_assigned");}
   if (!hiddenfield('cmhc_status') && gvtfieldvalue('cmhc_status')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_status");}
   if (!hiddenfield('ada_su_status') && gvtfieldvalue('ada_su_status')=='') {edesc=edesc+`Must specify a value for ADA/SU\n`; seterror("ada_su_status");}
@@ -538,6 +540,19 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col12 fldadded_cohort_date qadded_cohort_date">
+    <div class="col12 fldadded_cohort_date qadded_cohort_date"><span class="qadded_cohort_date required-label"></span><span class="qadded_cohort_date"><label class="label-top">||FIELDTAG added_cohort_date||Cohort Selection Date||ENDFIELDTAG||</label></span><span class="qadded_cohort_date"><input type="text" name="added_cohort_date" size="8" class="jdatepicker"></span></div>
+     </div>
+  </div>
+<div class="entire">
+    <div class="col12 fldcomplex_care_referral_source qcomplex_care_referral_source">
+    <div class="col12 fldcomplex_care_referral_source qcomplex_care_referral_source"><span class="qcomplex_care_referral_source required-label">||PWRequiredFieldRequiredText||</span><span class="qcomplex_care_referral_source required-field-label"><label class="label-top">Referral Source</label></span><span class="qcomplex_care_referral_source"><select size="1" name="complex_care_referral_source" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_referral_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE complex_care_referral_source^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE complex_care_referral_source||
+</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -566,7 +581,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldcmhc_agency qcmhc_agency">
     <div class="col12 fldcmhc_agency qcmhc_agency"><span class="qcmhc_agency"><label class="label-top">CMHC Agency</label></span><span class="qcmhc_agency"><select size="1" name="cmhc_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency^^') and program_name='LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency^^') and program_name='ERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
@@ -587,7 +602,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldada_su_agency qada_su_agency">
     <div class="col12 fldada_su_agency qada_su_agency"><span class="qada_su_agency"><label class="label-top">ADA/SU Agency</label></span><span class="qada_su_agency"><select size="1" name="ada_su_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency^^') and program_name='LINCS NAV' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency^^') and program_name='ERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ada_su_agency||
 </span></div>
      </div>
@@ -597,7 +612,14 @@ function updatesignatures(){
     <div class="col12 fldother_ada_su_agency qother_ada_su_agency"><span class="qother_ada_su_agency"><label class="label-top">||FIELDTAG other_ada_su_agency||Other ADA/SU Agency||ENDFIELDTAG||</label></span><span class="qother_ada_su_agency"><input type="text" name="other_ada_su_agency" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
-
+<div class="entire">
+    <div class="col12 flddm3700_status qdm3700_status">
+    <div class="col12 flddm3700_status qdm3700_status"><span class="qdm3700_status required-label">||PWRequiredFieldRequiredText||</span><span class="qdm3700_status required-field-label"><label class="label-top">DM3700</label></span><span class="qdm3700_status"><select size="1" name="dm3700_status" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [dm3700_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dm3700_status^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE dm3700_status||
+</span></div>
+     </div>
+  </div>
 </div>
 </div>
 <!--ENDOFMAINFORM -->

@@ -1,6 +1,6 @@
 <html>
 <head>
-<!--PATHWAYWIZARDSUMMATION BCR Presenting Concerns-->
+<!--PATHWAYWIZARDSUMMATION Housing Status Sum-->
 </head>
 
 <script language="JavaScript">
@@ -11,17 +11,12 @@
 
 <body>
 <div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
-<!--_AUTONAVIGATION-->||SQC SELECT PWBCRPresentingConcerns.ID, PWBCRPresentingConcerns.DOCSERNO, PWBCRPresentingConcerns.VISITTM, PWBCRPresentingConcerns.VISITDT, PWBCRPresentingConcerns.USERID, PWBCRPresentingConcerns.Pathway_Date, (SELECT STRING_AGG(BC.DESCRIPTION, '<br>')
- FROM STRING_SPLIT(PWBCRPresentingConcerns.bcr_presenting_concerns, ',') AS SplitCode
- JOIN bcr_presenting_concerns AS BC ON BC.CODE = SplitCode.value
-)
-AS PresentingConcerns FROM PWBCRPresentingConcerns WHERE PWBCRPresentingConcerns.DOCREVNO = ' 0 ' AND PWBCRPresentingConcerns.CLIENTNUMBER = '^^CLIENTNUMBER^^' ORDER BY PWBCRPresentingConcerns.DOCSERNO DESC;|| ||TSSTART||
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWHousingStatus].[Pathway_Date] ,[PWHousingStatus].[client_housing_status] ,[PWHousingStatus].[housing_start_date] ,[PWHousingStatus].[housing_end_date]  FROM ^^SP FORMNAME^^  WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
 <table cellspacing="0" class="summary">
     <thead>
         <tr>
             <th class="colAction">Action</th>
-            <th>Pathway Date</th>
-            <th>Presenting Concerns</th>
+<th>Pathway Date</th><th>Housing Status</th><th>Start Date</th><th>End Date</th>
             <th>||SORTCOL|ID;descending||Edited On</th>
             <th>||SORTCOL|USERID;ascending||Edited By</th>
         </tr>
@@ -29,8 +24,7 @@ AS PresentingConcerns FROM PWBCRPresentingConcerns WHERE PWBCRPresentingConcerns
     <tbody>
         <tr class="||ALTERNATE |altrow||">
             <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
-            <td>||SF Pathway_Date||</td>
-            <td>||SF PresentingConcerns||</td>
+<td>||SF Pathway_Date||</td><td>||SF client_housing_status||</td><td>||SF housing_start_date||</td><td>||SF housing_end_date||</td>
             <td>||SF VISITDT|| ||SF VISITTM||</td>
             <td>||SF USERID||</td>
         </tr>

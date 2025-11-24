@@ -1,6 +1,6 @@
 ---
 form_title: EPICC Initial Contact
-form_file: code/pwepiccic.html
+form_file: code/epicc/pwepiccic.html
 table_name: PWEPICCINITIALCONTACT
 program_scope: single
 programs:
@@ -54,38 +54,38 @@ This form tracks Initial Contact data for EPICC clients, including referral sour
 
 ## Field Matrix
 
-|                Field Name               |                   Field Prompt                  |     Type     | Required |                    Conditional Logic Notes                    |
-|:---------------------------------------:|:----------------------------------------:|:------------:|:--------:|:-------------------------------------------------------------:|
-| `pathway_date`                            | Pathway Date                             | Date         | Yes        | Required via `setrequire()` and validated in `validateform()`     |
-| `time_referral_placed`                    | Time of Referral Call                    | Time         | Yes        | Uses jQuery timepicker; required                              |
-| `epicc_pro_or_core_ic`                    | Referral Type                            | Radio        | Yes        | Triggers conditional display of MAT fields                    |
-| `program_participation_ic`                | Program Participation                    | Dropdown     | Yes        | SQL-driven choice table; triggers multiple conditional fields |
-| `treatment_path_ic`                       | Anticipated Service Path                 | Radio        | Yes        |                                                               |
-| `who_initiated_referral`                  | Who initiated the referral?              | Radio        | Yes        | Triggers `community_referral_source_ic` visibility              |
-| `community_referral_source_ic`            | If Community Referral, Select One        | Dropdown     | Yes        | SQL-driven choice table                                       |
-| `type_contact_ic`                         | Type of Contact                          | Radio        | Yes        |                                                               |
-| `consent_crc_referral_ic`                 | Does client consent to CRC referral?     | Radio        | Yes        | Triggers `reason_consent_refused_crc_ic` if 'No'                |
+|                Field Name                 |                   Field Prompt           |     Type     | Required   |                    Conditional Logic Notes                               |
+|:-----------------------------------------:|:----------------------------------------:|:------------:|:----------:|:------------------------------------------------------------------------:|
+| `pathway_date`                            | Pathway Date                             | Date         | Yes        | Required via `setrequire()` and validated in `validateform()`            |
+| `time_referral_placed`                    | Time of Referral Call                    | Time         | Yes        | Uses jQuery timepicker; required                                         |
+| `epicc_pro_or_core_ic`                    | Referral Type                            | Radio        | Yes        | Triggers conditional display of MAT fields                               |
+| `program_participation_ic`                | Program Participation                    | Dropdown     | Yes        | SQL-driven choice table; triggers multiple conditional fields            |
+| `treatment_path_ic`                       | Anticipated Service Path                 | Radio        | Yes        |                                                                          |
+| `who_initiated_referral`                  | Who initiated the referral?              | Radio        | Yes        | Triggers `community_referral_source_ic` visibility                       |
+| `community_referral_source_ic`            | If Community Referral, Select One        | Dropdown     | Yes        | SQL-driven choice table                                                  |
+| `type_contact_ic`                         | Type of Contact                          | Radio        | Yes        |                                                                          |
+| `consent_crc_referral_ic`                 | Does client consent to CRC referral?     | Radio        | Yes        | Triggers `reason_consent_refused_crc_ic` if 'No'                         |
 | `epicc_opioids_of_use`                    | Opioid(s) of Use                         | Multi-Select | Yes        | Triggers hidden field updates via function `updateReportFields()`        |
-| `overdose_event_referral`                 | Referral due to overdose event?          | Radio        | Yes        | Triggers `overdose_location`, `first_overdose`                    |
-| `overdose_location`                       | Location of Overdose                     | Radio        | Yes        | Triggers `specify_other_location` if 'Other'                    |
-| `first_overdose`                          | Was this the client's first overdose?    | Radio        | Yes        | Triggers `num_past_overdoses`, `most_recent_past_overdose_date`            |
-| `su_treatment_past_twelve_mos`            | Treatment in past 12 months              | Radio        | Yes        |                                                               |
-| `current_su_treatment`                    | Currently receiving treatment            | Radio        | Yes        |                                                               |
-| `opioid_prescription_long_term_pain_mgmt` | Opioid prescription for pain management? | Radio        | Yes        |                                                               |
-| `ever_prescription_mat_not_referral`      | Ever had MAT prescription?               | Radio        | Yes        |                                                               |
-| `current_script_mat_not_referral`         | Current MAT prescription?                | Radio        |          | Triggers `current_script_mat_type`                            |
-| `current_script_mat_type`                 | Type of MAT Prescribed                   | Dropdown     | Yes        |                                                               |
-| `mat_initiated_hospital`                  | Was MAT initiated in hospital?           | Radio        | Yes        | Triggers `what_mat_initiated_hospital`                       |
-| `what_mat_initiated_hospital`             | Type of MAT in Hospital                  | Dropdown     | Yes        |                                                               |
-| `mat_script_discharge`                    | MAT prescription at discharge?           | Radio        |          | Triggers `what_mat_script_discharge`                          |
-| `what_mat_script_discharge`               | Type of MAT Prescribed                   | Dropdown     | Yes        |                                                               |
-| `overdose_ed_provided`                    | Was overdose education provided?         | Radio        | Yes        | Triggers `reason_oe_not_provided`                            |
-| `reason_oe_not_provided`                  | If "No", why?                            | Radio        | Yes        | Triggers `if_other_specify`                                   |
-| `narcan_distributed`                      | Was Narcan distributed?                  | Radio        | Yes        | Triggers `reason_narcan_not_distributed`                      |
-| `reason_narcan_not_distributed`           | If not, why?                             | Radio        |          | Triggers `no_narcan_exp`                                      |
-| `preg_post_part_ic`                       | Is client pregnant or postpartum?        | Radio        | Yes        |                                                               |
-| `veteran_status`                          | Is client a veteran?                     | Radio        | Yes        |                                                               |
-| `presenting_notes_ic`                     | Presenting Notes                         | Textarea     |          |                                                               |
+| `overdose_event_referral`                 | Referral due to overdose event?          | Radio        | Yes        | Triggers `overdose_location`, `first_overdose`                           |
+| `overdose_location`                       | Location of Overdose                     | Radio        | Yes        | Triggers `specify_other_location` if 'Other'                             |
+| `first_overdose`                          | Was this the client's first overdose?    | Radio        | Yes        | Triggers `num_past_overdoses`, `most_recent_past_overdose_date`          |
+| `su_treatment_past_twelve_mos`            | Treatment in past 12 months              | Radio        | Yes        |                                                                          |
+| `current_su_treatment`                    | Currently receiving treatment            | Radio        | Yes        |                                                                          |
+| `opioid_prescription_long_term_pain_mgmt` | Opioid prescription for pain management? | Radio        | Yes        |                                                                          |
+| `ever_prescription_mat_not_referral`      | Ever had MAT prescription?               | Radio        | Yes        |                                                                          |
+| `current_script_mat_not_referral`         | Current MAT prescription?                | Radio        |            | Triggers `current_script_mat_type`                                       |
+| `current_script_mat_type`                 | Type of MAT Prescribed                   | Dropdown     | Yes        |                                                                          |
+| `mat_initiated_hospital`                  | Was MAT initiated in hospital?           | Radio        | Yes        | Triggers `what_mat_initiated_hospital`                                   |
+| `what_mat_initiated_hospital`             | Type of MAT in Hospital                  | Dropdown     | Yes        |                                                                          |
+| `mat_script_discharge`                    | MAT prescription at discharge?           | Radio        |            | Triggers `what_mat_script_discharge`                                     |
+| `what_mat_script_discharge`               | Type of MAT Prescribed                   | Dropdown     | Yes        |                                                                          |
+| `overdose_ed_provided`                    | Was overdose education provided?         | Radio        | Yes        | Triggers `reason_oe_not_provided`                                        |
+| `reason_oe_not_provided`                  | If "No", why?                            | Radio        | Yes        | Triggers `if_other_specify`                                              |
+| `narcan_distributed`                      | Was Narcan distributed?                  | Radio        | Yes        | Triggers `reason_narcan_not_distributed`                                 |
+| `reason_narcan_not_distributed`           | If not, why?                             | Radio        |            | Triggers `no_narcan_exp`                                                 |
+| `preg_post_part_ic`                       | Is client pregnant or postpartum?        | Radio        | Yes        |                                                                          |
+| `veteran_status`                          | Is client a veteran?                     | Radio        | Yes        |                                                                          |
+| `presenting_notes_ic`                     | Presenting Notes                         | Textarea     |            |                                                                          |
 
 Note: Additional fields like `non_opioid_substance_*`, `reason_ic_not_success`, and summation blocks are conditionally rendered or embedded.
 
@@ -110,11 +110,12 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 ## Cross References
 
-- [EPICC Initial Contact Form](https://github.com/Behavioral-Health-Network/FAMCare-HTML-Form-Code.git/blob/main/code/epicc/pwepiccic.html)
-- [EPICC Initial Contact Data Dictionary](https://github.com/Behavioral-Health-Network/BHN-Data-Team-Wiki.git/blob/main/docs/data-dictionaries/epicc/table-inital-contact.md)
+- [EPICC Initial Contact Form](https://github.com/Behavioral-Health-Network/FAMCare-HTML-Form-Code/blob/main/code/epicc/pwepiccic.html)
+- [EPICC Initial Contact Data Dictionary](https://github.com/Behavioral-Health-Network/BHN-Data-Team-Wiki/blob/main/docs/data-dictionaries/epicc-data-dictionaries/epicc-initial-contact.md)
 
 ## Changelog
 
+- **2025-11-20**: Fixes URLs in cross references.
 - **2025-10-17**: Changes Field Prompt for status_unable_to_contact_transfer to just Status.
 - **2025-10-17**: Fixes typo in transfer_type_ic from transfered to transferred.
 - **2025-10-01**: Updates the `epicc_program_participation` master table. Updates the conditional logic based on those options. Adds new question `transfer_type_ic` and `reason_not_participating_ic`.

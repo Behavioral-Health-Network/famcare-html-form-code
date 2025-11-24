@@ -768,7 +768,7 @@ function updatesignatures(){
     <input type="hidden" name="mh_hx_other_psychiotic_disorder" value="||FIELDVALUE mh_hx_other_psychiotic_disorder||" class="report-field value-017" data-source="ere_mental_health_history">
     <input type="hidden" name="mh_hx_other" value="||FIELDVALUE mh_hx_other||" class="report-field value-018" data-source="ere_mental_health_history">
     <input type="hidden" name="mh_hx_unknown_refused" value="||FIELDVALUE mh_hx_unknown_refused||" class="report-field value-019" data-source="ere_mental_health_history">
-    <input type="hidden" name="mh_hx_none" value="||FIELDVALUE mh_hx_none||" class="report-field value-020" data-source="ere_substance_use_history">
+    <input type="hidden" name="mh_hx_none" value="||FIELDVALUE mh_hx_none||" class="report-field value-020" data-source="ere_mental_health_history">
     <input type="hidden" name="su_hx_alcohol" value="||FIELDVALUE su_hx_alcohol||" class="report-field value-001" data-source="ere_substance_use_history">
     <input type="hidden" name="su_hx_cocaine" value="||FIELDVALUE su_hx_cocaine||" class="report-field value-002" data-source="ere_substance_use_history">
     <input type="hidden" name="su_hx_hallucinogens" value="||FIELDVALUE su_hx_hallucinogens||" class="report-field value-003" data-source="ere_substance_use_history">
@@ -911,7 +911,7 @@ function updatesignatures(){
   </div>
 <div class="entire row three-col-row">
 <div class="col4 qmh_history">
-  <div class="col4 fldmh_history qmh_history"><span class ="qmh_history required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_history required-field-label"><label class="label-top">Mental Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_history"><select size="21" name="mh_history" id="ere_mental_health_history" onchange="updateReprotFields(['ere_mental_health_history']);checkhideall()" multiple>
+  <div class="col4 fldmh_history qmh_history"><span class ="qmh_history required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_history required-field-label"><label class="label-top">Mental Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_history"><select size="21" name="mh_history" id="ere_mental_health_history" onchange="updateReportFields(['ere_mental_health_history']);checkhideall()" multiple>
     <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_mental_health_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
   </select>||CONFIGURE ere_mental_health_history||
 
@@ -919,7 +919,7 @@ function updatesignatures(){
   </span></div>
 </div>
 <div class="col4 qsu_history">
-  <div class="col4 flsu_history qsu_history"><span class ="qsu_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsu_history"><select size="16" name="su_history" id="ere_substance_use_history" onchange="updateReprotFields(['ere_substance_use_history']);checkhideall()" multiple>
+  <div class="col4 flsu_history qsu_history"><span class ="qsu_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsu_history"><select size="16" name="su_history" id="ere_substance_use_history" onchange="updateReportFields(['ere_substance_use_history']);checkhideall()" multiple>
     <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
   </select>||CONFIGURE ere_substance_use_history||
 
@@ -927,7 +927,7 @@ function updatesignatures(){
   </span></div>
 </div>
 <div class="col4 qphy_health_history">
-  <div class="col4 flphy_health_history qphy_health_history"><span class ="qphy_health_history required-label">||PWRequiredFieldRequiredText||</span><span class="qphy_health_history required-field-label"><label class="label-top">Physical Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qphy_health_history"><select size="12" name="phy_health_history" id="ere_physical_health_history" onchange="updateReprotFields(['ere_physical_health_history']);checkhideall()" multiple>
+  <div class="col4 flphy_health_history qphy_health_history"><span class ="qphy_health_history required-label">||PWRequiredFieldRequiredText||</span><span class="qphy_health_history required-field-label"><label class="label-top">Physical Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qphy_health_history"><select size="12" name="phy_health_history" id="ere_physical_health_history" onchange="updateReportFields(['ere_physical_health_history']);checkhideall()" multiple>
     <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_physical_health_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE phy_health_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
   </select>||CONFIGURE ere_physical_health_history||
 

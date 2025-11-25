@@ -41,8 +41,9 @@ function startup() {
     setrequire('EMPLOYMENTSTATUS');
     setrequire('client_pcp_ic');
     setrequire('psychiatrist_ic');
-    setrequire('pregnant_ic');
-    setrequire('preg_child_last_90_ic');
+// ** Removes pregnancy questions asked at intitial contact (11/3/25).
+   //  setrequire('pregnant_ic');
+   //  setrequire('preg_child_last_90_ic');
     setrequire('phq9_completed');
     setrequire('cage_aid_administered');
     setrequire('dass_administered');
@@ -51,6 +52,13 @@ function startup() {
     setrequire('bcr_prog_participation');
     setrequire('bcr_grant');
     setrequire('TiedEnrollment');
+// ** Adds planned_event, event_type, event_type_other, reside_stl_city, and prior_mh_bh_services questions to form. 
+// ** These used to be asked on the Referral form but have been moved to the IC on 10/30/2025
+    setrequire('planned_event');
+    setrequire('event_type');
+    setrequire('event_type_other');
+    setrequire('reside_stl_city');
+    setrequire('prior_mh_bh_services');
 
 	checkhideall();
 
@@ -68,8 +76,10 @@ function checkhideall() {
    checkhide(f.crim_justice_involvement,"nature_of_involvement","Yes");
    checkhide(f.bcr_prog_participation,"reason_if_ineligible_ic","002");
    checkhide(f.reason_if_ineligible_ic,"other_reason_ineligible_ic","Other");
-   checkhide(f.pregnant_ic,"preg_child_last_90_ic","No");
-   checkhide(f.bcr_prog_participation,"bcr_grant","001")
+   // checkhide(f.pregnant_ic,"preg_child_last_90_ic","No");
+   checkhide(f.bcr_prog_participation,"bcr_grant","001");
+   checkhide(f.planned_event,"event_type", "Yes");
+   checkhide(f.event_type,"event_type_other", "Other");
 
 }
 
@@ -306,8 +316,8 @@ function validateform(scope='all') {
   if (!hiddenfield('EMPLOYMENTSTATUS') && gvtfieldvalue('EMPLOYMENTSTATUS')=='') {edesc=edesc+`Must specify a value for Client's Employment Status\n`; seterror("EMPLOYMENTSTATUS");}
   if (!hiddenfield('client_pcp_ic') && gvtfieldvalue('client_pcp_ic')=='') {edesc=edesc+`Must specify a value for Does the client have a primary care physician?\n`; seterror("client_pcp_ic");}
   if (!hiddenfield('psychiatrist_ic') && gvtfieldvalue('psychiatrist_ic')=='') {edesc=edesc+`Must specify a value for Does the client have a psychiatrist?\n`; seterror("psychiatrist_ic");}
-  if (!hiddenfield('pregnant_ic') && gvtfieldvalue('pregnant_ic')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant?\n`; seterror("pregnant_ic");}
-  if (!hiddenfield('preg_child_last_90_ic') && gvtfieldvalue('preg_child_last_90_ic')=='') {edesc=edesc+`Must specify a value for If not currently pregnant, has client been pregnant or delivered a child within the past 90 days? \n`; seterror("preg_child_last_90_ic");}
+//   if (!hiddenfield('pregnant_ic') && gvtfieldvalue('pregnant_ic')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant?\n`; seterror("pregnant_ic");}
+//   if (!hiddenfield('preg_child_last_90_ic') && gvtfieldvalue('preg_child_last_90_ic')=='') {edesc=edesc+`Must specify a value for If not currently pregnant, has client been pregnant or delivered a child within the past 90 days? \n`; seterror("preg_child_last_90_ic");}
   if (!hiddenfield('phq9_completed') && gvtfieldvalue('phq9_completed')=='') {edesc=edesc+`Must specify a value for Was PHQ-9 questionnaire completed? \n`; seterror("phq9_completed");}
   if (!hiddenfield('cage_aid_administered') && gvtfieldvalue('cage_aid_administered')=='') {edesc=edesc+`Must specify a value for Was CAGE-AID administered?\n`; seterror("cage_aid_administered");}
   if (!hiddenfield('dass_administered') && gvtfieldvalue('dass_administered')=='') {edesc=edesc+`Must specify a value for Was DASS Administered?\n`; seterror("dass_administered");}
@@ -316,6 +326,11 @@ function validateform(scope='all') {
   if (!hiddenfield('bcr_prog_participation') && gvtfieldvalue('bcr_prog_participation')=='') {edesc=edesc+`Must specify a value for Program Participation at Initial Contact\n`; seterror("bcr_prog_participation");}
   if (!hiddenfield('bcr_grant') && gvtfieldvalue('bcr_grant')=='') {edesc=edesc+`Must specify a value for Which grant will the participant be covered by?\n`; seterror("bcr_grant");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+  if (!hiddenfield('planned_event') && gvtfieldvalue('planned_event')=='') {edesc=edesc+`Must specify a value for Did client attend a planned BCR event?\n`; seterror("planned_event");}
+  if (!hiddenfield('event_type') && gvtfieldvalue('event_type')=='') {edesc=edesc+`Must specify type of event\n`; seterror("event_type");}
+  if (!hiddenfield('event_type_other') && gvtfieldvalue('event_type_other')=='') {edesc=edesc+`Must specify other type of event\n`; seterror("event_type_other");}
+  if (!hiddenfield('reside_stl_city') && gvtfieldvalue('reside_stl_city')=='') {edesc=edesc+`Must specify if client lives in St. Louis City or not.\n`; seterror("reside_stl_city");}
+  if (!hiddenfield('prior_mh_bh_services') && gvtfieldvalue('prior_mh_bh_services')=='') {edesc=edesc+`Must specify if client previously received mental or behavioral health services or not.\n`; seterror("prior_mh_bh_services");}
     return edesc;
 }
 
@@ -421,7 +436,7 @@ function deleteit() {
 	return functionreturnvalue;
 }
 
-// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// ** Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
 // function quicksubmitit() {
 // //	errdesc=validateform();
 // //	if (errdesc!="") {alert(errdesc); return;}
@@ -576,6 +591,34 @@ function updatesignatures(){
     <div class="col12 fldzip_of_initial_contact qzip_of_initial_contact"><span class="qzip_of_initial_contact required-label">||PWRequiredFieldRequiredText||</span><span class="qzip_of_initial_contact required-field-label"><label class="label-top">||FIELDTAG zip_of_initial_contact||ZIP Code of Initial Contact||ENDFIELDTAG||</label></span><span class="qzip_of_initial_contact"><input type="text" name="zip_of_initial_contact" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
+  <!-- Added planned_event on 10/30/25 -->
+   <div class="entire">
+    <div class="col12 fldplanned_event qplanned_event">
+    <div class="col12 fldplanned_event qplanned_event"><span class="qplanned_event required-label">||PWRequiredFieldRequiredText||</span><span class="qplanned_event required-field-label"><label class="label-top">||FIELDTAG planned_event||Did client attend a planned event?||ENDFIELDTAG||</label></span><span class="qplanned_event"><input type="radio" name="planned_event" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="planned_event" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="planned_event" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+   <!-- Added event_type on 10/30/25 -->
+ <div class="entire">
+    <div class="col12 fldevent_type qevent_type">
+    <div class="col12 fldevent_type qevent_type"><span class="qevent_type required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_type required-field-label"><label class="label-top">||FIELDTAG event_type||Which Event||ENDFIELDTAG||</label></span><span class="qevent_type"><select size="1"  name="event_type" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Church Training ">Church Training </option>
+<option value="Community Presentation">Community Presentation</option>
+<option value="Health Or Resource Fair">Health Or Resource Fair</option>
+<option value="Other">Other</option>
+<option value="Outreach Event">Outreach Event</option>
+<option value="SAMHSA Training">SAMHSA Training</option>
+<option value="Screening">Screening</option>
+
+</select></span></div>
+     </div>
+  </div>
+   <!-- Added event_type_other on 10/30/25 -->
+   <div class="entire">
+    <div class="col12 fldevent_type_other qevent_type_other">
+    <div class="col12 fldevent_type_other qevent_type_other"><span class="qevent_type_other"><label class="label-top">||FIELDTAG event_type_other||Other Event Name||ENDFIELDTAG||</label></span><span class="qevent_type_other"><input type="text" name="event_type_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
      <div class="entire">
         <div class="col12 fldchurch_home qchurch_home">
         <div class="col12 fldchurch_home qchurch_home"><span class="qchurch_home"><label class="label-top">||FIELDTAG church_home||Does the client have a "Church Home?"||ENDFIELDTAG||</label></span><span class="qchurch_home"><input type="radio" name="church_home" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="church_home" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -602,18 +645,6 @@ function updatesignatures(){
       </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Presenting Concerns</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top"><i>Verify the client’s presenting concerns below. If needed, click "View/Edit" and edit the client concerns. Note that there should only be ONE entry that lists all client concerns per enrollment to BCR.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWBCRPresentingConcerns||</div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
@@ -655,12 +686,19 @@ function updatesignatures(){
     <div class="col12 fldagreeable_pcp_ref qagreeable_pcp_ref"><span class="qagreeable_pcp_ref"><label class="label-top">||FIELDTAG agreeable_pcp_ref||Is client agreeable to a referral for primary care?||ENDFIELDTAG||</label></span><span class="qagreeable_pcp_ref"><input type="radio" name="agreeable_pcp_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="agreeable_pcp_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
+  <!-- Added prior_mh_bh_services on 10/30/25 -->
+   <div class="entire">
+    <div class="col12 fldprior_mh_bh_services qprior_mh_bh_services">
+    <div class="col12 fldprior_mh_bh_services qprior_mh_bh_services"><span class="qprior_mh_bh_services required-label">||PWRequiredFieldRequiredText||</span><span class="qprior_mh_bh_services required-field-label"><label class="label-top">||FIELDTAG prior_mh_bh_services||Has client previously received any form of mental or behavioral health service?||ENDFIELDTAG||</label></span><span class="qprior_mh_bh_services"><input type="radio" name="prior_mh_bh_services" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="prior_mh_bh_services" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="prior_mh_bh_services" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12 fldpsychiatrist_ic qpsychiatrist_ic">
     <div class="col12 fldpsychiatrist_ic qpsychiatrist_ic"><span class="qpsychiatrist_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qpsychiatrist_ic required-field-label"><label class="label-top">||FIELDTAG psychiatrist_ic||Does the client have a psychiatrist?||ENDFIELDTAG||</label></span><span class="qpsychiatrist_ic"><input type="radio" name="psychiatrist_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="psychiatrist_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
- <div class="entire">
+   <!-- ** Removes pregnancy questions asked at intitial contact (11/3/25). -->
+ <!-- <div class="entire">
     <div class="col12 fldpregnant_ic qpregnant_ic">
     <div class="col12 fldpregnant_ic qpregnant_ic"><span class="qpregnant_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qpregnant_ic required-field-label"><label class="label-top">||FIELDTAG pregnant_ic||Is client currently pregnant?||ENDFIELDTAG||</label></span><span class="qpregnant_ic"><input type="radio" name="pregnant_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="pregnant_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
@@ -669,7 +707,7 @@ function updatesignatures(){
     <div class="col12 fldpreg_child_last_90_ic qpreg_child_last_90_ic">
     <div class="col12 fldpreg_child_last_90_ic qpreg_child_last_90_ic"><span class="qpreg_child_last_90_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qpreg_child_last_90_ic required-field-label"><label class="label-top">||FIELDTAG preg_child_last_90_ic||If not currently pregnant, has client been pregnant or delivered a child within the past 90 days? ||ENDFIELDTAG||</label></span><span class="qpreg_child_last_90_ic"><input type="radio" name="preg_child_last_90_ic" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_child_last_90_ic" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col12 fldphq9_completed qphq9_completed">
     <div class="col12 fldphq9_completed qphq9_completed"><span class="qphq9_completed required-label">||PWRequiredFieldRequiredText||</span><span class="qphq9_completed required-field-label"><label class="label-top">||FIELDTAG phq9_completed||Was PHQ-9 questionnaire completed? ||ENDFIELDTAG||</label></span><span class="qphq9_completed"><input type="radio" name="phq9_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="phq9_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -753,6 +791,12 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldother_reason_ineligible_ic qother_reason_ineligible_ic">
     <div class="col12 fldother_reason_ineligible_ic qother_reason_ineligible_ic"><span class="qother_reason_ineligible_ic"><label class="label-top">||FIELDTAG other_reason_ineligible_ic||If "Other", Explain||ENDFIELDTAG||</label></span><span class="qother_reason_ineligible_ic"><input type="text" name="other_reason_ineligible_ic" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <!-- Added reside_stl_city on 10/30/25 -->
+   <div class="entire">
+    <div class="col12 fldreside_stl_city qreside_stl_city">
+    <div class="col12 fldreside_stl_city qreside_stl_city"><span class="qreside_stl_city required-label">||PWRequiredFieldRequiredText||</span><span class="qreside_stl_city required-field-label"><label class="label-top">||FIELDTAG reside_stl_city||Does client reside in St. Louis City?||ENDFIELDTAG||</label></span><span class="qreside_stl_city"><input type="radio" name="reside_stl_city" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="reside_stl_city" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="reside_stl_city" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

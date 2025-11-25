@@ -37,7 +37,6 @@ function startup() {
             setrequire('Pathway_Date');
     setrequire('client_housing_status');
     setrequire('housing_start_date');
-    setrequire('homeless_housing_insecure_eto');
     setrequire('housing_status_incarcerated');
     setrequire('unhoused_shelter');
 
@@ -284,7 +283,6 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('client_housing_status') && gvtfieldvalue('client_housing_status')=='') {edesc=edesc+`Must specify a value for Housing Status\n`; seterror("client_housing_status");}
   if (!hiddenfield('housing_start_date') && gvtfieldvalue('housing_start_date')=='') {edesc=edesc+`Must specify a value for Start Date\n`; seterror("housing_start_date");}
-  if (!hiddenfield('homeless_housing_insecure_eto') && gvtfieldvalue('homeless_housing_insecure_eto')=='') {edesc=edesc+`Must specify a value for Is client currently experiencing housing instability or homelessness?\n`; seterror("homeless_housing_insecure_eto");}
   if (!hiddenfield('unhoused_shelter') && gvtfieldvalue('unhoused_shelter')=='') {edesc=edesc+`Must specify a value for Is client currently in a shelter?\n`; seterror("unhoused_shelter");}
   if (!hiddenfield('housing_status_incarcerated') && gvtfieldvalue('housing_status_incarcerated')=='') {edesc=edesc+`Must specify a value for Is client currently incarcerated?\n`; seterror("housing_status_incarcerated");}
     return edesc;
@@ -527,7 +525,7 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Institutionally Housed</label></div>
+    <div class="col12"><label class="label-top"><strong>Institutionally Housed</strong></label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top">Client has a long term residence within an established organization. 
@@ -537,7 +535,7 @@ Examples: Inpatient Hospitalization or Treatment, Jail or Prison, Transitional H
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Precariously Housed</label></div>
+    <div class="col12"><label class="label-top"><strong>Precariously Housed</strong></label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top">Permanence of housing is not necessarily within full control of client. 
@@ -547,7 +545,7 @@ Examples: Hotel, Friend or Family Residence, Currently own/rent but Unable to Ma
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Stably Housed</label></div>
+    <div class="col12"><label class="label-top"><strong>Stably Housed</strong></label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top">Permanence of Housing Within Reasonable Control of Client. 
@@ -557,7 +555,7 @@ Examples: Owns Home, Rents Home, Group Home</label></div>
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Unhoused</label></div>
+    <div class="col12"><label class="label-top"><strong>Unhoused</strong></label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top">Client is without reliable and ongoing shelter. 
@@ -579,7 +577,7 @@ Examples: Staying on street/outdoors, Emergency Shelter</label></div>
   </div>
 <div class="entire">
 </div>
-//Added housing_status_incarcerated and unhoused_shelter fields on 06/23/2025. These fields were added mainly for ERE clients. We needed these questions to be able to collect the data to be entered in to CareManager for MBHC.
+<!-- Added housing_status_incarcerated and unhoused_shelter fields on 06/23/2025. These fields were added mainly for ERE clients. We needed these questions to be able to collect the data to be entered in to CareManager for MBHC. -->
  <div class="entire">
     <div class="col12 fldhousing_status_incarcerated qhousing_status_incarcerated">
     <div class="col12 fldhousing_status_incarcerated qhousing_status_incarcerated"><span class="qhousing_status_incarcerated required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_status_incarcerated required-field-label"><label class="label-top">||FIELDTAG housing_status_incarcerated||Is client currently incarcerated?||ENDFIELDTAG||</label></span><span class="qhousing_status_incarcerated"><input type="radio" name="housing_status_incarcerated" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="housing_status_incarcerated" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -615,14 +613,16 @@ Examples: Staying on street/outdoors, Emergency Shelter</label></div>
  <div class="entire">
     <div class="col6"><label class="label-top"></label></div>
   </div>
- <div class="entire">
+
+  <!-- ** Question is being removed since it was only for FY25 and all programs have completed FY25 as of 10/01/2025. -->
+ <!-- <div class="entire">
     <div class="col6"><label class="label-top">For FY25 only, please answer the following question.</label></div>
   </div>
  <div class="entire">
     <div class="col6 qhomeless_housing_insecure_eto">
     <div class="col6 fldhomeless_housing_insecure_eto qhomeless_housing_insecure_eto"><span class="qhomeless_housing_insecure_eto required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_housing_insecure_eto required-field-label"><label class="label-top">||FIELDTAG homeless_housing_insecure_eto||Is client currently experiencing housing instability or homelessness?||ENDFIELDTAG||</label></span><span class="qhomeless_housing_insecure_eto"><input type="radio" name="homeless_housing_insecure_eto" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="homeless_housing_insecure_eto" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="homeless_housing_insecure_eto" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
-  </div>
+  </div> -->
 
 </div>
 </div>

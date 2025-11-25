@@ -35,17 +35,17 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('method_referral');
+    // setrequire('method_referral');
     setrequire('ref_source_type');
-    setrequire('ref_through_event');
-    setrequire('bcr_ref_event');
-    setrequire('how_hear_about_bcr');
-    setrequire('prev_mh_bh_services');
-    setrequire('pregnant_at_ref');
-    setrequire('preg_or_child_last_ninety');
-    setrequire('reside_in_stl_city');
-    setrequire('bcr_prog_participation');
-    setrequire('bcr_reason_ineligible_ref');
+    // setrequire('ref_through_event');
+    // setrequire('bcr_ref_event');
+    setrequire('how_hear_about_bcr'); 
+    // setrequire('prev_mh_bh_services');
+    // setrequire('pregnant_at_ref');
+    // setrequire('preg_or_child_last_ninety');
+    // setrequire('reside_in_stl_city');
+    // setrequire('bcr_prog_participation');
+    // setrequire('bcr_reason_ineligible_ref');
     setrequire('housing_status_referral');
     setrequire('TiedEnrollment');
 
@@ -59,12 +59,12 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.ref_source_type,"ref_source_name","Wellness Champion,Pastor");
    checkhide(f.ref_source_type,"other_referral_source_type","Other");
-   checkhide(f.ref_through_event,"bcr_ref_event","Yes");
-   checkhide(f.bcr_ref_event,"other_event_exp","Other");
+  //  checkhide(f.ref_through_event,"bcr_ref_event","Yes");
+  //  checkhide(f.bcr_ref_event,"other_event_exp","Other");
    checkhide(f.how_hear_about_bcr,"if_other_please_specify","Other");
-   checkhide(f.pregnant_at_ref,"preg_or_child_last_ninety","No");
-   checkhide(f.bcr_prog_participation,"bcr_reason_ineligible_ref","002");
-   checkhide(f.bcr_reason_ineligible_ref,"other_reason_ineligible","Other");
+  //  checkhide(f.pregnant_at_ref,"preg_or_child_last_ninety","No");
+  //  checkhide(f.bcr_prog_participation,"bcr_reason_ineligible_ref",";002");
+  //  checkhide(f.bcr_reason_ineligible_ref,"other_reason_ineligible","Other")
 
 }
 
@@ -295,17 +295,17 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('method_referral') && gvtfieldvalue('method_referral')=='') {edesc=edesc+`Must specify a value for Method of Referral\n`; seterror("method_referral");}
+  // if (!hiddenfield('method_referral') && gvtfieldvalue('method_referral')=='') {edesc=edesc+`Must specify a value for Method of Referral\n`; seterror("method_referral");}
   if (!hiddenfield('ref_source_type') && gvtfieldvalue('ref_source_type')=='') {edesc=edesc+`Must specify a value for Referral Source Type\n`; seterror("ref_source_type");}
-  if (!hiddenfield('ref_through_event') && gvtfieldvalue('ref_through_event')=='') {edesc=edesc+`Must specify a value for Was referral through a planned event?\n`; seterror("ref_through_event");}
-  if (!hiddenfield('bcr_ref_event') && gvtfieldvalue('bcr_ref_event')=='') {edesc=edesc+`Must specify a value for Which Event \n`; seterror("bcr_ref_event");}
+  // if (!hiddenfield('ref_through_event') && gvtfieldvalue('ref_through_event')=='') {edesc=edesc+`Must specify a value for Was referral through a planned event?\n`; seterror("ref_through_event");}
+  // if (!hiddenfield('bcr_ref_event') && gvtfieldvalue('bcr_ref_event')=='') {edesc=edesc+`Must specify a value for Which Event \n`; seterror("bcr_ref_event");}
   if (!hiddenfield('how_hear_about_bcr') && gvtfieldvalue('how_hear_about_bcr')=='') {edesc=edesc+`Must specify a value for How did client hear about Bridges to Care & Recovery?\n`; seterror("how_hear_about_bcr");}
-  if (!hiddenfield('prev_mh_bh_services') && gvtfieldvalue('prev_mh_bh_services')=='') {edesc=edesc+`Must specify a value for Has client previously received any form of mental or behavioral health service?\n`; seterror("prev_mh_bh_services");}
-  if (!hiddenfield('pregnant_at_ref') && gvtfieldvalue('pregnant_at_ref')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant?\n`; seterror("pregnant_at_ref");}
-  if (!hiddenfield('preg_or_child_last_ninety') && gvtfieldvalue('preg_or_child_last_ninety')=='') {edesc=edesc+`Must specify a value for If not currently pregnant, has client been pregnant or delivered a child within the past 90 days?\n`; seterror("preg_or_child_last_ninety");}
-  if (!hiddenfield('reside_in_stl_city') && gvtfieldvalue('reside_in_stl_city')=='') {edesc=edesc+`Must specify a value for Does client reside in St. Louis City?\n`; seterror("reside_in_stl_city");}
-  if (!hiddenfield('bcr_prog_participation') && gvtfieldvalue('bcr_prog_participation')=='') {edesc=edesc+`Must specify a value for Program Participation:\n`; seterror("bcr_prog_participation");}
-  if (!hiddenfield('bcr_reason_ineligible_ref') && gvtfieldvalue('bcr_reason_ineligible_ref')=='') {edesc=edesc+`Must specify a value for Reason for Ineligibility\n`; seterror("bcr_reason_ineligible_ref");}
+  // if (!hiddenfield('prev_mh_bh_services') && gvtfieldvalue('prev_mh_bh_services')=='') {edesc=edesc+`Must specify a value for Has client previously received any form of mental or behavioral health service?\n`; seterror("prev_mh_bh_services");}
+  // if (!hiddenfield('pregnant_at_ref') && gvtfieldvalue('pregnant_at_ref')=='') {edesc=edesc+`Must specify a value for Is client currently pregnant?\n`; seterror("pregnant_at_ref");}
+  // if (!hiddenfield('preg_or_child_last_ninety') && gvtfieldvalue('preg_or_child_last_ninety')=='') {edesc=edesc+`Must specify a value for If not currently pregnant, has client been pregnant or delivered a child within the past 90 days?\n`; seterror("preg_or_child_last_ninety");}
+  // if (!hiddenfield('reside_in_stl_city') && gvtfieldvalue('reside_in_stl_city')=='') {edesc=edesc+`Must specify a value for Does client reside in St. Louis City?\n`; seterror("reside_in_stl_city");}
+  // if (!hiddenfield('bcr_prog_participation') && gvtfieldvalue('bcr_prog_participation')=='') {edesc=edesc+`Must specify a value for Program Participation:\n`; seterror("bcr_prog_participation");}
+  // if (!hiddenfield('bcr_reason_ineligible_ref') && gvtfieldvalue('bcr_reason_ineligible_ref')=='') {edesc=edesc+`Must specify a value for Reason for Ineligibility\n`; seterror("bcr_reason_ineligible_ref");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
@@ -558,11 +558,11 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col12 fldmethod_referral qmethod_referral">
     <div class="col12 fldmethod_referral qmethod_referral"><span class="qmethod_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_referral required-field-label"><label class="label-top">||FIELDTAG method_referral||Method of Referral||ENDFIELDTAG||</label></span><span class="qmethod_referral"><input type="radio" name="method_referral" value="Phone Call" onclick="checkhideall()" >Phone Call&nbsp;&nbsp;<input type="radio" name="method_referral" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;</span></div>
      </div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col12 fldref_source_type qref_source_type">
     <div class="col12 fldref_source_type qref_source_type"><span class="qref_source_type required-label">||PWRequiredFieldRequiredText||</span><span class="qref_source_type required-field-label"><label class="label-top">||FIELDTAG ref_source_type||Referral Source Type||ENDFIELDTAG||</label></span><span class="qref_source_type"><select size="1"  name="ref_source_type" onchange="checkhideall()" >
@@ -590,12 +590,12 @@ function updatesignatures(){
     <div class="col12 fldother_referral_source_type qother_referral_source_type"><span class="qother_referral_source_type"><label class="label-top">||FIELDTAG other_referral_source_type||If "Other" Referral Source, Specify||ENDFIELDTAG||</label></span><span class="qother_referral_source_type"><input type="text" name="other_referral_source_type" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col12 fldref_through_event qref_through_event">
     <div class="col12 fldref_through_event qref_through_event"><span class="qref_through_event required-label">||PWRequiredFieldRequiredText||</span><span class="qref_through_event required-field-label"><label class="label-top">||FIELDTAG ref_through_event||Was referral through a planned event?||ENDFIELDTAG||</label></span><span class="qref_through_event"><input type="radio" name="ref_through_event" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ref_through_event" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="ref_through_event" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
-  </div>
- <div class="entire">
+  </div> -->
+ <!-- <div class="entire">
     <div class="col12 fldbcr_ref_event qbcr_ref_event">
     <div class="col12 fldbcr_ref_event qbcr_ref_event"><span class="qbcr_ref_event required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_event required-field-label"><label class="label-top">||FIELDTAG bcr_ref_event||Which Event ||ENDFIELDTAG||</label></span><span class="qbcr_ref_event"><select size="1"  name="bcr_ref_event" onchange="checkhideall()" >
 <option value="">(please select)</option>
@@ -609,19 +609,20 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
-  </div>
- <div class="entire">
+  </div> -->
+ <!-- <div class="entire">
     <div class="col12 fldother_event_exp qother_event_exp">
     <div class="col12 fldother_event_exp qother_event_exp"><span class="qother_event_exp"><label class="label-top">||FIELDTAG other_event_exp||Other Event Name||ENDFIELDTAG||</label></span><span class="qother_event_exp"><input type="text" name="other_event_exp" size="20" onchange="checkhideall()"></span></div>
      </div>
-  </div>
+  </div> -->
  <div class="entire">
     <div class="col12 fldhow_hear_about_bcr qhow_hear_about_bcr">
-    <div class="col12 fldhow_hear_about_bcr qhow_hear_about_bcr"><span class="qhow_hear_about_bcr required-label">||PWRequiredFieldRequiredText||</span><span class="qhow_hear_about_bcr required-field-label"><label class="label-top">||FIELDTAG how_hear_about_bcr||How did client hear about Bridges to Care & Recovery?||ENDFIELDTAG||</label></span><span class="qhow_hear_about_bcr"><select size="1"  name="how_hear_about_bcr" onchange="checkhideall()" >
+    <div class="col12 fldhow_hear_about_bcr qhow_hear_about_bcr"><span class="qhow_hear_about_bcr required-label">||PWRequiredFieldRequiredText||</span><span class="qhow_hear_about_bcr required-field-label"><label class="label-top">||FIELDTAG how_hear_about_bcr||How did caller or client hear about Bridges to Care & Recovery?||ENDFIELDTAG||</label></span><span class="qhow_hear_about_bcr"><select size="1"  name="how_hear_about_bcr" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="BCR Staff">BCR Staff</option>
 <option value="Church Member">Church Member</option>
 <option value="Community Event">Community Event</option>
+<option value="Counseling Agency">Counseling Agency</option>
 <option value="Family">Family</option>
 <option value="Friend">Friend</option>
 <option value="Other">Other</option>
@@ -641,12 +642,12 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col12 fldprev_mh_bh_services qprev_mh_bh_services">
     <div class="col12 fldprev_mh_bh_services qprev_mh_bh_services"><span class="qprev_mh_bh_services required-label">||PWRequiredFieldRequiredText||</span><span class="qprev_mh_bh_services required-field-label"><label class="label-top">||FIELDTAG prev_mh_bh_services||Has client previously received any form of mental or behavioral health service?||ENDFIELDTAG||</label></span><span class="qprev_mh_bh_services"><input type="radio" name="prev_mh_bh_services" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="prev_mh_bh_services" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="prev_mh_bh_services" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
-  </div>
- <div class="entire">
+  </div> -->
+ <!-- <div class="entire">
     <div class="col12 fldpregnant_at_ref qpregnant_at_ref">
     <div class="col12 fldpregnant_at_ref qpregnant_at_ref"><span class="qpregnant_at_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qpregnant_at_ref required-field-label"><label class="label-top">||FIELDTAG pregnant_at_ref||Is client currently pregnant?||ENDFIELDTAG||</label></span><span class="qpregnant_at_ref"><input type="radio" name="pregnant_at_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="pregnant_at_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="pregnant_at_ref" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
@@ -655,8 +656,8 @@ function updatesignatures(){
     <div class="col12 fldpreg_or_child_last_ninety qpreg_or_child_last_ninety">
     <div class="col12 fldpreg_or_child_last_ninety qpreg_or_child_last_ninety"><span class="qpreg_or_child_last_ninety required-label">||PWRequiredFieldRequiredText||</span><span class="qpreg_or_child_last_ninety required-field-label"><label class="label-top">||FIELDTAG preg_or_child_last_ninety||If not currently pregnant, has client been pregnant or delivered a child within the past 90 days?||ENDFIELDTAG||</label></span><span class="qpreg_or_child_last_ninety"><input type="radio" name="preg_or_child_last_ninety" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="preg_or_child_last_ninety" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="preg_or_child_last_ninety" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
-  </div>
- <div class="entire">
+  </div> -->
+ <!-- <div class="entire">
     <div class="col12 fldmarital_status_ref qmarital_status_ref">
     <div class="col12 fldmarital_status_ref qmarital_status_ref"><span class="qmarital_status_ref"><label class="label-top">||FIELDTAG marital_status_ref||Marital Status ||ENDFIELDTAG||</label></span><span class="qmarital_status_ref"><select size="1"  name="marital_status_ref" onchange="checkhideall()" >
 <option value="">(please select)</option>
@@ -669,7 +670,7 @@ function updatesignatures(){
 
 </select></span></div>
      </div>
-  </div>
+  </div> -->
 <div class="entire">
 <div class="col12 term">Presenting Concerns</div>
 </div>
@@ -691,7 +692,7 @@ function updatesignatures(){
   <div class="col6 fldhousing_status_referral qhousing_status_referral"><span class="qhousing_status_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_status_referral required-field-label"><label class="label-top">||FIELDTAG housing_status_referral||Housing Status at Referral||ENDFIELDTAG||</label></span><span class="qhousing_status_referral"><input type="radio" name="housing_status_referral" value="Housed" onclick="checkhideall()" >Housed&nbsp;&nbsp;<input type="radio" name="housing_status_referral" value="Unhoused" onclick="checkhideall()" >Unhoused&nbsp;&nbsp;<input type="radio" name="housing_status_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
 </div>
 </div>
- <div class="entire">
+ <!-- <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
 <div class="entire">
@@ -727,7 +728,7 @@ function updatesignatures(){
     <div class="col12 fldother_reason_ineligible qother_reason_ineligible">
     <div class="col12 fldother_reason_ineligible qother_reason_ineligible"><span class="qother_reason_ineligible"><label class="label-top">||FIELDTAG other_reason_ineligible||If "Other" Reason, Specify||ENDFIELDTAG||</label></span><span class="qother_reason_ineligible"><textarea name="other_reason_ineligible" class="autoexpand"></textarea></span></div>
      </div>
-  </div>
+  </div> -->
 
 </div>
 </div>

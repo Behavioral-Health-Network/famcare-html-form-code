@@ -41,7 +41,8 @@ function startup() {
     setrequire('su_tx_intake');
     setrequire('intake_not_completed');
     setrequire('coach_attend_intake');
-    setrequire('ces_attend_intake')
+    setrequire('ces_attend_intake');
+    setrequire('was_intake_completed');
 
     checkhideall();
 
@@ -296,7 +297,7 @@ function validateform(scope='all') {
   if (!hiddenfield('intake_not_completed') && gvtfieldvalue('intake_not_completed')==''){edesc=edesc+`Must specify a value for why intake was not completed\n`; seterror("intake_not_completed");}
   if (!hiddenfield('coach_attend_intake') && gvtfieldvalue('coach_attend_intake')==''){edesc=edesc+`Must specify a value for if the epicc coach attend an intake\n`; seterror("coach_attend_intake");}
   if (!hiddenfield('ces_attend_intake') && gvtfieldvalue('ces_attend_intake')==''){edesc=edesc+`Must specify a value for if the CES attend an intake\n`; seterror("ces_attend_intake");}
-
+  if (!hiddenfield('was_intake_completed') && gvtfieldvalue('was_intake_completed')==''){edesc=edesc+`Must specify a value for was intake completed\n`; seterror("was_intake_completed");}
     return edesc;
 }
 
@@ -593,7 +594,7 @@ function updatesignatures(){
   </div>
    <div class="entire">
      <div class="col12 fldwas_intake_completed qwas_intake_completed">
-        <div class="col12 fldwas_intake_completed qwas_intake_completed"><span class="qwas_intake_completed"><label class="label-top">||FIELDTAG was_intake_completed||Was intake completed?||ENDFIELDTAG||</label></span><span class="qwas_intake_completed"><input type="radio" name="was_intake_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="was_intake_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+        <div class="col12 fldwas_intake_completed qwas_intake_completed"><span class="qwas_intake_completed required-label">||PWRequiredFieldRequiredText||</span><span class="qwas_intake_completed required-field-label"><label class="label-top">||FIELDTAG was_intake_completed||Was intake completed?||ENDFIELDTAG||</label></span><span class="qwas_intake_completed"><input type="radio" name="was_intake_completed" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="was_intake_completed" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
          </div>
      </div>    
     <div class="entire">
@@ -639,8 +640,10 @@ function updatesignatures(){
        <div class="entire">
         <div class="col12"><label class="label-top"></label></div>
       </div>
+      <div class="entire">
       <div class="col6 qces_not_attend_intake">
         <div class="col6 fldces_not_attend_intake qces_not_attend_intake"><span class="qces_not_attend_intake"><label class="label-top">||FIELDTAG ces_not_attend_intake||Why did CES not attend the intake appointment?||ENDFIELDTAG||</label></span><span class="qces_not_attend_intake"><textarea name="ces_not_attend_intake" class="autoexpand"></textarea></span></div>
+      </div>
       </div>
 
 

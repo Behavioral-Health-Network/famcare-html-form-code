@@ -118,7 +118,7 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 - **2025-11-20**: Fixes URLs in cross references.
 - **2025-10-17**: Changes Field Prompt for status_unable_to_contact_transfer to just Status.
 - **2025-10-17**: Fixes typo in transfer_type_ic from transfered to transferred.
-- **2025-10-01**: Updates the `epicc_program_participation` master table. Updates the conditional logic based on those options. Adds new question `transfer_type_ic` and `reason_not_participating_ic`.
+- **2025-10-01**: Updates the `epicc_program_participation` master table to inactivate `Ineligible, Does Not Meet Project Criteria`, `Ineligible, Not Clinically Appropriate`, `Client Declined Services`, `Client In Jail/Incarcerated`, `Client Deceased`, `Regional Transfer`, `Services Transferred To LINCS IO`, `Services Transferred To Youth ERE Program`, and `Already Enrolled in SUD Services`. Adds values `Not Participating In EPICC Program` (to replace the various reasons the client is not participation or is ineligible) and `Transfer` (to replace the three transfer conditions that were previously listed separately). Updates the conditional logic based on those options. Adds new question `transfer_type_ic` and `reason_not_participating_ic`.
 - **2025-09-18**: Changes Field Name of `TiedEnrollment` from Select Pathway Enrollment to Select Pathway Assignment
 - **2025-08-25**: Adds HTML and JavaScript code for `TiedEnrollment` fix that GVT created to help join all our pathway forms together.
 - **2025-08-15**: Adds radio button option for `mat_prescribed_physician_appt_six_month`, Unable To Contact Client Or Treatment Agency.

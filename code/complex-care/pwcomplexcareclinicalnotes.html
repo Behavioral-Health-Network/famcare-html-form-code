@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>Complex Care Roster</title>
+<title>Complex Care Clinical Notes</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
@@ -36,12 +36,11 @@ function startup() {
 		}
 	}
     setrequire('Pathway_Date');
-    setrequire('program_assigned');
-    setrequire('complex_care_referral_source');
-    setrequire('cmhc_status');
-    setrequire('ada_su_status');
-    setrequire('dm3700_status');
-	  setrequire('TiedEnrollment');
+    setrequire('clinical_committee_meeting_date');
+    setrequire('decision');
+    setrequire('complex_care_clinical_committee_rationale');
+    setrequire('complex_care_reasons_ineligible');
+	setrequire('TiedEnrollment');
 
 	checkhideall();
 
@@ -51,11 +50,8 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-   checkhide(f.cmhc_status,"cmhc_agency","001,002");
-   checkhide(f.cmhc_agency,"other_cmhc_agency","006");
-   checkhide(f.ada_su_status,"ada_su_agency","001,002");
-   checkhide(f.ada_su_agency,"other_ada_su_agency","008");
-
+   checkhide(f.complex_care_clinical_committee_rationale,"complex_care_reasons_ineligible","006");
+   checkhide(f.decision,"complex_care_clinical_committee_rationale","Do Not Select To BEACN Cohort");
 }
 
 function addEventListeners(){
@@ -284,13 +280,14 @@ function validateform(scope='all') {
        f.TESTRIGHTANSWERS.value=cstrjis(right);
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
-  if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('program_assigned') && gvtfieldvalue('program_assigned')=='') {edesc=edesc+`Must specify a value for Program Assigned\n`; seterror("program_assigned");}
-  if (!hiddenfield('cmhc_status') && gvtfieldvalue('cmhc_status')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_status");}
-  if (!hiddenfield('ada_su_status') && gvtfieldvalue('ada_su_status')=='') {edesc=edesc+`Must specify a value for ADA/SU\n`; seterror("ada_su_status");}
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('clinical_committee_meeting_date') && gvtfieldvalue('clinical_committee_meeting_date')=='') {edesc=edesc+`Must specify a value for Date Of Clinical Committee Meeting\n`; seterror("clinical_committee_meeting_date");}
+  if (!hiddenfield('decision') && gvtfieldvalue('decision')=='') {edesc=edesc+`Must specify a value for Decision\n`; seterror("decision");}
+  if (!hiddenfield('complex_care_clinical_committee_rationale') && gvtfieldvalue('complex_care_clinical_committee_rationale')=='') {edesc=edesc+`Must specify a value for Rationale For Decision\n`; seterror("complex_care_clinical_committee_rationale");}
+  if (!hiddenfield('complex_care_reasons_ineligible') && gvtfieldvalue('complex_care_reasons_ineligible')=='') {edesc=edesc+`Must specify a value for Why Does Patient Not Meet BEACN criteria?\n`; seterror("complex_care_reasons_ineligible");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}	
 
-    return edesc;
+  return edesc;
 }
 
 function gvtfieldvalue(fldname) {
@@ -498,7 +495,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWComplexCareRoster" />
+    <input type="hidden" name="TABLENAME" value="PWComplexCareClinicalNotes" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -511,7 +508,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>Complex Care Roster</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>Complex Care Clinical Notes</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -524,117 +521,60 @@ function updatesignatures(){
 <div class="deflist">
 <div class="entire">
 </div>
-
+<div class="col4"><label class="label-top"></label></div>
       <div class="entire">
     <div class="qTiedEnrollment">
     <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
-    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-left">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
 <option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
 </select>
 </span></div>
      </div>
-    <div class="col4"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldPathway_Date qPathway_Date">
-    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
-     </div>
-  </div>
-  <div class="entire">
-    <div class="col12 fldadded_cohort_date qadded_cohort_date">
-    <div class="col12 fldadded_cohort_date qadded_cohort_date"><span class="qadded_cohort_date required-label"></span><span class="qadded_cohort_date"><label class="label-top">||FIELDTAG added_cohort_date||Cohort Selection Date||ENDFIELDTAG||</label></span><span class="qadded_cohort_date"><input type="text" name="added_cohort_date" size="8" class="jdatepicker"></span></div>
-     </div>
-  </div>
-<div class="entire">
-    <div class="col12 fldcomplex_care_referral_source qcomplex_care_referral_source">
-    <div class="col12 fldcomplex_care_referral_source qcomplex_care_referral_source"><span class="qcomplex_care_referral_source required-label">||PWRequiredFieldRequiredText||</span><span class="qcomplex_care_referral_source required-field-label"><label class="label-top">Referral Source</label></span><span class="qcomplex_care_referral_source"><select size="1" name="complex_care_referral_source" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_referral_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE complex_care_referral_source^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE complex_care_referral_source||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldprogram_assigned qprogram_assigned">
-    <div class="col12 fldprogram_assigned qprogram_assigned"><span class="qprogram_assigned required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_assigned required-field-label"><label class="label-top">||FIELDTAG program_assigned||Program Assigned||ENDFIELDTAG||</label></span><span class="qprogram_assigned"><input type="radio" name="program_assigned" value="Adult ERE" onclick="checkhideall()" >Adult ERE<br><input type="radio" name="program_assigned" value="Mercy BEACN" onclick="checkhideall()" >Mercy BEACN<br><input type="radio" name="program_assigned" value="BJC/H2H" onclick="checkhideall()" >BJC/H2H<br><input type="radio" name="program_assigned" value="SSM Complex Care" onclick="checkhideall()" >SSM Complex Care</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
-  <div class="entire">
-    <div class="col12 term">CIMOR Status at Referral</div>
-    </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldcmhc_status qcmhc_status">
-    <div class="col12 fldcmhc_status qcmhc_status"><span class="qcmhc_status required-label">||PWRequiredFieldRequiredText||</span><span class="qcmhc_status required-field-label"><label class="label-top">CMHC</label></span><span class="qcmhc_status"><select size="1" name="cmhc_status" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cimor_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_status^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE cimor_status||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldcmhc_agency qcmhc_agency">
-    <div class="col12 fldcmhc_agency qcmhc_agency"><span class="qcmhc_agency"><label class="label-top">CMHC Agency</label></span><span class="qcmhc_agency"><select size="1" name="cmhc_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency^^') and program_name='ERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE cmhc_agency||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldother_cmhc_agency qother_cmhc_agency">
-    <div class="col12 fldother_cmhc_agency qother_cmhc_agency"><span class="qother_cmhc_agency"><label class="label-top">||FIELDTAG other_cmhc_agency||Other CMHC Agency||ENDFIELDTAG||</label></span><span class="qother_cmhc_agency"><input type="text" name="other_cmhc_agency" size="20" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldada_su_status qada_su_status">
-    <div class="col12 fldada_su_status qada_su_status"><span class="qada_su_status required-label">||PWRequiredFieldRequiredText||</span><span class="qada_su_status required-field-label"><label class="label-top">ADA/SU</label></span><span class="qada_su_status"><select size="1" name="ada_su_status" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cimor_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_status^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE cimor_status||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldada_su_agency qada_su_agency">
-    <div class="col12 fldada_su_agency qada_su_agency"><span class="qada_su_agency"><label class="label-top">ADA/SU Agency</label></span><span class="qada_su_agency"><select size="1" name="ada_su_agency" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ada_su_agency^^') and program_name='ERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE ada_su_agency||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldother_ada_su_agency qother_ada_su_agency">
-    <div class="col12 fldother_ada_su_agency qother_ada_su_agency"><span class="qother_ada_su_agency"><label class="label-top">||FIELDTAG other_ada_su_agency||Other ADA/SU Agency||ENDFIELDTAG||</label></span><span class="qother_ada_su_agency"><input type="text" name="other_ada_su_agency" size="20" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
-<div class="entire">
-    <div class="col12 flddm3700_status qdm3700_status">
-    <div class="col12 flddm3700_status qdm3700_status"><span class="qdm3700_status required-label">||PWRequiredFieldRequiredText||</span><span class="qdm3700_status required-field-label"><label class="label-top">DM3700</label></span><span class="qdm3700_status"><select size="1" name="dm3700_status" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [dm3700_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dm3700_status^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE dm3700_status||
-</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Clinical Committee Notes</div>
+
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"><i>Click "Add" below to record details of the Clinical Committee discussion of this patient's referral to the cohort.</i></label></div>
+    <div class="col1 qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-left">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWComplexCareClinicalNotes||</div>
+    <div class="col1 qclinical_committee_meeting_date"><span class="qclinical_committee_meeting_date required-label">||PWRequiredFieldRequiredText||</span><span class="qclinical_committee_meeting_date required-field-label"><label class="label-left">||FIELDTAG clinical_committee_meeting_date||Date Of Clinical Committee Meeting||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qclinical_committee_meeting_date"><span class="qclinical_committee_meeting_date"><input type="text" name="clinical_committee_meeting_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
+    <div class="col1 qdecision"><span class="qdecision required-label">||PWRequiredFieldRequiredText||</span><span class="qdecision required-field-label"><label class="label-left">||FIELDTAG decision||Decision||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdecision"><span class="qdecision"><select size="1"  name="decision" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Select To BEACN Cohort">Select To BEACN Cohort</option>
+<option value="Do Not Select To BEACN Cohort">Do Not Select To BEACN Cohort</option>
+
+</select></span></div>
   </div>
-<div class="entire">
-<div class="col12 term"></div>
-</div>
+ <div class="entire">
+    <div class="col1 fldcomplex_care_clinical_committee_rationale qcomplex_care_clinical_committee_rationale"><span class="qcomplex_care_clinical_committee_rationale required-label">||PWRequiredFieldRequiredText||</span><span class="qcomplex_care_clinical_committee_rationale required-field-label"><label class="label-left">Rationale For Decision&nbsp;</label></span></div>
+    <div class="col9 fldcomplex_care_clinical_committee_rationale qcomplex_care_clinical_committee_rationale"><span class="qcomplex_care_clinical_committee_rationale"><select size="1" name="complex_care_clinical_committee_rationale" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_clinical_committee_rationale] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE complex_care_clinical_committee_rationale^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE complex_care_clinical_committee_rationale||
+</span></div>
+  </div>
+ <div class="entire">
+    <div class="col1 fldcomplex_care_reasons_ineligible qcomplex_care_reasons_ineligible"><span class="qcomplex_care_reasons_ineligible required-label">||PWRequiredFieldRequiredText||</span><span class="qcomplex_care_reasons_ineligible required-field-label"><label class="label-left">Why Does Patient Not Meet BEACN Criteria?&nbsp;</label></span></div>
+    <div class="col9 fldcomplex_care_reasons_ineligible qcomplex_care_reasons_ineligible"><span class="qcomplex_care_reasons_ineligible"><select size="1" name="complex_care_reasons_ineligible" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_reasons_ineligible] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE complex_care_reasons_ineligible^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE complex_care_reasons_ineligible||
+</span></div>
+  </div>
+ <div class="entire">
+    <div class="col1 qcomplex_care_other_outcomes"><span class="qcomplex_care_other_outcomes"><label class="label-left">Other Outcomes&nbsp;</label></span></div>
+    <div class="col9 qcomplex_care_other_outcomes"><span class="qcomplex_care_other_outcomes"><select size="1" name="complex_care_other_outcomes" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_other_outcomes] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE complex_care_other_outcomes^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE complex_care_other_outcomes||
+</span></div>
+  </div>
+ <div class="entire">
+    <div class="col1 qclinical_notes"><span class="qclinical_notes"><label class="label-left">||FIELDTAG clinical_notes||Clinical Notes||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qclinical_notes"><span class="qclinical_notes"><textarea name="clinical_notes" class="autoexpand"></textarea></span></div>
+  </div>
+
 </div>
 </div>
 <!--ENDOFMAINFORM -->

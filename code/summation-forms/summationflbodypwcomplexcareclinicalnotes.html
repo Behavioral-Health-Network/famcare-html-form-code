@@ -1,0 +1,34 @@
+<html>
+<head>
+<!--PATHWAYWIZARDSUMMATION Complex Care Clinical Notes-->
+</head>
+
+<script language="JavaScript">
+</script>
+
+<script language="VBScript">
+</script>
+
+<body>
+<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWComplexCareClinicalNotes].[Pathway_Date] ,[PWComplexCareClinicalNotes].[clinical_committee_meeting_date] ,[PWComplexCareClinicalNotes].[decision] ,JTBL1.DESCRIPTION AS JDESC1 ,JTBL2.DESCRIPTION AS JDESC2 ,JTBL3.DESCRIPTION AS JDESC3  FROM ^^SP FORMNAME^^  LEFT JOIN [complex_care_clinical_committee_rationale] as JTBL1 ON JTBL1.CODE=[PWComplexCareClinicalNotes].[complex_care_clinical_committee_rationale] LEFT JOIN [complex_care_reasons_ineligible] as JTBL2 ON JTBL2.CODE=[PWComplexCareClinicalNotes].[complex_care_reasons_ineligible] LEFT JOIN [complex_care_other_outcomes] as JTBL3 ON JTBL3.CODE=[PWComplexCareClinicalNotes].[complex_care_other_outcomes] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<table cellspacing="0" class="summary">
+    <thead>
+        <tr>
+            <th class="colAction">Action</th>
+<th>Pathway Date</th><th>Date Of Clinical Committee Meeting</th><th>Decision</th><th>Rationale For Decision</th><th>Why Does Patient Not Meet BEACN criteria?</th><th>Other Outcomes</th>
+            <th>||SORTCOL|ID;descending||Edited On</th>
+            <th>||SORTCOL|USERID;ascending||Edited By</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="||ALTERNATE |altrow||">
+            <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
+<td>||SF Pathway_Date||</td><td>||SF clinical_committee_meeting_date||</td><td>||SF decision||</td><td>||SF JDESC1||</td><td>||SF JDESC2||</td><td>||SF JDESC3||</td>
+            <td>||SF VISITDT|| ||SF VISITTM||</td>
+            <td>||SF USERID||</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -55,5 +55,15 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-11-12**: Adds `TIEDENROLLMENT` field to allow for one-to-one cardinality joins to `PATHWAYCLIENT.DOCSERNO` in order to join this data to the enrollment.
 - **2025-10-29**: Adds HTML and JavaScript code.
+
+</details>

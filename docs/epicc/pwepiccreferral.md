@@ -27,13 +27,13 @@ date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
-    - table: PATHWAYEVENTCLIENT
+    - table: PATHWAYCLIENT
       join_type: inner
       on:
-        - source: PWEPICCREFERRAL.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWEPICCREFERRAL.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWEPICCREFERRAL.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
 last_updated: 2025-09-17
 status: active
@@ -55,6 +55,16 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-10-01**: Updates options for program_participation_referral to Eligible For Services, Ineligible, and Unable To Contact/Locate. Adds a new question ineligible_referral where the user will select why the client wasn't eligible at referral and then ineligible_reason is conditional upon if Doesn't Meet Program Criteria is selected for ineligible_referral.
 - **2025-09-18**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-08-15**: Removes client_on_outreach_list. Question no longer needed. Makes `ems_fire_district_place_referral_in_transit`, `emergency_response_call`, and `suboxone_ems` conditional upon 073 and 015.Adds open text field for `other_ems_fire_district`. It is a conditional questions when Other EMS/Fire District is selected for Which EMS/Fire District?
+
+</details>

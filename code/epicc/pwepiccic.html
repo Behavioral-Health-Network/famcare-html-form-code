@@ -147,37 +147,41 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
     setrequire('consent_crc_referral_ic');
     setrequire('epicc_opioids_of_use');
     setrequire('overdose_event_referral');
-		setrequire('overdose_event_referral_unknown');
+	 setrequire('overdose_event_referral_unknown');
     setrequire('overdose_location');
     setrequire('first_overdose');
     setrequire('num_past_overdoses');
     setrequire('most_recent_past_overdose_date');
     setrequire('most_recent_past_overdose_date_unknown');
     setrequire('su_treatment_past_twelve_mos');
-		setrequire('su_treatment_past_twelve_mos_unknown');
+	 setrequire('su_treatment_past_twelve_mos_unknown');
     setrequire('current_su_treatment');
-		setrequire('current_su_treatment_unknown');
+	 setrequire('current_su_treatment_unknown');
     setrequire('opioid_prescription_long_term_pain_mgmt');
-		setrequire('opioid_prescription_long_term_pain_mgmt_unknown');
+	 setrequire('opioid_prescription_long_term_pain_mgmt_unknown');
     setrequire('ever_prescription_mat_not_referral');
-		setrequire('ever_prescription_mat_not_referral_unknown');
+	 setrequire('ever_prescription_mat_not_referral_unknown');
+    setrequire('current_script_mat_not_referral');
     setrequire('current_script_mat_type');
-		setrequire('current_script_mat_not_referral_unknown');
+	 setrequire('current_script_mat_not_referral_unknown');
     setrequire('mat_initiated_hospital');
     setrequire('what_mat_initiated_hospital');
+    setrequire('mat_script_discharge');
     setrequire('what_mat_script_discharge');
+    setrequire('mat_script_discharge_unknown');
     setrequire('overdose_ed_provided');
     setrequire('reason_oe_not_provided');
     setrequire('if_other_specify');
     setrequire('narcan_distributed');
     setrequire('preg_post_part_ic');
-		setrequire('preg_post_part_ic_unknown');
+	 setrequire('preg_post_part_ic_unknown');
     setrequire('veteran_status');
     setrequire('TiedEnrollment');
     setrequire('transfer_type_ic');
     setrequire('status_unable_contact_transfer');
     setrequire('reason_not_participating_ic');
     setrequire('why_not_meet_prog_eligibility_ic');
+    setrequire('reason_ic_not_success');
 
 	checkhideall();
 
@@ -216,7 +220,7 @@ function checkhideall() {
    checkhide(f.why_not_meet_prog_eligibility_ic,"non_opioid_substance","Non-Opioid User");
    checkhide(f.program_participation_ic,"treatment_path_ic","019");
    checkhide(f.who_initiated_referral,"community_referral_source_ic","Community");
-   checkhide(f.program_participation_ic,"reason_ic_not_success","002,003,004,005,006,007,011");
+   checkhide(f.program_participation_ic,"reason_ic_not_success","005");
    checkhide(f.consent_crc_referral_ic,"reason_consent_refused_crc_ic","No");
    checkhide(f.epicc_opioids_of_use,"other_opioid_ic","006");
    checkhide(f.overdose_event_referral,"overdose_location","Yes");
@@ -244,6 +248,7 @@ function checkhideall() {
 	 checkhide(f.preg_post_part_ic,"preg_post_part_ic_unknown","Unknown");
     checkhide(f.program_participation_ic,"reason_not_participating_ic","024");
     checkhide(f.reason_not_participating_ic,"why_not_meet_prog_eligibility_ic","Doesn't Meet Program Criteria");
+    checkhide(f.mat_script_discharge,"mat_script_discharge_unknown","Unknown");
 
 
 }
@@ -518,6 +523,10 @@ function validateform(scope='all') {
   if (!hiddenfield('status_unable_contact_transfer') && gvtfieldvalue('status_unable_contact_transfer')=='') {edesc=edesc+`Must specify a value for Status if Unable to Contact/Transfer\n`; seterror("status_unable_contact_transfer");}
   if (!hiddenfield('reason_not_participating_ic') && gvtfieldvalue('reason_not_participating_ic')=='') {edesc=edesc+`Must specify a value for Reason Not Participating\n`; seterror("reason_not_participating_ic");} 
   if (!hiddenfield('why_not_meet_prog_eligibility_ic') && gvtfieldvalue('why_not_meet_prog_eligibility_ic')=='') {edesc=edesc+`Must specify a value for Why doesn't client meet program eligibility?\n`; seterror("why_not_meet_prog_eligibility_ic");}
+  if (!hiddenfield('current_script_mat_not_referral') && gvtfieldvalue('current_script_mat_not_referral')=='') {edesc=edesc+`Must specify a value for Is client currently prescribed MAT?\n`; seterror("current_script_mat_not_referral");}  
+  if (!hiddenfield('mat_script_discharge_unknown') && gvtfieldvalue('mat_script_discharge_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("mat_script_discharge_unknown");}
+  if (!hiddenfield('mat_script_discharge') && gvtfieldvalue('mat_script_discharge')=='') {edesc=edesc+`Must specify a value for Will client have a MAT script at discharge?\n`; seterror("mat_script_discharge");} 
+  if (!hiddenfield('reason_ic_not_success') && gvtfieldvalue('reason_ic_not_success')=='') {edesc=edesc+`Must specify a value for Reason for Not Successful Outcome\n`; seterror("reason_ic_not_success");}
   return edesc;
 }
 
@@ -964,13 +973,15 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldreason_ic_not_success qreason_ic_not_success">
-    <div class="col12 fldreason_ic_not_success qreason_ic_not_success"><span class="qreason_ic_not_success"><label class="label-top">||FIELDTAG reason_ic_not_success||Reason Initial Contact Not Made||ENDFIELDTAG||</label></span><span class="qreason_ic_not_success"><select size="1"  name="reason_ic_not_success" onchange="checkhideall()" >
+    <div class="col12 fldreason_ic_not_success qreason_ic_not_success"><span class="qreason_ic_not_success required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_ic_not_success required-field-label"><label class="label-top">||FIELDTAG reason_ic_not_success||Reason Initial Contact Not Made||ENDFIELDTAG||</label></span><span class="qreason_ic_not_success"><select size="1"  name="reason_ic_not_success" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Client Not At Hospital Upon Coach Arrival">Client Not At Hospital Upon Coach Arrival</option>
-<option value="Client Unable To Stay To Complete Intake">Client Unable To Stay To Complete Intake</option>
-<option value="Client Refused Initial Face-To-Face">Client Refused Initial Face-To-Face</option>
-<option value="Unable To Contact/Locate">Unable To Contact/Locate</option>
 <option value="Client Left AMA">Client Left AMA</option>
+<option value="Client Not At Hospital Upon Coach Arrival">Client Not At Hospital Upon Coach Arrival</option>
+<option value="Client Refused Initial Face-To-Face">Client Refused Initial Face-To-Face</option>
+<option value="Client Unable To Stay To Complete Intake">Client Unable To Stay To Complete Intake</option>
+<option value="Client Un-Responsive Upon Coach Arrival">Client Not Responsive Upon Coach Arrival</option>
+<option value="Unable To Contact/Locate">Unable To Contact/Locate</option>
+
 
 </select></span></div>
      </div>
@@ -1134,9 +1145,9 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
- <div class="entire">
+   <div class="entire">
     <div class="col12 fldcurrent_script_mat_not_referral qcurrent_script_mat_not_referral">
-    <div class="col12 fldcurrent_script_mat_not_referral qcurrent_script_mat_not_referral"><span class="qcurrent_script_mat_not_referral"><label class="label-top">||FIELDTAG current_script_mat_not_referral||Does client have a current prescription for MAT? ||ENDFIELDTAG||</label></span><span class="qcurrent_script_mat_not_referral"><input type="radio" name="current_script_mat_not_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="current_script_mat_not_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="current_script_mat_not_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+    <div class="col12 fldcurrent_script_mat_not_referral qcurrent_script_mat_not_referral"><span class="qcurrent_script_mat_not_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qcurrent_script_mat_not_referral required-field-label"><label class="label-top">||FIELDTAG current_script_mat_not_referral||Does client have a current prescription for MAT?||ENDFIELDTAG||</label></span><span class="qcurrent_script_mat_not_referral"><input type="radio" name="current_script_mat_not_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="current_script_mat_not_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="current_script_mat_not_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -1171,11 +1182,16 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
- <div class="entire">
+     <div class="entire">
     <div class="col12 fldmat_script_discharge qmat_script_discharge">
-    <div class="col12 fldmat_script_discharge qmat_script_discharge"><span class="qmat_script_discharge"><label class="label-top">||FIELDTAG mat_script_discharge||Was client given a MAT prescription from a medical provider working in the hospital to take home/upon discharge? ||ENDFIELDTAG||</label></span><span class="qmat_script_discharge"><input type="radio" name="mat_script_discharge" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_script_discharge" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldmat_script_discharge qmat_script_discharge"><span class="qmat_script_discharge required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_script_discharge required-field-label"><label class="label-top">||FIELDTAG mat_script_discharge||Was client given a MAT prescription from a medical provider working in the hospital to take home/upon discharge?||ENDFIELDTAG||</label></span><span class="qmat_script_discharge"><input type="radio" name="mat_script_discharge" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_script_discharge" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_script_discharge" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+     <div class="entire">
+   <div class="col6 flddmat_script_discharge_unknown qmat_script_discharge_unknown">
+   <div class="col6 fldmat_script_discharge_unknown qmat_script_discharge_unknown"><span class="qmat_script_discharge_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_script_discharge_unknown required-field-label"><label class="label-top">||FIELDTAG mat_script_discharge_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qmat_script_discharge_unknown"><textarea name="mat_script_discharge_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+			</div>
  <div class="entire">
     <div class="col12 fldwhat_mat_script_discharge qwhat_mat_script_discharge">
     <div class="col12 fldwhat_mat_script_discharge qwhat_mat_script_discharge"><span class="qwhat_mat_script_discharge required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_script_discharge required-field-label"><label class="label-top">Type of MAT Prescribed</label></span><span class="qwhat_mat_script_discharge"><select size="1" name="what_mat_script_discharge" onchange="checkhideall()">

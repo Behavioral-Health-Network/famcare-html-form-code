@@ -54,6 +54,14 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-12-01**: Updates `program_assigned` field: 'Adult ERE Complex Care/BEACN' to 'Adult ERE', 'Clinical BEACN' to 'Mercy BEACN', 'H2HH' to 'BJC/H2H', and 'DePaul Vituity' to 'SSM Complex Care'. Adds `summationflbodypwcomplexcareclinicalnotes` to the bottom of the form so that Clinical Notes may be tracked via the Roster form.
 - **2025-11-05**: Adds `date_added_cohort` field as a non-required input to allow for recording 'Cohort Selection Date'.
 - **2025-10-31**: Adds `complex_care_referral_source` field.
@@ -61,3 +69,5 @@ status: active
 - **2025-10-28**: Changes the `WHERE` clause for `cmhc_agency` and `ada_su_agency` to filter to ERE instead of LINCS NAV.
 - **2025-08-27**: Comments out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
 - **2025-08-27**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
+
+</details>

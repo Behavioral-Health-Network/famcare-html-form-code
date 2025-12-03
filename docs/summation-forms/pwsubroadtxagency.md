@@ -78,4 +78,14 @@ This form tracks referrals to substance use treatment agencies for formal treatm
 
 ## Changelog
 
-- **2024-11-20**: Adds initial markdown. Adds `PATHWAY_DATE_JOINKEY` to the base `PWSUBROADTREATMENTAGENCY` table in the `PROD` database.
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
+- **2025-11-20**: Adds initial markdown. Adds `PATHWAY_DATE_JOINKEY` to the base `PWSUBROADTREATMENTAGENCY` table in the `PROD` database.
+
+</details>

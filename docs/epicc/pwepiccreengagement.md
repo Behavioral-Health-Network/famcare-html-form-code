@@ -46,8 +46,18 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 - **2025-06-03**: Comments out code for function quicksubmitit() and anything related to Quick Submit.
 - **2025-03-12**: Replacing the Master Table dropdown in reengagement_specialist with a filtered HR Dropdown.
 - **2025-01-05**: Update to replace coach agency mts with reengage mt
 - **2024-11-08**: Initial creation of EPICC Re-Engagement Form in Pathway Wizard.
+
+</details>

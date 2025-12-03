@@ -5,27 +5,37 @@ table_name: PWEREHOSPITALVISITNOTE
 program_scope: single
 programs:
   - ere
-form_type: pathways-standalone
+form_type: pathways-governed
 client_form: true
 tags:
-  - standalone-form
+  - pathway-event
+  - yere-hospital-visit-note
 pathway_name: ERE
 pathway_id: 55320250326123001961
-pathway_event: null
-pathway_event_logic: null
+pathway_event: ERE Hospital Visit Note
+pathway_event_logic:
+    start_period: 0 - D
+    end_period: 30 - D
+    early_period: 0
+    late_period: 180
+    recurring_period: 0 - D
+    lag_period: 0 - D
+    number_occurrences: 1
+    depends_on:
+    completion_check_table: PWEREHOSPITALVISITNOTE
 date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
-    - table: PATHWAYEVENTCLIENT
+    - table: PATHWAYCLIENT
       join_type: inner
       on:
-        - source: PWEREHOSPITALVISITNOTE.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWEREHOSPITALVISITNOTE.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWEREHOSPITALVISITNOTE.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-10-10
+last_updated: 2025-12-03
 status: active
 ---
 
@@ -45,5 +55,15 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-09-12**: Adds code to make TiedEnrollment a required question.
 - **2025-09-11**: Created in Pathway Form Wizard
+
+</details>

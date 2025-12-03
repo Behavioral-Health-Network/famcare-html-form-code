@@ -27,13 +27,13 @@ date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
-    - table: PATHWAYEVENTCLIENT
+    - table: PATHWAYCLIENT
       join_type: inner
       on:
-        - source: PWEPICCIC.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWEPICCIC.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWEPICCIC.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
 last_updated: 2025-08-25
 status: active
@@ -115,6 +115,14 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-11-20**: Fixes URLs in cross references.
 - **2025-10-17**: Changes Field Prompt for status_unable_to_contact_transfer to just Status.
 - **2025-10-17**: Fixes typo in transfer_type_ic from transfered to transferred.
@@ -138,3 +146,5 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 - **2024-10-16**: Adds pregnancy question. It had recently been added to the form in ETO, and the decision was reached to leave it on the form.
 - **2024-10-15**: Removes `coach_ic` for Recovery Coach performing Initial Contact and adds a summation instead.
 - **2024-10-15**: Removes `agency_ic` for agency of Recovery Coach and adds a summation instead.
+
+</details>

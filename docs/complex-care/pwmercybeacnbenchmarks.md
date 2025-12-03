@@ -55,8 +55,18 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-11-11**: Adds a condition to the `startup()` function to load `date_added_cohort` if `TIEDENROLLMENT` is already present. This is intended to address the fact that the cohort selection date is a read-only value on this form that is not saved to the table and thus is not displayed when the form reloads unless the user interacts with the Pathway Assignment field again, which leads to a confusing and poor user experience.
 - **2025-11-06**: Adds a hidden field for `date_added_cohort` to allow for saving the form when the date even when the value is blank.
 - **2025-11-05**: Adds `TIEDENROLLMENT` field to allow for one-to-one cardinality joins to `PATHWAYCLIENT.DOCSERNO` in order to join this data to the enrollment. Leverages the `TIEDENROLLMENT` field to replace the basic `PULL` syntax for `added_cohort_date`. Defines an `onchange` event to run the new function `getCohortDate()`, which, when combined with another new function `popCohortDate()` pulls the relevant cohort selection date only after Pathway Assignment has been made using `TIEDENROLLMENT`. This ensures that the cohort selection date is always correct, even when patients are re-referred and selected for the cohort more than once.
 - **2025-10-29**: Adds `screenparm` `ROSTERDATE` to `PULL` the `PATHWAY_DATE` from `PWCOMPLEXCAREROSTER.html` and fill `added_cohort_date`. Removes required field element from `added_cohort_date` field. Removes `pfp_discharge_date` because the field is movingt o a new form that will dependent upon the Pathway Event for this form.
 - **2025-08-11**: Adds HTML and JavaScript code.
+
+</details>

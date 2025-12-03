@@ -27,13 +27,13 @@ date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
-    - table: PATHWAYEVENTCLIENT
+    - table: PATHWAYCLIENT
       join_type: inner
       on:
-        - source: PWEPICC30DAYFU.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWEPICC30DAYFU.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWEPICC30DAYFU.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
 last_updated: 2025-09-17
 status: active
@@ -55,6 +55,14 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-10-17**: Fixes typo in `transfer_type_thirty_day` from transfered to transferred.
 - **2025-10-17**: Removes function updateThirtyDayForm and anything and BHN added such as showfields(). Added `treatment_path_thirty_day_unable_to_contact`, `what_mat_physician_appt_thirty_day_unable_to_contact`, and `mat_prescribed_physician_thirty_day_unable_to_contact`. This will allow for BHN to follow the new workflow that was created without having to modify checkhideall(), checkhide(), or create a new function to accomidate the complex conditional logic.
 - **2025-10-01**: Removes Client Declined Services from `treatment_path_thirty_day` and updates the options for `client_status_thirty_day` from starting with Recommending to Recommend.
@@ -62,3 +70,5 @@ status: active
 - **2025-08-25**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
 -**2025-08-15**: Fixes typo in `why_not_meet_prog_eligibility_thirty_day` field name. Adds `why_not_meet_prog_eligibility_thirty_day`. Makes `intake_conducted_appt_date_thirty_day` and `why_not_meet_prog_eligibility_thirty_day` required questions. Updates typos in `client_status_thirty_day` and `date_transferred_reengagement_specialist_thirty_day`.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_THIRTY_DAY` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.
+
+</details>

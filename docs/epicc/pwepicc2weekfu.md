@@ -27,13 +27,13 @@ date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
-    - table: PATHWAYEVENTCLIENT
+    - table: PATHWAYCLIENT
       join_type: inner
       on:
-        - source: PWEPICC2WEEKFU.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWEPICC2WEEKFU.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWEPICC2WEEKFU.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
 last_updated: 2025-09-17
 status: active
@@ -55,6 +55,14 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-10-17**: Adds ||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM|| back in to allow the summations to work. Removes function updateTwoWeekForm and anything and BHN added such as showfields(). Added `treatment_path_two_week_unable_to_contact`, `what_mat_physician_appt_two_week_unable_to_contact`, and `mat_prescribed_physician_two_week_unable_to_contact`. This will allow for BHN to follow the new workflow that was created without having to modify checkhideall(), checkhide(), or create a new function to accomidate the complex conditional logic.
 - **2025-10-17**: Updates options for client_status_two_week from Recommending to Recommend. Takes out option Client Declined SUD Treatment Services from treatment_path_two_week.
 - **2025-10-01**: Updates options for client_status_two_week from Recommending to Recommend. Takes out option Client Declined SUD Treatment Services from `treatment_path_two_week`.
@@ -62,3 +70,5 @@ status: active
 - **2025-08-25**: Adds HTML and JavaScript code for `TiedEnrollment` fix that GVT created to help join all our Pathway forms together.
 - **2025-08-15**: Adds conditional question `why_not_meet_prog_eligibility_two_week` when program participation option 002 Ineligible, Does Not Meet Project Criteria is selected. Adds radio button option to  `mat_prescribed_physician_appt_two_week`, Unable To Contact Client Or Treatment Agency. Adds presenting_notes_two_week to the bottom of the form.
 - **2025-08-15**: Changed the `MAT_PRESCRIBED_PHYSICIAN_APPT_TWO_WEEK` data type from varchar(30) to varchar(50) to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field.
+
+</details>

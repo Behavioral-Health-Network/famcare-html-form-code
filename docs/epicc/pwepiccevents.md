@@ -17,13 +17,13 @@ date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:
   targets:
-    - table: PATHWAYEVENTCLIENT
+    - table: PATHWAYCLIENT
       join_type: inner
       on:
-        - source: PWEPICCEVENTS.PATHWAY_DATE
-          target: PATHWAYEVENTCLIENT.DATEACCOMPLISHED
+        - source: PWEPICCEVENTS.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
         - source: PWEPICCEVENTS.CLIENT_NUMBER
-          target: PATHWAYEVENTCLIENT.CLIENTNUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
 last_updated: 2025-10-10
 status: active
@@ -45,5 +45,15 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-10-08**: Makes epicc_events_materials_distributed required.
 - **2025-09-24**: Created in Pathway Form Wizard
+
+</details>

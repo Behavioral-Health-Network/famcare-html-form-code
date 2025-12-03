@@ -54,6 +54,16 @@ status: active
 
 ## Changelog
 
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
 - **2025-12-01**: Adds initial Markdown documentation file. Adds condition to show `complex_care_committee_rationale` only when 'Do Not Select To BEACN Cohort' is selected for `Decision`. Capitalizes the letter 'C' in `Why Does Patient Not Meet BEACN Criteria?` field prompt.
 - **2025-11-25**: Comments out `quicksubmitit()` and `QuickSubmitReturn()` functions. Adds `TIEDENROLLMENT` field to enable one-to-one joins to `PATHWAYCLIENT.DOCSERNO`. Adjusts the field alignments to the left. Adds condition to show `complex_care_reasons_ineligible` only when 'Client Does Not Meet BEACN Criteria' ('006') is selected for `complex_care_clinical_committee_rationale`.
 - **2025-11-19**: Adds initial HTML file using the `Pathway Wizard`.
+
+</details>

@@ -123,12 +123,15 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 2025
 
+- **2025-11-21**: Makes `reason_ic_not_success` a required questions and adds Client Not Responsive Upon Coach Arrival as a new option.
 - **2025-11-20**: Fixes URLs in cross references.
+- **2025-10-29**: Makes `current_script_mat_referral` and `mat_script_discharge` required questions. Adds `mat_script_discharge_unknown` as a new question conditional upon Unknown being selected for `mat_script_discharge`.
 - **2025-10-17**: Changes Field Prompt for status_unable_to_contact_transfer to just Status.
 - **2025-10-17**: Fixes typo in transfer_type_ic from transfered to transferred.
 - **2025-10-01**: Updates the `epicc_program_participation` master table to inactivate `Ineligible, Does Not Meet Project Criteria`, `Ineligible, Not Clinically Appropriate`, `Client Declined Services`, `Client In Jail/Incarcerated`, `Client Deceased`, `Regional Transfer`, `Services Transferred To LINCS IO`, `Services Transferred To Youth ERE Program`, and `Already Enrolled in SUD Services`. Adds values `Not Participating In EPICC Program` (to replace the various reasons the client is not participation or is ineligible) and `Transfer` (to replace the three transfer conditions that were previously listed separately). Updates the conditional logic based on those options. Adds new question `transfer_type_ic` and `reason_not_participating_ic`.
 - **2025-09-18**: Changes Field Name of `TiedEnrollment` from Select Pathway Enrollment to Select Pathway Assignment
 - **2025-08-25**: Adds HTML and JavaScript code for `TiedEnrollment` fix that GVT created to help join all our pathway forms together.
+- **2025-08-20**: Adds `treatment_path_ic_unknown`, `overdose_event_referral_unknown`, `most_recent_past_overdose_date_unknown`, `su_treatment_past_twelve_mos_unknown`, `current_su_treatment_unknown`, `opioid_prescription_long_term_pain_mgmt_unknown`, `ever_prescription_mat_not_referral_unknown`, `current_script_mat_not_referral_unknown`, `preg_post_part_ic_unknown`. All of these are conditional and required questions when Unknown is selected. Adds Unknown dropdown option to `most_recent_past_overdose_date`.
 - **2025-08-15**: Adds radio button option for `mat_prescribed_physician_appt_six_month`, Unable To Contact Client Or Treatment Agency.
 - **2025-08-12**: Disables 'Already Enrolled In SUD Services' program participation value due to ongoing concerns on the part of the EPICC leadership that Recovery Coaches were misusing this value and would likely continue to do so despite retraining efforts.
 - **2025-08-01**: Updates `epicc_program_participation` code '011' to description 'Services Transferred To ERE' to update the program name from 'LINCS IO'.

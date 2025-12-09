@@ -51,6 +51,13 @@ status: active
 
 2025
 
+-
 - **2025-12-03**: Adds initial Markdown documentation file.
+- **2025-11-21**: Adds Counseling Agency as a drop down option to `how_hear_about_bcr`.
+- **2025-11-20**: Comments out `method_referral`, `ref_through_event`, `bcr_ref_event`, `other_event_exp`, `prev_mh_bh_services`, `pregnant_at_ref`, `preg_or_child_last_ninety`, `reside_in_stl_city`, `bcr_prog_participation`, `marital_status_ref`, `bcr_reason_ineligible_ref`, and `other_reason_ineligible`. This was done per Tamela and Wendy's request to make the referral form shorter and some of the questions were moved to the IC form.
+- **2025-08-25**: Adds HTML and JavaScript code to add `TiedEnrollment` field to the form as a fix GVT came up with to assist in joining our pathway forms together and avoiding duplication.
+- **2025-05-01**: Adds closing div after `housing_status_referral`.
+- **2025-05-01**: Adds `housing_status_referral` and removes Housing Status summation.
+- **2025-01-03**: Adds summation instructions and adjusts one field to radio button control.
 
 </details>

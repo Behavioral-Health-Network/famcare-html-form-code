@@ -1,0 +1,995 @@
+<html>
+
+<head>
+<title>ERE IHNA</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+<!-- FIELDOVERRIDE(ADD_ADHD,10,10) -->
+<!-- FIELDOVERRIDE(ALZHEIMERS,10,10) -->
+<!-- FIELDOVERRIDE(ANTISOCIAL_PERSONALITY_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(AUTISM_SPECRTUM_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(BIPOLAR_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(BORDERLINE_PERSONALITY_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(DD_INTELLECTUAL_DISABILITY,10,10) -->
+<!-- FIELDOVERRIDE(DELISIONAL,10,10) -->
+<!-- FIELDOVERRIDE(DEMENTIA,10,10) -->
+<!-- FIELDOVERRIDE(DEPRESSION,10,10) -->
+<!-- FIELDOVERRIDE(EATING_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(OCD,10,10) -->
+<!-- FIELDOVERRIDE(PANIC_ANXIETY,10,10) -->
+<!-- FIELDOVERRIDE(PTSD,10,10) -->
+<!-- FIELDOVERRIDE(SLEEP_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(SUICIDE_IDEATION_OR_ATTEMPT,10,10) -->
+<!-- FIELDOVERRIDE(NON_SUICIDE_SELF_HARM,10,10) -->
+<!-- FIELDOVERRIDE(OTHER-PHYCHOTIC_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+<!-- FIELDOVERRIDE(NO_MENTAL_HEALTH_HISTORY,10,10) -->
+<!-- FIELDOVERRIDE(SCHIZOPHRENIA_SCHIZOAFFECTIVE_DISORDER,10,10) -->
+<!-- FIELDOVERRIDE(ALCOHOL,10,10) -->
+<!-- FIELDOVERRIDE(COCAINE,10,10) -->
+<!-- FIELDOVERRIDE(HALLUCINOGENS,10,10) -->
+<!-- FIELDOVERRIDE(HEROIN,10,10) -->
+<!-- FIELDOVERRIDE(INHALANTS,10,10) -->
+<!-- FIELDOVERRIDE(MARJUANA,10,10) -->
+<!-- FIELDOVERRIDE(METHAMPHETAMINE,10,10) -->
+<!-- FIELDOVERRIDE(PRESCRIPTION_OPIOIDS,10,10) -->
+<!-- FIELDOVERRIDE(PRESCRIPTION_SEDATIVES,10,10) -->
+<!-- FIELDOVERRIDE(PRESCRIPTION_STIMULANTS,10,10) -->
+<!-- FIELDOVERRIDE(SYNTHETIC_DRUGS,10,10) -->
+<!-- FIELDOVERRIDE(FENTANYL,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+<!-- FIELDOVERRIDE(UNKNOWN_SUBSTANCE,10,10) -->
+<!-- FIELDOVERRIDE(NO_SUBSTANCE_USE_HISTORY,10,10) -->
+<!-- FIELDOVERRIDE(BMI_OVER_25,10,10) -->
+<!-- FIELDOVERRIDE(CHRONIC_PAIN,10,10) -->
+<!-- FIELDOVERRIDE(CONGESTIVE_HEART_FAILURE,10,10) -->
+<!-- FIELDOVERRIDE(COPD_ASTHMA,10,10) -->
+<!-- FIELDOVERRIDE(DENTAL_PAIN,10,10) -->
+<!-- FIELDOVERRIDE(DIABETES,10,10) -->
+<!-- FIELDOVERRIDE(HEPATITIS_C,10,10) -->
+<!-- FIELDOVERRIDE(HYPERTENSION,10,10) -->
+<!-- FIELDOVERRIDE(TOBACCO_USE,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+<!-- FIELDOVERRIDE(NO_PHYSICAL_HEALTH_ISSUES,10,10) -->
+
+<script language="JavaScript">
+
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#yere_mh_concerns, #yere_type_trauma_reported, #yere_substance_use_history, #yere_type_of_school_discipline'); // Add more IDs as needed
+
+
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
+
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
+
+//     if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
+
+// Start observing the document body for changes
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#ere_mental_health_history', listenerSetup);
+waitForElement('#ere_substance_use_history', listenerSetup);
+waitForElement('#ere_physical_health_history', listenerSetup);
+
+var genpdf='true';  
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+          // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+          // f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+    // Commenting out code for PPC contact as a result of not needing the question now but might want it in the future.
+    // setrequire('contact_result_ppc_ihna');
+    setrequire('still_engaged_ihna');
+    setrequire('ineligible_reason_ihna');
+    setrequire('employment_status_ihna');
+    setrequire('probation_parole_ihna');
+    setrequire('mh_history');
+    setrequire('su_history');
+    setrequire('phy_health_history');
+    setrequire('num_er_visits_past_three_months_ihna');
+    setrequire('num_hosp_past_three_months_ihna');
+    setrequire('num_leo_contacts_past_three_months_ihna');
+    setrequire('TiedEnrollment');
+    setrequire('specify_probation_parole_ihna');
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+
+// Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#ere_mental_health_history, #ere_substance_use_history, #ere_physical_health_history'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.still_engaged_ihna,"ineligible_reason_ihna","No");
+      checkhide(f.probation_parole_ihna,"specify_probation_parole_ihna","Yes");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  //  Commenting out code for PPC contact as a result of not needing the question now but might want it in the future.
+  // if (!hiddenfield('contact_result_ppc_ihna') && gvtfieldvalue('contact_result_ppc_ihna')=='') {edesc=edesc+`Must specify a value for Was this contact a direct result of an alert message from PointClickCare?\n`; seterror("contact_result_ppc_ihna");}
+  if (!hiddenfield('still_engaged_ihna') && gvtfieldvalue('still_engaged_ihna')=='') {edesc=edesc+`Must specify a value for Is individual still actively engaged in ERE services?\n`; seterror("still_engaged_ihna");}
+  if (!hiddenfield('ineligible_reason_ihna') && gvtfieldvalue('ineligible_reason_ihna')=='') {edesc=edesc+`Must specify a value for Reason Not Engaged\n`; seterror("ineligible_reason_ihna");}
+  if (!hiddenfield('employment_status_ihna') && gvtfieldvalue('employment_status_ihna')=='') {edesc=edesc+`Must specify a value for Employment Status\n`; seterror("employment_status_ihna");}
+  if (!hiddenfield('probation_parole_ihna') && gvtfieldvalue('probation_parole_ihna')=='') {edesc=edesc+`Must specify a value for Is individual currently on probation or parole?\n`; seterror("probation_parole_ihna");}
+  if (!hiddenfield('mh_history') && gvtfieldvalue('mh_history')=='') {edesc=edesc+`Must specify a value for Mental Health History\n`; seterror("mh_history");}
+  if (!hiddenfield('su_history') && gvtfieldvalue('su_history')=='') {edesc=edesc+`Must specify a value for Substance Use History\n`; seterror("su_history");}
+  if (!hiddenfield('phy_health_history') && gvtfieldvalue('phy_health_history')=='') {edesc=edesc+`Must specify a value for Physical Health History\n`; seterror("phy_health_history");}
+  if (!hiddenfield('num_er_visits_past_three_months_ihna') && gvtfieldvalue('num_er_visits_past_three_months_ihna')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_er_visits_past_three_months_ihna");}
+  if (!hiddenfield('num_hosp_past_three_months_ihna') && gvtfieldvalue('num_hosp_past_three_months_ihna')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_ihna");}
+  if (!hiddenfield('num_leo_contacts_past_three_months_ihna') && gvtfieldvalue('num_leo_contacts_past_three_months_ihna')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_ihna");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+  if (!hiddenfield('specify_probation_parole_ihna') && gvtfieldvalue('specify_probation_parole_ihna')=='') {edesc=edesc+`Must specify a value for If yes, please specify:\n`; seterror("specify_probation_parole_ihna");}
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+    // Force update of report fields before submission
+    updateReportFields([
+      'ere_mental_health_history', 'ere_substance_use_history', 'ere_physical_health_history'
+          // add other dropdown IDs here as needed
+   ]);
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['ere_mental_health_history', 'ere_substance_use_history', 'ere_physical_health_history', etc.].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWEREIHNA" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields -->
+    <input type="hidden" name="mh_hx_add_adhd" value="||FIELDVALUE mh_hx_add_adhd||" class="report-field value-001" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_alzheimers" value="||FIELDVALUE mh_hx_alzheimers||" class="report-field value-002" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_antisocial_personality_disorder" value="||FIELDVALUE mh_hx_antisocial_personality_disorder||" class="report-field value-003" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_autism_spectrum_disorder" value="||FIELDVALUE mh_hx_autism_spectrum_disorder||" class="report-field value-004" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_bipolar_disorder" value="||FIELDVALUE mh_hx_bipolar_disorder||" class="report-field value-005" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_borderline_personality_disorder" value="||FIELDVALUE mh_hx_borderline_personality_disorder||" class="report-field value-006" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_dd_intellectual_disorder" value="||FIELDVALUE mh_tx_dd_intellectual_disorder||" class="report-field value-007" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_delusional" value="||FIELDVALUE mh_hx_delusional||" class="report-field value-008" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_dementia" value="||FIELDVALUE mh_hx_dementia||" class="report-field value-009" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_depression" value="||FIELDVALUE mh_hx_depression||" class="report-field value-010" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_eating_disorder" value="||FIELDVALUE mh_hx_eating_disorder||" class="report-field value-011" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_ocd" value="||FIELDVALUE mh_hx_ocd||" class="report-field value-012" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_panic_anxiety" value="||FIELDVALUE mh_hx_panic_anxiety||" class="report-field value-013" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_ptsd" value="||FIELDVALUE mh_hx_ptsd||" class="report-field value-014" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_schizophrenia" value="||FIELDVALUE mh_hx_schizophrenia||" class="report-field value-015" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_sleep_disorder" value="||FIELDVALUE mh_hx_sleep_disorder||" class="report-field value-016" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_other_psychiotic_disorder" value="||FIELDVALUE mh_hx_other_psychiotic_disorder||" class="report-field value-017" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_other" value="||FIELDVALUE mh_hx_other||" class="report-field value-018" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_unknown_refused" value="||FIELDVALUE mh_hx_unknown_refused||" class="report-field value-019" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_none" value="||FIELDVALUE mh_hx_none||" class="report-field value-020" data-source="ere_mental_health_history">
+    <input type="hidden" name="su_hx_alcohol" value="||FIELDVALUE su_hx_alcohol||" class="report-field value-001" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_cocaine" value="||FIELDVALUE su_hx_cocaine||" class="report-field value-002" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_hallucinogens" value="||FIELDVALUE su_hx_hallucinogens||" class="report-field value-003" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_heroin" value="||FIELDVALUE su_hx_heroin||" class="report-field value-004" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_inhalants" value="||FIELDVALUE su_hx_inhalants||" class="report-field value-005" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_marijuana" value="||FIELDVALUE su_hx_marijuana||" class="report-field value-006" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_methamphetamine" value="||FIELDVALUE su_hx_methamphetamine||" class="report-field value-007" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_prescription_opioids" value="||FIELDVALUE su_hx_prescription_opioids||" class="report-field value-008" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_prescription_sedatives" value="||FIELDVALUE su_hx_prescription_sedatives||" class="report-field value-009" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_prescription_stimulants" value="||FIELDVALUE su_hx_prescription_stimulants||" class="report-field value-010" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_synthetic_drugs" value="||FIELDVALUE su_hx_synthetic_drugs||" class="report-field value-011" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_fentanyl" value="||FIELDVALUE su_hx_fentanyl||" class="report-field value-012" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_other" value="||FIELDVALUE su_hx_other||" class="report-field value-013" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_unknown_substances" value="||FIELDVALUE su_hx_unknown_substances||" class="report-field value-014" data-source="ere_substance_use_history">
+    <input type="hidden" name="su_hx_no_substance_use_history" value="||FIELDVALUE su_hx_no_substance_use_history||" class="report-field value-015" data-source="ere_substance_use_history">
+    <input type="hidden" name="phy_hx_bmi" value="||FIELDVALUE phy_hx_bmi||" class="report-field value-001" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_chronic_pain" value="||FIELDVALUE phy_hx_chronic_pain||" class="report-field value-002" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_congestive_heart_failure" value="||FIELDVALUE phy_hx_congestive_heart_failure||" class="report-field value-003" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_copd_asthma" value="||FIELDVALUE phy_hx_copd_asthma||" class="report-field value-004" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_dental_care" value="||FIELDVALUE phy_hx_dental_care||" class="report-field value-005" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_diabetes" value="||FIELDVALUE phy_hx_diabetes||" class="report-field value-006" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_hepatitis_c" value="||FIELDVALUE phy_hx_hepatitis_c||" class="report-field value-007" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_hypertention" value="||FIELDVALUE phy_hx_hypertention||" class="report-field value-008" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_tobacco_use" value="||FIELDVALUE phy_hx_tobacco_use||" class="report-field value-009" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_other" value="||FIELDVALUE phy_hx_other||" class="report-field value-010" data-source="ere_physical_health_history">
+    <input type="hidden" name="phy_hx_no_physical_health_history" value="||FIELDVALUE phy_hx_no_physical_health_history||" class="report-field value-011" data-source="ere_physical_health_history">
+
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>ERE IHNA</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+</div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <!-- Commenting out code for PPC contact as a result of not needing the question now but might want it in the future. -->
+ <!-- <div class="entire">
+    <div class="col12 fldcontact_result_ppc_ihna qcontact_result_ppc_ihna">
+    <div class="col12 fldcontact_result_ppc_ihna qcontact_result_ppc_ihna"><span class="qcontact_result_ppc_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qcontact_result_ppc_ihna required-field-label"><label class="label-top">||FIELDTAG contact_result_ppc_ihna||Was this contact a direct result of an alert message from PointClickCare?||ENDFIELDTAG||</label></span><span class="qcontact_result_ppc_ihna"><input type="radio" name="contact_result_ppc_ihna" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="contact_result_ppc_ihna" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div> -->
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldstill_engaged_ihna qstill_engaged_ihna">
+    <div class="col12 fldstill_engaged_ihna qstill_engaged_ihna"><span class="qstill_engaged_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qstill_engaged_ihna required-field-label"><label class="label-top">||FIELDTAG still_engaged_ihna||Is individual still actively engaged in ERE services?||ENDFIELDTAG||</label></span><span class="qstill_engaged_ihna"><input type="radio" name="still_engaged_ihna" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="still_engaged_ihna" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+    <div class="col12 fldineligible_reason_ihna qineligible_reason_ihna">
+    <div class="col12 fldineligible_reason_ihna qineligible_reason_ihna"><span class="qineligible_reason_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qineligible_reason_ihna required-field-label"><label class="label-top">Reason Not Engaged</label></span><span class="qineligible_reason_ihna"><select size="1" name="ineligible_reason_ihna" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_ineligible_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE ineligible_reason_ihna^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE ere_ineligible_status||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">Housing</div>
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+  </div>
+<div class="entire">
+<div class="col12 term">Payor Source</div>
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Click "Add" below to enter the client's current insurance status, including Start Date(s) if covered by one (or more) payors. When payor source is current, select "Yes" for "Payor is Current". Click View/Edit to add an "End Date" when payor source is no longer current.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+<div class="col12 term"></div>
+</div>
+ <div class="entire">
+    <div class="col12 fldemployment_status_ihna qemployment_status_ihna">
+    <div class="col12 fldemployment_status_ihna qemployment_status_ihna"><span class="qemployment_status_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qemployment_status_ihna required-field-label"><label class="label-top">Employment Status</label></span><span class="qemployment_status_ihna"><select size="1" name="employment_status_ihna" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_employ_status] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE employment_status_ihna^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE ere_employ_status||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldprobation_parole_ihna qprobation_parole_ihna">
+    <div class="col12 fldprobation_parole_ihna qprobation_parole_ihna"><span class="qprobation_parole_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qprobation_parole_ihna required-field-label"><label class="label-top">||FIELDTAG probation_parole_ihna||Is individual currently on probation or parole?||ENDFIELDTAG||</label></span><span class="qprobation_parole_ihna"><input type="radio" name="probation_parole_ihna" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="probation_parole_ihna" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldspecify_probation_parole_ihna qspecify_probation_parole_ihna">
+    <div class="col12 fldspecify_probation_parole_ihna qspecify_probation_parole_ihna"><span class="qspecify_probation_parole_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qspecify_probation_parole_ihna required-field-label"><label class="label-top">||FIELDTAG specify_probation_parole_ihna||Specify, Which One||ENDFIELDTAG||</label></span><span class="qspecify_probation_parole_ihna"><input type="radio" name="specify_probation_parole_ihna" value="Yes, Probation" onclick="checkhideall()" >Yes, Probation&nbsp;&nbsp;<input type="radio" name="specify_probation_parole_ihna" value="Yes, Parole" onclick="checkhideall()" >Yes, Parole&nbsp;&nbsp;<input type="radio" name="specify_probation_parole_ihna" value="Yes, Both" onclick="checkhideall()" >Yes, Both&nbsp;&nbsp;<input type="radio" name="specify_probation_parole_ihna" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+<div class="entire row three-col-row">
+<div class="col4 qmh_history">
+  <div class="col4 fldmh_history qmh_history"><span class ="qmh_history required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_history required-field-label"><label class="label-top">Mental Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_history"><select size="21" name="mh_history" id="ere_mental_health_history" onchange="updateReportFields(['ere_mental_health_history']);checkhideall()" multiple>
+    <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_mental_health_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+  </select>||CONFIGURE ere_mental_health_history||
+
+  <!-- FIELDOVERRIDE(mh_history,10,250) -->
+  </span></div>
+</div>
+<div class="col4 qsu_history">
+  <div class="col4 flsu_history qsu_history"><span class ="qsu_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsu_history"><select size="16" name="su_history" id="ere_substance_use_history" onchange="updateReportFields(['ere_substance_use_history']);checkhideall()" multiple>
+    <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+  </select>||CONFIGURE ere_substance_use_history||
+
+  <!-- FIELDOVERRIDE(su_history,10,250) -->
+  </span></div>
+</div>
+<div class="col4 qphy_health_history">
+  <div class="col4 flphy_health_history qphy_health_history"><span class ="qphy_health_history required-label">||PWRequiredFieldRequiredText||</span><span class="qphy_health_history required-field-label"><label class="label-top">Physical Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qphy_health_history"><select size="12" name="phy_health_history" id="ere_physical_health_history" onchange="updateReportFields(['ere_physical_health_history']);checkhideall()" multiple>
+    <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_physical_health_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE phy_health_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+  </select>||CONFIGURE ere_physical_health_history||
+
+  <!-- FIELDOVERRIDE(phy_health_history,10,250) -->
+  </span></div>
+</div>
+</div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldnum_er_visits_past_three_months_ihna qnum_er_visits_past_three_months_ihna">
+    <div class="col12 fldnum_er_visits_past_three_months_ihna qnum_er_visits_past_three_months_ihna"><span class="qnum_er_visits_past_three_months_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_er_visits_past_three_months_ihna required-field-label"><label class="label-top">||FIELDTAG num_er_visits_past_three_months_ihna||Number of Emergency Dept Visits in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_er_visits_past_three_months_ihna"><input type="text" name="num_er_visits_past_three_months_ihna" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldnum_hosp_past_three_months_ihna qnum_hosp_past_three_months_ihna">
+    <div class="col12 fldnum_hosp_past_three_months_ihna qnum_hosp_past_three_months_ihna"><span class="qnum_hosp_past_three_months_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_hosp_past_three_months_ihna required-field-label"><label class="label-top">||FIELDTAG num_hosp_past_three_months_ihna||Number of Hospitalizations in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_hosp_past_three_months_ihna"><input type="text" name="num_hosp_past_three_months_ihna" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldnum_leo_contacts_past_three_months_ihna qnum_leo_contacts_past_three_months_ihna">
+    <div class="col12 fldnum_leo_contacts_past_three_months_ihna qnum_leo_contacts_past_three_months_ihna"><span class="qnum_leo_contacts_past_three_months_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_leo_contacts_past_three_months_ihna required-field-label"><label class="label-top">||FIELDTAG num_leo_contacts_past_three_months_ihna||Number of Law Enforcement Contacts in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_leo_contacts_past_three_months_ihna"><input type="text" name="num_leo_contacts_past_three_months_ihna" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Client Needs</div>
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">When entering the client's needs for the first time at IHNA, select all applicable needs that the client currently has. If the client has already been referred to or is actively engaging with a resource for a specific need, indicate this in the corresponding status question associated with that need. There should only be one entry per enrollment.</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWEREClientNeeds||</div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+    <div class="entire">
+<div class="col12 term"></div>
+</div>
+ <div class="entire">
+    <div class="col12 fldnotes_ihna qnotes_ihna">
+    <div class="col12 fldnotes_ihna qnotes_ihna"><span class="qnotes_ihna"><label class="label-top">||FIELDTAG notes_ihna||Notes||ENDFIELDTAG||</label></span><span class="qnotes_ihna"><textarea name="notes_ihna" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

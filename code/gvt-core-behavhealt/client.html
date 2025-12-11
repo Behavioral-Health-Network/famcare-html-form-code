@@ -1,0 +1,1856 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>Initial Setup of Client - System</title>
+<meta name="Microsoft Border" content="none, default">
+
+
+<style>
+/* START tooltip styling */
+
+:root {
+  --accent-color-text: #fff;
+  --accent-color: #555;
+  --border-radius: .25em;  
+  --filter-accent-color: invert(31%) sepia(9%) saturate(0%) hue-rotate(223deg) brightness(96%) contrast(84%); /* #555 */
+  --filter-default-font-color: invert(0%) sepia(100%) saturate(0%) hue-rotate(358deg) brightness(97%) contrast(100%); /* #000 */
+}
+
+.tooltipReference {
+    position: relative;
+    margin: .25em;
+    vertical-align: top;
+}
+
+.tooltipIcon {
+    /*  size of SVG   */
+    width: 30px;
+    filter: var(--filter-default-font-color);
+}
+
+.tooltipText {
+    opacity: 0;
+    bottom: -1em;
+    left: 2.5em;
+    position: absolute;
+    width: 300px;
+    border: 1px solid var(--accent-color-text);
+    background-color: var(--accent-color);
+    color: var(--accent-color-text);
+    padding: .5em;
+    border-radius: var(--border-radius);
+    transition: opacity 500ms ease;
+}
+
+.tooltipIcon:hover {
+    cursor: pointer;
+    filter: var(--filter-accent-color);
+}
+
+.tooltipIcon:hover+.tooltipText {
+    opacity: 1;
+}
+
+/* END tooltip styling */
+</style>
+</head>
+
+||INCLUDE FunctionSummationLibrary.htm||
+||INCLUDE RemoveApostrophe.htm||
+
+<!-- FIELDOVERRIDE(CHILDLEGALSTATUS,10,50) -->
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+
+ <PREADD SET PROVIDERCODECLIENT=""> 
+<PREEDIT SET PROVIDERCODECLIENT="||FIELDVALUE PROVIDERCODECLIENT||">
+ <PREADD SETPARM PROVIDERCODECLIENT=""> 
+<PREEDIT SETPARM PROVIDERCODECLIENT="||FIELDVALUE PROVIDERCODECLIENT||">
+ <PREADD SET OLDCLIENT="||CLIENTNUMBER||">
+ <PREADD SET CLIENTNUMBER="||CLIENT|CLIENTNUMBER||">
+ <PREADD SET CLIENTNAME="||||">
+<PREEDIT SET CLIENTNUMBER="||FIELDVALUE CLIENTNUMBER||">
+<POSTADD CLIENTACCESS DUMMY1="||PROVIDERCODE||;1/1/1905;12/31/2099;EXPAND">
+<POSTADD SETPARM PARPROVCODE="||LOADFIELDS Select ParentOrganization From Q_Provider Where DocRevNo=' 0 ' And ProviderCode='^^FIELDVALUE ProviderCodeClient^^'||||LOADCURRENTALWAYS (0)||">
+<POSTADD CLIENTACCESS DUMMY1="||SP PARPROVCODE||;1/1/1905;12/31/2099;EXPAND">
+<POSTADD SET CLIENTNUMBER="||SCREENPARM CLIENTNUMBER||">
+<POSTEDIT SET CLIENTNUMBER="||SCREENPARM CLIENTNUMBER||">
+<POSTADD SET CLIENTNAME="||SCREENPARM LASTNAME||, ||SCREENPARM FIRSTNAME|| ||SCREENPARM MI||">
+<POSTADD UPDATEQUERY DUMMY1="INSERT INTO RELATIONSHIP (DOCSERNO,DOCREVNO,STATUS,VISITDT,VISITTM,USERID,CLIENTNUMBER,[NUMBER],RELATIONTYPE,RELATIONSHIPSTATUS,FIRSTNAME,LASTNAME,PRIVATEPROVIDER,DOMICILE) VALUES('||FIELDVALUE DOCSERNO||',' 0 ',1,'||DATE||','||TIME||','||FIELDVALUE USERID||','||CLIENTNUMBER||','||CLIENTNUMBER||','Sel','Active','||SCREENPARM FIRSTNAME||','||SCREENPARM LASTNAME||','||PRIVATEPROVIDER||','||ISDOMICILE||')">
+<POSTADD SET SAVEDCLIENTNUMBER="||FIELDVALUE CLIENTNUMBER||">
+
+ <PREADD SET HASPLACEMENT="||||">
+<PREEDIT SET HASPLACEMENT="||LOADFIELDS Select 'Yes' From ProviderPlacement Where DocRevNo=' 0 ' and ClientNumber='^^CLIENTNUMBER^^'||||LOADCURRENTALWAYS (0)||">
+ <PREADD SET EXTCASEWORKER="||||">
+ <PREADD SET CASEWORKER="||||">
+ <PREADD SET TRBLSOCWORKER="||||">
+ <PREADD SET CPSWORKER="||||">
+<PREEDIT SET EXTCASEWORKER="||FIELDVALUE JJSWORKER||">
+<PREEDIT SET CASEWORKER="||FIELDVALUE StateCaseWorker||">
+<PREEDIT SET TRBLSOCWORKER="||FIELDVALUE TribalSocialWorker||">
+<PREEDIT SET CPSWORKER="||FIELDVALUE CPSWORKER||">
+<PREEDIT SET CURRCWUSERID="||LOADFIELDS Select UserID.UserID From Q_HRFORM Inner Join UserID on Q_HRFORM.FamCareUserID=UserID.UserID Where EmployeeNumber='^^FIELDVALUE FACM^^'||||LOADCURRENTALWAYS (0)||">
+
+ <POSTADD UPDATEQUERY DUMMY1="INSERT INTO UserCaseLoad ( userid, clientnumber, BeginDate, BeginTime ) SELECT '||USERID||' AS UserID, '||CLIENTNUMBER||' AS ClientNumber, '||DATE||' As TheDate, '||TIME||' As TheTime WHERE ('||SP _AddToMyCaseLoad||'='ON') And ((Select Count(*) From UserCaseLoad ucl Where ucl.[UserId] = '||USERID||' And ucl.[ClientNumber] = '||CLIENTNUMBER||') = 0)">
+<POSTEDIT UPDATEQUERY DUMMY1="INSERT INTO UserCaseLoad ( userid, clientnumber, BeginDate, BeginTime ) SELECT '||USERID||' AS UserID, '||CLIENTNUMBER||' AS ClientNumber, '||DATE||' As TheDate, '||TIME||' As TheTime WHERE ('||SP _AddToMyCaseLoad||'='ON') And ((Select Count(*) From UserCaseLoad ucl Where ucl.[UserId] = '||USERID||' And ucl.[ClientNumber] = '||CLIENTNUMBER||' And Coalesce(ucl.[EndDate],GetDate()) >= GetDate()) = 0)">
+
+ <POSTADD EMAILLINK NOTIFICATIONINFORMATION="NotifySupervisor(ON),||SCREENPARM SupervisorEmail||,New client created in FAMCare">
+<POSTEDIT EMAILLINK NOTIFICATIONINFORMATION="NotifySupervisor(ON),||SCREENPARM SupervisorEmail||,New client created in FAMCare--edited form">
+  
+<PREEDIT SET CReferralIn="||LOADFIELDS Select Count(id) From Referralin Where ClientNumber='^^CLIENTNUMBER^^' And DocRevNo=' 0 '||||LOADCURRENTALWAYS (0)||"> 
+<PREEDIT SET COffenseHist="||LOADFIELDS Select Count(id) From OffenseHist Where ClientNumber='^^CLIENTNUMBER^^' And DocRevNo=' 0 '||||LOADCURRENTALWAYS (0)||"> 
+<PREEDIT SET CPathwayClient="||LOADFIELDS Select Count(id) From PathwayClient Where ClientNumber='^^CLIENTNUMBER^^' And DocRevNo=' 0 '||||LOADCURRENTALWAYS (0)||"> 
+<PREEDIT SET CSchoolInfo="||LOADFIELDS Select Count(id) From SchoolInfo Where ClientNumber='^^CLIENTNUMBER^^' And DocRevNo=' 0 '||||LOADCURRENTALWAYS (0)||"> 
+<PREEDIT SET CAppointments="||LOADFIELDS Select Count(id) From SCHEDULE Where ClientNumber='^^CLIENTNUMBER^^'||||LOADCURRENTALWAYS (0)||"> 
+
+
+<!-- Followiing is to support the new soundex searchex..
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST=LTRIM(RTRIM(REPLACE(LASTNAME,'`',''))),SOUNDEXFIRST=RTRIM(LTRIM(REPLACE(FIRSTNAME,'`',''))) WHERE DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='F'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='PH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='F'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='PH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='J'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,2)='GE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='J'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,2)='GE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='J'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,2)='GI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='J'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,2)='GI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='KW'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='QU' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='KW'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='QU' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='SE'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='CE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='SE'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='CE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='SE'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='CI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='SE'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='CI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='SEE'+SUBSTRING(SOUNDEXLAST,4,75) WHERE LEFT(SOUNDEXLAST,3)='CAE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='SEE'+SUBSTRING(SOUNDEXFIRST,4,75) WHERE LEFT(SOUNDEXFIRST,3)='CAE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='S'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,2)='CY' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='S'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,2)='CY' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='K'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,1)='C' AND LEFT(SOUNDEXLAST,2)!='CH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='K'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,3)='CHR' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='K'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,3)='CHR' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='K'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,1)='C' AND LEFT(SOUNDEXFIRST,2)!='CH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST=SOUNDEX(SOUNDEXFIRST) WHERE DOCREVNO=' 0 ' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTADD UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST=SOUNDEX(SOUNDEXLAST) WHERE DOCREVNO=' 0 ' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST=LTRIM(RTRIM(REPLACE(LASTNAME,'`',''))),SOUNDEXFIRST=RTRIM(LTRIM(REPLACE(FIRSTNAME,'`',''))) WHERE DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='F'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='PH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='F'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='PH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='J'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,2)='GE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='J'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,2)='GE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='J'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,2)='GI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='J'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,2)='GI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='KW'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='QU' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='KW'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='QU' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='SE'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='CE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='SE'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='CE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='SE'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,2)='CI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='SE'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,2)='CI' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='SEE'+SUBSTRING(SOUNDEXLAST,4,75) WHERE LEFT(SOUNDEXLAST,3)='CAE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='SEE'+SUBSTRING(SOUNDEXFIRST,4,75) WHERE LEFT(SOUNDEXFIRST,3)='CAE' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='S'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,2)='CY' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='S'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,2)='CY' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='K'+SUBSTRING(SOUNDEXFIRST,3,75) WHERE LEFT(SOUNDEXFIRST,3)='CHR' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='K'+SUBSTRING(SOUNDEXLAST,3,75) WHERE LEFT(SOUNDEXLAST,3)='CHR' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST='K'+SUBSTRING(SOUNDEXLAST,2,75) WHERE LEFT(SOUNDEXLAST,1)='C' AND LEFT(SOUNDEXLAST,2)!='CH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST='K'+SUBSTRING(SOUNDEXFIRST,2,75) WHERE LEFT(SOUNDEXFIRST,1)='C' AND LEFT(SOUNDEXFIRST,2)!='CH' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXFIRST=SOUNDEX(SOUNDEXFIRST) WHERE DOCREVNO=' 0 ' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+<POSTEDIT UPDATEQUERY DUMMY1="UPDATE CLIENT SET SOUNDEXLAST=SOUNDEX(SOUNDEXLAST) WHERE DOCREVNO=' 0 ' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||CLIENTNUMBER||'">
+  
+-->
+  <style type="text/css">
+  .NotDisplayed  {
+    display: none;
+  }
+  
+  .bullet:before{
+        content:"• ";
+}
+    
+    .DisplaySection {
+       cursor: pointer;
+    }
+  </style>
+
+<script language="JavaScript">
+function Startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	console.clear();
+	if("||SP REPORTCONFIGURE||" == "YES"){
+		document.getElementById("BulkOfForm").style.display = "";
+	} else {
+		if("||LOADFIELDS Select ClientNumber From Client Where ClientNumber = '^^SP CLIENTNUMBER^^' And DocRevNo = ' 0 '||||LOADCURRENTALWAYS (0)||" == "" && "||LOADFIELDS Select ClientNumber From Client Where ClientNumber = '^^SP CLIENTNUMBER^^' And (DocRevNo = '887' or DocRevNo = '888')||||LOADCURRENTALWAYS (0)||" != ""){
+			alert("Alert, This is Not a Valid Client Number.");
+			var urlfunc = "genfunc.exe?FULLFUNCTION^CLIENTACCESS|REMOVECLIENT(YES)|SESSIONID(||SESSIONID||)|CLIENTNUMBER(||SP CLIENTNUMBER||)^";
+			parent.main.location = urlfunc;
+			document.getElementById("fullscreenspan").innerHTML = "<p align=center><img src='images/PleaseWait.gif'></p>";
+			return functionreturnvalue;
+		}
+	}
+
+	if ("||SCREENPARM OPTION||" != "PRINTFORMAT") {
+		if ("||LOADFIELDS Select UserId From UserCaseLoad Where UserId='^^USERID^^' and ClientNumber='^^CLIENTNUMBER^^'||||LOADCURRENTALWAYS (0)||" == "") {
+			document.getElementById("AddToMyCaseLoad").style.display = "";
+		}
+	}
+
+	if ("||FIELDVALUE COUNTY||" == "") {
+		f.COUNTY.options[0].text = "(Please Select County)";
+		f.COUNTY.selectedIndex = 0;
+	}
+	if ("||DOCSERNO||" == "") {
+		f.LastName.value = '||SP LASTNAME||';
+		f.FirstName.value= '||SP FIRSTNAME||';
+		if('||CAPCLIENTNAMES||' == 'YES') {
+			var FName = f.FirstName.value.substring(1,f.FirstName.length);
+			var LName = f.LastName.value.substring(1,f.LastName.length);
+			var MName = f.MI.value.substring(1,f.MI.length);
+			var FNameLetter = f.FirstName.value.substring(0,1);
+			var LNameLetter = f.LastName.value.substring(0,1);
+			var MNameLetter = f.MI.value.substring(0,1);
+			FNameLetter = FNameLetter.toUpperCase();
+			LNameLetter = LNameLetter.toUpperCase();
+			MNameLetter = MNameLetter.toUpperCase();
+			FName = FNameLetter + FName;
+			LName = LNameLetter + LName;
+			MName = MNameLetter + MName;
+			f.FirstName.value = FName;
+			f.LastName.value = LName;
+			f.MI.value = MName;
+		}
+		if (f.LastName.value == "") {
+			f.LastName.focus();
+			return functionreturnvalue;
+		}
+		var TheName = f.LastName.value + ", " + f.FirstName.value;
+		if (f.FirstName.value != "") {
+			document.getElementById("CNameDisp").innerHTML = TheName;
+		}
+		var CtrlCPSWorker = f.CPSWorker;
+		var CtrlJJSWorker = f.JJSWorker;
+		var CtrlStateWrkr = f.StateCaseWorker;
+		var CtrlTribeWrkr = f.TribalSocialWorker;
+		try {
+			CtrlCPSWorker.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+			CtrlCPSWorker.options[0].selected = true;
+			CtrlJJSWorker.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+			CtrlJJSWorker.options[0].selected = true;
+			CtrlStateWrkr.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+			CtrlStateWrkr.options[0].selected = true;
+			CtrlTribeWrkr.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+			CtrlTribeWrkr.options[0].selected = true;
+		} catch (e) {}
+		document.getElementById("ClientIndicator").checked = true;
+
+		//TASK:  00E20170719145508192 Match the default state on a new form to the state of the main provider
+		///PULLDATA SELECT State FROM provider where docrevno=' 0 ' and providercode = '100001'
+		var ProvState = new String(||SetCountyTable||);
+		if(ProvState.indexOf(results[1][1]) >= 0) {
+			f.STATE.value = results[1][1];
+		}
+	} else {
+		document.getElementById("BulkOfForm").style.display = "";
+                document.getElementById('_B1').style.display = '';
+||STARTSTRIP||
+		f._B6.value = "Save and Continue"
+		if ("||FIELDVALUE CPSWorker||" == "") {
+			var CtrlCPSWorker = f.elements["CPSWorker"];
+			try {
+				CtrlCPSWorker.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+				CtrlCPSWorker.options[0].selected = true;
+			} catch (e) {}
+		}
+		if ("||FIELDVALUE JJSWorker||" == "") {
+			var CtrlJJSWorker = f.elements["JJSWorker"];
+			try {
+				CtrlJJSWorker.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+				CtrlJJSWorker.options[0].selected = true;
+			} catch (e) {}
+		}
+		if ("||FIELDVALUE StateCaseWorker||" == "") {
+			var CtrlStateWrkr = f.StateCaseWorker;
+			try {
+				CtrlStateWrkr.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+				CtrlStateWrkr.options[0].selected = true;
+			} catch (e) {}
+		}
+		if ("||FIELDVALUE TribalSocialWorker||" == "") {
+			var CtrlTribeWrkr = f.TribalSocialWorker;
+			try {
+				CtrlTribeWrkr.options[0].text = "Type the First Couple of letters of the Last Name, and Press Enter";
+				CtrlTribeWrkr.options[0].selected = true;
+			} catch (e) {}
+		}
+||ENDSTRIP||
+||STARTDISPLAY|ALWAYS|X^^CLIENTPORTALMODULE^^|XYES||
+            if ("||CLIENTPORTALMODULE||"=="YES" && "||SP OPTION||" != "PRINTFORMAT") {
+                if ("||FIELDVALUE PortalUserID||" == "") {
+                     document.getElementById("btnPortalUserID").style.display = "";
+                     document.getElementById("PortalUserID").style.display="none"; 
+                } else  {
+                      document.getElementById("btnPortalUserID").style.display="none";
+                      document.getElementById("PortalUserID").style.display="";
+                }
+            }
+||ENDDISPLAY||
+        }
+	AgeRefresh();
+        if("||SP OPTION||" != "PRINTFORMAT"){
+		checkdeceased();
+		gvtclientcalendarpopulate();
+	}
+
+        setrace();
+        setEthnicity();
+        setlanguage();
+        setReligion();
+        setprovider();
+        CheckProviderIndicator();
+
+return;
+//Added this return, the code was erroring past this point - SJG 12/19/2024, Task : 00E20241118151257945
+      
+      /*assigning values for checkboxes based on field tag*/      
+      f.R1RadioFieldOneA.value = f.R1RadioFieldOneA.parentElement.textContent
+      f.R1RadioFieldOneB.value = f.R1RadioFieldOneB.parentElement.textContent
+      f.R1RadioFieldOneC.value = f.R1RadioFieldOneC.parentElement.textContent
+      f.R1RadioFieldOneD.value = f.R1RadioFieldOneD.parentElement.textContent
+      f.R1RadioFieldOneE.value = f.R1RadioFieldOneE.parentElement.textContent
+      f.R1RadioFieldOneF.value = f.R1RadioFieldOneF.parentElement.textContent
+      f.R1RadioFieldOneG.value = f.R1RadioFieldOneG.parentElement.textContent
+      f.R1RadioFieldOneH.value = f.R1RadioFieldOneH.parentElement.textContent
+      f.R1RadioFieldOneI.value = f.R1RadioFieldOneI.parentElement.textContent
+      f.R1RadioFieldOneJ.value = f.R1RadioFieldOneJ.parentElement.textContent
+      f.R1RadioFieldOneK.value = f.R1RadioFieldOneK.parentElement.textContent
+      f.R1RadioFieldOneL.value = f.R1RadioFieldOneL.parentElement.textContent
+      
+      f.R1RadioFieldFourA.value = f.R1RadioFieldFourA.parentElement.textContent
+      f.R1RadioFieldFourB.value = f.R1RadioFieldFourB.parentElement.textContent
+      f.R1RadioFieldFourC.value = f.R1RadioFieldFourC.parentElement.textContent
+      f.R1RadioFieldFourD.value = f.R1RadioFieldFourD.parentElement.textContent
+      f.R1RadioFieldFourE.value = f.R1RadioFieldFourE.parentElement.textContent
+      
+      f.R1RadioFieldFiveA.value = f.R1RadioFieldFiveA.parentElement.textContent
+      f.R1RadioFieldFiveB.value = f.R1RadioFieldFiveB.parentElement.textContent
+      f.R1RadioFieldFiveC.value = f.R1RadioFieldFiveC.parentElement.textContent
+      f.R1RadioFieldFiveD.value = f.R1RadioFieldFiveD.parentElement.textContent
+      f.R1RadioFieldFiveE.value = f.R1RadioFieldFiveE.parentElement.textContent
+      f.R1RadioFieldFiveF.value = f.R1RadioFieldFiveF.parentElement.textContent
+      
+      
+        return functionreturnvalue;
+}
+
+
+function setprovidercode(o) {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if (o.value == "") {
+		document.getElementById("clientproviderspan1").style.display = "none";
+		document.getElementById("clientproviderspan2").style.display = "none";
+		document.getElementById("clientproviderspan3").style.display = "none";
+		document.getElementById("clientproviderspan4").style.display = "none";
+		document.getElementById("clientproviderspan5").style.display = "none";
+		document.forms[0].ProviderIndicator.checked = false;
+		return functionreturnvalue;
+	}
+	if ("||SECURITYLEVEL NEWPROVIDER||" < "2") {
+		alert("You do not have Security Rights to This Function.");
+		o.value = "||FIELDVALUE PROVIDERCODECLIENT||";
+		return functionreturnvalue;
+	}
+	if(o.value == "NEWPROV"){
+		document.getElementById("clientproviderspan1").style.display = "none";
+		document.getElementById("clientproviderSearch").style.display = "";
+		return functionreturnvalue;
+	} else {
+		document.getElementById("clientproviderspan1").style.display = "";
+		document.getElementById("clientproviderSearch").style.display = "none";
+		f._ProviderCodeClient.value = "";
+	}
+
+        if (leftjis(o.value, 9) != "CREATENEW") {
+            return functionreturnvalue;
+        }
+        var f = document.forms[0];
+        ///PULLDATA SELECT CLIENT.LASTNAME,CLIENT.FIRSTNAME FROM CLIENT,RELATIONSHIP,RELATIONTYPE WHERE RELATIONTYPE.GENOGRAMTYPE='I' AND RELATIONSHIP.RELATIONTYPE=RELATIONTYPE.CODE AND RELATIONSHIP.CLIENTNUMBER='||CLIENTNUMBER||' AND RELATIONSHIP.DOCREVNO=' 0 ' AND RELATIONSHIP.[NUMBER]=CLIENT.CLIENTNUMBER AND CLIENT.DOCREVNO=' 0 '
+        var provname = f.LastName.value + ", " + f.FirstName.value;
+        if (totalelements != 0) {
+            if (ucasejis(f.LastName.value) == ucasejis(results[1][1])) {
+                provname = provname + " and " + results[1][2];
+            } else {
+                provname = provname + " and " + results[1][1] + ", " + results[1][2];
+            }
+        }
+        // check msgbox (yes/no) to confirm (ok/cancel) wording
+        var msgtemp = confirm("Are you sure you want to create a new provider record that is attached to this client?");
+        if (!msgtemp) {
+            o.value = "";
+            return functionreturnvalue;
+        }
+        provname = InputBoxGVT("What Provider Name do you want to create", provname);
+        if (provname == "") {
+            o.value = "";
+            return functionreturnvalue;
+        }
+        var url = "genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(NEWPROVIDER)|PROVIDERNAME(" + escape(provname) + ")";
+        url = url + "|ADDRESS(" + escape(f.STREET.value) + ")";
+        url = url + "|CITY(" + escape(f.CITY.value) + ")";
+        url = url + "|STATE(" + escape(f.STATE.value) + ")";
+        url = url + "|ZIP(" + escape(f.ZIP.value) + ")";
+        url = url + "|COUNTY(" + escape(f.COUNTY.value) + ")";
+        url = url + "|PARENTORGANIZATION(" + escape(midjis(o.value, 10)) + ")";
+        url = url + "|PROVIDERTYPE(SP)";
+        url = url + "|SESSIONID(S||SESSIONID||)|NOFORMATFILE(YES)|TIMER(||DATE|| ||TIME||)^";
+        document.getElementById("fullscreenspan").disabled = true;
+        parent.fvalidate.location = url;
+        o.length = o.length + 1;
+        o[o.length - 1].value = "";
+        o[o.length - 1].text = provname;
+    }
+
+function PopulatePriorNames(){
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	var totalelements = 0;
+///PULLDATAEDIT Select LastName, FirstName, MI, Min(VisitDt) from Client Where DocSerNo = '||DOCSERNO||' And Case When LastName='||FIELDVALUE LASTNAME||' Then Case When FirstName = '||FIELDVALUE FIRSTNAME||' Then Case When [MI] = '||FIELDVALUE MI||' Then 'No' Else 'Yes' End Else 'Yes' End Else 'Yes' End = 'Yes' Group By LastName, FirstName, MI Order by LastName, FirstName
+}
+
+// BEGIN geomapping functions
+  function showmap() {
+       f=document.forms[0];
+        if (f.LATITUDE.value=="" || f.LONGITUDE.value=="") {
+           alert("Cannot display map until latitude and longitude are retrieved.  Please enter a valid address and click 'Retrieve'");
+           return;
+        }
+        var lat=f.LATITUDE.value;
+        var long=f.LONGITUDE.value;
+
+        urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GEOMAP)|LATITUDE("+lat+")|LONGITUDE("+long+")|INFO("+escape(f.STREET.value)+")|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+        openhyperlink(urlfunc);
+  }
+  function findplaces() {
+       f=document.forms[0];
+        if (f.LATITUDE.value=="" || f.LONGITUDE.value=="") {
+           alert("Cannot display map until latitude and longitude are retrieved.  Please enter a valid address and click 'Retrieve'");
+           return;
+        }
+        var lat=f.LATITUDE.value;
+        var long=f.LONGITUDE.value;
+        var info="Client home location";
+        var overlays="||LOADFIELDS SELECT dbo.udf_CheckedPlaceCodes() AS [Codes]||||LOADCURRENTALWAYS (0)||";
+        var pinradius="5";
+        var circleradius="0";
+
+        urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GeoMapWithOverlays)|LATITUDE("+lat+")|LONGITUDE("+long+")|INFO("+info+")|OVERLAYS("+escape(overlays)+")|PINRADIUS("+escape(pinradius)+")|CIRCLERADIUS("+escape(circleradius)+")|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+        openhyperlink(urlfunc);
+
+  }
+
+function financialstatus() {
+///PULLDATA SELECT COUNT(ID) FROM INSURANCEDETAIL WHERE DOCREVNO=' 0 ' AND '||SP CLIENTNUMBER||'!='' AND (CLIENTNUMBER='||SP CLIENTNUMBER||' OR CLIENTNUMBER1='||SP CLIENTNUMBER||' OR CLIENTNUMBER2='||SP CLIENTNUMBER||' OR CLIENTNUMBER3='||SP CLIENTNUMBER||' OR CLIENTNUMBER4='||SP CLIENTNUMBER||' OR CLIENTNUMBER5='||SP CLIENTNUMBER||' OR CLIENTNUMBER6='||SP CLIENTNUMBER||')  UNION  ALL SELECT COUNT(ID) FROM PROVIDERPLACEMENT WHERE '||SP CLIENTNUMBER||'!='' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||SP CLIENTNUMBER||' UNION  ALL SELECT COUNT(ID) FROM JJINSURANCEDETAIL WHERE '||SP CLIENTNUMBER||'!='' AND DOCREVNO=' 0 ' AND CLIENTNUMBER='||SP CLIENTNUMBER||'
+    poppathwayworkflow(numelementsper,totalelements,"",results);
+}
+
+function rotate() {
+   rid=document.getElementById("rotateid").innerHTML;
+   if (rid=="") {
+       alert("You cannot rotate this image");
+       return;
+   }
+   url="genfunc.exe?FULLFUNCTION^ROTATEIMAGE|SESSIONID(||SESSIONID||)|IMAGESPAN(clientimage)|RECORDID("+rid+")|TABLENAME(IMAGES)|IMAGEFIELD(IMAGE)|IMAGERAWFIELD(IMAGERAW)|IMAGEEXTENSION(IMAGEEXTENSION)|TIMER("+Date().toString()+")^";
+   parent.fvalidate.location=url;
+}
+
+function poppathwayworkflow(np,te,i,r) {
+    f=document.forms[0];
+    t="Before entering enrollments, you must set up a source of insurance.  Before entering fee for service authorizations, you must have at least one enrollment set up.";
+    t=t+"<br><table border=1 cellpadding=0 cellspacing=0 width=\"100%\"><tr>";
+    wording="There is at least one Insurance Policy record for this client";
+    img="images/check.png";
+    bgc="cef6d8";
+||STARTDISPLAY|ALWAYS|XYESX|X^^BILLINGMODULE^^X||
+    if (r[1][1]=="0") {
+  
+
+    try{
+      if (f.NoInsuranceNeeded.checked) {
+        wording="No Insurance Policy is needed for this client";
+      } else {
+        img="images/warning.png"; wording="There is no Insurance Policy recorded for this client"; bgc="f2f5a9";
+      }
+
+
+    }catch(error){console.log('error : ', error)}
+    
+    }
+||ENDDISPLAY||
+    t=t+"<td width=\"33%\" align=center valign=top bgcolor=#"+bgc+"><img src=\""+img+"\" style=\"cursor:pointer\" onclick=\"alert('To add or modify insurance, use the Insurance Policies Section below')\"><br>"+wording+"</td>";
+    wording="There is at least one Enrollment record";
+    img="images/check.png";
+    bgc="cef6d8";
+    ||STARTDISPLAY|ALWAYS|XYESX|X^^BILLINGMODULE^^X||
+    if (r[2][1]=="0") {
+      
+      try{
+      if (f.NoEnrollmentNeeded.checked) {
+         wording="No Enrollment information is needed for this client";
+       } else {
+         img="images/warning.png"; wording="There are no Enrollment Records"; bgc="f2f5a9";
+       }
+      }catch(error){console.log('error:',error)}
+    }
+    ||ENDDISPLAY||
+    t=t+"<td width=\"33%\" align=center valign=top bgcolor=#"+bgc+"><img src=\""+img+"\" style=\"cursor:pointer\" onclick=\"alert('To add or modify enrollments, use the Client Enroll/DisEnrollments Section below')\"><br>"+wording+"</td>";
+    wording="There is at least one Fee for Service Authorization for this client";
+    img="images/check.png";
+    bgc="cef6d8";
+    ||STARTDISPLAY|ALWAYS|XYESX|X^^BILLINGMODULE^^X||
+    if (r[3][1]=="0") {
+       try{
+       if (f.NoFFSAuthNeeded.checked) {
+         wording="No Fee for Service Authorization is needed for this client";
+       } else {
+         img="images/warning.png"; wording="There are no Fee for Service Authorizations for this client"; bgc="f2f5a9";
+       }
+       
+       }catch(error){console.log('error:',error)}
+    }
+    ||ENDDISPLAY||
+    t=t+"<td width=\"33%\" align=center valign=top bgcolor=#"+bgc+"><img src=\""+img+"\" style=\"cursor:pointer\" onclick=\"alert('To add or modify Fee for Service Authorizations, use the Fee for Service Authorizations Section below')\"><br>"+wording+"</td>";
+    wording="There is at least one Financial Arrangement record for this client";
+//    img="images/check.png";
+//    bgc="cef6d8";
+//    if (r[4][1]=="0") {
+//       if (f.NoFinAgreementNeeded.checked) {
+//         wording="No Financial Payment Information is needed for this client";
+//       } else {
+//         img="images/warning.png"; wording="There are no Financial Payment Agreement Records for this client"; bgc="f2f5a9";
+//       }
+//    }
+//    t=t+"<td width=\"25%\" align=center valign=top bgcolor=#"+bgc+"><img src=\""+img+"\" style=\"cursor:pointer\" onclick=\"alert('To add or modify a Financial Payment Agreement Record, use the Financial Payment Agreement Section below below')\"><br>"+wording+"</td>";
+    t=t+"</tr></table>";
+    ||STARTDISPLAY|ALWAYS|XYESX|X^^BILLINGMODULE^^X||
+  try {
+  
+    document.getElementById("financialprogress").innerHTML=t;
+   }catch(error){console.log('error:',error)}
+   
+      
+    ||ENDDISPLAY||
+}
+
+||STARTDISPLAY|ALWAYS|X^^CLIENTPORTALMODULE^^|XYES||
+   function createPortalUserID() {
+        var f = document.forms[0];
+        var email=f.CLIENTEMAIL.value;
+        if (email == "") {
+           alert("You must set the client's email address before making the client a portal user");
+           f.CLIENTEMAIL.focus();
+           return;
+        }
+        if (!confirm("Are you sure you want to make this client a portal user?")) {
+            return;
+        }
+        var cnum="||CLIENTNUMBER||";
+        var url = "genfunc.exe?FULLFUNCTION^LOADSCREEN|SCREENNAME(CreatePortalUserID)|CLIENTNUM(" + cnum + ")|EMAIL(" + email + ")^";
+        window.fvalidate2.location = url;
+    }
+
+    function createPortalUserIDreturn(result) {
+        var f = document.forms[0];
+        
+        if (result == "no email") {
+            alert("Portal ID not created; client does not have email address");
+        }
+        document.getElementById("btnPortalUserID").style.display="none";
+        document.getElementById("PortalUserID").style.display=""; 
+        f.PortalUserID.value = f.CLIENTEMAIL.value;
+    }
+||ENDDISPLAY||
+
+    var  CLincludesv1="||CURRCWUSERID||";
+    var  CLincludesv2="||EXTCASEWORKER||";
+    var  CLincludesv3="||CASEWORKER||";
+    var  CLincludesv4="||TRBLSOCWORKER||";
+    var  CLincludesv5="||CPSWORKER||";
+    var  CLincludesv6="||SESSIONID||";
+    var  CLincludesv7="||ADDRESSVALIDATIONKEY||";
+    var  CLincludesv8="||SUPERFLAG||";
+    var  CLincludesv9="||ORGNAME||";
+    var  CLincludesv10="||CLIENTNUMBER||";
+    var  CLincludesv11="||DATE||";
+    var  CLincludesv12="||ALERTIFAGEGREATERTHAN||";
+    var  CLincludesv13="||SCREENPARM OPTION||";
+    var  CLincludesv14="||FIELDVALUE BirthDate||";
+    var  CLincludesv15="||CAPCLIENTNAMES||";   //CHECK THIS VARIABLE
+    var  CLincludesv16="||DOCSERNO||";
+    var  CLincludesv17="||FIELDVALUE CLIENTINDICATOR||";
+    var  CLincludesv18="||HASPLACEMENT||";
+    var  CLincludesv19="||FIELDVALUE RACE||";
+    var  CLincludesv20="||ACCESSFORM||";
+    var  CLincludesv21="||FIELDVALUE RISKLEVEL||";
+    var  CLincludesv22="||FIELDVALUE SECURITYLEVEL||";
+    var  CLincludesv23="||SP OPTION||";
+    var  CLincludesv24="||FIELDVALUE PROVIDERCODECLIENT||";
+    var  CLincludesv25="||FIELDVALUE PROVTYPE||";
+    var  CLincludesv26="||TIME||";
+    var  CLincludesv27="||FIELDVALUE DECEASED||";
+    var  CLincludesv28="||FIELDVALUE SexualOrientation||";
+    var  CLincludesv29="||FIELDVALUE GenderExpression||";
+    var  CLincludesv30="||BILLINGMODULE||";
+    var  CLincludesv31="||SP CLIENTNUMBER||";
+    var  CLincludesv32="||FIELDVALUE COUNTY||";
+    var  CLincludesv33="||FIELDVALUE COMMITTINGCOUNTY||";
+
+function SetState() {
+   f=document.forms[0];
+   if (f.DOCSERNO.value=="") {
+         f.STATE.value="||TOPPROVIDERSTATE||";
+   }
+}
+
+function genqrcode() {
+//    urldem="||SITEURL||genfunc.exe?FULLFUNCTION?DIRECT?TYPE?-PASS-??DOCUMENTDIRECT?--??IDENTIFIER?--??TABLENAME?--??PASSEDFULLFUNCTION?-UNIQUEFORM~FORMNAME[CLIENT]~MENUREFRESH[YES]~CLIENTNUMBER[||CLIENTNUMBER||]-??END";
+    urldem="||SITEURL||genfunc.exe?FULLFUNCTION?DIRECT?TYPE?-PASS-??DOCUMENTDIRECT?--??IDENTIFIER?--??TABLENAME?--??PASSEDFULLFUNCTION?-UNIQUEFORM~FORMNAME[CLIENT]~CLIENTNUMBER[||CLIENTNUMBER||]-??END";
+    url="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GENERATEQRCODE)|SESSIONID(S||SESSIONID||)|URL("+escape(urldem)+")|TIMER("+Date().toString()+")^";
+    openhyperlink(url);
+}
+
+// following code was in salesdemo site
+//$(document).ready(function() {
+//$('#addfav').hide()
+//});
+function checkhideall(){
+f=document.forms[0]
+//console.log('checkhideall running  so=',f.SexualOrientation.value,'  ge=',f.GenderExpression.value)
+if (f.SexualOrientation.value=='005'){//other
+  document.getElementById('SexualOrientationOthRow').classList.remove('NotDisplayed')
+}
+
+  else{
+
+    document.getElementById('SexualOrientationOthRow').classList.add('NotDisplayed')}
+
+
+if (f.GenderExpression.value=='004'){//other
+  document.getElementById('GenderExpressionOthRow').classList.remove('NotDisplayed')
+}
+
+  else{
+
+    document.getElementById('GenderExpressionOthRow').classList.add('NotDisplayed')}
+
+
+}
+
+function showOldAddressmap(lat,long,Str) {
+        urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GEOMAP)|LATITUDE("+lat+")|LONGITUDE("+long+")|INFO("+escape(Str)+")|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+        openhyperlink(urlfunc);
+}
+
+function ShowPreviousAddresses(){
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	var totalelements = 0;
+	var numelementsper = 0;
+	var identifier = "P";
+
+///PULLDATA Select c.ClientNumber, c.Street, c.City, c.[State], c.County, co.[Description] As TheCounty, c.zip, Latitude, Longitude, Max(c.ID) AS MaxID, Min(Cast(Convert(VarChar(10),VisitDt,101) + ' ' + VisitTm As DateTime)) As DateChanged, c.Client, c.Comorbidity4, c.Comorbidity2, c.Comorbidity3, Min(Cast(c.DocRevNo As Integer)) From Client c Left Join Counties co on c.County = co.Code Where c.ClientNumber = '||CLIENTNUMBER||' And Coalesce(c.Street,'') != '' Group By c.ClientNumber, c.Street,c. City, c.[State], co.Description, c.County, c.Zip, Longitude, Latitude, c.Client, c.Comorbidity4, c.Comorbidity2, c.Comorbidity3 Order by Min(Cast(Convert(VarChar(10),VisitDt,101) + ' ' + VisitTm As DateTime)) Desc
+
+	if(totalelements > 0){
+		SetPreviousAddresses(numelementsper, totalelements, identifier, results);
+	} else {
+		document.getElementById("AddressHistory").innerHTML = "";
+	}
+
+	totalelements = 0;
+	numelementsper = 0;
+return;
+///PULLDATAEDIT Select LastName, FirstName, MI, Min(Cast(Convert(VarChar(10),VisitDt,101) + ' ' + VisitTm As DateTime)) from Client Where DocSerNo = '||DOCSERNO||' And Case When LastName='||FIELDVALUE LASTNAME||' Then Case When FirstName = '||FIELDVALUE FIRSTNAME||' Then Case When [MI] = '||FIELDVALUE MI||' Then 'No' Else 'Yes' End Else 'Yes' End Else 'Yes' End = 'Yes' Group By LastName, FirstName, MI Order by Min(Cast(Convert(VarChar(10),VisitDt,101) + ' ' + VisitTm As DateTime)) Desc
+
+	var t = "<table width=\"60%\" class=\"summary\"><thead><tr>";
+	t = t + "<th width\"25%\" align=\"center\">LastName</th>";
+	t = t + "<th width\"15%\" align=\"center\">FirstName</th>";
+	t = t + "<th width\"5%\" align=\"center\">MI</th>";
+	t = t + "<th width\"10%\" align=\"center\">Dates Updated</th></tr></thead>";
+
+	var AltRow = "class=\"altrow\"";
+	if(totalelements > 0){
+		t = t + "<tbody>";
+		for(var x = 1; x <= totalelements; x++){
+			if(x % 2 == 0){
+				t = t +"<tr " + AltRow + ">";
+			} else {
+				t = t +"<tr>";
+			}
+			t = t + "<td width\"25%\" align=\"center\">" + results[x][1] + "</td>";
+			t = t + "<td width\"15%\" align=\"center\">" + results[x][2] + "</td>";
+			t = t + "<td width\"5%\" align=\"center\">" + results[x][3] + "</td>";
+			t = t + "<td width\"15%\" align=\"center\">" + results[x][4] + "</td></tr>";
+		}
+		t = "<h3>Name History</h3>" + t + "</tbody></table><div>&nbsp;&nbsp;</div>";
+	} else {
+		t = "";
+	}
+	document.getElementById("NameHistory").innerHTML = t;
+
+	totalelements = 0;
+
+///PULLDATAEDIT Select PRIMARYPHONE, CELLPHONE, Min(Cast(Convert(VarChar(10),VisitDt,101) + ' ' + VisitTm As DateTime)) from Client Where DocSerNo = '||DOCSERNO||' And Case When PRIMARYPHONE='||FIELDVALUE PRIMARYPHONE||' Then Case When CELLPHONE = '||FIELDVALUE CELLPHONE||' Then 'No' Else 'Yes' End Else 'Yes' End = 'Yes' and (Coalesce(CellPhone,'') != '' Or Coalesce(PrimaryPhone,'') != '') Group By PRIMARYPHONE, CELLPHONE Order by Min(Cast(Convert(VarChar(10),VisitDt,101) + ' ' + VisitTm As DateTime)) Desc
+
+	var t = "<table width=\"60%\" class=\"summary\"><thead><tr>";
+	t = t + "<th width\"25%\" align=\"center\">Telephone</th>";
+	t = t + "<th width\"15%\" align=\"center\">Cellphone</th>";
+	t = t + "<th width\"10%\" align=\"center\">Date Updated</th></tr></thead>";
+
+	var AltRow = "class=\"altrow\"";
+	if(totalelements > 0){
+		t = t + "<tbody>";
+		for(var x = 1; x <= totalelements; x++){
+			if(x % 2 == 0){
+				t = t +"<tr " + AltRow + ">";
+			} else {
+				t = t +"<tr>";
+			}
+			t = t + "<td width\"25%\" align=\"center\">" + results[x][1] + "</td>";
+			t = t + "<td width\"15%\" align=\"center\">" + results[x][2] + "</td>";
+			t = t + "<td width\"15%\" align=\"center\">" + results[x][3] + "</td></tr>";
+		}
+		t = "<h3>Phone History</h3>" + t + "</tbody></table><div>&nbsp;&nbsp;</div>";
+	} else {
+		t = "";
+	}
+	document.getElementById("PhoneHistory").innerHTML = t;
+	return functionreturnvalue;
+}
+
+  function showMapHist(lat, long, Str) {
+        Str = escape(Str);
+        urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GEOMAPADJUST)|LATITUDE("+lat+")|LONGITUDE("+long+")|INFO("+Str+")|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+        openhyperlink(urlfunc);
+  }
+
+function SetAddressChange(TheField){
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	var ClientID = new String(TheField.name);
+	ClientID = ClientID.substr(ClientID.indexOf("_")+1);
+
+	if(ClientID.indexOf("_Current") >= 0){
+		f.COMORBIDITY3.value = "";
+		var SDate = TheField.value;
+		f.COMORBIDITY2.value = "";
+		var EDate = "";
+		ClientID = ClientID.substr(0,ClientID.indexOf("_"));
+	} else {
+		var SDate = f.elements["AddressChangeS_"+ClientID].value;
+		var EDate = f.elements["AddressChangeE_"+ClientID].value;
+	}
+
+	var urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(ClientAddressHistoryUpdate)|NewSDate("+SDate+")|NewEDate("+EDate+")|ClientID("+ClientID+")|NOFORMATFILE(YES)|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+
+//openhyperlink(urlfunc);
+//return;
+	window.SubmitFrame.location = urlfunc;
+	//parent.fvalidate.location = urlfunc;
+	return functionreturnvalue;
+}
+
+function QuickSubmitReturnAlt(){
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+
+	GetPreviousAddresses();
+
+	return functionreturnvalue;
+}
+
+function GetPreviousAddresses(){
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	document.getElementById("AddressHistory").innerHTML = "<p align=center><img src='images/PleaseWait.gif'></p>";
+	var sql = "Select c.ClientNumber, c.Street, c.City, c.[State], c.County, co.[Description] As TheCounty, c.zip, Latitude, Longitude, Max(c.ID) AS MaxID, Min(Cast(Convert(VarChar(10),VisitDt,101) & ' ' & VisitTm As DateTime)) As DateChanged, c.Client, c.Comorbidity4, c.Comorbidity2, c.Comorbidity3, Min(Cast(c.DocRevNo As Integer)) From Client c Left Join Counties co on c.County = co.Code Where c.ClientNumber = '||CLIENTNUMBER||' And Coalesce(c.Street,'') != '' Group By c.ClientNumber, c.Street, c. City, c.[State], co.Description, c.County, c.Zip, Longitude, Latitude, c.Client, c.Comorbidity4, c.Comorbidity2, c.Comorbidity3 Order by Min(Cast(Convert(VarChar(10),VisitDt,101) & ' ' & VisitTm As DateTime)) Desc";
+	sql = escape(sql);
+	var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(SetPreviousAddresses)|CALLBACKFRAME(window)|SUBMITTIME(" + Date() + ")^";
+	window.SubmitFrame.location = fullhlink;
+	return functionreturnvalue;
+}
+
+function SetPreviousAddresses(numelementsper, totalelements, identifier, results) {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+
+	var t = "<table width=\"90%\" class=\"summary\"><thead><tr>";
+	t = t + "<th width\"30%\" align=\"center\">Street</th>";
+	t = t + "<th width\"25%\" align=\"center\">City</th>";
+	t = t + "<th width\"5%\" align=\"center\">State</th>";
+	t = t + "<th width\"15%\" align=\"center\">County</th>";
+	t = t + "<th width\"10%\" align=\"center\">Zip Code</th>";
+	t = t + "<th width\"15%\" align=\"center\">Dates</th></tr></thead>";
+
+	var AltRow = "class=\"altrow\"";
+	if(totalelements > 0){
+		t = t + "<tbody>";
+		for(var x = 1; x <= totalelements; x++){
+			if(x > 1){
+				var IsDup = true;
+				for(var y = 2; y <= 7; y++){
+					if(results[x][y] != results[x-1][y]){
+						IsDup = false;
+						break;
+					}
+				}
+			}
+			if(!IsDup){
+				if(x % 2 == 0){
+					t = t +"<tr " + AltRow + ">";
+				} else {
+					t = t +"<tr>";
+				}
+
+				t = t + "<td width\"30%\" align=\"center\" valign=\"top\">" + results[x][2] + "</td>";
+				t = t + "<td width\"25%\" align=\"center\" valign=\"top\">" + results[x][3] + "</td>";
+				t = t + "<td width\"5%\" align=\"center\" valign=\"top\">" + results[x][4] + "</td>";
+				t = t + "<td width\"15%\" align=\"center\" valign=\"top\">" + results[x][6] + "</td>";
+				t = t + "<td width\"10%\" align=\"center\" valign=\"top\">" + results[x][7] + "</td>";
+				if(results[x][16] != "0"){
+					t = t + "<td width\"15%\" align=\"center\"><in"+"put ty"+"pe=\"text\" name=\"AddressChangeS_"+results[x][10]+"\" size=\"8\" onChange=\"SetAddressChange(this)\" class=\"jdatepicker\" value=\"" + results[x][14] + "\"> To <in"+"put ty"+"pe=\"text\" name=\"AddressChangeE_"+results[x][10]+"\" size=\"8\" onChange=\"SetAddressChange(this)\" class=\"jdatepicker\" value=\"" + results[x][15] + "\">";
+				} else {
+					t = t + "<td width\"15%\" align=\"center\"><in"+"put ty"+"pe=\"text\" name=\"AddressChangeS_"+results[x][10]+"_Current\" size=\"8\" onChange=\"SetAddressChange(this)\" class=\"jdatepicker\" value=\"" + results[x][14] + "\"> To <b><span id=\"IsCurrent\">Is Current</span></b>";
+				}
+
+				if(results[x][8] != "" && results[x][9] != ""){
+					t = t + "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:void showOldAddressmap('"+results[x][8]+"','"+results[x][9]+"','"+results[x][2]+"')\">Show On Map</a>";
+				}
+				t = t + "</td>";
+			}
+		}
+		t = "<h3>Address History</h3>" + t + "</tbody></table>";
+	} else {
+		t = "";
+	}
+	document.getElementById("AddressHistory").innerHTML = t;
+	return functionreturnvalue;
+}
+
+</script>
+
+<script language="JavaScript" src="script/IncludeClient2.js">
+</script>
+
+<body onload="Startup();AgeRefresh();CheckForTribe();ShowPreviousAddresses(); financialstatus();SetState();GenPDF(); checkhideall()">
+<form action="genfunc.exe" method="post" name="client">
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" /> 
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="TABLENAME" value="CLIENT" /> 
+    <input type="hidden" name="OWNINGAGENCY" value="||LICENSENUMBER||" /> 
+    <input type="hidden" name="_PRESERVE" value="YES">
+    <input type="hidden" name="FUNCTION" value="SAVE" /> 
+    <input type="hidden" name="VISITDT" value="||DATE||" /> 
+    <input type="hidden" name="VISITTM" value="||TIME||" /> 
+    <input type="hidden" name="SUPRESSAUTHORIZE" value="YES" /> 
+    <input type="hidden" name="CONFIRMSCREEN" value="SaveConfirmClient" />
+    <input type="hidden" name="COMORBIDITY1" value="||FIELDVALUE COMORBIDITY1||" /> 
+    <input type="hidden" name="COMORBIDITY2" value="||FIELDVALUE COMORBIDITY2||" /> 
+    <input type="hidden" name="COMORBIDITY3" value="||FIELDVALUE COMORBIDITY3||" /> 
+    <input type="hidden" name="COMORBIDITY4" value="||FIELDVALUE COMORBIDITY4||" /> 
+    <input type="hidden" name="COMORBIDITY5" value="||FIELDVALUE COMORBIDITY5||" />
+    <input type="hidden" name="DEMOGRAPHICNUMBER" value="||FIELDVALUE DEMOGRAPHICNUMBER||">
+    <input type="hidden" name="DEMOGRAPHICRELEASE" value="||FIELDVALUE DEMOGRAPHICRELEASE||">
+    <input type="hidden" name="SSN" value="||FIELDVALUE SSN||">
+    ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||">
+    ||ENDSTRIP||
+    <input type="hidden" name="DATEENROLLED" value="||FIELDVALUE DATEENROLLED||">
+    <input type="hidden" name="COUNTRYOFCITIZENSHIP" value="||FIELDVALUE COUNTRYOFCITIZENSHIP||">
+    <input type="hidden" name="CURRENTRISKLEVEL" value="||FIELDVALUE CURRENTRISKLEVEL||">
+    <input type="hidden" name="CURRENTSECURITYLEVEL" value="||FIELDVALUE CURRENTSECURITYLEVEL||">
+    <input type="hidden" name="RiskDateUpdated" id="RiskDateUpdated" value="||FIELDVALUE RiskDateUpdated||">
+    <input type="hidden" name="SecurityDateUpdated" id="SecurityDateUpdated" value="||FIELDVALUE SecurityDateUpdated||">
+    <input type="hidden" name="FOSTERINDICATOR" value="||FIELDVALUE FOSTERINDICATOR||">
+    <input type="hidden" name="ADOPTIONINDICATOR" value="||FIELDVALUE ADOPTIONINDICATOR||">
+    <input type="hidden" name="PROVIDERNAME" value="||FIELDVALUE PROVIDERNAME||">
+    <input type="hidden" name="LEGALSTATUS" value="||FIELDVALUE LEGALSTATUS||">
+    <input type="hidden" name="LEGALSTATUSSECONDARY" value="||FIELDVALUE LEGALSTATUSSECONDARY||">
+    <input type="hidden" name="LEGALSTATUSDATE" value="||FIELDVALUE LEGALSTATUSDATE||">
+    <input type="hidden" name="PAGER" value="||FIELDVALUE PAGER||">
+    <input type="hidden" name="HEIGHT" value="||FIELDVALUE HEIGHT||">
+    <input type="hidden" name="OCCUPATION" value="||FIELDVALUE OCCUPATION||">
+    <input type="hidden" name="MIGRANTSTATUS" value="||FIELDVALUE MIGRANTSTATUS||">
+    <input type="hidden" name="DateDNASentMISP" value="||FIELDVALUE DateDNASentMISP||">
+    <input type="hidden" name="FamilyType" value="||FIELDVALUE FamilyType||">
+    <input type="hidden" name="MARITIALSTATUSOFBIOPARENTSCLIENT" value="||FIELDVALUE MARITIALSTATUSOFBIOPARENTSCLIENT||">
+    <input type="hidden" name="PARENTSLANGUAGE" value="||FIELDVALUE PARENTSLANGUAGE||">
+    <input type="hidden" name="_RENDEREDHTML" value="||||" />
+    <input type="hidden" name="NOFAVORITES" value="YES" />
+<span id="fullscreenspan">
+<!--BEGINOFPRINT-->
+    <h1>DEMOGRAPHICS : <span id="CNameDisp">||CLIENTNAME||&nbsp;</span>&nbsp;&nbsp;(||CLIENTNUMBER||)</h1>
+    <div class="deflist">
+    ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+    <div class="leftcol">
+||ENDSTRIP||
+    <div class="term">||FIELDTAG demographicinformation||Demographic Information||ENDFIELDTAG||&nbsp;&nbsp;<span id="_gvtQRCode"><a href="javascript:void genqrcode()">Generate QR Code to this page</a></span></div>
+    <div class="def">
+             <ul>
+                <li><strong>||FIELDTAG EntryDate||Date Entered/Created||ENDFIELDTAG|| : </strong>
+                     <input type="text" name="EntryDate" size="8" onblur="checkdate(this)" value="||Date||" class="jdatepicker"/></li>
+                <li id="_gvtClientStatus"><strong>||FIELDTAG ClientStatus||Status||ENDFIELDTAG|| : </strong><font size="3" align="left"><select id="clientStatus" size="1" name="ClientStatus" style="background-color:#FDFDD3">
+                    <option value="||Select Code, Description From CLIENTSTATUS Where DocRevNo = ' 0 ' AND PrivateProvider='^^PRIVATEPROVIDER^^' AND ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE ClientStatus^^') Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select></font>||CONFIGURE CLIENTSTATUS||
+               </li>
+               <li id="_gvtContactOK"><strong>||FIELDTAG ContactOK||OK to Contact||ENDFIELDTAG|| : </strong><input type="radio" name="R1ContactOK" value="Yes" />Yes <input type="radio" name="R1ContactOK" value="No" /> No</li>
+               
+              ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+               <li><strong>||FIELDTAG CLIENTNUMBER||ID||ENDFIELDTAG|| : </strong><font size="3">||CLIENTNUMBER||</font></li>
+||ENDSTRIP||
+||STARTDISPLAY|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+               <li><strong>||FIELDTAG CLIENTNUMBER||ID||ENDFIELDTAG|| : </strong><input type="text" name="CLIENTNUMBER" ></li>
+||ENDDISPLAY||
+             ||STARTDISPLAY|ALWAYS|X^^FOSTERMODULE^^|XYES||
+               <li id="_gvtFamilyGroupSuffix"><strong>||FIELDTAG FamilyGroupSuffix||Family Group Suffix||ENDFIELDTAG|| : </strong><select size="1" name="FamGroupSuffix">
+                 <option value="||Select Code, Description From FAMILYGROUPSUFFIX Where ((Status='Active' or Status='' or Status is null) or Code='^^FIELDVALUE FamGroupSuffix^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE FAMILYGROUPSUFFIX||
+               </li>              
+           ||ENDDISPLAY||
+               <li><strong>||FIELDTAG LastName||Last||ENDFIELDTAG||  : </strong><input type="text" name="LastName" style="background-color:#FDFDD3" maxlength="30" size="25" onchange="SetClientName();RemoveApostrophe(this);CapFirstLetter(this)" /></li>
+               <li><strong>||FIELDTAG FirstName||First||ENDFIELDTAG|| : </strong><input type="text" name="FirstName" size="25" style="background-color:#FDFDD3" onchange="SetClientName();RemoveApostrophe(this);CapFirstLetter(this)" /></li>
+               <li id="_gvtMI"><strong>||FIELDTAG MI||Middle||ENDFIELDTAG|| : </strong><input type="text" name="MI" size="15" onchange="SetClientName();RemoveApostrophe(this);CapFirstLetter(this)"/></li>
+                          <li id="_gvtClientAliases"><strong>||FIELDTAG ClientAliases||Client Aliases||ENDFIELDTAG|| : </strong><input type="text" name="NickName" size="25" />  <span class="tooltipReference">    
+<!-- tooltipIcon should be located before tooltipText to make the CSS work  -->
+<img class="tooltipIcon" src="./images/lightbulb-line.svg" alt="tooltip for this field" >
+<!-- tooltipText should be a direct sibling of tooltipIcon to make the CSS work -->
+<span class="tooltipText">(Separated by comma)</span>
+</span></li>
+
+               <li id="_gvtFamilySuffix"><strong>||FIELDTAG FamilySuffix||Family Suffix||ENDFIELDTAG|| : </strong><select size="1" name="Suffix">
+                 <option value="||Select Code, Description From FAMILYSUFFIX Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE Suffix^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE FAMILYSUFFIX||
+               </li>
+               <li><strong>||FIELDTAG Birthdate||Date of Birth||ENDFIELDTAG|| : </strong>
+                    <input type="text" name="Birthdate" size="8" onChange="validdatenoblank(this)" style="background-color:#FDFDD3" class="jdatepicker"/></li>
+                    
+               ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+               <li id="_gvtAge"><strong>||FIELDTAG Age||Age||ENDFIELDTAG|| : </strong><font size="2"><span id="CalculatedAge">N/A</span></font></li>
+||ENDSTRIP||
+||STARTDISPLAY|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+               <li><strong>||FIELDTAG Age||Age||ENDFIELDTAG|| : </strong><input type="text" name="Age" ></li>
+||ENDDISPLAY||
+               
+               <li><strong>||FIELDTAG Gender||Gender||ENDFIELDTAG|| : </strong><select size="1" name="Gender" style="background-color:#FDFDD3" >
+                 <option value="||Select Code, Description From GENDER Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE GENDER^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE GENDER||
+               </li>
+               <li id="_gvtPreferredPronoun"><strong>||FIELDTAG PreferredPronoun||Preferred Pronoun||ENDFIELDTAG|| : </strong><select size="1" name="PreferredPronoun">
+                 <option value="||Select Code, Description From PREFERREDPRONOUN Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE PreferredPronoun^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE PREFERREDPRONOUN||
+               </li>    
+               <li id="_gvtGenderExpression"><strong>||FIELDTAG GenderExpression||Gender Expression||ENDFIELDTAG|| : </strong>
+                 <select size="1" name="GenderExpression" onchange="checkhideall()">
+                 <option value="||Select Code, Description From GenderExpression Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE GenderExpression^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||
+                   </option>
+                 </select>||CONFIGURE GenderExpression|| </li>
+                 <li><span id="GenderExpressionOthRow" class="NotDisplayed"><strong>||FIELDTAG GenderExpressionOther||Specify Gender Expression||ENDFIELDTAG|| :</strong><input type="text" name="GenderExpressionOther" id="GenderExpressionOther" size="35" ></span>
+               </li>
+               <li id="_gvtSexualOrientation"><strong>||FIELDTAG SexualOrientation||Sexual Orientation||ENDFIELDTAG|| : </strong>
+                 <select size="1" name="SexualOrientation" onchange="checkhideall()">
+                 <option value="||Select Code, Description From SexualOrientation Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE SexualOrientation^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By KPIValue||" selected="selected">||CHOICETABLESQLD||
+                   </option>
+                 </select>||CONFIGURE SexualOrientation|| </li>
+                 <li> <span id="SexualOrientationOthRow" class="NotDisplayed"> <strong>||FIELDTAG SexualOrientationOther||Specify Sexual Orientation||ENDFIELDTAG|| :</strong><input type="text" name="SexualOrientationOther" id="SexualOrientationOther" size="25"></span>
+               </li>
+               <li><strong>||FIELDTAG Race||Race||ENDFIELDTAG|| : </strong><select size="1" onchange="setrace()" name="Race" style="background-color:#FDFDD3" >
+                 <option value="||Select Code, Description From Race Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE RACE^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE RACE||</li>
+               <li id="RaceOtherRow" style="display: none"><strong>||FIELDTAG RaceOther||Please specify||ENDFIELDTAG|| : </strong><input type="text" name="RaceOther" size="30"/>
+               </li>
+               <li id="_gvtEthnicity"><strong>||FIELDTAG Ethnicity||Ethnicity||ENDFIELDTAG|| : </strong><select size="1" onchange="setEthnicity()" name="Ethnicity" style="background-color:#FDFDD3">
+                 <option value="||Select Code, Description From Ethnicity Where ((Status='Active' or Status='' or Status='1') or Code='^^FIELDVALUE EMPLOYMENTSTATUS^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE Ethnicity||</li>
+               <li id="EthnicityOtherRow" style="display: none"><strong>||FIELDTAG EthnicityOther||Specify Other Ethnicity||ENDFIELDTAG|| : </strong><input type="text" name="EthnicityOther" size="30" />
+               </li>
+                 <li id="_gvtHispanicOrigin"><strong>||FIELDTAG HispanicOrigin||HispanicOrigin||ENDFIELDTAG|| : </strong>
+                   <select size="1" name="HispanicOrigin" onchange="sethispanicother()" >
+                     <option value="||Select Code, Description From HispanicOrigin Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE HispanicOrigin^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' ||" selected="selected">||CHOICETABLESQLD||</option>
+                   </select> ||CONFIGURE HispanicOrigin||
+                 </li>
+                 <li id="HispanicOriginOtherRow" style="display: none"><strong>||FIELDTAG HispanicOriginOther||Please specify||ENDFIELDTAG||</strong> : <input type="text" name="HispanicOriginOther" size="30" />
+                 </li>
+               <span id="_gvtTribalDocumentation">
+                 <li id="Tribal1"><strong>||FIELDTAG TribalDocumentation||Tribal Documentation||ENDFIELDTAG|| : </strong><select size="1" name="TribalDocumentation">
+                    <option value="||Select Code, Description From TRIBALDOCUMENTATIONSTATUS Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE Suffix^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE TRIBALDOCUMENTATIONSTATUS|| (If child has any American Indian Heritage, is there tribal documentation?)
+                 </li>
+               </span>
+               <span id="_gvtTribeName">
+                 <li id="Tribal2"><strong>||FIELDTAG TribeName||Name of Tribe||ENDFIELDTAG|| : </strong><input type="text" name="TribeName" size="34" /></li>
+               </span>
+               <li id="_gvtLanguage"><strong>||FIELDTAG Language||Language||ENDFIELDTAG|| : </strong><select size="1" onchange="setlanguage()" name="Language">
+                 <option value="||Select Code, Description From Language Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE Language^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE Language||</li>
+                 <li id="OtherLanguageRow" style="display: none"><strong>||FIELDTAG IndigenousLanuage||Specify Language||ENDFIELDTAG|| : </strong><input type="text" name="IndigenousLanuage" size="30" />
+               </li>
+               <li id="_gvtEnglishLevel"><strong>||FIELDTAG EnglishLevel||English Level||ENDFIELDTAG|| : </strong><select size="1" name="EnglishLevel">
+                  <option value="||Select Code, Description From ProficiencyLevel Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE EnglishLevel^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE ProficiencyLevel||</li>
+               <li id="_gvtOtherLanguage"><strong>||FIELDTAG OtherLanguage||Other Language||ENDFIELDTAG|| : </strong><select size="1" onchange="setlanguage()" name="OtherLanguage">
+                <option value="||Select Code, Description From Language Where Description &lt;&gt; 'Indigenous' AND (Status='Active' or Status='' or Code='^^FIELDVALUE OtherLanguage^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select> ||CONFIGURE Language||</li>
+                <li id="OtherLanguageSpan" style="display: none"><strong>Specify Language : </strong><input type="text" name="OtherLanguageOther" size="30" />
+               </li>
+               <li id="_gvtOtherLanguageProficiency"><strong>||FIELDTAG OtherLanguageProficiency||Proficiency Level||ENDFIELDTAG|| : </strong><select size="1" name="OtherLanguageProficiency">
+                    <option value="||Select Code, Description From ProficiencyLevel Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE OtherLanguageProficiency^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE ProficiencyLevel||</li>
+
+              <li id="_gvtInterpreter "><strong>||FIELDTAG Interpreter ||Interpreter ||ENDFIELDTAG|| : </strong>&nbsp; <input type="checkbox" name="Interpreter" value="ON" />
+                 <select size="1" name="Interpreter">
+                  <option value="||Select Description, Description as D2 From LANGUAGE Where (Status='Active' or Status='' or Status='1' or Description ='^^FIELDVALUE Interpreter^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE LANGUAGE||</li>
+
+               <li id="_gvtReligiousPreference"><strong>||FIELDTAG ReligiousPreference||Religion||ENDFIELDTAG|| : </strong><select size="1" name="ReligiousPreference"  onchange="setReligion()">
+                <option value="||Select Code, Description From ReligiousPreference Where (Status='Active' or Status='' or Code='^^FIELDVALUE ReligiousPreference^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>  ||CONFIGURE ReligiousPreference||</li>
+               <li id="ReligiousOtherRow" style="display: none"><strong>||FIELDTAG ReligiousOther||Please specify||ENDFIELDTAG|| : </strong><input type="text" name="ReligiousOther" /></li>
+
+
+               <li id="_gvtChildAdult"><strong>||FIELDTAG ChildAdult||Child/Adult||ENDFIELDTAG|| :</strong><input type="radio" name="CHILDADULT" value="Child">Child&nbsp;&nbsp;<input type="radio" name="CHILDADULT" value="Adult">Adult</li>
+               <li id="_gvtDeceased"><strong>||FIELDTAG Deceased||Deceased||ENDFIELDTAG|| :</strong><select size="1" name="DECEASED" onchange="checkdeceased()">
+                      <option value="">No</option>
+                      <option value="YESUNKNOWN">Yes, date unknown</option>
+                      <option value="YESKNOWN">Yes, general/exact date known</option>
+                     </select><li>
+               <li id="spandeceaseddate" style="display: none"><strong>Date (or approximate)</strong><input type="text" name="DECEASEDDATE" size="8" class="jdatepicker">
+               </li>
+               <li id="_gvtUSCIS"><strong>||FIELDTAG USCIS||USCIS||ENDFIELDTAG|| : </strong><select size="1" name="USCIS">
+                           <option value="||Select Code, Description From USCIS Where (Status='Active' or Code='^^FIELDVALUE USCIS^^') Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                            </select> ||CONFIGURE USCIS||</li>              
+               <li id="_gvtEntryDateUS"><strong>||FIELDTAG EntryDateUS||Date of US Entry||ENDFIELDTAG|| : </strong> <input type="text" name="EntryDateUS" size="8" onblur="checkdate(this)" value="" class="jdatepicker" /></li>
+               <li id="_gvtCountryOfBirth"><strong>||FIELDTAG CountryOfBirth||Country Of Birth||ENDFIELDTAG|| : </strong><select size="1" name="CountryOfBirth">
+                           <option value="||Select Code, Description From Countries Where (Status='Active' or Code='^^FIELDVALUE CountryOfBirth^^') Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                            </select> ||CONFIGURE Countries||</li> 
+         </ul>
+       </div>
+       ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+       </div>
+<span id="_gvtphoto">
+       <div class="rightcol">
+         <div class="term">Photo</div>
+             <div class="def">
+                <ul>
+                   <li><strong>||FIELDTAG ClientImage||&nbsp;||ENDFIELDTAG||</strong><a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(UPLOADIMAGE)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(S||SESSIONID||)^')"><img id="clientimage" border="1" alt="Click To Upload A New Picture" align="center" width="300" src="||IMAGECLIENT^^CLIENTNUMBER^^MAXWIDTH300,MAXHEIGHT350||" /> </a></li>
+                   ||ENDSTRIP||
+                   ||STARTSTRIP||||STARTDISPLAY|ALWAYS|XYESX|X^^SV SHOWCAMERALINK^^X||<li><input type="button" onclick="directpicture()" value="Take picture with camera"> (Click on image to upload a file instead)||ENDSTRIP||</li>
+||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+
+
+<script language="JavaScript">
+
+function directpicture() {
+    url="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(DIRECTPICTURE)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+    window.open(url);
+}
+
+</script>
+
+||ENDDISPLAY||
+                   <li><span id="rotateid" style="display:none">||LOADFIELDS SELECT ID FROM IMAGES WHERE IMAGEKEY='CLIENT^^CLIENTNUMBER^^'||||LOADCURRENTALWAYS (0)||</span><input type="button" onclick="rotate()" value="Rotate image"></li>
+                </ul>
+             </div>
+       </div>
+</span>
+
+||ENDSTRIP||
+
+   <div class="deflist">
+     <div class="def highlighted">
+      <ul>
+               <li id="_gvtCreatingAgency"><strong>||FIELDTAG CreatingAgency||Creating Agency||ENDFIELDTAG|| : </strong>
+                           <font size="3" align="left"><input type="text" name="CreatingAgency" size="6" readonly="readonly" value="||PROVIDERCODE||" style="display: none" />||LOADFIELDS select ProviderName from Provider where '^^PROVIDERCODE^^'=ProviderCode and docrevno=' 0 ' and privateprovider='^^PRIVATEPROVIDER^^'|| ||LOADCURRENTALWAYS (0)||</font>
+               </li>
+               <li><strong>||FIELDTAG ClientIndicator||Show as Client||ENDFIELDTAG|| : </strong>&nbsp;<input type="checkbox" id="ClientIndicator" name="ClientIndicator" onClick="CheckClientIndicator()" value="ON" /></li>
+               <li id="_gvtProviderIndicator"><strong>||FIELDTAG ProviderIndicator||Client is a Provider||ENDFIELDTAG|| :</strong>&nbsp;<input type="checkbox" name="ProviderIndicator" onClick="CheckProviderIndicator()" value="ON" /></li>
+        <li id="clientproviderspan1" style="display: none"><strong>Provider Name : </strong><select size="1" name="ProviderCodeClient" onchange="setprovidercode(this)">
+          <option value="||SELECT 'CREATENEW'+PROVIDERCODE AS [RAW],'(Create new provider under '+PROVIDERNAME+')' AS PROVIDERNAME FROM PROVIDER WHERE DOCREVNO=' 0 ' AND (PROVIDERTYPE='B' OR PROVIDERTYPE='PO') and ProviderStatus='Active' and PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' And '^^SECURITYLEVEL NEWPROVIDER^^'&gt;'1'    UNION  SELECT PR.PROVIDERCODE,PR.PROVIDERNAME + ' ('+P.PROVIDERNAME+')' FROM PROVIDER PR LEFT JOIN PROVIDER P ON PR.PARENTORGANIZATION=P.PROVIDERCODE AND P.DOCREVNO=' 0 ' WHERE PR.DOCREVNO=' 0 ' AND PR.PROVIDERCODE='^^FIELDVALUE PROVIDERCODECLIENT^^' and PR.privateprovider='^^PRIVATEPROVIDER^^' ORDER BY PROVIDERNAME||">||CHOICETABLESQLD||</option>
+          </select>
+        </li>
+        <li id="clientproviderSearch" style="display: none"><strong>Provider Name : </strong><input type="text" name="_ProviderCodeClient" size="40" onKeyDown="SetAjax()">||AJAX SELECT '' As TheBlank, PR.PROVIDERCODE, PR.PROVIDERNAME + ' ('+P.PROVIDERNAME+')', Pr.Address, Pr.City, Pr.County, Pr.State, Pr.Zip, Pr.Phone, Pr.Email FROM PROVIDER PR LEFT JOIN PROVIDER P ON PR.PARENTORGANIZATION=P.PROVIDERCODE AND P.DOCREVNO=' 0 ' WHERE (Pr.ProviderName Like '*^^TYPEVALUE^^*' or (Case When CharIndex(' ','^^TYPEVALUE^^') > 0 Then Case When CharIndex(RTrim(LTrim(SubString('^^TYPEVALUE^^',1,CharIndex(' ','^^TYPEVALUE^^')))),Pr.PROVIDERNAME) > 0 Or CharIndex(SUBSTRING('^^TYPEVALUE^^',CharIndex(' ','^^TYPEVALUE^^')+1,1000),Pr.PROVIDERNAME) > 0 Then 1 Else 0 End Else 0 End) > 0) And PR.DOCREVNO=' 0 ' AND (PR.PROVIDERTYPE='SP' or PR.PROVIDERTYPE='FP' or PR.PROVIDERTYPE='AP') And PR.ProviderStatus='Active' AND PR.PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' ORDER BY PR.PROVIDERNAME||&nbsp;&nbsp;<input type="hidden" name="_ProviderCodeClient_hidden" id="_ProviderCodeClient_hidden"><br><span id="activecount">&nbsp;</span></li>
+
+        <li id="clientproviderspan2" style="display: none"><strong>Provider Type : </strong><select size="1" name="ProvType" onChange="ChangeProvType()">
+                 <option value="||Select Code, Description From ProviderType Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE ProvType^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE ProviderType||</li>
+      </ul>
+<div id="clientproviderspan3" style="display:none">||INCLUDESUMMATION SummationClientProviderTypeClient POSTLOAD||</div>
+<br>
+<div id="clientproviderspan4" class="term DisplaySection" onclick="ExpandFormSection('clientproviderspan5')">||FIELDTAG Providercaregivergroup||Provider Caregiver Group||ENDFIELDTAG||</div>
+<div>&nbsp;</div>
+<div id="clientproviderspan5" class="deflist NotDisplayed" style="display:none">||INCLUDESUMMATION SummationFLBodyKSSPcaregivergroups POSTLOAD||</div>
+<span id="Childenrollmentrow" style="display:none">
+<p> </p>
+             <div class="term DisplaySection" onclick="ExpandFormSection('ChildEnrollmentToProviderHideDisplay')">||FIELDTAG Childenrollment||Child Enrollment to this Provider||ENDFIELDTAG||</div>
+             <div class="def NotDisplayed" id="ChildEnrollmentToProviderHideDisplay">||INCLUDESUMMATION SummationFLBodyPROVIDERPLACEMENTFA POSTLOAD||</div>
+          </span>
+
+<p> </p>
+    </div>
+    </div>
+
+
+<span id="_gvtContactSection">
+       <div class="term DisplaySection" onclick="ExpandFormSection('ContactHideDisplay')">||FIELDTAG ContactSection||Contact Information||ENDFIELDTAG||</div>
+       <div class="def NotDisplayed" id="ContactHideDisplay">
+          <ul>
+           <li id="_gvtStreet"><strong>||FIELDTAG Street||Street||ENDFIELDTAG|| : </strong><input type="text" name="STREET" size="40" onChange="getlatlong()" /></li>
+             <li id="_gvtCity"><strong>||FIELDTAG City||City||ENDFIELDTAG|| : </strong><input type="text" name="CITY" size="25" onChange="getlatlong()" /></li>
+             <li id="_gvtState"><strong>||FIELDTAG State||State||ENDFIELDTAG|| : </strong><select size="1" name="STATE" onchange="GetCountyList()" onChange="getlatlong()">
+                        <option value="||SELECT Code, Description From StatesUS Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE STATE^^') and code in(^^SetCountyTable^^) Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select></li>
+             <li id="_gvtCounty"><strong>||FIELDTAG County||County||ENDFIELDTAG|| : </strong><select size="1" name="COUNTY" onChange="getlatlong()">
+                  <option value="||Select Code, Description From Counties Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE COUNTY^^') AND (State='^^FIELDVALUE STATE^^' OR (State='^^TOPPROVIDERSTATE^^' and '^^FIELDVALUE DOCSERNO^^'='')) Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                  </select>
+             </li>
+             <li id="_gvtZIP"><strong>||FIELDTAG ZIP||ZIP||ENDFIELDTAG|| : </strong><input type="text" name="ZIP" size="14" onChange="getlatlong()" />                
+             </li>
+             ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||
+             <li><strong><a href="javascript:void getlatlong()">Retrieve latitude/longitude</a></strong>
+                       Latitude: <input type="text" name="LATITUDE" onfocus="this.blur()">
+                       Longitude: <input type="text" name="LONGITUDE" onfocus="this.blur()">
+                       <a href="javascript:void showmapAdjust()">Show on map</a>
+             </li>
+             ||ENDDISPLAY||
+             ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||
+                   <li id="_gvtFindPlaces"><strong>&nbsp;&nbsp;</strong><a href="javascript:void findplaces()">||MapPlaceTypeLabel||</a></li>
+             ||ENDDISPLAY||
+          </ul>
+
+<div>
+   <span id="AddressHistory"></span>
+</div>
+<br>
+          <ul>
+             <li id="_gvtMailingAddress"><strong>||FIELDTAG MailingAddress||Mailing Address if Different||ENDFIELDTAG|| : </strong><input type="text" name="MailingAddress" size="65" /></li>
+             <li id="_gvtUSMailList"><strong>||FIELDTAG USMailList||U.S. Mail List||ENDFIELDTAG|| : </strong><input type="radio" name="R1USMailList" value="Yes" />Yes <input type="radio" name="R1USMailList" value="No" /> No</li>
+<br>
+
+ <li id="_gvtPrimaryPhone"><strong>||FIELDTAG PrimaryPhone||Telephone||ENDFIELDTAG|| : </strong> <input type="text" name="PRIMARYPHONE" size="18" onblur="FormatPhone('PRIMARYPHONE')"/></li>
+              <li id="_gvtWorkPhone"><strong>||FIELDTAG WorkPhone||Work Phone||ENDFIELDTAG|| : </strong> <input type="text" name="WORKPHONE" size="18" onblur="FormatPhone('WORKPHONE')"/></li>
+             <li id="_gvtCellPhone"><strong>||FIELDTAG CellPhone||Cell Phone||ENDFIELDTAG|| : </strong> <input type="text" name="CELLPHONE" size="18" onblur="FormatPhone('CELLPHONE')"/></li>
+ ||STARTDISPLAY|ALWAYS|X^^TEXTMODULE^^|XYES||
+             <li><strong>||FIELDTAG TextNotification||Text Notification||ENDFIELDTAG|| :</strong>
+                         <input type="radio" name="CELLOPTIN" value="Yes">||FIELDTAG OptIn||Opt-In||ENDFIELDTAG||  
+                         <input type="radio" name="CELLOPTIN" value="No">||FIELDTAG OptOut||Opt-Out||ENDFIELDTAG||</li>
+             <li><strong>||FIELDTAG LastTextReply||Last Text Reply||ENDFIELDTAG|| :</strong><input type="text" name="TEXTRESPONSE" size="10"> On:<input type="text" name="TEXTRESPONSEDATE" size="15"></li>
+   ||ENDDISPLAY||
+
+
+             
+<br>
+
+             <li id="_gvtClientEmail"><strong>||FIELDTAG ClientEmail||Email Address||ENDFIELDTAG|| : </strong> <input type="text" name="CLIENTEMAIL" size="65" /></li>
+             ||STARTDISPLAY|ALWAYS|X^^CLIENTPORTALMODULE^^|XYES||
+               <li id="spanPortalUserID"><strong>Portal User ID :</strong><input type="text" name="PortalUserID" id="PortalUserID" size="12" onfocus="this.blur()">
+                                ||STARTSTRIP||<input type="button" name="btnPortalUserID" id="btnPortalUserID" style="display: none" onclick="createPortalUserID()" value="Create Portal UserID" />||ENDSTRIP||
+               </li>
+             ||ENDDISPLAY||             
+
+             <li id="_gvtEmailList"><strong>||FIELDTAG EmailList||Email List||ENDFIELDTAG|| : </strong><input type="radio" name="R1EmailList" value="Yes" />Yes <input type="radio" name="R1EmailList" value="No" /> No</li>
+
+
+</ul>
+</div>
+</span>
+
+
+
+<span id="_gvtIdentifyingInformationSection">
+       <div class="term DisplaySection" onclick="ExpandFormSection('IdentifyingInformationHideDisplay')">||FIELDTAG IdentifyingInformation||Identifying Information||ENDFIELDTAG||</div>
+       <div class="def NotDisplayed" id="IdentifyingInformationHideDisplay">
+          <ul>
+             <li id="_gvtHeight"><strong>||FIELDTAG Height||Height||ENDFIELDTAG|| : </strong><select size="1" name="HeightFt">
+                 <option value="||||" selected="selected">Select Ft.</option>
+                 <option value="1">1</option>
+                 <option value="2">2</option>
+                 <option value="3">3</option>
+                 <option value="4">4</option>
+                 <option value="5">5</option>
+                 <option value="6">6</option>
+                 <option value="7">7</option>
+                 </select>
+                 <select size="1" name="HeightIn">
+                 <option value="||||" selected="selected">Select Inches</option>
+                 <option value="0">0</option>
+                 <option value="1">1</option>
+                 <option value="2">2</option>
+                 <option value="3">3</option>
+                 <option value="4">4</option>
+                 <option value="5">5</option>
+                 <option value="6">6</option>
+                 <option value="7">7</option>
+                 <option value="8">8</option>
+                 <option value="9">9</option>
+                 <option value="10">10</option>
+                 <option value="11">11</option>
+                 </select>
+             </li>
+            <li id="_gvtWeight"><strong>||FIELDTAG Weight||Weight||ENDFIELDTAG|| : </strong><input type="text" name="Weight" size="5" /></li>
+            <li id="_gvtDateWeightUpdated"><strong>||FIELDTAG DateWeightUpdated||Date Weight Updated||ENDFIELDTAG|| : </strong>
+                    <input type="text" name="HeightWtUpdated" size="8" onblur="checkdate(this)" value="||DATE||" class="jdatepicker"/></li>
+            <li id="_gvtHairColor"><strong>||FIELDTAG HairColor||Hair Color||ENDFIELDTAG|| : </strong><input type="text" name="HairColor" size="12" /></li>
+            <li id="_gvtEyeColor"><strong>||FIELDTAG EyeColor||Eye Color||ENDFIELDTAG|| : </strong><input type="text" name="EyeColor" size="12" /></li>
+            <li id="_gvtComplexion"><strong>||FIELDTAG Complexion||Complexion||ENDFIELDTAG|| : </strong><input type="text" name="Complexion" size="12" /></li>
+            <li id="_gvtBuild"><strong>||FIELDTAG Build||Build||ENDFIELDTAG|| : </strong><select size="1" name="Build">
+               <option value="||Select Code, Description From BUILD Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE Build^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' ORDER BY Code||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select> ||CONFIGURE BUILD||</li>
+            <li id="_gvtMarksScarsTattoos"><strong>||FIELDTAG MarksScarsTattoos||Identifying Marks||ENDFIELDTAG||&nbsp;: </strong><textarea rows="1" cols="90" name="MARKSSCARSTATTOOS" class="autoexpand"></textarea>
+              
+            </li>
+                      
+             <li id="_gvtWard"><strong>||FIELDTAG Ward||Ward :||ENDFIELDTAG|| </strong><select size="1" name="Ward">
+                  <option value="||Select Code, Description From Ward Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE Ward^^') Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+                  </select>||CONFIGURE WARD||
+             </li> 
+
+ 
+
+
+                         
+             <li id="_gvtMaritalStatus"><strong>||FIELDTAG MaritalStatus||Marital Status||ENDFIELDTAG|| : </strong><select size="1" name="MARITALSTATUS">
+                  <option value="||Select Code, Description From MARITALSTATUS Where (Status='Active' or Status='' or Code='^^FIELDVALUE MARITALSTATUS^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                  </select> ||CONFIGURE MaritalStatus||</li>
+             <li id="_gvtEducationLevel"><strong>||FIELDTAG EducationLevel||Education Level||ENDFIELDTAG|| : </strong> <select size="1" name="EducationLevel">
+                <option value="||Select Code, Description From EDUCATIONLEVEL Where (Status='Active' or Status='' or Code='^^FIELDVALUE EDUCATIONLEVEL^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select> ||CONFIGURE EducationLevel||</li>
+             <li id="_gvtUSCitizen"><strong>||FIELDTAG USCitizen||U.S. Citizen||ENDFIELDTAG|| : </strong><input type="radio" name="R1USCitizen" value="Yes" />Yes <input type="radio" name="R1USCitizen" value="No" /> No</li>
+             <li id="_gvtVeteran"><strong>||FIELDTAG Veteran||Veteran||ENDFIELDTAG|| : </strong><input type="radio" name="R1Veteran" value="Yes" />Yes <input type="radio" name="R1Veteran" value="No" /> No</li>
+             <li id="_gvtOnSuicideWatchAtAdmission"><strong>||FIELDTAG OnSuicideWatchAtAdmission||On Suicide Watch at Admission||ENDFIELDTAG|| : </strong><input type="radio" name="R1OnSuicideWatchAtAdmission" value="Yes" />Yes <input type="radio" name="R1OnSuicideWatchAtAdmission" value="No" /> No</li>
+             <li id="_gvtGangAffiliation"><strong>||FIELDTAG GangAffiliation||Gang Affiliation||ENDFIELDTAG|| : </strong><input type="radio" name="R1GangAffiliation" value="Yes" />Yes <input type="radio" name="R1GangAffiliation" value="No" />No <input type="radio" name="R1GangAffiliation" value="Unknown" />Unknown&nbsp;&nbsp; Gang Name: <input type="text" name="GangName" /></li>
+             
+
+             
+           <div id="_gvtDisability">
+           <li><strong>||FIELDTAG Disability||Disability (Please check all that apply)||ENDFIELDTAG||:</strong></li>
+           <li><strong>&nbsp;&nbsp;</strong>
+                                <input type="checkbox" name="Disphysicaldisability" value="On" />||FIELDTAG Physicaldisability||Physical disability||ENDFIELDTAG|| &nbsp;&nbsp; 
+                                <input type="checkbox" name="DisMemoryLoss" value="On" />||FIELDTAG Memoryloss||Memory loss||ENDFIELDTAG||&nbsp;&nbsp; 
+                                <input type="checkbox" name="DisMentalDisability" value="On" />||FIELDTAG AMentalbehavioraldis||A Mental/behavioral disability||ENDFIELDTAG||</li>       
+           <li><strong>&nbsp;&nbsp;</strong>
+                                <input type="checkbox" name="DisIntellDevelDisability" value="On" />||FIELDTAG AnIntellectualDD||An intellectual and developmental disability||ENDFIELDTAG||&nbsp;&nbsp;
+                                <input type="checkbox" name="UnspecifiedDisability" value="On" />||FIELDTAG Unspecified Disability||Unspecified disability||ENDFIELDTAG||&nbsp;&nbsp;
+                                <input type="checkbox" name="Traumaticbraininjury" value="On" />||FIELDTAG Atraumaticbraininjury||A traumatic brain injury||ENDFIELDTAG||</li>
+           <li><strong>&nbsp;&nbsp;</strong>
+                                <input type="checkbox" name="DisOther" value="On" />||FIELDTAG Other||Other Disabilities (Specify):||ENDFIELDTAG||&nbsp;<input type="text" name="OtherDD" size="10" /></li>
+<li>&nbsp;</li>
+               <li id="_gvtSpecialNeedsHandicaps"><strong>||FIELDTAG SpecialNeedsHandicaps||Disabilities||ENDFIELDTAG|| : </strong><input type="text" name="SpecialNeedsHandicaps" size="35" />
+               </li>
+           </div>
+
+             <li id="_gvtTitleIVEEligible"><strong>||FIELDTAG TitleIVEEligible||Title IV-E Eligible||ENDFIELDTAG|| : </strong>
+                <input type="radio" name="R3TitleIVEEligible" value="Yes" />Yes 
+                <input type="radio" name="R3TitleIVEEligible" value="No" />No&nbsp;&nbsp;&nbsp;&nbsp; ||FIELDTAG TitleIVYes||If Yes, date became eligible? ||ENDFIELDTAG||                
+                <input type="text" name="Title4DateApproved" onblur="checkdate(this)" size="8" class="jdatepicker"/>
+             </li>
+
+
+          </ul>
+       </div>
+</span>
+
+       ||STARTSTRIP||<div align="center"><input type="button" name="_B6" onclick="initialsubmitit()" value="Initial Save and Continue" /></div>||ENDSTRIP||
+       <span id="BulkOfForm" style="display:none">
+
+
+
+
+<span id="_gvtLegalInfoSection">
+       <div class="term DisplaySection" onclick="ExpandFormSection('LegalInfoHideDisplay')">||FIELDTAG LegalInfo||Legal Information||ENDFIELDTAG||</div>
+       <div class="def NotDisplayed" id="LegalInfoHideDisplay">
+          <ul>
+<li id="_gvtLegalStatus"><strong>||FIELDTAG LegalStatus||Legal Status||ENDFIELDTAG|| : </strong> <font size="2"><span id="spLGLSTAT">||LOADFIELDS SELECT LegalStatus.DESCRIPTION FROM LegalStatus WHERE (SELECT TOP 1 CourtInfo.LEGALSTATUS FROM CourtInfo WHERE CourtInfo.DOCREVNO=' 0 ' AND CourtInfo.CLIENTNUMBER='^^CLIENTNUMBER^^' ORDER BY LglStatEffectiveDate DESC)=LegalStatus.CODE|| ||LOADCURRENTALWAYS (0)||</span>||STARTSTRIP||&nbsp;&nbsp;&nbsp;<a href="javascript: void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(CourtInfomaster_CS)|SESSIONID(S||SESSIONID||)|CLIENTNUMBER(||CLIENTNUMBER||)^')"><font size="2">Click Here To Change</font></a>||ENDSTRIP|| </font></li>
+             <li id="_gvtRiskLevel"><strong>||FIELDTAG RiskLevel||Risk Lvl at Admission||ENDFIELDTAG|| : </strong><select size="1" onchange="SetSecRistDate('Risk')" name="RiskLevel" id="RiskLevel">
+                <option value="||Select Code, Description From RiskLevel Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE RiskLevel^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order by Code||" selected="selected">||CHOICETABLESQLD||</option>
+                </select> ||CONFIGURE Risklevel||</li>
+               <li id="_gvtCommittingCounty"><strong>||FIELDTAG CommittingCounty||Committing / Jurisdiction County||ENDFIELDTAG|| : </strong>&nbsp;&nbsp;<select size="1" name="CommittingCounty"> 
+                  <option value="||Select Code, Description From Counties Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE CommittingCounty^^') AND State='^^FIELDVALUE STATE^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                  </select></li>
+            <li id="_gvtProtCustDate"><strong>||FIELDTAG ProtCustDate||Protective Custody Date||ENDFIELDTAG|| :</strong>
+            <input type="text" name="ProtCustDate" onblur="validdate(this)" size="8" class="jdatepicker"/>
+            </li>
+           <li id="_gvtChildlegalStatus"><strong>||FIELDTAG ChildlegalStatus||Child's Legal Status||ENDFIELDTAG|| : </strong>
+            <input type="radio" name="ChildlegalStatus" value="Dependent" onClick="SetChildLegalStatus()" />Dependent
+            <input type="radio" name="ChildlegalStatus" value="Non-Dependent" onClick="SetChildLegalStatus()" />Non-Dependent
+            <input type="radio" name="ChildlegalStatus" value="Undetermined" onClick="SetChildLegalStatus()" />Undetermined 
+            <input type="radio" name="ChildlegalStatus" value="||||" onClick="SetChildLegalStatus()" />N/A 
+        </li>
+
+   <span id="_gvtSummationChildLegalStatus">||INCLUDESUMMATION SummationChildLegalStatus POSTLOAD||</span>
+
+
+          </ul>
+       </div>
+</span>
+
+
+
+<span id="_gvtEmploymentIncomeSection">
+       <div class="term DisplaySection" onclick="ExpandFormSection('EmploymentIncomeSectionHideDisplay')">||FIELDTAG EmploymentIncomeSectionHideDisplay||Employment/Income Information||ENDFIELDTAG||</div>
+       <div class="def NotDisplayed" id="EmploymentIncomeSectionHideDisplay">
+          <ul>
+
+<span id="_gvtEmploymentquestions">
+             <li id="_gvtEmploymentStatus"><strong>||FIELDTAG EmploymentStatus||Employment Status||ENDFIELDTAG|| : </strong> <select size="1" name="EmploymentStatus">
+                <option value="||Select Code, Description From EMPLOYMENTSTATUS Where (Status='Active' or Status='' or Code='^^FIELDVALUE EMPLOYMENTSTATUS^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select> ||CONFIGURE EmploymentStatus||</li>
+             <li id="_gvtPlaceOfEmployment"><strong>||FIELDTAG PlaceOfEmployment||Place of Employment||ENDFIELDTAG|| : </strong><input type="text" name="PlaceOfEmployment" size="31" /></li>
+             <li id="_gvtTypeOfEmployment"><strong>||FIELDTAG TypeOfEmployment||Type of Employment||ENDFIELDTAG|| : </strong><input type="text" name="TypeOfEmployment" size="31" /></li>
+             </span>
+             
+             <span id="_gvtHouseholdincomesection">
+             <li id="_gvtPeopleInHousehold"><strong>||FIELDTAG PeopleInHousehold||# People in Household||ENDFIELDTAG|| : </strong>
+                                            <input type="text" name="PeopleInHousehold" size="3" onblur="CalcPoverty()" /></li>
+             <li id="_gvtFederalPovGuideline"><strong>||FIELDTAG R1Povlevel||Federal Poverty Guideline||ENDFIELDTAG|| :</strong>
+                   <input type="radio" name="R1Povlevel" value="1-$12,760"><b>1-$12,760</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="radio" name="R1Povlevel" value="2-$17,240"><b>2-$17,240</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      
+                   <input type="radio" name="R1Povlevel" value="3-$21,720"><b>3-$21,720</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="radio" name="R1Povlevel" value="4-$26,200"><b>4-$26,200</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="radio" name="R1Povlevel" value="5-$30,680"><b>5-$30,680</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="radio" name="R1Povlevel" value="6-$35,160"><b>6-$35,160</b>&nbsp;</li>
+        
+             <li id="_gvtPovertyMonthly"><strong>||FIELDTAG PovertyMonthly||200% Poverty||ENDFIELDTAG|| : </strong>
+                            Monthly: <input type="text" name="PovertyMonthly" size="9" readonly="readonly" /> Annually: <input type="text" name="PovertyAnnually" size="9" onfocus="this.blur()" /></li>
+             <li id="_gvtMonthlyIncome"><strong>||FIELDTAG MonthlyIncome||Total Monthly Income||ENDFIELDTAG|| : </strong><input type="text" name="MonthlyIncome" id="MonthlyIncome" size="9" onfocus="CalcMonthlyIncome('','')" /></li>
+             <li id="_gvtFamilyIncomeSources"><strong>||FIELDTAG FamilyIncomeSources||Family Income Sources||ENDFIELDTAG|| :</strong>
+          
+                 <table>
+                      <tbody>
+                          <tr>
+                              <td>Alimony</td>
+                              <td><input type="text" name="IncomeAlimony" id="IncomeAlimony" size="5" onblur="CalcMonthlyIncome('IncomeAlimony','Alimony')" /></td>
+                              <td>Pension/Retirement</td>
+                              <td><input type="text" name="IncomePension" id="IncomePension" size="5" onblur="CalcMonthlyIncome('IncomePension','Pension/Retirement')" /></td>
+                              <td>VA Benefits</td>
+                              <td><input type="text" name="IncomeVA" id="IncomeVA" size="5" onblur="CalcMonthlyIncome('IncomeVA','VA Benefits')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Annuities</td>
+                              <td><input type="text" name="IncomeAnnuities" id="IncomeAnnuities" size="5" onblur="CalcMonthlyIncome('IncomeAnnuities','Annuities')" /></td>
+                              <td>Public Assistance/TANF</td>
+                              <td><input type="text" name="IncomePublicAssitance" id="IncomePublicAssitance" size="5" onblur="CalcMonthlyIncome('IncomePublicAssitance','Public Assistance/TANF')" /></td>
+                              <td>Workers Compensation</td>
+                              <td><input type="text" name="IncomeWorkersCompensation" id="IncomeWorkersCompensation" size="5" onblur="CalcMonthlyIncome('IncomeWorkersCompensation','Workers Compensation')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Child Support</td>
+                              <td><input type="text" name="IncomeChildSupport" id="IncomeChildSupport" size="5" onblur="CalcMonthlyIncome('IncomeChildSupport','Child Support')" /></td>
+                              <td>Rental Income</td>
+                              <td><input type="text" name="IncomeRentalIncome" id="IncomeRentalIncome" size="5" onblur="CalcMonthlyIncome('IncomeRentalIncome','Rental Income')" /></td>
+                              <td>KinGap</td>
+                              <td><input type="text" name="IncomeOther01" id="IncomeOther01" size="5" onblur="CalcMonthlyIncome('IncomeOther01','Other')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Contributions from others</td>
+                              <td><input type="text" name="IncomeContributions" id="IncomeContributions" size="5" onblur="CalcMonthlyIncome('IncomeContributions','Contributions from others')" /></td>
+                              <td>Self Employment</td>
+                              <td><input type="text" name="IncomeSelfEmployment" id="IncomeSelfEmployment" size="5" onblur="CalcMonthlyIncome('IncomeSelfEmployment','Self Employment')" /></td>
+                              <td>Foster Care</td>
+                              <td><input type="text" name="IncomeOther02" id="IncomeOther02" size="5" onblur="CalcMonthlyIncome('IncomeOther02','Other')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Dividends</td>
+                              <td><input type="text" name="IncomeDividends" id="IncomeDividends" size="5" onblur="CalcMonthlyIncome('IncomeDividends','Dividends')" /></td>
+                              <td>Social Security</td>
+                              <td><input type="text" name="IncomeSocialSecurity" id="IncomeSocialSecurity" size="5" onblur="CalcMonthlyIncome('IncomeSocialSecurity','Social Security')" /></td>
+                              <td>AAP Adoption Assist</td>
+                              <td><input type="text" name="IncomeOther03" id="IncomeOther03" size="5" onblur="CalcMonthlyIncome('IncomeOther03','Other')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Employment Income</td>
+                              <td><input type="text" name="IncomeEmployment" id="IncomeEmployment" size="5" onblur="CalcMonthlyIncome('IncomeEmployment','Employment')" /></td>
+                              <td>SSI</td>
+                              <td><input type="text" name="IncomeSSI" id="IncomeSSI" size="5" onblur="CalcMonthlyIncome('IncomeSSI','SSI')" /></td>
+                              <td>Other</td>
+                              <td><input type="text" name="IncomeOther04" id="IncomeOther04" size="5" onblur="CalcMonthlyIncome('IncomeOther04','Other')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Food Stamps</td>
+                              <td><input type="text" name="IncomeFoodStamps" id="IncomeFoodStamps" size="5" onblur="CalcMonthlyIncome('IncomeFoodStamps','Food Stamps')" /></td>
+                              <td>SSDI</td>
+                              <td><input type="text" name="IncomeSSDI" id="IncomeSSDI" size="5" onblur="CalcMonthlyIncome('IncomeSSDI','SSDI')" /></td>
+                              <td>Other</td>
+                              <td><input type="text" name="IncomeOther05" id="IncomeOther05" size="5" onblur="CalcMonthlyIncome('IncomeOther05','Other')" /></td>
+                          </tr>
+                          <tr>
+                              <td>Interest</td>
+                              <td><input type="text" name="IncomeInterest" id="IncomeInterest" size="5" onblur="CalcMonthlyIncome('IncomeInterest','Interest')" /></td>
+                              <td>Unemployment Benefits</td>
+                              <td><input type="text" name="IncomeUnemployment" id="IncomeUnemployment" size="5" onblur="CalcMonthlyIncome('IncomeUnemployment','Unemployment Benefits')" /></td>
+                              <td>Other</td>
+                              <td><input type="text" name="IncomeOther06" id="IncomeOther06" size="5" onblur="CalcMonthlyIncome('IncomeOther06','Other')" /></td>
+                          </tr>
+
+                      </tbody>
+                  </table>                
+             </li>
+             </span>
+
+
+</ul>
+</div>
+</span>
+
+<!-- new financial detail section-->
+||STARTDISPLAY|ALWAYS|XYESX|X^^BILLINGMODULE^^X||
+     
+          <span id="_gvtInsuranceSection">
+            <div class="term DisplaySection" onclick="ExpandFormSection('InsuranceHideDisplay')">||FIELDTAG Insurance||Insurance Policies||ENDFIELDTAG||</div>
+              <div class="def NotDisplayed" id="InsuranceHideDisplay">
+                ||INCLUDESUMMATION SummationFLBodyInsuranceDetail POSTLOAD||
+              </div>
+          </span>
+||ENDDISPLAY||
+         <span id="Enrollmentrow">
+          </span>
+
+||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+         <span id="_gvtEnrollment">
+           <div class="term DisplaySection" onclick="ExpandFormSection('EnrollmentHideDisplay')">||FIELDTAG Enrollment||Client Enrollments/DisEnrollments||ENDFIELDTAG||</div>
+           <div class="def NotDisplayed" id="EnrollmentHideDisplay">||INCLUDESUMMATION SummationFLBodyPROVIDERPLACEMENT POSTLOAD||</div>
+         </span>
+        ||ENDSTRIP||
+        
+||STARTDISPLAY|ALWAYS|X^^PATHWAYMODULE^^|XYES||
+          <span id="_gvtPathwayEnrollment">
+             <div class="term DisplaySection" onclick="ExpandFormSection('PWEnrollmentHideDisplay')">||FIELDTAG PathwayEnrollment||Pathway Enrollment||ENDFIELDTAG||<span id="_gvtPathwayClientCount"> ||FIELDTAG PathwayClientCount||- Record Count - ||ENDFIELDTAG||<b>(||CPathwayClient||)</b></span></div>
+             <div class="def NotDisplayed" id="PWEnrollmentHideDisplay">||INCLUDESUMMATION SummationFLBodyPathwayClient POSTLOAD||</div>
+          </span>
+||ENDDISPLAY||
+        
+||STARTDISPLAY|ALWAYS|XYESX|X^^BILLINGMODULE^^X||
+          <span id="_gvtFeeForService">
+             <div class="term DisplaySection" onclick="ExpandFormSection('FeeForServiceHideDisplay')">||FIELDTAG FeeForService||Fee For Service Authorizations||ENDFIELDTAG||</div>
+             <div class="def NotDisplayed" id="FeeForServiceHideDisplay">||INCLUDESUMMATION SummationFLBodyJJInsuranceDetail POSTLOAD||</div>
+          </span>
+
+||ENDDISPLAY||
+<!-- End of new section -->
+
+<div id="_gvtENTIREOpenConfigureSection">
+<div id="_gvtOpenConfigureOptions" class="term DisplaySection" onclick="ExpandFormSection('OpenConfigureOptionsHideDisplay')">||FIELDTAG OpenConfigureOptions||Open Configuration Section||ENDFIELDTAG||</div>
+<div class="def NotDisplayed" id="OpenConfigureOptionsHideDisplay">
+     <table border="2" cellspacing="2" cellpadding="1" width="100%">
+     <tr id="_gvtTextFieldOne">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextFieldOne||Text Field One:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="TextFieldOne" size="75"></td>
+     </tr>
+     <tr id="_gvtTextFieldTwo">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextFieldTwo||Text Field Two:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="TextFieldTwo" size="75"></td>
+     </tr>
+     <tr id="_gvtTextFieldThree">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextFieldThree||Text Field Three:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="TextFieldThree" size="75"></td>
+     </tr>
+     <tr id="_gvtTextFieldFour">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextFieldFour||Text Field Four:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="TextFieldFour" size="75"></td>
+     </tr>
+     <tr id="_gvtTextFieldFive">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextFieldFive||Text Field Five:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="TextFieldFive" size="75"></td>
+     </tr>
+     <tr id="_gvtTextAreaFieldOne">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextAreaFieldOne||Text Area One:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<textarea rows="2" cols="90" name="TextAreaOne" class="autoexpand"></textarea></td>
+     </tr>
+     <tr id="_gvtTextAreaFieldTwo">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextAreaFieldTwo||Text Area Two:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<textarea rows="2" cols="90" name="TextAreaTwo" class="autoexpand"></textarea></td>
+     </tr>
+     <tr id="_gvtTextAreaFieldThree">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextAreaFieldThree||Text Area Three:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<textarea rows="2" cols="90" name="TextAreaThree" class="autoexpand"></textarea></td>
+     </tr>
+     <tr id="_gvtTextAreaFieldFour">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextAreaFieldFour||Text Area Four:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<textarea rows="2" cols="90" name="TextAreaFour" class="autoexpand"></textarea></td>
+     </tr>
+     <tr id="_gvtTextAreaFieldFive">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG TextAreaFieldFive||Text Area Five:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<textarea rows="2" cols="90" name="TextAreaFive" class="autoexpand"></textarea></td>
+     </tr>
+     <tr id="_gvtDateFieldOne">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG DateFieldOne||Date Field One:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="DateFieldOne" size="12" class="jdatepicker"></td>
+     </tr>
+     <tr id="_gvtDateFieldTwo">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG DateFieldTwo||Date Field Two:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="DateFieldTwo" size="12" class="jdatepicker"></td>
+     </tr>
+     <tr id="_gvtDateFieldThree">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG DateFieldThree||Date Field Three:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="DateFieldThree" size="12" class="jdatepicker"></td>
+     </tr>
+     <tr id="_gvtDateFieldFour">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG DateFieldFour||Date Field Four:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="DateFieldFour" size="12" class="jdatepicker"></td>
+     </tr>
+     <tr id="_gvtDateFieldFive">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG DateFieldFive||Date Field Five:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="DateFieldFive" size="12" class="jdatepicker"></td>
+     </tr>
+     <tr id="_gvtRadioFieldOne">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG RadioFieldOne||Radio Field One:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtRadioFieldOneOptionone" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtRadioFieldOneOptiononea"><input type="radio" name="R1RadioFieldOne" value="1">||FIELDTAG OptionOnea||Option Onea||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptiononeb"><input type="radio" name="R1RadioFieldOne" value="2">||FIELDTAG OptionOneb||Option Oneb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptiononec"><input type="radio" name="R1RadioFieldOne" value="3">||FIELDTAG OptionOnec||Option Onec||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptiononed"><input type="radio" name="R1RadioFieldOne" value="4">||FIELDTAG OptionOned||Option Oned||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptiononee"><input type="radio" name="R1RadioFieldOne" value="5">||FIELDTAG OptionOnee||Option Onee||ENDFIELDTAG||</span></td>
+     </tr>
+     <tr id="_gvtRadioFieldTwo">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG RadioFieldTwo||Radio Field Two:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtRadioFieldOneOptionTwo" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtRadioFieldOneOptionTwoa"><input type="radio" name="R1RadioFieldTwo" value="1">||FIELDTAG OptionTwoa||Option Twoa||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionTwob"><input type="radio" name="R1RadioFieldTwo" value="2">||FIELDTAG OptionTwob||Option Twob||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionTwoc"><input type="radio" name="R1RadioFieldTwo" value="3">||FIELDTAG OptionTwoc||Option Twoc||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionTwod"><input type="radio" name="R1RadioFieldTwo" value="4">||FIELDTAG OptionTwod||Option Twod||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionTwoe"><input type="radio" name="R1RadioFieldTwo" value="5">||FIELDTAG OptionTwoe||Option Twoe||ENDFIELDTAG||</span></td>
+     </tr>
+     <tr id="_gvtRadioFieldThree">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG RadioFieldThree||Radio Field Three:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtRadioFieldOneOptionThree" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtRadioFieldOneOptionThreea"><input type="radio" name="R1RadioFieldThree" value="1">||FIELDTAG OptionThreea||Option Threea||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionThreeb"><input type="radio" name="R1RadioFieldThree" value="2">||FIELDTAG OptionThreeb||Option Threeb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionThreec"><input type="radio" name="R1RadioFieldThree" value="3">||FIELDTAG OptionThreec||Option Threec||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionThreed"><input type="radio" name="R1RadioFieldThree" value="4">||FIELDTAG OptionThreed||Option Threed||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionThreee"><input type="radio" name="R1RadioFieldThree" value="5">||FIELDTAG OptionThreee||Option Threee||ENDFIELDTAG||</span></td>
+     </tr>
+     <tr id="_gvtRadioFieldFour">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG RadioFieldFour||Radio Field Four:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtRadioFieldOneOptionFour" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtRadioFieldOneOptionFoura"><input type="radio" name="R1RadioFieldFour" value="1">||FIELDTAG OptionFoura||Option Foura||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFourb"><input type="radio" name="R1RadioFieldFour" value="2">||FIELDTAG OptionFourb||Option Fourb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFourc"><input type="radio" name="R1RadioFieldFour" value="3">||FIELDTAG OptionFourc||Option Fourc||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFourd"><input type="radio" name="R1RadioFieldFour" value="4">||FIELDTAG OptionFourd||Option Fourd||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFoure"><input type="radio" name="R1RadioFieldFour" value="5">||FIELDTAG OptionFoure||Option Foure||ENDFIELDTAG||</span></td>
+     </tr>
+     <tr id="_gvtRadioFieldFive">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG RadioFieldFive||Radio Field Five:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtRadioFieldOneOptionFive" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtRadioFieldOneOptionFivea"><input type="radio" name="R1RadioFieldFive" value="1">||FIELDTAG OptionOnea||Option Onea||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFiveb"><input type="radio" name="R1RadioFieldFive" value="2">||FIELDTAG OptionFiveb||Option Fiveb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFivec"><input type="radio" name="R1RadioFieldFive" value="3">||FIELDTAG OptionFivec||Option Fivec||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFived"><input type="radio" name="R1RadioFieldFive" value="4">||FIELDTAG OptionFived||Option Fived||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtRadioFieldOneOptionFivee"><input type="radio" name="R1RadioFieldFive" value="5">||FIELDTAG OptionFivee||Option Fivee||ENDFIELDTAG||</span></td>
+     </tr>
+
+
+     <tr id="_gvtCheckboxFieldOne">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG CheckboxFieldOne||Checkbox Field One:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtCheckboxFieldOne" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtCheckboxFieldOnea"><input type="checkbox" name="checkboxFieldOnea" value="1">||FIELDTAG CheckboxFieldOnea||Option CheckboxFieldOnea||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldOneb"><input type="checkbox" name="checkboxFieldOneb" value="2">||FIELDTAG CheckboxFieldOneb||Option CheckboxFieldOneb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldOnec"><input type="checkbox" name="checkboxFieldOnec" value="3">||FIELDTAG CheckboxFieldOnec||Option CheckboxFieldOnec||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldOned"><input type="checkbox" name="checkboxFieldOned" value="4">||FIELDTAG CheckboxFieldOned||Option CheckboxFieldOned||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldOnee"><input type="checkbox" name="checkboxFieldOnee" value="5">||FIELDTAG CheckboxFieldOnee||Option CheckboxFieldOnee||ENDFIELDTAG||</span></td>
+     </tr>
+
+     <tr id="_gvtCheckboxFieldTwo">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG CheckboxFieldTwo||Checkbox Field Two:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtCheckboxFieldTwo" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtCheckboxFieldTwoa"><input type="checkbox" name="checkboxFieldTwoa" value="1">||FIELDTAG CheckboxFieldTwoa||Option CheckboxFieldTwoa||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldTwob"><input type="checkbox" name="checkboxFieldTwob" value="2">||FIELDTAG CheckboxFieldTwob||Option CheckboxFieldTwob||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldTwoc"><input type="checkbox" name="checkboxFieldTwoc" value="3">||FIELDTAG CheckboxFieldTwoc||Option CheckboxFieldTwoc||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldTwod"><input type="checkbox" name="checkboxFieldTwod" value="4">||FIELDTAG CheckboxFieldTwod||Option CheckboxFieldTwod||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldTwoe"><input type="checkbox" name="checkboxFieldTwoe" value="5">||FIELDTAG CheckboxFieldTwoe||Option CheckboxFieldTwoe||ENDFIELDTAG||</span></td>
+     </tr>
+
+     <tr id="_gvtCheckboxFieldThree">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG CheckboxFieldThree||Checkbox Field Three:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtCheckboxFieldThree" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtCheckboxFieldThreea"><input type="checkbox" name="checkboxFieldThreea" value="1">||FIELDTAG CheckboxFieldThreea||Option CheckboxFieldThreea||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldThreeb"><input type="checkbox" name="checkboxFieldThreeb" value="2">||FIELDTAG CheckboxFieldThreeb||Option CheckboxFieldThreeb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldThreec"><input type="checkbox" name="checkboxFieldThreec" value="3">||FIELDTAG CheckboxFieldThreec||Option CheckboxFieldThreec||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldThreed"><input type="checkbox" name="checkboxFieldThreed" value="4">||FIELDTAG CheckboxFieldThreed||Option CheckboxFieldThreed||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldThreee"><input type="checkbox" name="checkboxFieldThreee" value="5">||FIELDTAG CheckboxFieldThreee||Option CheckboxFieldThreee||ENDFIELDTAG||</span></td>
+     </tr>
+
+
+     <tr id="_gvtCheckboxFieldFour">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG CheckboxFieldFour||Checkbox Field Four:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtCheckboxFieldFour" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtCheckboxFieldFoura"><input type="checkbox" name="checkboxFieldFoura" value="1">||FIELDTAG CheckboxFieldFoura||Option CheckboxFieldFoura||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFourb"><input type="checkbox" name="checkboxFieldFourb" value="2">||FIELDTAG CheckboxFieldFourb||Option CheckboxFieldFourb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFourc"><input type="checkbox" name="checkboxFieldFourc" value="3">||FIELDTAG CheckboxFieldFourc||Option CheckboxFieldFourc||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFourd"><input type="checkbox" name="checkboxFieldFourd" value="4">||FIELDTAG CheckboxFieldFourd||Option CheckboxFieldFourd||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFoure"><input type="checkbox" name="checkboxFieldFoure" value="5">||FIELDTAG CheckboxFieldFoure||Option CheckboxFieldFoure||ENDFIELDTAG||</span></td>
+     </tr>
+
+     <tr id="_gvtCheckboxFieldFive">
+          <td width="30%" colspan="6" align="right"><b>||FIELDTAG CheckboxFieldFive||Checkbox Field Five:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td id="_gvtCheckboxFieldFive" width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;
+              <span id="_gvtCheckboxFieldFivea"><input type="checkbox" name="checkboxFieldFivea" value="1">||FIELDTAG CheckboxFieldFivea||Option CheckboxFieldFivea||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFiveb"><input type="checkbox" name="checkboxFieldFiveb" value="2">||FIELDTAG CheckboxFieldFiveb||Option CheckboxFieldFiveb||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFivec"><input type="checkbox" name="checkboxFieldFivec" value="3">||FIELDTAG CheckboxFieldFivec||Option CheckboxFieldFivec||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFived"><input type="checkbox" name="checkboxFieldFived" value="4">||FIELDTAG CheckboxFieldFived||Option CheckboxFieldFived||ENDFIELDTAG||</span>&nbsp;&nbsp; 
+              <span id="_gvtCheckboxFieldFivee"><input type="checkbox" name="checkboxFieldFivee" value="5">||FIELDTAG CheckboxFieldFivee||Option CheckboxFieldFivee||ENDFIELDTAG||</span></td>
+     </tr>
+     <tr id="_gvtOptionDropdownOne">
+         <td width="30%" colspan="6" align="right"><b>||FIELDTAG OptionDropdownOne||Option Dropdown One:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                 <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="OptionDropdownOne">
+                 <option value="||Select Code, Description From OptionDropdownOne Where ((Status='Active' or Status='' or Status is null) or Code='^^FIELDVALUE OptionDropdownOne^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE OptionDropdownOne||
+               </td>
+     </tr>
+
+     <tr id="_gvtOptionDropdownTwo">
+         <td width="30%" colspan="6" align="right"><b>||FIELDTAG OptionDropdownTwo||Option Dropdown Two:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                 <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="OptionDropdownTwo">
+                 <option value="||Select Code, Description From OptionDropdownTwo Where ((Status='Active' or Status='' or Status is null) or Code='^^FIELDVALUE OptionDropdownTwo^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE OptionDropdownTwo||
+               </td>
+     </tr>
+     <tr id="_gvtOptionDropdownThree">
+         <td width="30%" colspan="6" align="right"><b>||FIELDTAG OptionDropdownThree||Option Dropdown Three:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                 <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="OptionDropdownThree">
+                 <option value="||Select Code, Description From OptionDropdownThree Where ((Status='Active' or Status='' or Status is null) or Code='^^FIELDVALUE OptionDropdownThree^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE OptionDropdownThree||
+               </td>
+     </tr>
+     <tr id="_gvtOptionDropdownFour">
+         <td width="30%" colspan="6" align="right"><b>||FIELDTAG OptionDropdownFour||Option Dropdown Four:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                 <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="OptionDropdownFour">
+                 <option value="||Select Code, Description From OptionDropdownFour Where ((Status='Active' or Status='' or Status is null) or Code='^^FIELDVALUE OptionDropdownFour^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE OptionDropdownFour||
+               </td>
+     </tr>
+     <tr id="_gvtOptionDropdownFive">
+         <td width="30%" colspan="6" align="right"><b>||FIELDTAG OptionDropdownFive||Option Dropdown Five:||ENDFIELDTAG||</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                 <td width="70%" colspan="14">&nbsp;&nbsp;&nbsp;&nbsp;<select size="1" name="OptionDropdownFive">
+                 <option value="||Select Code, Description From OptionDropdownFiveclient Where ((Status='Active' or Status='' or Status is null) or Code='^^FIELDVALUE OptionDropdownFive^^') AND PrivateProvider='^^PRIVATEPROVIDER^^' Order By description||" selected="selected">||CHOICETABLESQLD||</option>
+                 </select>||CONFIGURE OptionDropdownFiveclient||
+               </td>
+     </tr>
+   </table>
+</div>
+</div>
+          ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||       
+    <span id="_gvtAppointments">
+    <div class="term DisplaySection" onclick="ExpandFormSection('AppointmentsHideDisplay')">||FIELDTAG Appointments||Appointments||ENDFIELDTAG||
+    <span id="_gvtAppointmentCount"> ||FIELDTAG AppointmentCount||- Record Count - ||ENDFIELDTAG||<b>(||CAppointments||)</b></span></div>
+    <div class="def highlighted NotDisplayed" id="AppointmentsHideDisplay">||APPOINTMENTLINKCLIENTSUMMATION||<br>||INCLUDE FUNCTIONCLIENTCALENDAR.HTM||</div>
+    </span>
+||ENDSTRIP||
+
+
+<span id="_gvtWorkerAssignmentSection">
+       <div class="term DisplaySection" onclick="ExpandFormSection('WorkerSectionHideDisplay')">||FIELDTAG CaseWorkers||Case Workers||ENDFIELDTAG||</div>
+         
+       <div class="def NotDisplayed" id="WorkerSectionHideDisplay">
+          <ul>
+             <li id="_gvtCPSWorker"><strong>||FIELDTAG CPSWorker||CPS Worker||ENDFIELDTAG|| : </strong><select size="1" name="CPSWorker">
+                <option value="||SELECT Distinct TOP 50 EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], LastName, FirstName, Suffix FROM Q_HRFORM WHERE (LASTNAME LIKE '^^TYPEVALUE^^*' or FirstName LIKE '^^TYPEVALUE^^*') and EmpStatus='Active' AND PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], LastName, FirstName, Suffix FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE CPSWorker^^'||"  selected="selected">||CHOICETABLESEARCH||</option>
+               </select>||STARTSTRIP|| &nbsp;&nbsp; 
+               <a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(HRFormDynamicEntry)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(||SESSIONID||)|TARGETDROPDOWN(DDCareManager)|SETVALUE(TARGETDROPDOWN)|TARGETDDFIELD(CPSWorker)|SETVALUE(TARGETDDFIELD)')">Click Here to Add Someone to the List</a>||ENDSTRIP||
+             </li>
+             <li id="_gvtCountySocialWorker"><strong>||FIELDTAG CountySocialWorker||County Worker||ENDFIELDTAG|| : </strong><select size="1" name="JJSWorker">
+                <option value="||SELECT DISTINCT TOP 30 EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], [LASTNAME], [FIRSTNAME] FROM Q_HRFORM WHERE (LASTNAME LIKE '*^^TYPEVALUE^^*') and EmpStatus='Active' AND PrivateProvider='^^PRIVATEPROVIDER^^' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME] FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE JJSWorker^^'  AND PrivateProvider='^^PRIVATEPROVIDER^^'||" selected="selected">||CHOICETABLESEARCH||</option>
+                </select> &nbsp;&nbsp; 
+                ||STARTSTRIP||
+                  <a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(HRFormDynamicEntry)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(S||SESSIONID||)|TARGETDROPDOWN(DDCareManager)|SETVALUE(TARGETDROPDOWN)|TARGETDDFIELD(JJSWorker)|SETVALUE(TARGETDDFIELD)')">Click Here to Add Someone to the List</a>
+                ||ENDSTRIP||
+             </li>
+             <li id="_gvtStateWorker"><strong>||FIELDTAG StateWorker||State Worker||ENDFIELDTAG|| : </strong><select size="1" name="StateCaseWorker">
+                <option value="||SELECT DISTINCT TOP 30 EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], [LASTNAME], [FIRSTNAME] FROM Q_HRFORM WHERE (LASTNAME LIKE '*^^TYPEVALUE^^*') and EmpStatus='Active' AND PrivateProvider='^^PRIVATEPROVIDER^^' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME] FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE StateCaseWorker^^' AND PrivateProvider='^^PRIVATEPROVIDER^^'||" selected="selected">||CHOICETABLESEARCH||</option>
+                </select> &nbsp;&nbsp; 
+                ||STARTSTRIP||
+                  <a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(HRFormDynamicEntry)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(S||SESSIONID||)|TARGETDROPDOWN(DDYGLSW)|SETVALUE(TARGETDROPDOWN)|TARGETDDFIELD(StateCaseWorker)|SETVALUE(TARGETDDFIELD)')">Click Here to Add Someone to the List</a>
+                ||ENDSTRIP||
+             </li>
+             <li id="_gvtTribalSocialWorker"><strong>||FIELDTAG TribalSocialWorker||Tribal Social Worker||ENDFIELDTAG|| : </strong><select size="1" name="TribalSocialWorker">
+                <option value="||SELECT DISTINCT TOP 30 EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME], [LASTNAME], [FIRSTNAME] FROM Q_HRFORM WHERE (LASTNAME LIKE '*^^TYPEVALUE^^*') and EmpStatus='Active' AND PrivateProvider='^^PRIVATEPROVIDER^^' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [LASTNAME] &amp; ', ' &amp; [FIRSTNAME] FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE TribalSocialWorker^^' AND PrivateProvider='^^PRIVATEPROVIDER^^'||" selected="selected">||CHOICETABLESEARCH||</option>
+                </select> &nbsp;&nbsp; 
+                ||STARTSTRIP||
+                  <a href="javascript:void openhyperlink('genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(HRFormDynamicEntry)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(S||SESSIONID||)|TARGETDROPDOWN(DDYGLSW)|SETVALUE(TARGETDROPDOWN)|TARGETDDFIELD(TribalSocialWorker)|SETVALUE(TARGETDDFIELD)')">Click Here to Add Someone to the List</a>
+                ||ENDSTRIP||
+             </li> 
+             <li><strong>||FIELDTAG AgencyWorker||Agency Worker||ENDFIELDTAG|| : </strong><h3>||LOADFIELDS Select Q_HRFORM.[LASTNAME] + ', ' + Q_HRFORM.[FIRSTNAME] FROM Q_HRFORM Where EmployeeNumber='^^FIELDVALUE FACM^^'||||LOADCURRENTALWAYS (0)||</h3><select size="1" onchange="UpdateUserCaseLoad()" name="FACM" style="display:none">
+               <option value="||SELECT DISTINCT EMPLOYEENUMBER, Q_HRFORM.[LASTNAME] + ', ' + Q_HRFORM.[FIRSTNAME],Q_HRFORM.[LASTNAME] ,Q_HRFORM.[FIRSTNAME] FROM (Q_HRFORM Inner Join UserID on Q_HRFORM.FamCareUserID=UserID.UserID) Inner join SecurityGroupsMembers on UserId.UserId=SecurityGroupsMembers.GroupMember WHERE (SecurityGroupsMembers.GroupName='Therapists or Clinicians' or SecurityGroupsMembers.GroupName='CASE WORKERS' or SecurityGroupsMembers.GroupName='Case Worker or Social Worker Supervision') And Q_HRFORM.PrivateProvider='^^PRIVATEPROVIDER^^' And (Q_HRFORM.[LASTNAME]&lt;&gt;'' And AccountStatus='Active' And (ExcludeFromLicenseCount IS NULL OR ExcludeFromLicenseCount&lt;&gt;'Yes')) Or EMPLOYEENUMBER='^^FIELDVALUE FACM^^' ORDER BY Q_HRFORM.[LASTNAME]||" selected="selected">||CHOICETABLESQLD||</option>
+               </select>
+             </li>
+          </ul>
+       </div>
+</span>
+||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+<span id="_gvtagencyworkerhistory">
+    <div class="term DisplaySection" onclick="ExpandFormSection('CaseWorkerHistoryHideDisplay')" id="gvtLocalCaseWorkerHistory">||FIELDTAG CaseWorker||Case Worker||ENDFIELDTAG||</div>
+    <div class="def NotDisplayed" id="CaseWorkerHistoryHideDisplay">||INCLUDESUMMATION SummationClientCaseWorkerHistory POSTLOAD||<br />
+    <br />
+    </div>
+</span>
+<script language="JavaScript">
+    function deletesummationrecordEXTCW(serno) {
+        var f=document.forms[0];
+        f.target="";
+        var urlassist;
+        urlassist="genfunc.exe?FULLFUNCTION^DELETEDATA|TABLENAME(CASEWORKERCHANGE)|NOFORMATFILE(YES)|AUTOCLOSE(YES)|FORMNAME(USERCASELOADEDIT)|CONFIRMSCREEN(SAVECONFIRMREFRESHSUMMARY)|SUMMARYDIVID(SummationClientExtCaseWorkerHistory)|DOCSERNO("+serno+")|SESSIONID(||SESSIONID||)^";
+        openhyperlink(urlassist);
+//        parent.fvalidate.location.replace(urlassist);        
+       return;
+    }
+
+    function DeletesummationrecordEXTCW(serno) {
+        deletesummationrecord(serno);
+        return;
+    }
+
+    function deletesummationrecordCW(serno) {
+        var f=document.forms[0];
+        f.target="";
+        var urlassist;
+        urlassist="genfunc.exe?FULLFUNCTION^DELETEDATA|TABLENAME(USERCASELOAD)|NOFORMATFILE(YES)|AUTOCLOSE(YES)|FORMNAME(USERCASELOADEDIT)|CONFIRMSCREEN(SAVECONFIRMREFRESHSUMMARY)|CLIENTNUMBER(||CLIENTNUMBER||)|SUMMARYDIVID(SummationClientCaseWorkerHistory)|DOCSERNO("+serno+")|SESSIONID(||SESSIONID||)^";
+        openhyperlink(urlassist);
+//        parent.fvalidate.location.replace(urlassist);        
+       return;
+    }
+
+    function DeletesummationrecordCW(serno) {
+        deletesummationrecord(serno);
+        return;
+    }
+</script>
+<span id="_gvtExtCaseWorkerHistory">
+    <div class="term DisplaySection" onclick="ExpandFormSection('ExternalCaseWorkerHideDisplay')">||FIELDTAG ExternalCaseWorker||External Worker History||ENDFIELDTAG||</div>
+    <div class="def NotDisplayed" id="ExternalCaseWorkerHideDisplay" id="_gvtExtCaseWorkerHistory">||INCLUDESUMMATION SummationClientExtCaseWorkerHistory POSTLOAD||<br />
+    <br />
+    </div>
+</span>
+        
+
+         
+       <span id="_gvtIdentifyingNumbers">
+          <div class="term DisplaySection" onclick="ExpandFormSection('IdentifyingNumbersHideDisplay')">||FIELDTAG IdentifyingNumbers||Identifying Numbers||ENDFIELDTAG||</div>
+          <div class="def NotDisplayed" id="IdentifyingNumbersHideDisplay">||INCLUDESUMMATION SUMMATIONCLIENTPASSPORT POSTLOAD||</div>
+       </span>
+
+
+          <span id="_gvtClientRelationships">
+             <div class="term DisplaySection" onclick="ExpandFormSection('ClientRelationshipsHideDisplay')">||FIELDTAG ClientRelationships||Client Relationships||ENDFIELDTAG||</div>
+            <div class="def NotDisplayed" id="ClientRelationshipsHideDisplay" >
+             <ul>
+               <li>&nbsp;</li>
+               <li id="_gvtFatherStatus">&nbsp;&nbsp;||FIELDTAG FatherStatus||Father Status:||ENDFIELDTAG||&nbsp;&nbsp;
+                        <input type="radio" name="R1fatherstatus" value="Alleged">||FIELDTAG Alleged||Alleged||ENDFIELDTAG||&nbsp;&nbsp;
+                        <input type="radio" name="R1fatherstatus" value="Presumed">||FIELDTAG Presumed||Presumed||ENDFIELDTAG||&nbsp;&nbsp;
+                        <input type="radio" name="R1fatherstatus" value="Adjudicated">||FIELDTAG Adjudicated||Adjudicated||ENDFIELDTAG||&nbsp;&nbsp;
+                        <input type="radio" name="R1fatherstatus" value="NoFatherIdentified">||FIELDTAG NoFatherIdentified||No Father Identified||ENDFIELDTAG||&nbsp;&nbsp;
+                        </li>
+             </ul>
+             ||INCLUDESUMMATION SUMMATIONRELATIONSHIP_ClientForm POSTLOAD||
+            </div>
+          </span>
+          <span id="_gvtReferralInformation">
+             <div class="term DisplaySection" onclick="ExpandFormSection('ReferralInHideDisplay')">||FIELDTAG ReferralInformation||Referral Information||ENDFIELDTAG||<span id="_gvtReferralRecordCount"> ||FIELDTAG ReferralRecordCount||- Record Count - ||ENDFIELDTAG||<b>(||CReferralIn||)</b></span></div>
+             <div class="def highlighted NotDisplayed" id="ReferralInHideDisplay">||INCLUDESUMMATION SummationFLBodyReferralIn POSTLOAD||</div>
+          </span>
+
+||ENDSTRIP||
+
+       ||STARTSTRIP||<div align="center"><input type="button" name="_B7" onclick="initialsubmitit()" value="Save And Continue" /></div>||ENDSTRIP||
+       ||STARTSTRIP|ALWAYS|XYESX|X^^SP REPORTCONFIGURE^^X||
+
+
+
+||STARTDISPLAY|ALWAYS|X^^LEGALMODULE^^|XYES||
+          <span id="_gvtOffenseHistory">
+             <div id="OffenseHistorySection">
+                <div class="term DisplaySection" onclick="ExpandFormSection('OffenseHistoryHideDisplay')">||FIELDTAG OffenseHistory||Offense History||ENDFIELDTAG||<span id="_gvtOffenseHistRecordCount"> ||FIELDTAG OffenseHistCount||- Record Count - ||ENDFIELDTAG||<b>(||COffenseHist||)</b></span></div>
+                <div class="def highlighted NotDisplayed" id="OffenseHistoryHideDisplay">
+                <div class="def">
+                   <ul>
+                      <li>Committing Offense is N/A :<input type="checkbox" name="AbuseNeglectClient" value="ON" /></li>
+                   </ul>
+                </div>
+                ||INCLUDESUMMATION SummationOffenseHistory POSTLOAD||
+             </div>
+            </div>
+         </span>
+||ENDDISPLAY||
+
+  
+||STARTDISPLAY|ALWAYS|X^^EDUCATIONMODULE^^|XYES||
+         <span id="_gvtSchoolInformation">
+             <div class="term DisplaySection" onclick="ExpandFormSection('SchoolInfoHideDisplay')">||FIELDTAG SchoolInformation||School Information||ENDFIELDTAG||<span id="_gvtSchoolInfoRecordCount"> ||FIELDTAG SchoolInfoCount||- Record Count - ||ENDFIELDTAG||<b>(||CSchoolInfo||)</b></span></div>
+
+             <div class="def NotDisplayed" id="SchoolInfoHideDisplay">||INCLUDESUMMATION SUMMATIONSCHOOLINFOCS POSTLOAD|| </div>
+         </span>
+||ENDDISPLAY||
+         <span id="_gvtComments">
+             <div class="term DisplaySection" onclick="ExpandFormSection('CommentsHideDisplay')">||FIELDTAG Comments||Comments||ENDFIELDTAG||</div>
+             <div class="def highlighted NotDisplayed" id="CommentsHideDisplay">
+                <ul>
+                   <li><strong>&nbsp;</strong><textarea name="Comments" style="width: 600px; height: 45px" id="Comments" onkeyup="javascript: haut(this.id)" onfocus="javascript: toptext(this.id)"></textarea>
+                   </li>
+                </ul>
+             </div>
+         </span>
+<!--ENDOFPRINT-->
+<span id="_gvtemailsection">
+    <div class="term DisplaySection" onclick="ExpandFormSection('EMailSectionHideDisplay')">||FIELDTAG EmailNotification||Email Notification||ENDFIELDTAG||</div>
+    <div class="def NotDisplayed" id="EMailSectionHideDisplay">
+       <table border="0" width="100%" id="EmailTable" style="border-collapse: collapse" bordercolor="#111111" cellpadding="0" cellspacing="0">
+         <tr>
+           <td width="30%" align="right"><font size="2">||FIELDTAG SupervisorEmail||Notify Staff of New Client||ENDFIELDTAG||</font></td>
+           <td width="70%">&nbsp;<input type="checkbox" name="NotifySupervisor" value="ON" style="border: 1px solid #FF0000">&nbsp;<input type="text" name="SupervisorEmail" size="40"></td>
+         </tr>
+       </table>
+      </div>     
+</span>         
+               
+                  ||ENDSTRIP||
+            ||STARTSTRIP||
+               <div align="center">
+                  <span id="AddToMyCaseLoad" style="display:none"><input type="checkbox" name="_AddToMyCaseLoad" value="ON" />Add To My Case Load<br /></span>
+               </div>
+               <div align="center">
+                  ||SIGNATURES||<br />
+                  Signature : <input type="password" name="Signature" /><br />
+                  <input type="button" id="_B1"name="_B1" onclick="submitit()" value="SAVE" />
+               </div>
+            ||ENDSTRIP||
+       </span>
+    </div>
+    </span>            
+
+    <iframe style="display: none" name="fvalidate2" id="fvalidate2" src="blankt.htm"></iframe>
+
+</form>
+
+
+<form method="post" action="genfunc.exe" target="fvalidate" name="formaddress">
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="FUNCTION" value="PULLDATA" /> 
+    <input type="hidden" name="WEBSERVICE" value="ADDRESSVALIDATION" /> 
+    <input type="hidden" name="POPULATEFUNCTION" value="addressverifyreturn" /> 
+    <input type="hidden" name="STREET" /> 
+    <input type="hidden" name="STREET2" /> 
+    <input type="hidden" name="CITY" /> 
+    <input type="hidden" name="STATE" /> 
+    <input type="hidden" name="ZIP" />
+    <input type="hidden" name="JAVASCRIPT" value="YES" />
+</form>
+
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data" target="PDFFormFrame" id="PDFPrint" style="display:none">
+
+    <input type="hidden" name="FUNCTION" value="GenPDFFromHTML">
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||">
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||">
+    <input type="hidden" name="HTML" value="||||">
+
+<IFRAME name="PDFFormFrame" id="PDFFormFrame" style="overflow:hidden" target="main" src="blankt.htm" width="100%" height="300" scrolling="auto"> </IFRAME>
+</form>
+<div style="display:none">
+<IFRAME name="SubmitFrame" id="SubmitFrame" style="overflow:hidden" target="main" src="BlankFrameRelationship.htm" width="100%" height="300" scrolling="auto"> </IFRAME>
+</div>
+</body>
+</html>

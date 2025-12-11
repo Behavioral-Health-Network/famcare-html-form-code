@@ -1,0 +1,1413 @@
+<html>
+
+<head>
+<title>BCR Referrals Placed</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(BEHAVIORAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(PHYSICAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(HOUSING,10,10) -->
+<!-- FIELDOVERRIDE(SPIRITUAL_CARE,10,10) -->
+<!-- FIELDOVERRIDE(MATERNAL_HEALTH,10,10) -->
+<!-- FIELDOVERRIDE(SOCIAL_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+<!-- FIELDOVERRIDE(CMHC,10,10) -->
+<!-- FIELDOVERRIDE(COUNSELING,10,10) -->
+<!-- FIELDOVERRIDE(GROUP_PEER_SUPPORT,10,10) -->
+<!-- FIELDOVERRIDE(INDIVIDUAL_PEER_SUPPORT,10,10) -->
+<!-- FIELDOVERRIDE(SUBSTANCE_USE,10,10) -->
+<!-- FIELDOVERRIDE(FURNITURE,10,10) -->
+<!-- FIELDOVERRIDE(HOME_REPAIRS,10,10) -->
+<!-- FIELDOVERRIDE(HOMELESS_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(LANDLORD-TENANT_MEDIATION,10,10) -->
+<!-- FIELDOVERRIDE(RENT/MORTGAGE_ASSISTANCE,10,10) -->
+<!-- FIELDOVERRIDE(UTILITY_ASSISTANCE,10,10) -->
+<!-- FIELDOVERRIDE(PRIMARY_CARE,10,10) -->
+<!-- FIELDOVERRIDE(DENTAL,10,10) -->
+<!-- FIELDOVERRIDE(CLOTHING,10,10) -->
+<!-- FIELDOVERRIDE(CHILD_CARE_ASSISTANCE,10,10) -->
+<!-- FIELDOVERRIDE(DEVELOPMENTAL_DISABILITIES,10,10) -->
+<!-- FIELDOVERRIDE(DOMESTIC_VIOLENCE,10,10) -->
+<!-- FIELDOVERRIDE(INSURANCE_ACCESS,10,10) -->
+<!-- FIELDOVERRIDE(FOOD,10,10) -->
+<!-- FIELDOVERRIDE(LEGAL_AID,10,10) -->
+<!-- FIELDOVERRIDE(LGBTQ_SERVICES,10,10) -->
+<!-- FIELDOVERRIDE(TRANSPORTATION,10,10) -->
+<!-- FIELDOVERRIDE(EMPLOYMENT,10,10) -->
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#bcr_presenting_concerns, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_housing_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
+
+    
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
+
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
+
+//     if (dropdowns.length > 0) {
+// Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
+
+// Start observing the document body for changes
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#bcr_presenting_concerns', listenerSetup);
+waitForElement('#bcr_ref_placed_bh_subtype', listenerSetup);
+waitForElement('#bcr_ref_placed_housing_subtype', listenerSetup);
+waitForElement('#bcr_ref_placed_phys_health_subtype', listenerSetup);
+waitForElement('#bcr_ref_placed_social_service_subtype', listenerSetup);
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+          // f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+    setrequire('bcr_type_ref_placed');
+    setrequire('bcr_ref_placed_bh_subtype');
+    setrequire('cmhc_agency');
+    setrequire('date_cmhc_ref_placed');
+    setrequire('counseling_agency');
+    setrequire('date_counseling_ref_placed');
+    setrequire('group_peer_support_agency');
+    setrequire('date_group_peer_support_ref_placed');
+    setrequire('indiv_peer_support_agency');
+    setrequire('date_indiv_peer_support_ref');
+    setrequire('su_agency');
+    setrequire('date_su_ref');
+    setrequire('bcr_ref_placed_housing_subtype');
+    setrequire('rent_assist_agency');
+    setrequire('date_rent_assist_ref');
+    setrequire('utility_assist_agency');
+    setrequire('date_utility_ref');
+    setrequire('furniture_agency');
+    setrequire('date_furniture_ref');
+    setrequire('home_repair_agency');
+    setrequire('date_home_repairs_ref');
+    setrequire('landlord_med_agency');
+    setrequire('date_landlord_mediation_ref');
+    setrequire('homeless_services_agency');
+    setrequire('date_homeless_services_ref');
+    setrequire('mat_health_agency');
+    setrequire('date_mat_health_ref_placed');
+    setrequire('bcr_ref_placed_phys_health_subtype');
+    setrequire('primary_care_agency');
+    setrequire('date_primary_care_ref_placed');
+    setrequire('dental_agency');
+    setrequire('date_dental_ref_placed');
+    setrequire('bcr_ref_placed_social_subtype');
+    setrequire('child_care_agency');
+    setrequire('date_child_care_ref_placed');
+    setrequire('clothing_agency');
+    setrequire('date_clothing_ref_placed');
+    setrequire('dd_agency');
+    setrequire('date_dd_ref_placed');
+    setrequire('dv_agency');
+    setrequire('date_dv_ref_placed');
+    setrequire('food_agency');
+    setrequire('date_food_ref_placed');
+    setrequire('employment_agency');
+    setrequire('date_employment_ref_placed');
+    setrequire('insurance_agency');
+    setrequire('date_insurance_ref_placed');
+    setrequire('legal_agency');
+    setrequire('date_legal_ref_placed');
+    setrequire('lgbtq_agency');
+    setrequire('date_lgbtq_ref_placed');
+    setrequire('transport_agency');
+    setrequire('date_transport_ref_placed');
+    setrequire('spiritual_agency');
+    setrequire('date_spiritual_ref_placed');
+    setrequire('wellness_plan_rp');
+    setrequire('unmet_needs');
+    setrequire('unmet_needs_exp');
+    setrequire('TiedEnrollment');
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#bcr_presenting_concerns, #bcr_ref_placed_bh_subtype, #bcr_ref_placed_housing_subtype, #bcr_ref_placed_phys_health_subtype, #bcr_ref_placed_social_service_subtype'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_bh_subtype","001");
+   checkhide(f.bcr_ref_placed_bh_subtype,"cmhc_agency","004");
+   checkhide(f.bcr_ref_placed_bh_subtype,"date_cmhc_ref_placed","004");
+   checkhide(f.bcr_ref_placed_bh_subtype,"counseling_agency","001");
+   checkhide(f.bcr_ref_placed_bh_subtype,"date_counseling_ref_placed","001");
+   checkhide(f.bcr_ref_placed_bh_subtype,"group_peer_support_agency","003");
+   checkhide(f.bcr_ref_placed_bh_subtype,"date_group_peer_support_ref_placed","003");
+   checkhide(f.bcr_ref_placed_bh_subtype,"indiv_peer_support_agency","002");
+   checkhide(f.bcr_ref_placed_bh_subtype,"date_indiv_peer_support_ref","002");
+   checkhide(f.bcr_ref_placed_bh_subtype,"su_agency","005");
+   checkhide(f.bcr_ref_placed_bh_subtype,"date_su_ref","005");
+   checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_housing_subtype","003");
+   checkhide(f.bcr_ref_placed_housing_subtype,"rent_assist_agency","005");
+   checkhide(f.bcr_ref_placed_housing_subtype,"date_rent_assist_ref","005");
+   checkhide(f.bcr_ref_placed_housing_subtype,"utility_assist_agency","006");
+   checkhide(f.bcr_ref_placed_housing_subtype,"date_utility_ref","006");
+   checkhide(f.bcr_ref_placed_housing_subtype,"furniture_agency","001");
+   checkhide(f.bcr_ref_placed_housing_subtype,"date_furniture_ref","001");
+   checkhide(f.bcr_ref_placed_housing_subtype,"home_repair_agency","002");
+   checkhide(f.bcr_ref_placed_housing_subtype,"date_home_repairs_ref","002");
+   checkhide(f.bcr_ref_placed_housing_subtype,"landlord_med_agency","004");
+   checkhide(f.bcr_ref_placed_housing_subtype,"date_landlord_mediation_ref","004");
+   checkhide(f.bcr_ref_placed_housing_subtype,"homeless_services_agency","003");
+   checkhide(f.bcr_ref_placed_housing_subtype,"date_homeless_services_ref","003");
+   checkhide(f.bcr_type_ref_placed,"mat_health_agency","006");
+   checkhide(f.bcr_type_ref_placed,"date_mat_health_ref_placed","006");
+   checkhide(f.bcr_type_ref_placed,"date_other_ref","010");
+   checkhide(f.bcr_type_ref_placed,"other_agency","010");
+   checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_phys_health_subtype","002");
+   checkhide(f.bcr_ref_placed_phys_health_subtype,"primary_care_agency","001");
+   checkhide(f.bcr_ref_placed_phys_health_subtype,"date_primary_care_ref_placed","001");
+   checkhide(f.bcr_ref_placed_phys_health_subtype,"dental_agency","002");
+   checkhide(f.bcr_ref_placed_phys_health_subtype,"date_dental_ref_placed","002");
+   checkhide(f.bcr_type_ref_placed,"bcr_ref_placed_social_subtype","009");
+   checkhide(f.bcr_ref_placed_social_subtype,"child_care_agency","002");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_child_care_ref_placed","002");
+   checkhide(f.bcr_ref_placed_social_subtype,"clothing_agency","001");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_clothing_ref_placed","001");
+   checkhide(f.bcr_ref_placed_social_subtype,"dd_agency","003");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_dd_ref_placed","003");
+   checkhide(f.bcr_ref_placed_social_subtype,"dv_agency","004");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_dv_ref_placed","004");
+   checkhide(f.bcr_ref_placed_social_subtype,"food_agency","006");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_food_ref_placed","006");
+   checkhide(f.bcr_ref_placed_social_subtype,"employment_agency","010");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_employment_ref_placed","010");
+   checkhide(f.bcr_ref_placed_social_subtype,"insurance_agency","005");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_insurance_ref_placed","005");
+   checkhide(f.bcr_ref_placed_social_subtype,"legal_agency","007");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_legal_ref_placed","007");
+   checkhide(f.bcr_ref_placed_social_subtype,"lgbtq_agency","008");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_lgbtq_ref_placed","008");
+   checkhide(f.bcr_ref_placed_social_subtype,"transport_agency","009");
+   checkhide(f.bcr_ref_placed_social_subtype,"date_transport_ref_placed","009");
+   checkhide(f.bcr_type_ref_placed,"spiritual_agency","004");
+   checkhide(f.bcr_type_ref_placed,"date_spiritual_ref_placed","004");
+   checkhide(f.unmet_needs,"unmet_needs_exp","Yes");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('bcr_type_ref_placed') && gvtfieldvalue('bcr_type_ref_placed')=='') {edesc=edesc+`Must specify a value for Type of Referrals Placed\n`; seterror("bcr_type_ref_placed");}
+  if (!hiddenfield('bcr_ref_placed_bh_subtype') && gvtfieldvalue('bcr_ref_placed_bh_subtype')=='') {edesc=edesc+`Must specify a value for Type of Behavioral Health Referral\n`; seterror("bcr_ref_placed_bh_subtype");}
+  if (!hiddenfield('cmhc_agency') && gvtfieldvalue('cmhc_agency')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_agency");}
+  if (!hiddenfield('date_cmhc_ref_placed') && gvtfieldvalue('date_cmhc_ref_placed')=='') {edesc=edesc+`Must specify a value for Date of CMHC Referral\n`; seterror("date_cmhc_ref_placed");}
+  if (!hiddenfield('counseling_agency') && gvtfieldvalue('counseling_agency')=='') {edesc=edesc+`Must specify a value for Counseling Agency\n`; seterror("counseling_agency");}
+  if (!hiddenfield('date_counseling_ref_placed') && gvtfieldvalue('date_counseling_ref_placed')=='') {edesc=edesc+`Must specify a value for Date of Counseling Referral\n`; seterror("date_counseling_ref_placed");}
+  if (!hiddenfield('group_peer_support_agency') && gvtfieldvalue('group_peer_support_agency')=='') {edesc=edesc+`Must specify a value for Group Peer Support Agency\n`; seterror("group_peer_support_agency");}
+  if (!hiddenfield('date_group_peer_support_ref_placed') && gvtfieldvalue('date_group_peer_support_ref_placed')=='') {edesc=edesc+`Must specify a value for Date of Group Peer Support Referral\n`; seterror("date_group_peer_support_ref_placed");}
+  if (!hiddenfield('indiv_peer_support_agency') && gvtfieldvalue('indiv_peer_support_agency')=='') {edesc=edesc+`Must specify a value for Individual Peer Support Agency\n`; seterror("indiv_peer_support_agency");}
+  if (!hiddenfield('date_indiv_peer_support_ref') && gvtfieldvalue('date_indiv_peer_support_ref')=='') {edesc=edesc+`Must specify a value for Date of Individual Peer Support Referral\n`; seterror("date_indiv_peer_support_ref");}
+  if (!hiddenfield('su_agency') && gvtfieldvalue('su_agency')=='') {edesc=edesc+`Must specify a value for Substance Use Agency\n`; seterror("su_agency");}
+  if (!hiddenfield('date_su_ref') && gvtfieldvalue('date_su_ref')=='') {edesc=edesc+`Must specify a value for Date of Substance Use Referral\n`; seterror("date_su_ref");}
+  if (!hiddenfield('bcr_ref_placed_housing_subtype') && gvtfieldvalue('bcr_ref_placed_housing_subtype')=='') {edesc=edesc+`Must specify a value for Housing Subtype\n`; seterror("bcr_ref_placed_housing_subtype");}
+  if (!hiddenfield('rent_assist_agency') && gvtfieldvalue('rent_assist_agency')=='') {edesc=edesc+`Must specify a value for Rent/Mortgage Assistance Agency\n`; seterror("rent_assist_agency");}
+  if (!hiddenfield('date_rent_assist_ref') && gvtfieldvalue('date_rent_assist_ref')=='') {edesc=edesc+`Must specify a value for Date of Rent/Mortgage Assistance Referral\n`; seterror("date_rent_assist_ref");}
+  if (!hiddenfield('utility_assist_agency') && gvtfieldvalue('utility_assist_agency')=='') {edesc=edesc+`Must specify a value for Utility Assistance Agency\n`; seterror("utility_assist_agency");}
+  if (!hiddenfield('date_utility_ref') && gvtfieldvalue('date_utility_ref')=='') {edesc=edesc+`Must specify a value for Date of Utility Assistance Referral \n`; seterror("date_utility_ref");}
+  if (!hiddenfield('furniture_agency') && gvtfieldvalue('furniture_agency')=='') {edesc=edesc+`Must specify a value for Furniture Agency\n`; seterror("furniture_agency");}
+  if (!hiddenfield('date_furniture_ref') && gvtfieldvalue('date_furniture_ref')=='') {edesc=edesc+`Must specify a value for Date of Furniture Referral \n`; seterror("date_furniture_ref");}
+  if (!hiddenfield('home_repair_agency') && gvtfieldvalue('home_repair_agency')=='') {edesc=edesc+`Must specify a value for Home Repair Agency\n`; seterror("home_repair_agency");}
+  if (!hiddenfield('date_home_repairs_ref') && gvtfieldvalue('date_home_repairs_ref')=='') {edesc=edesc+`Must specify a value for Date of Home Repairs Referral \n`; seterror("date_home_repairs_ref");}
+  if (!hiddenfield('landlord_med_agency') && gvtfieldvalue('landlord_med_agency')=='') {edesc=edesc+`Must specify a value for Landlord-Tenant Mediation Agency\n`; seterror("landlord_med_agency");}
+  if (!hiddenfield('date_landlord_mediation_ref') && gvtfieldvalue('date_landlord_mediation_ref')=='') {edesc=edesc+`Must specify a value for Date of Landlord-Tenant Mediation Referral \n`; seterror("date_landlord_mediation_ref");}
+  if (!hiddenfield('homeless_services_agency') && gvtfieldvalue('homeless_services_agency')=='') {edesc=edesc+`Must specify a value for Homeless Services Agency\n`; seterror("homeless_services_agency");}
+  if (!hiddenfield('date_homeless_services_ref') && gvtfieldvalue('date_homeless_services_ref')=='') {edesc=edesc+`Must specify a value for Date of Homeless Services Referral \n`; seterror("date_homeless_services_ref");}
+  if (!hiddenfield('mat_health_agency') && gvtfieldvalue('mat_health_agency')=='') {edesc=edesc+`Must specify a value for Maternal Health Agency\n`; seterror("mat_health_agency");}
+  if (!hiddenfield('bcr_ref_placed_phys_health_subtype') && gvtfieldvalue('bcr_ref_placed_phys_health_subtype')=='') {edesc=edesc+`Must specify a value for Physical Health Subtype\n`; seterror("bcr_ref_placed_phys_health_subtype");}
+  if (!hiddenfield('primary_care_agency') && gvtfieldvalue('primary_care_agency')=='') {edesc=edesc+`Must specify a value for Primary Care Agency\n`; seterror("primary_care_agency");}
+  if (!hiddenfield('dental_agency') && gvtfieldvalue('dental_agency')=='') {edesc=edesc+`Must specify a value for Dental Agency\n`; seterror("dental_agency");}
+  if (!hiddenfield('bcr_ref_placed_social_subtype') && gvtfieldvalue('bcr_ref_placed_social_subtype')=='') {edesc=edesc+`Must specify a value for Social Service Subtype\n`; seterror("bcr_ref_placed_social_subtype");}
+  if (!hiddenfield('child_care_agency') && gvtfieldvalue('child_care_agency')=='') {edesc=edesc+`Must specify a value for Child Care Agency\n`; seterror("child_care_agency");}
+  if (!hiddenfield('clothing_agency') && gvtfieldvalue('clothing_agency')=='') {edesc=edesc+`Must specify a value for Clothing Agency\n`; seterror("clothing_agency");}
+  if (!hiddenfield('dd_agency') && gvtfieldvalue('dd_agency')=='') {edesc=edesc+`Must specify a value for Developmental Disability Agency\n`; seterror("dd_agency");}
+  if (!hiddenfield('dv_agency') && gvtfieldvalue('dv_agency')=='') {edesc=edesc+`Must specify a value for Domestic Violence Agency\n`; seterror("dv_agency");}
+  if (!hiddenfield('food_agency') && gvtfieldvalue('food_agency')=='') {edesc=edesc+`Must specify a value for Food Assistance Agency\n`; seterror("food_agency");}
+  if (!hiddenfield('employment_agency') && gvtfieldvalue('employment_agency')=='') {edesc=edesc+`Must specify a value for Employment Agency\n`; seterror("employment_agency");}
+  if (!hiddenfield('insurance_agency') && gvtfieldvalue('insurance_agency')=='') {edesc=edesc+`Must specify a value for Insurance Access Agency\n`; seterror("insurance_agency");}
+  if (!hiddenfield('legal_agency') && gvtfieldvalue('legal_agency')=='') {edesc=edesc+`Must specify a value for Legal Aid Agency\n`; seterror("legal_agency");}
+  if (!hiddenfield('lgbtq_agency') && gvtfieldvalue('lgbtq_agency')=='') {edesc=edesc+`Must specify a value for LGBTQ Services Agency\n`; seterror("lgbtq_agency");}
+  if (!hiddenfield('transport_agency') && gvtfieldvalue('transport_agency')=='') {edesc=edesc+`Must specify a value for Transportation Agency\n`; seterror("transport_agency");}
+  if (!hiddenfield('spiritual_agency') && gvtfieldvalue('spiritual_agency')=='') {edesc=edesc+`Must specify a value for Spiritual Care Agency\n`; seterror("spiritual_agency");}
+  if (!hiddenfield('wellness_plan_rp') && gvtfieldvalue('wellness_plan_rp')=='') {edesc=edesc+`Must specify a value for Was a client wellness plan developed?\n`; seterror("wellness_plan_rp");}
+  if (!hiddenfield('unmet_needs_exp') && gvtfieldvalue('unmet_needs_exp')=='') {edesc=edesc+`Must specify a value for If "Yes," please list additional client needs\n`; seterror("unmet_needs_exp");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+   // Force update of report fields before submission
+   updateReportFields([
+    'bcr_presenting_concerns', 'bcr_ref_placed_bh_subtype',
+    'bcr_ref_placed_housing_subtype', 'bcr_ref_placed_phys_health_subtype',
+    'bcr_ref_placed_social_service_subtype'
+    // add other dropdown IDs here as needed
+  ]);
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+//      // Force update of report fields before submission
+//      updateReportFields([
+//     'bcr_presenting_concerns', 'bcr_ref_placed_bh_subtype',
+//     'bcr_ref_placed_housing_subtype', 'bcr_ref_placed_phys_health_subtype',
+//     'bcr_ref_placed_social_service_subtype'
+//     // add other dropdown IDs here as needed
+//   ]);
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['bcr_type_ref_placed', 'bcr_ref_placed_bh_subtype', 'table3'].
+ */
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+  
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+
+
+</script>
+
+<script language="VBScript">
+</script>
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWBCRReferralsPlaced" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+    <!-- used by updateReportFields -->
+    <input type="hidden" name="bh_ref_placed" value="||FIELDVALUE bh_ref_placed||" class="report-field value-001" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="physical_health_ref_placed" value="||FIELDVALUE physical_health_ref_placed||" class="report-field value-002" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="housing_ref_placed" value="||FIELDVALUE housing_ref_placed||" class="report-field value-003" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="spiritual_care_ref_placed" value="||FIELDVALUE spiritual_care_ref_placed||" class="report-field value-004" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="mat_health_ref_placed" value="||FIELDVALUE mat_health_ref_placed||" class="report-field value-006" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="soc_services_ref_placed" value="||FIELDVALUE soc_services_ref_placed||" class="report-field value-009" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="other_ref_placed" value="||FIELDVALUE other_ref_placed||" class="report-field value-010" data-source="bcr_presenting_concerns">
+    <input type="hidden" name="counseling_ref_placed" value="||FIELDVALUE counseling_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="individual_peer_support_ref_placed" value="||FIELDVALUE individual_peer_support_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="group_peer_support_ref_placed" value="||FIELDVALUE group_peer_support_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="cmhc_ref_placed" value="||FIELDVALUE cmhc_ref_placed||" class="report-field value-004" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="su_ref_placed" value="||FIELDVALUE su_ref_placed||" class="report-field value-005" data-source="bcr_ref_placed_bh_subtype">
+    <input type="hidden" name="furniture_ref_placed" value="||FIELDVALUE furniture_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="home_repair_ref_placed" value="||FIELDVALUE home_repair_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="homeless_services_ref_placed" value="||FIELDVALUE homeless_services_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="landlord_med_ref_placed" value="||FIELDVALUE landlord_med_ref_placed||" class="report-field value-004" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="rent_assist_ref_placed" value="||FIELDVALUE rent_assist_ref_placed||" class="report-field value-005" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="utility_assist_ref_placed" value="||FIELDVALUE utility_assist_ref_placed||" class="report-field value-006" data-source="bcr_ref_placed_housing_subtype">
+    <input type="hidden" name="primary_care_ref_placed" value="||FIELDVALUE primary_care_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_phys_health_subtype">
+    <input type="hidden" name="dental_ref_placed" value="||FIELDVALUE dental_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_phys_health_subtype">
+    <input type="hidden" name="clothing_ref_placed" value="||FIELDVALUE clothing_ref_placed||" class="report-field value-001" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="child_care_ref_placed" value="||FIELDVALUE child_care_ref_placed||" class="report-field value-002" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="dd_ref_placed" value="||FIELDVALUE dd_ref_placed||" class="report-field value-003" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="dv_ref_placed" value="||FIELDVALUE dv_ref_placed||" class="report-field value-004" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="insurance_ref_placed" value="||FIELDVALUE insurance_ref_placed||" class="report-field value-005" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="food_ref_placed" value="||FIELDVALUE food_ref_placed||" class="report-field value-006" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="legal_ref_placed" value="||FIELDVALUE legal_ref_placed||" class="report-field value-007" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="lgbtq_ref_placed" value="||FIELDVALUE lgbtq_ref_placed||" class="report-field value-008" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="transport_ref_placed" value="||FIELDVALUE transport_ref_placed||" class="report-field value-009" data-source="bcr_ref_placed_social_service_subtype">
+    <input type="hidden" name="employment_ref_placed" value="||FIELDVALUE employment_ref_placed||" class="report-field value-010" data-source="bcr_ref_placed_social_service_subtype">
+
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>BCR Referrals Placed</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+<div class="col12 term">Referrals Placed</div>
+</div>
+
+<div class="entire">
+  <div class="col3 qTiedEnrollment">
+    <span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span>
+    <span class="qTiedEnrollment required-field-label">
+      <label class="label-right">Select Pathway Assignment</label>
+    </span>
+  </div>
+  <div class="col9 qTiedEnrollment">
+    <span class="qTiedEnrollment">
+      <select size="1" name="TiedEnrollment" onchange="checkhideall()">
+        <option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+      </select>
+    </span>
+  </div>
+</div>
+ <div class="entire">
+    <div class="col3 qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-right">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qPathway_Date"><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+  </div>
+ <div class="entire">
+    <div class="col3 qbcr_type_ref_placed"><span class="qbcr_type_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_type_ref_placed required-field-label"><label class="label-right">Type of Referrals Placed&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_type_ref_placed"><span class="qbcr_type_ref_placed"><select size="8" name="bcr_type_ref_placed" id="bcr_presenting_concerns" onchange="updateReportFields(['bcr_presenting_concerns']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_presenting_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_type_ref_placed^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_presenting_concerns||
+
+<!-- FIELDOVERRIDE(bcr_type_ref_placed,10,200) -->
+</span></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbcr_ref_placed_bh_subtype qbcr_ref_placed_bh_subtype">
+    <div class="col3 qbcr_ref_placed_bh_subtype"><span class="qbcr_ref_placed_bh_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_bh_subtype required-field-label"><label class="label-right">Type of Behavioral Health Referral&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_ref_placed_bh_subtype"><span class="qbcr_ref_placed_bh_subtype"><select size="8" name="bcr_ref_placed_bh_subtype" id="bcr_ref_placed_bh_subtype" onchange="updateReportFields(['bcr_ref_placed_bh_subtype']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_bh_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_bh_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_bh_subtype||
+
+<!-- FIELDOVERRIDE(bcr_ref_placed_bh_subtype,10,200) -->
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcmhc_agency qcmhc_agency">
+    <div class="col3 qcmhc_agency"><span class="qcmhc_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qcmhc_agency required-field-label"><label class="label-right">CMHC&nbsp;</label></span></div>
+    <div class="col9 qcmhc_agency"><span class="qcmhc_agency"><select size="1" name="cmhc_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE cmhc_agency^^') AND SUBTYPE='CMHC' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_cmhc_ref_placed qdate_cmhc_ref_placed">
+    <div class="col3 qdate_cmhc_ref_placed"><span class="qdate_cmhc_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_cmhc_ref_placed required-field-label"><label class="label-right">||FIELDTAG date_cmhc_ref_placed||Date of CMHC Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_cmhc_ref_placed"><span class="qdate_cmhc_ref_placed"><input type="text" name="date_cmhc_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldcounseling_agency qcounseling_agency">
+    <div class="col3 qcounseling_agency"><span class="qcounseling_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qcounseling_agency required-field-label"><label class="label-right">Counseling Agency&nbsp;</label></span></div>
+    <div class="col9 qcounseling_agency"><span class="qcounseling_agency"><select size="1" name="counseling_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE counseling_agency^^') AND SUBTYPE='Counseling' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_counseling_ref_placed qdate_counseling_ref_placed">
+    <div class="col3 qdate_counseling_ref_placed"><span class="qdate_counseling_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_counseling_ref_placed required-field-label"><label class="label-right">||FIELDTAG date_counseling_ref_placed||Date of Counseling Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_counseling_ref_placed"><span class="qdate_counseling_ref_placed"><input type="text" name="date_counseling_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldgroup_peer_support_agency qgroup_peer_support_agency">
+    <div class="col3 qgroup_peer_support_agency"><span class="qgroup_peer_support_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qgroup_peer_support_agency required-field-label"><label class="label-right">Group Peer Support Agency&nbsp;</label></span></div>
+    <div class="col9 qgroup_peer_support_agency"><span class="qgroup_peer_support_agency"><select size="1" name="group_peer_support_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE group_peer_support_agency^^') AND SUBTYPE='Group Peer Support' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_group_peer_support_ref_placed qdate_group_peer_support_ref_placed">
+    <div class="col3 qdate_group_peer_support_ref_placed"><span class="qdate_group_peer_support_ref_placed required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_group_peer_support_ref_placed required-field-label"><label class="label-right">||FIELDTAG date_group_peer_support_ref_placed||Date of Group Peer Support Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_group_peer_support_ref_placed"><span class="qdate_group_peer_support_ref_placed"><input type="text" name="date_group_peer_support_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldindiv_peer_support_agency qindiv_peer_support_agency">
+    <div class="col3 qindiv_peer_support_agency"><span class="qindiv_peer_support_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qindiv_peer_support_agency required-field-label"><label class="label-right">Individual Peer Support Agency&nbsp;</label></span></div>
+    <div class="col9 qindiv_peer_support_agency"><span class="qindiv_peer_support_agency"><select size="1" name="indiv_peer_support_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE indiv_peer_support_agency^^') AND SUBTYPE='Individual Peer Support' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_indiv_peer_support_ref qdate_indiv_peer_support_ref">
+    <div class="col3 qdate_indiv_peer_support_ref"><span class="qdate_indiv_peer_support_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_indiv_peer_support_ref required-field-label"><label class="label-right">||FIELDTAG date_indiv_peer_support_ref||Date of Individual Peer Support Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_indiv_peer_support_ref"><span class="qdate_indiv_peer_support_ref"><input type="text" name="date_indiv_peer_support_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldsu_agency qsu_agency">
+    <div class="col3 qsu_agency"><span class="qsu_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_agency required-field-label"><label class="label-right">Substance Use Agency&nbsp;</label></span></div>
+    <div class="col9 qsu_agency"><span class="qsu_agency"><select size="1" name="su_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_agency^^') AND SUBTYPE='Substance Use' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_su_ref qdate_su_ref">
+    <div class="col3 qdate_su_ref"><span class="qdate_su_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_su_ref required-field-label"><label class="label-right">||FIELDTAG date_su_ref||Date of Substance Use Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_su_ref"><span class="qdate_su_ref"><input type="text" name="date_su_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbcr_ref_placed_housing_subtype qbcr_ref_placed_housing_subtype">
+    <div class="col3 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_housing_subtype required-field-label"><label class="label-right">Housing Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_ref_placed_housing_subtype"><span class="qbcr_ref_placed_housing_subtype"><select size="8" name="bcr_ref_placed_housing_subtype" id="bcr_ref_placed_housing_subtype" onchange="updateReportFields(['bcr_ref_placed_housing_subtype']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_housing_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_housing_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_housing_subtype||
+
+<!-- FIELDOVERRIDE(bcr_ref_placed_housing_subtype,10,200) -->
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldrent_assist_agency qrent_assist_agency">
+    <div class="col3 qrent_assist_agency"><span class="qrent_assist_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qrent_assist_agency required-field-label"><label class="label-right">Rent/Mortgage Assistance Agency&nbsp;</label></span></div>
+    <div class="col9 qrent_assist_agency"><span class="qrent_assist_agency"><select size="1" name="rent_assist_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE rent_assist_agency^^') AND SUBTYPE='Rent/Mortgage Assistance' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_rent_assist_ref qdate_rent_assist_ref">
+    <div class="col3 qdate_rent_assist_ref"><span class="qdate_rent_assist_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_rent_assist_ref required-field-label"><label class="label-right">||FIELDTAG date_rent_assist_ref||Date of Rent/Mortgage Assistance Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_rent_assist_ref"><span class="qdate_rent_assist_ref"><input type="text" name="date_rent_assist_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldutility_assist_agency qutility_assist_agency">
+    <div class="col3 qutility_assist_agency"><span class="qutility_assist_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qutility_assist_agency required-field-label"><label class="label-right">Utility Assistance Agency&nbsp;</label></span></div>
+    <div class="col9 qutility_assist_agency"><span class="qutility_assist_agency"><select size="1" name="utility_assist_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE utility_assist_agency^^') AND SUBTYPE='Utility Assistance' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_utility_ref qdate_utility_ref">
+    <div class="col3 qdate_utility_ref"><span class="qdate_utility_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_utility_ref required-field-label"><label class="label-right">||FIELDTAG date_utility_ref||Date of Utility Assistance Referral ||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_utility_ref"><span class="qdate_utility_ref"><input type="text" name="date_utility_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldfurniture_agency qfurniture_agency">
+    <div class="col3 qfurniture_agency"><span class="qfurniture_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qfurniture_agency required-field-label"><label class="label-right">Furniture Agency&nbsp;</label></span></div>
+    <div class="col9 qfurniture_agency"><span class="qfurniture_agency"><select size="1" name="furniture_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE furniture_agency^^') AND SUBTYPE='Furniture' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_furniture_ref qdate_furniture_ref">
+    <div class="col3 qdate_furniture_ref"><span class="qdate_furniture_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_furniture_ref required-field-label"><label class="label-right">||FIELDTAG date_furniture_ref||Date of Furniture Referral ||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_furniture_ref"><span class="qdate_furniture_ref"><input type="text" name="date_furniture_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhome_repair_agency qhome_repair_agency">
+    <div class="col3 qhome_repair_agency"><span class="qhome_repair_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qhome_repair_agency required-field-label"><label class="label-right">Home Repair Agency&nbsp;</label></span></div>
+    <div class="col9 qhome_repair_agency"><span class="qhome_repair_agency"><select size="1" name="home_repair_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE home_repair_agency^^') AND SUBTYPE='Home Repairs' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_home_repairs_ref qdate_home_repairs_ref">
+    <div class="col3 qdate_home_repairs_ref"><span class="qdate_home_repairs_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_home_repairs_ref required-field-label"><label class="label-right">||FIELDTAG date_home_repairs_ref||Date of Home Repairs Referral ||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_home_repairs_ref"><span class="qdate_home_repairs_ref"><input type="text" name="date_home_repairs_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlandlord_med_agency qlandlord_med_agency">
+    <div class="col3 qlandlord_med_agency"><span class="qlandlord_med_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qlandlord_med_agency required-field-label"><label class="label-right">Landlord-Tenant Mediation Agency&nbsp;</label></span></div>
+    <div class="col9 qlandlord_med_agency"><span class="qlandlord_med_agency"><select size="1" name="landlord_med_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE landlord_med_agency^^') AND SUBTYPE='Landlord-Tenant Mediation' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_landlord_mediation_ref qdate_landlord_mediation_ref">
+    <div class="col3 qdate_landlord_mediation_ref"><span class="qdate_landlord_mediation_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_landlord_mediation_ref required-field-label"><label class="label-right">||FIELDTAG date_landlord_mediation_ref||Date of Landlord-Tenant Mediation Referral ||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_landlord_mediation_ref"><span class="qdate_landlord_mediation_ref"><input type="text" name="date_landlord_mediation_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldhomeless_services_agency qhomeless_services_agency">
+    <div class="col3 qhomeless_services_agency"><span class="qhomeless_services_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qhomeless_services_agency required-field-label"><label class="label-right">Homeless Services Agency&nbsp;</label></span></div>
+    <div class="col9 qhomeless_services_agency"><span class="qhomeless_services_agency"><select size="1" name="homeless_services_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE homeless_services_agency^^') AND SUBTYPE='Homeless Services' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_homeless_services_ref qdate_homeless_services_ref">
+    <div class="col3 qdate_homeless_services_ref"><span class="qdate_homeless_services_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_homeless_services_ref required-field-label"><label class="label-right">||FIELDTAG date_homeless_services_ref||Date of Homeless Services Referral ||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_homeless_services_ref"><span class="qdate_homeless_services_ref"><input type="text" name="date_homeless_services_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldmat_health_agency qmat_health_agency">
+    <div class="col3 qmat_health_agency"><span class="qmat_health_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_health_agency required-field-label"><label class="label-right">Maternal Health Agency&nbsp;</label></span></div>
+    <div class="col9 qmat_health_agency"><span class="qmat_health_agency"><select size="1" name="mat_health_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mat_health_agency^^') AND TYPE='Maternal Health' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_mat_health_ref_placed qdate_mat_health_ref_placed">
+    <div class="col3 qdate_mat_health_ref_placed"><span class="qdate_mat_health_ref_placed"><label class="label-right">||FIELDTAG date_mat_health_ref_placed||Date of Maternal Health Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_mat_health_ref_placed"><span class="qdate_mat_health_ref_placed"><input type="text" name="date_mat_health_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_other_ref qdate_other_ref">
+    <div class="col3 qdate_other_ref"><span class="qdate_other_ref"><label class="label-right">||FIELDTAG date_other_ref||Date Other Referral Placed||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_other_ref"><span class="qdate_other_ref"><input type="text" name="date_other_ref" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldother_agency qother_agency">
+    <div class="col3 qother_agency"><span class="qother_agency"><label class="label-right">||FIELDTAG other_agency||Other Referral Type and/or Agency||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qother_agency"><span class="qother_agency"><input type="text" name="other_agency" size="20" onchange="checkhideall()"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbcr_ref_placed_phys_health_subtype qbcr_ref_placed_phys_health_subtype">
+    <div class="col3 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_phys_health_subtype required-field-label"><label class="label-right">Physical Health Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_ref_placed_phys_health_subtype"><span class="qbcr_ref_placed_phys_health_subtype"><select size="4" name="bcr_ref_placed_phys_health_subtype" id="bcr_ref_placed_phys_health_subtype" onchange="updateReportFields(['bcr_ref_placed_phys_health_subtype']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_phys_health_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_phys_health_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_phys_health_subtype||
+
+<!-- FIELDOVERRIDE(bcr_ref_placed_phys_health_subtype,10,200) -->
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldprimary_care_agency qprimary_care_agency">
+    <div class="col3 qprimary_care_agency"><span class="qprimary_care_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qprimary_care_agency required-field-label"><label class="label-right">Primary Care Agency&nbsp;</label></span></div>
+    <div class="col9 qprimary_care_agency"><span class="qprimary_care_agency"><select size="1" name="primary_care_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE primary_care_agency^^') AND SUBTYPE='Primary Care' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_primary_care_ref_placed qdate_primary_care_ref_placed">
+    <div class="col3 qdate_primary_care_ref_placed"><span class="qdate_primary_care_ref_placed"><label class="label-right">||FIELDTAG date_primary_care_ref_placed||Date of Primary Care Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_primary_care_ref_placed"><span class="qdate_primary_care_ref_placed"><input type="text" name="date_primary_care_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddental_agency qdental_agency">
+    <div class="col3 qdental_agency"><span class="qdental_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qdental_agency required-field-label"><label class="label-right">Dental Agency&nbsp;</label></span></div>
+    <div class="col9 qdental_agency"><span class="qdental_agency"><select size="1" name="dental_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dental_agency^^') AND SUBTYPE='Dental' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_dental_ref_placed qdate_dental_ref_placed">
+    <div class="col3 qdate_dental_ref_placed"><span class="qdate_dental_ref_placed"><label class="label-right">||FIELDTAG date_dental_ref_placed||Date of Dental Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_dental_ref_placed"><span class="qdate_dental_ref_placed"><input type="text" name="date_dental_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbcr_ref_placed_social_subtype qbcr_ref_placed_social_subtype">
+    <div class="col3 qbcr_ref_placed_social_subtype"><span class="qbcr_ref_placed_social_subtype required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_ref_placed_social_subtype required-field-label"><label class="label-right">Social Service Subtype&nbsp;<br>(Hold down Ctrl to select multiple)</label></span></div>
+    <div class="col9 qbcr_ref_placed_social_subtype"><span class="qbcr_ref_placed_social_subtype"><select size="8" name="bcr_ref_placed_social_subtype" id="bcr_ref_placed_social_service_subtype" onchange="updateReportFields(['bcr_ref_placed_social_service_subtype']); checkhideall();" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_social_service_subtype] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_ref_placed_social_subtype^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_social_service_subtype||
+
+<!-- FIELDOVERRIDE(bcr_ref_placed_social_subtype,10,200) -->
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldchild_care_agency qchild_care_agency">
+    <div class="col3 qchild_care_agency"><span class="qchild_care_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qchild_care_agency required-field-label"><label class="label-right">Child Care Agency&nbsp;</label></span></div>
+    <div class="col9 qchild_care_agency"><span class="qchild_care_agency"><select size="1" name="child_care_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE child_care_agency^^') AND SUBTYPE='Child Care Assistance' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_child_care_ref_placed qdate_child_care_ref_placed">
+    <div class="col3 qdate_child_care_ref_placed"><span class="qdate_child_care_ref_placed"><label class="label-right">||FIELDTAG date_child_care_ref_placed||Date of Child Care Assistance Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_child_care_ref_placed"><span class="qdate_child_care_ref_placed"><input type="text" name="date_child_care_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldclothing_agency qclothing_agency">
+    <div class="col3 qclothing_agency"><span class="qclothing_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qclothing_agency required-field-label"><label class="label-right">Clothing Agency&nbsp;</label></span></div>
+    <div class="col9 qclothing_agency"><span class="qclothing_agency"><select size="1" name="clothing_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE clothing_agency^^') AND SUBTYPE='Clothing' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_clothing_ref_placed qdate_clothing_ref_placed">
+    <div class="col3 qdate_clothing_ref_placed"><span class="qdate_clothing_ref_placed"><label class="label-right">||FIELDTAG date_clothing_ref_placed||Date of Clothing Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_clothing_ref_placed"><span class="qdate_clothing_ref_placed"><input type="text" name="date_clothing_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddd_agency qdd_agency">
+    <div class="col3 qdd_agency"><span class="qdd_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qdd_agency required-field-label"><label class="label-right">Developmental Disability Agency&nbsp;</label></span></div>
+    <div class="col9 qdd_agency"><span class="qdd_agency"><select size="1" name="dd_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dd_agency^^') AND SUBTYPE='Developmental Disabilities' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_dd_ref_placed qdate_dd_ref_placed">
+    <div class="col3 qdate_dd_ref_placed"><span class="qdate_dd_ref_placed"><label class="label-right">||FIELDTAG date_dd_ref_placed||Date of DD Services Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_dd_ref_placed"><span class="qdate_dd_ref_placed"><input type="text" name="date_dd_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddv_agency qdv_agency">
+    <div class="col3 qdv_agency"><span class="qdv_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qdv_agency required-field-label"><label class="label-right">Domestic Violence Agency&nbsp;</label></span></div>
+    <div class="col9 qdv_agency"><span class="qdv_agency"><select size="1" name="dv_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dv_agency^^') AND SUBTYPE='Domestic Violence' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_dv_ref_placed qdate_dv_ref_placed">
+    <div class="col3 qdate_dv_ref_placed"><span class="qdate_dv_ref_placed"><label class="label-right">||FIELDTAG date_dv_ref_placed||Date of Domestic Violence/IPV Referral ||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_dv_ref_placed"><span class="qdate_dv_ref_placed"><input type="text" name="date_dv_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldfood_agency qfood_agency">
+    <div class="col3 qfood_agency"><span class="qfood_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qfood_agency required-field-label"><label class="label-right">Food Assistance Agency&nbsp;</label></span></div>
+    <div class="col9 qfood_agency"><span class="qfood_agency"><select size="1" name="food_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE food_agency^^') AND SUBTYPE='Food' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_food_ref_placed qdate_food_ref_placed">
+    <div class="col3 qdate_food_ref_placed"><span class="qdate_food_ref_placed"><label class="label-right">||FIELDTAG date_food_ref_placed||Date of Food Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_food_ref_placed"><span class="qdate_food_ref_placed"><input type="text" name="date_food_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldemployment_agency qemployment_agency">
+    <div class="col3 qemployment_agency"><span class="qemployment_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qemployment_agency required-field-label"><label class="label-right">Employment Agency&nbsp;</label></span></div>
+    <div class="col9 qemployment_agency"><span class="qemployment_agency"><select size="1" name="employment_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE employment_agency^^') AND SUBTYPE='Employment' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_employment_ref_placed qdate_employment_ref_placed">
+    <div class="col3 qdate_employment_ref_placed"><span class="qdate_employment_ref_placed"><label class="label-right">||FIELDTAG date_employment_ref_placed||Date of Employment Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_employment_ref_placed"><span class="qdate_employment_ref_placed"><input type="text" name="date_employment_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldinsurance_agency qinsurance_agency">
+    <div class="col3 qinsurance_agency"><span class="qinsurance_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qinsurance_agency required-field-label"><label class="label-right">Insurance Access Agency&nbsp;</label></span></div>
+    <div class="col9 qinsurance_agency"><span class="qinsurance_agency"><select size="1" name="insurance_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE insurance_agency^^') AND SUBTYPE='Insurance Access' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_insurance_ref_placed qdate_insurance_ref_placed">
+    <div class="col3 qdate_insurance_ref_placed"><span class="qdate_insurance_ref_placed"><label class="label-right">||FIELDTAG date_insurance_ref_placed||Date Insurance Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_insurance_ref_placed"><span class="qdate_insurance_ref_placed"><input type="text" name="date_insurance_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlegal_agency qlegal_agency">
+    <div class="col3 qlegal_agency"><span class="qlegal_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qlegal_agency required-field-label"><label class="label-right">Legal Aid Agency&nbsp;</label></span></div>
+    <div class="col9 qlegal_agency"><span class="qlegal_agency"><select size="1" name="legal_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE legal_agency^^') AND SUBTYPE='Legal Aid' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_legal_ref_placed qdate_legal_ref_placed">
+    <div class="col3 qdate_legal_ref_placed"><span class="qdate_legal_ref_placed"><label class="label-right">||FIELDTAG date_legal_ref_placed||Date of Legal Aid Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_legal_ref_placed"><span class="qdate_legal_ref_placed"><input type="text" name="date_legal_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlgbtq_agency qlgbtq_agency">
+    <div class="col3 qlgbtq_agency"><span class="qlgbtq_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qlgbtq_agency required-field-label"><label class="label-right">LGBTQ Services Agency&nbsp;</label></span></div>
+    <div class="col9 qlgbtq_agency"><span class="qlgbtq_agency"><select size="1" name="lgbtq_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE lgbtq_agency^^') AND SUBTYPE='LGBTQ Services' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_lgbtq_ref_placed qdate_lgbtq_ref_placed">
+    <div class="col3 qdate_lgbtq_ref_placed"><span class="qdate_lgbtq_ref_placed"><label class="label-right">||FIELDTAG date_lgbtq_ref_placed||Date LGBTQ Services Referral Placed||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_lgbtq_ref_placed"><span class="qdate_lgbtq_ref_placed"><input type="text" name="date_lgbtq_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldtransport_agency qtransport_agency">
+    <div class="col3 qtransport_agency"><span class="qtransport_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qtransport_agency required-field-label"><label class="label-right">Transportation Agency&nbsp;</label></span></div>
+    <div class="col9 qtransport_agency"><span class="qtransport_agency"><select size="1" name="transport_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE transport_agency^^') AND SUBTYPE='Transportation' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_transport_ref_placed qdate_transport_ref_placed">
+    <div class="col3 qdate_transport_ref_placed"><span class="qdate_transport_ref_placed"><label class="label-right">||FIELDTAG date_transport_ref_placed||Date of Transportation Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_transport_ref_placed"><span class="qdate_transport_ref_placed"><input type="text" name="date_transport_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldspiritual_agency qspiritual_agency">
+    <div class="col3 qspiritual_agency"><span class="qspiritual_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qspiritual_agency required-field-label"><label class="label-right">Spiritual Care Agency&nbsp;</label></span></div>
+    <div class="col9 qspiritual_agency"><span class="qspiritual_agency"><select size="1" name="spiritual_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_ref_placed_agencies] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE spiritual_agency^^') AND TYPE='Spiritual Care' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_ref_placed_agencies||
+</span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddate_spiritual_ref_placed qdate_spiritual_ref_placed">
+    <div class="col3 qdate_spiritual_ref_placed"><span class="qdate_spiritual_ref_placed"><label class="label-right">||FIELDTAG date_spiritual_ref_placed||Date of Spiritual Care Referral||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qdate_spiritual_ref_placed"><span class="qdate_spiritual_ref_placed"><input type="text" name="date_spiritual_ref_placed" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+  </div>
+ </div>
+<div class="entire">
+<div class="col12 term">Wellness Plan/Additional Client Needs</div>
+</div>
+ <div class="entire">
+    <div class="col3 qwellness_plan_rp"><span class="qwellness_plan_rp required-label">||PWRequiredFieldRequiredText||</span><span class="qwellness_plan_rp required-field-label"><label class="label-right">||FIELDTAG wellness_plan_rp||Was a client wellness plan developed?||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qwellness_plan_rp"><span class="qwellness_plan_rp"><input type="radio" name="wellness_plan_rp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="wellness_plan_rp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+  </div>
+ <div class="entire">
+    <div class="col3 qunmet_needs"><span class="qunmet_needs"><label class="label-right">||FIELDTAG unmet_needs||Were there additional client needs that BCR was not able to provide referrals for?||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qunmet_needs"><span class="qunmet_needs"><input type="radio" name="unmet_needs" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="unmet_needs" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldunmet_needs_exp qunmet_needs_exp">
+    <div class="col3 qunmet_needs_exp"><span class="qunmet_needs_exp required-label">||PWRequiredFieldRequiredText||</span><span class="qunmet_needs_exp required-field-label"><label class="label-right">||FIELDTAG unmet_needs_exp||If "Yes," please list additional client needs||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qunmet_needs_exp"><span class="qunmet_needs_exp"><textarea name="unmet_needs_exp" class="autoexpand"></textarea></span></div>
+    </div>
+  </div>
+ <div class="entire">
+    <div class="col3 qnotes_rp"><span class="qnotes_rp"><label class="label-right">||FIELDTAG notes_rp||Notes||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 qnotes_rp"><span class="qnotes_rp"><textarea name="notes_rp" class="autoexpand"></textarea></span></div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

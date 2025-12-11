@@ -1,0 +1,238 @@
+<html>
+
+<head>
+<title>Pathway Event Client</title>
+</head> 
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+function startup() {
+   if ("||DOCSERNO||"=="") {
+      //***Commands here will execute when the record is new
+      document.forms[0]._B2.style.display = 'none';
+   }
+   else {
+      if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+         //***Commands here will execute when the form is printed
+      }
+      else {
+         //***Commands here will execute when the form is being edited
+        document.forms[0]._B1.style.display = "";
+        document.forms[0]._B2.style.display = "";
+        document.forms[0]._B3.style.display = "";
+      }
+   }
+}
+
+function submitit() {
+   var f=document.forms[0];
+   //***Error checking should be done here before a quick save
+   f.target="";
+   f.submit();
+   return;
+}
+
+function deleteit() {
+   functionreturnvalue = null;
+   var f = document.forms[0];
+   if ("||DOCSERNO||" == "") {
+       alert("Just click the X in the upper right hand corner to delete this.");
+       return functionreturnvalue;
+   }
+   // check msgbox (yes/no) to confirm (ok/cancel) wording
+   var msgtemp = confirm("Are you sure you want to delete this record?");
+   if (msgtemp) { gg = 1 } else { gg = 7 }
+   if (gg == 7) {
+       return functionreturnvalue;
+   }
+   document.forms[0].FUNCTION.value = "DELETEDATA";
+   document.forms[0].submit();
+   return functionreturnvalue;
+}
+
+function quicksubmitit() {
+   var f=document.forms[0];
+   //***Error checking should be done here before a quick save
+   document.forms[0]._B1.style.display = "none";
+   document.forms[0]._B2.style.display = "none";
+   document.forms[0]._B3.style.display = "none";
+   f.target = "fvalidate";
+   var DefaultSaveConfirm=document.forms[0].CONFIRMSCREEN.value;
+   f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+   f.submit();
+   document.forms[0].CONFIRMSCREEN.value=DefaultSaveConfirm;
+   return;
+}
+
+function QuickSubmitReturn() {
+   var f=document.forms[0];
+   //***Reset the form after a quick submit here
+   document.forms[0]._B1.style.display = "";
+   document.forms[0]._B2.style.display = "";
+   document.forms[0]._B3.style.display = "";
+   updatesignatures();
+   alert("Record Saved");
+   return;
+}
+
+function resetsave() {
+   //***Commands here will reset the form if there is an error during save
+   document.forms[0]._B1.style.display = "";
+   document.forms[0]._B2.style.display = "";
+   document.forms[0]._B3.style.display = "";
+}
+
+function ExpandText(fldname) {
+   var o = document.forms[0].elements(fldname);
+   g = parseInt(o.clientHeight / o.rows + .5);
+   h = o.scrollHeight;
+   h = parseInt(h / g) + 6;
+   o.rows = h;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+function pulldatafunction() {
+	var f=document.forms[0];
+//Replace the PopulateFunction with the unique name of the function to be used on the returned data
+	var PopField = "PopFieldName";
+	var sql="SELECT statemenet here";
+	sql=escape(sql);
+	var fullhlink="genfunc.exe?FULLFUNCTION^PULLDATA|IDENTIFIER("+PopFieldName+")|JAVASCRIPT(MULTIARRAY)|ERROR(SUPPRESS)|SQL("+sql+")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopPulldata)|SUBMITTIME("+rightjis(cstrjis(Date()),5)+")^";
+	parent.fvalidate.location=fullhlink;
+	return;
+}
+
+function PopPulldata(numelementsper,totalelements,identifier,results) {
+
+}
+
+function SwitchToAnotherScreen() {
+	var urlfunc;
+//Change FormNameHere to the name of your form you are changing to.
+	urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(FormNameHere)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(||SESSIONID||)^";
+	parent.main.location.replace(urlfunc);
+	return;
+}
+
+function CallFormInFValidateFrame() {
+	var urlfunc;
+//Change FormNameHere to the name of your form with the actions on it to perform when called to the FValidate frame.
+	urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(FormNameHere)|CLIENTNUMBER(||CLIENTNUMBER||)|SESSIONID(||SESSIONID||)^";
+	parent.fvalidate.location.replace(urlfunc);
+	return;
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PathwayEventClient" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+
+    <h1><span>Pathway Event Client</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+<div class="deflist">
+<div class="term">Heading Here</div>
+<div class="def highlighted">
+<ul>
+  <li><strong>Event DocSerNo</strong>
+<input type="text" name="EventDocSerno" size="30"></li>
+<li><strong>ID Number</strong>
+<input type="text" name="IDNumber" size="30"></li>
+<li><strong>Org Sched Date</strong>
+<input type="text" name="OrgSchedDate" value="||TYPE DATE||" size="12"></li>
+<li><strong>Start Date</strong>
+<input type="text" name="StartDate" value="||TYPE DATE||" size="12"></li>
+<li><strong>End Date</strong>
+<input type="text" name="EndDate" value="||TYPE DATE||" size="12"></li>
+<li><strong>Date Accomplished</strong>
+<input type="text" name="DateAccomplished" value="||TYPE DATE||" size="12"></li>
+<li><strong>Last Update by</strong>
+<input type="text" name="LastUpdateBy" size="30"></li>
+<li><strong>Last Update Date</strong>
+<input type="text" name="LastUpdateDate" value="||TYPE DATE||" size="12"></li>
+<li><strong>Last View By</strong>
+<input type="text" name="LastViewBy" size="30"></li>
+<li><strong>Last View Date</strong>
+<input type="text" name="LastViewDate" value="||TYPE DATE||" size="12"></li>
+<li><strong>Current Message</strong>
+<textarea name="CurrentMessage" rows="3" cols="45"></textarea></li>
+<li><strong>Comment</strong>
+<textarea name="Comment" rows="3" cols="45"></textarea></li>
+</ul>
+</div>
+</div>
+</div>
+||STARTSTRIP||
+    <div align="center"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
+    <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div>
+||ENDSTRIP||
+
+</form>
+</body>
+</html>

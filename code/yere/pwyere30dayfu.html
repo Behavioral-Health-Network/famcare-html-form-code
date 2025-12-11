@@ -1,0 +1,694 @@
+<html>
+
+<head>
+<title>YERE 30 Day Follow Up TP</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+          // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+          // f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('pathway_date');
+    setrequire('method_contact_thirty_day');
+    setrequire('other_contact_method_thirty_day');
+    setrequire('residency_change_since_referral_thirty_day');
+    setrequire('residency_change_type_thirty_day');
+    setrequire('residency_change_address_existing_barrier_service_plan_goal_thirty_day');
+    setrequire('school_change_thirty_day');
+    setrequire('TiedEnrollment');
+    
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.method_contact_thirty_day,"other_contact_method_thirty_day","Other");
+   checkhide(f.residency_change_since_referral_thirty_day,"residency_change_type_thirty_day","Yes");
+   checkhide(f.residency_change_type_thirty_day,"specify_other_residency_change_type_thirty_day","Other");
+   checkhide(f.residency_change_since_referral_thirty_day,"residency_change_address_existing_barrier_service_plan_goal_thirty_day","Yes");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
+  if (!hiddenfield('method_contact_thirty_day') && gvtfieldvalue('method_contact_thirty_day')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_contact_thirty_day");}
+  if (!hiddenfield('other_contact_method_thirty_day') && gvtfieldvalue('other_contact_method_thirty_day')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_thirty_day");}
+  if (!hiddenfield('residency_change_since_referral_thirty_day') && gvtfieldvalue('residency_change_since_referral_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral?\n`; seterror("residency_change_since_referral_thirty_day");}
+  if (!hiddenfield('residency_change_type_thirty_day') && gvtfieldvalue('residency_change_type_thirty_day')=='') {edesc=edesc+`Must specify a value for Residency Change Type\n`; seterror("residency_change_type_thirty_day");}
+  if (!hiddenfield('residency_change_address_existing_barrier_service_plan_goal_thirty_day') && gvtfieldvalue('residency_change_address_existing_barrier_service_plan_goal_thirty_day')=='') {edesc=edesc+`Must specify a value for Did the residency change address an existing barrier or service plan goal?\n`; seterror("residency_change_address_existing_barrier_service_plan_goal_thirty_day");}
+  if (!hiddenfield('school_change_thirty_day') && gvtfieldvalue('school_change_thirty_day')=='') {edesc=edesc+`Must specify a value for Has youth changed schools since the previous YERE encounter was completed?\n`; seterror("school_change_thirty_day");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+  return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWYERE30DayFollowUpTP" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>YERE 30 Day Follow Up TP</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+</div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpathway_date qpathway_date">
+    <div class="col12 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col4 qstill_actively_engaged_yere_thirty_day">
+    <div class="col4 fldstill_actively_engaged_yere_thirty_day qstill_actively_engaged_yere_thirty_day"><span class="qstill_actively_engaged_yere_thirty_day"><label class="label-top">||FIELDTAG still_actively_engaged_yere_thirty_day||Is youth still actively engaged in ERE services?||ENDFIELDTAG||</label></span><span class="qstill_actively_engaged_yere_thirty_day"><input type="radio" name="still_actively_engaged_yere_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="still_actively_engaged_yere_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col4 qmethod_contact_thirty_day">
+    <div class="col4 fldmethod_contact_thirty_day qmethod_contact_thirty_day"><span class="qmethod_contact_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_thirty_day required-field-label"><label class="label-top">||FIELDTAG method_contact_thirty_day||Method of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_thirty_day"><input type="radio" name="method_contact_thirty_day" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_thirty_day" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_thirty_day" value="Other" onclick="checkhideall()" >Other</span></div>
+     </div>
+    <div class="col4 qother_contact_method_thirty_day">
+    <div class="col4 fldother_contact_method_thirty_day qother_contact_method_thirty_day"><span class="qother_contact_method_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_thirty_day required-field-label"><label class="label-top">||FIELDTAG other_contact_method_thirty_day||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_thirty_day"><textarea name="other_contact_method_thirty_day" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Housing Status</div>
+</div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>If client's housing status hasn't changed, leave as is. If client's housing status has changed, click "View/Edit", add an "End Date" to the current entry, then add a new entry.</i></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qresidency_change_since_referral_thirty_day">
+    <div class="col6 fldresidency_change_since_referral_thirty_day qresidency_change_since_referral_thirty_day"><span class="qresidency_change_since_referral_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_since_referral_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_since_referral_thirty_day||Residency change since Youth ERE referral?||ENDFIELDTAG||</label></span><span class="qresidency_change_since_referral_thirty_day"><input type="radio" name="residency_change_since_referral_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_since_referral_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col6 qresidency_change_type_thirty_day">
+    <div class="col6 fldresidency_change_type_thirty_day qresidency_change_type_thirty_day"><span class="qresidency_change_type_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_type_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_type_thirty_day||Residency Change Type||ENDFIELDTAG||</label></span><span class="qresidency_change_type_thirty_day"><input type="radio" name="residency_change_type_thirty_day" value="Homeless To Housed" onclick="checkhideall()" >Homeless To Housed<br><input type="radio" name="residency_change_type_thirty_day" value="Out Of Home Placement (Foster Care Or Residential Treatment Facility)" onclick="checkhideall()" >Out Of Home Placement (Foster Care Or Residential Treatment Facility)<br><input type="radio" name="residency_change_type_thirty_day" value="Other" onclick="checkhideall()" >Other
+<!-- FIELDOVERRIDE(residency_change_type_thirty_day,10,69) -->
+</span></div>
+     </div>
+    <div class="col6 qspecify_other_residency_change_type_thirty_day">
+    <div class="col6 fldspecify_other_residency_change_type_thirty_day qspecify_other_residency_change_type_thirty_day"><span class="qspecify_other_residency_change_type_thirty_day"><label class="label-top">||FIELDTAG specify_other_residency_change_type_thirty_day||Other Type of Residency Change||ENDFIELDTAG||</label></span><span class="qspecify_other_residency_change_type_thirty_day"><textarea name="specify_other_residency_change_type_thirty_day" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qresidency_change_address_existing_barrier_service_plan_goal_thirty_day">
+    <div class="col6 fldresidency_change_address_existing_barrier_service_plan_goal_thirty_day qresidency_change_address_existing_barrier_service_plan_goal_thirty_day"><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day required-field-label"><label class="label-top">||FIELDTAG residency_change_address_existing_barrier_service_plan_goal_thirty_day||Did the residency change address an existing barrier or service plan goal?||ENDFIELDTAG||</label></span><span class="qresidency_change_address_existing_barrier_service_plan_goal_thirty_day"><input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="residency_change_address_existing_barrier_service_plan_goal_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">School</div>
+</div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day">
+    <div class="col12 fldschool_change_thirty_day qschool_change_thirty_day"><span class="qschool_change_thirty_day required-label">||PWRequiredFieldRequiredText||</span><span class="qschool_change_thirty_day required-field-label"><label class="label-top">||FIELDTAG school_change_thirty_day||Has youth changed schools since the previous YERE encounter was completed?||ENDFIELDTAG||</label></span><span class="qschool_change_thirty_day"><input type="radio" name="school_change_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="school_change_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"><i>If client hasn't changed schools, leave as is. If client has switched to a new school, click "View/Edit to add an "End Date" to the current school and then create a new entry.</i></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationSchoolInfoCS||</div>
+  </div>
+<div class="entire">
+<div class="col12 term">Youth Program Needs</div>
+</div>
+<div class="entire">
+    <div class="col12"><label class="label-top"><i>If client's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
+  </div>
+<div class="entire">
+</div>
+<div class="entire">
+    <div class="col12 term">Caregiver Program Needs</div>
+    </div>
+    <div class="entire">
+        <div class="col12"><label class="label-top"><i>If caregiver's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
+      </div>    
+     <div class="entire">
+        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
+      </div>
+      <div class="entire">
+        <div class="col12 term"></div>
+        </div>
+      <div class="entire">
+        <div class="col6"><label class="label-top"></label></div>
+      </div>     
+ <div class="entire">
+    <div class="col12 fldattend_bh_intake_between_ia_thirty_day qattend_bh_intake_between_ia_thirty_day">
+    <div class="col12 fldattend_bh_intake_between_ia_thirty_day qattend_bh_intake_between_ia_thirty_day"><span class="qattend_bh_intake_between_ia_thirty_day"><label class="label-top">||FIELDTAG attend_bh_intake_between_ia_thirty_day||Did youth attend a behavioral health intake between initial assessment and now?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake_between_ia_thirty_day"><input type="radio" name="attend_bh_intake_between_ia_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake_between_ia_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"><i>IF YES, PLEASE COMPLETE/UPDATE BEHAVIORAL HEALTH SERVICES FORM IMMEDIATELY FOLLOWING COMPLETION OF THIS FORM.</i></label></div>
+  </div>
+<div class="entire">
+</div>
+<div class="entire">
+  <div class="col6"><label class="label-top"></label></div>
+</div>
+ <div class="entire">
+    <div class="col6 qlegal_guardian_meet_yere_family_support_specialist_thirty_day">
+    <div class="col6 fldlegal_guardian_meet_yere_family_support_specialist_thirty_day qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><span class="qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><label class="label-top">||FIELDTAG legal_guardian_meet_yere_family_support_specialist_thirty_day||Did legal guardian(s) have a meeting with a YERE Family Support Specialist?||ENDFIELDTAG||</label></span><span class="qlegal_guardian_meet_yere_family_support_specialist_thirty_day"><input type="radio" name="legal_guardian_meet_yere_family_support_specialist_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="legal_guardian_meet_yere_family_support_specialist_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6 qcase_staffed_yere_collab_staffing_thirty_day">
+    <div class="col6 fldcase_staffed_yere_collab_staffing_thirty_day qcase_staffed_yere_collab_staffing_thirty_day"><span class="qcase_staffed_yere_collab_staffing_thirty_day"><label class="label-top">||FIELDTAG case_staffed_yere_collab_staffing_thirty_day||Was youth/family case staffed in a YERE collaborative staffing?||ENDFIELDTAG||</label></span><span class="qcase_staffed_yere_collab_staffing_thirty_day"><input type="radio" name="case_staffed_yere_collab_staffing_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="case_staffed_yere_collab_staffing_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+<div class="entire">
+  <div class="col6"><label class="label-top"></label></div>
+</div>
+ <div class="entire">
+    <div class="col12 fldactively_engaged_bhs_past_thirty_days_thirty_day qactively_engaged_bhs_past_thirty_days_thirty_day">
+    <div class="col12 fldactively_engaged_bhs_past_thirty_days_thirty_day qactively_engaged_bhs_past_thirty_days_thirty_day"><span class="qactively_engaged_bhs_past_thirty_days_thirty_day"><label class="label-top">||FIELDTAG actively_engaged_bhs_past_thirty_days_thirty_day||Is youth actively engaged in  behavioral services?||ENDFIELDTAG||</label></span><span class="qactively_engaged_bhs_past_thirty_days_thirty_day"><input type="radio" name="actively_engaged_bhs_past_thirty_days_thirty_day" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="actively_engaged_bhs_past_thirty_days_thirty_day" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldnotes_thirty_day qnotes_thirty_day">
+    <div class="col12 fldnotes_thirty_day qnotes_thirty_day"><span class="qnotes_thirty_day"><label class="label-top">||FIELDTAG notes_thirty_day||Notes||ENDFIELDTAG||</label></span><span class="qnotes_thirty_day"><textarea name="notes_thirty_day" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

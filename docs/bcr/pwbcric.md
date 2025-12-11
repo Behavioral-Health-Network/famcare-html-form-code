@@ -1,0 +1,62 @@
+---
+form_title: BCR Initial Contact
+form_file: code/bcr/pwbcric.html
+table_name: PWBCRINITIALCONTACT
+program_scope: single
+programs:
+  - bcr
+form_type: pathways-governed
+client_form: true
+tags:
+  - pathway-event
+  - bcr-initial-contact
+pathway_name: BCR
+pathway_id: 55320240917145557321
+pathway_event: BCR Initial Contact
+pathway_event_logic:
+    start_period: 0 - D
+    end_period: 14 - D
+    early_period: 0
+    late_period: 76
+    recurring_period: 0 - D
+    lag_period: 0 - D
+    number_occurrences: 1
+    depends_on: BCR Referral
+    completion_check_table: PWBCRINITIALCONTACT
+date_field: PATHWAY_DATE
+parent_linkage: null
+join_logic:
+  targets:
+    - table: PATHWAYCLIENT
+      join_type: inner
+      on:
+        - source: PWBCRINITIALCONTACT.TIEDENROLLMENT
+          target: PATHWAYCLIENT.DOCSERNO
+        - source: PWBCRINITIALCONTACT.CLIENT_NUMBER
+          target: PATHWAYCLIENT.CLIENTNUMBER
+quick_submit_enabled: false
+last_updated: 2025-12-03
+status: active
+---
+
+# BCR Initial Contact Form
+
+## Changelog
+
+<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
+
+2026
+
+- **YYYY-MM-DD**: Adds change.
+
+2025
+
+- **2025-12-03**: Adds initial Markdown documentation file.
+- **2025-11-20**: Comments out `pregnant_ic` and `preg_child_last_90_ic`. Changes location of `planned_event`, `event_type`, and `event_type_other` to be right after `zip_of_initial_contact`.
+- **2025-11-20**: Adds planned_event, event_type, event_type_other, reside_stl_city, and prior_mh_bh_service fields to the IC. These fields were requested to be movef from the Referral form to the IC by Tamela and Wendy to make the referral form shorter.
+- **2025-08-25**: Adds HTML and JavaScript code to add `TiedEnrollment` field to the form as a fix GVT came up with to assist in joining our pathway forms together and avoiding duplication.
+- **2025-03-11**: Removes extra class ="enter" that didn't need to be there before `pathway_date`.
+- **2025-03-11**: Adds header at the top of the page since getting rid of logo.
+- **2025-01-03**: Updates section headers.
+
+</details>

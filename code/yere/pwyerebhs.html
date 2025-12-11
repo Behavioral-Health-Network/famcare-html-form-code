@@ -1,0 +1,728 @@
+<html>
+
+<head>
+<title>YERE Behavioral Health Services TP</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+          // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+          // f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('pathway_date');
+    // Commented out bhs_service_path and open_cmhc_and_reconnected fields since we are switching to only use the BHS form for intakes and admissions. Reconnects will be completed on ProviderPlacement as a dismissal reason.
+    // setrequire('open_cmhc_and_reconnected');
+    // setrequire('bhs_service_path');
+    setrequire('attend_bh_intake');
+    setrequire('mh_intake');
+    setrequire('su_intake');
+    setrequire('mh_intake_agency');
+    setrequire('su_intake_agency');
+    setrequire('other_mh_intake_agency');
+    setrequire('other_su_intake_agency');
+    setrequire('admitted_to_services');
+    setrequire('reason_not_admitted');
+    setrequire('reason_not_admitted_capacity');
+    setrequire('reason_not_admitted_ineligibility');
+    setrequire('reason_not_admitted_other');
+    setrequire('date_admitted_services');
+    setrequire('admitting_program_dmh_or_nondmh');
+    setrequire('TiedEnrollment');
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+}
+
+function checkhideall() {
+   f=document.forms[0];
+// Commented out bhs_service_path and open_cmhc_and_reconnected fields since we are switching to only use the BHS form for intakes and admissions. Reconnects will be completed on ProviderPlacement as a dismissal reason.
+      // checkhide(f.bhs_service_path,"open_cmhc_and_reconnected","Reconnection Path");
+  //  checkhide(f.bhs_service_path,"attend_bh_intake","New Intake/Admission Path");
+   checkhide(f.attend_bh_intake,"num_days_bh_intake_since_ia","Yes");
+   checkhide(f.attend_bh_intake,"mh_intake","Yes");
+   checkhide(f.attend_bh_intake,"su_intake","Yes");
+   checkhide(f.mh_intake,"mh_intake_agency","Yes");
+   checkhide(f.su_intake,"su_intake_agency","Yes");
+   checkhide(f.mh_intake_agency,"other_mh_intake_agency","013");
+   checkhide(f.su_intake_agency,"other_su_intake_agency","023");
+   checkhide(f.mh_intake,"type_mh_intake","Yes");
+   checkhide(f.attend_bh_intake,"admitted_to_services","Yes");
+   checkhide(f.admitted_to_services,"reason_not_admitted","No");
+   checkhide(f.reason_not_admitted,"reason_not_admitted_capacity","Agency Capacity Limitations");
+   checkhide(f.reason_not_admitted,"reason_not_admitted_ineligibility","Ineligible");
+   checkhide(f.reason_not_admitted,"reason_not_admitted_other","Other");
+   checkhide(f.admitted_to_services,"date_admitted_services","Yes");
+   checkhide(f.admitted_to_services,"admitting_program_dmh_or_nondmh","Yes");
+   checkhide(f.admitted_to_services,"num_days_first_bh_service_since_date_admission","Yes");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
+  // Commented out bhs_service_path and open_cmhc_and_reconnected fields since we are switching to only use the BHS form for intakes and admissions. Reconnects will be completed on ProviderPlacement as a dismissal reason.
+     // if (!hiddenfield('open_cmhc_and_reconnected') && gvtfieldvalue('open_cmhc_and_reconnected')=='') {edesc=edesc+`Must specify a value for If youth was open with a CMHC at time of referral to YERE, was youth reconnected to those staff?\n`; seterror("open_cmhc_and_reconnected");}
+  // if (!hiddenfield('bhs_service_path') && gvtfieldvalue('bhs_service_path')=='') {edesc=edesc+`Must specify a value for Which behavioral health service path is client on?\n`; seterror("bhs_service_path");}
+  if (!hiddenfield('attend_bh_intake') && gvtfieldvalue('attend_bh_intake')=='') {edesc=edesc+`Must specify a value for Was a behavioral health intake attended?\n`; seterror("attend_bh_intake");}
+  if (!hiddenfield('mh_intake') && gvtfieldvalue('mh_intake')=='') {edesc=edesc+`Must specify a value for Mental Health\n`; seterror("mh_intake");}
+  if (!hiddenfield('su_intake') && gvtfieldvalue('su_intake')=='') {edesc=edesc+`Must specify a value for Substance Use\n`; seterror("su_intake");}
+  if (!hiddenfield('mh_intake_agency') && gvtfieldvalue('mh_intake_agency')=='') {edesc=edesc+`Must specify a value for Where did Mental Health intake take place?\n`; seterror("mh_intake_agency");}
+  if (!hiddenfield('su_intake_agency') && gvtfieldvalue('su_intake_agency')=='') {edesc=edesc+`Must specify a value for Where did Substance Use intake take place?\n`; seterror("su_intake_agency");}
+  if (!hiddenfield('other_mh_intake_agency') && gvtfieldvalue('other_mh_intake_agency')=='') {edesc=edesc+`Must specify a value for Other Mental Health Intake Agency\n`; seterror("other_mh_intake_agency");}
+  if (!hiddenfield('other_su_intake_agency') && gvtfieldvalue('other_su_intake_agency')=='') {edesc=edesc+`Must specify a value for Other Substance Use Intake Agency\n`; seterror("other_su_intake_agency");}
+  if (!hiddenfield('admitted_to_services') && gvtfieldvalue('admitted_to_services')=='') {edesc=edesc+`Must specify a value for Was youth admitted to services?\n`; seterror("admitted_to_services");}
+  if (!hiddenfield('reason_not_admitted') && gvtfieldvalue('reason_not_admitted')=='') {edesc=edesc+`Must specify a value for If youth was not admitted to services, indicate reason.\n`; seterror("reason_not_admitted");}
+  if (!hiddenfield('reason_not_admitted_capacity') && gvtfieldvalue('reason_not_admitted_capacity')=='') {edesc=edesc+`Must specify a value for If agency capacity limitations, please explain.\n`; seterror("reason_not_admitted_capacity");}
+  if (!hiddenfield('reason_not_admitted_ineligibility') && gvtfieldvalue('reason_not_admitted_ineligibility')=='') {edesc=edesc+`Must specify a value for If ineligible, please explain.\n`; seterror("reason_not_admitted_ineligibility");}
+  if (!hiddenfield('reason_not_admitted_other') && gvtfieldvalue('reason_not_admitted_other')=='') {edesc=edesc+`Must specify a value for If other reason youth was not admitted to services, please specify.\n`; seterror("reason_not_admitted_other");}
+  if (!hiddenfield('date_admitted_services') && gvtfieldvalue('date_admitted_services')=='') {edesc=edesc+`Must specify a value for Date Admitted to Services\n`; seterror("date_admitted_services");}
+  if (!hiddenfield('admitting_program_dmh_or_nondmh') && gvtfieldvalue('admitting_program_dmh_or_nondmh')=='') {edesc=edesc+`Must specify a value for Select DMH or Non-DMH\n`; seterror("admitting_program_dmh_or_nondmh");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWYEREBehavioralHealthServicesTP" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>YERE Behavioral Health Services TP</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+</div>
+
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpathway_date qpathway_date">
+    <div class="col12 fldpathway_date qpathway_date"><span class="qpathway_date required-label">||PWRequiredFieldRequiredText||</span><span class="qpathway_date required-field-label"><label class="label-top">||FIELDTAG pathway_date||Pathway Date||ENDFIELDTAG||</label></span><span class="qpathway_date"><input type="text" name="pathway_date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Intake</div>
+</div>
+<div class="entire">
+</div>
+  <div class="entire">
+    <div class="col4"><label class="label-top">Only complete this form if client is attending an intake or being admitted to services.
+</label></div>
+    <div class="col4"><label class="label-top"></label></div>
+  <!-- Commented out bhs_service_path and open_cmhc_and_reconnected fields since we are switching to only use the BHS form for intakes and admissions. Reconnects will be completed on ProviderPlacement as a dismissal reason. -->
+    <!-- <div class="col4 qopen_cmhc_and_reconnected">
+    <div class="col4 fldopen_cmhc_and_reconnected qopen_cmhc_and_reconnected"><span class="qopen_cmhc_and_reconnected required-label">||PWRequiredFieldRequiredText||</span><span class="qopen_cmhc_and_reconnected required-field-label"><label class="label-top">||FIELDTAG open_cmhc_and_reconnected||If youth was open with a CMHC at time of referral to YERE, was youth reconnected to those staff?||ENDFIELDTAG||</label></span><span class="qopen_cmhc_and_reconnected"><input type="radio" name="open_cmhc_and_reconnected" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="open_cmhc_and_reconnected" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div> -->
+<!-- <div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldbhs_service_path qbhs_service_path">
+    <div class="col12 fldbhs_service_path qbhs_service_path"><span class="qbhs_service_path required-label">||PWRequiredFieldRequiredText||</span><span class="qbhs_service_path required-field-label"><label class="label-top">||FIELDTAG bhs_service_path||Which behavioral health service path is client on?||ENDFIELDTAG||</label></span><span class="qbhs_service_path"><input type="radio" name="bhs_service_path" value="New Intake/Admission Path" onclick="checkhideall()" >New Intake/Admission Path<br><input type="radio" name="bhs_service_path" value="Reconnection Path" onclick="checkhideall()" >Reconnection Path</span></div>
+     </div>
+  </div> -->
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qattend_bh_intake">
+    <div class="col6 fldattend_bh_intake qattend_bh_intake"><span class="qattend_bh_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_bh_intake required-field-label"><label class="label-top">||FIELDTAG attend_bh_intake||Was a behavioral health intake attended?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake"><input type="radio" name="attend_bh_intake" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    </div>
+    <div class="col6 qnum_days_bh_intake_since_ia">
+    <div class="col6 fldnum_days_bh_intake_since_ia qnum_days_bh_intake_since_ia"><span class="qnum_days_bh_intake_since_ia"><label class="label-top">||FIELDTAG num_days_bh_intake_since_ia||How many days was behavioral health intake from date of initial contact?||ENDFIELDTAG||</label></span><span class="qnum_days_bh_intake_since_ia"><input type="radio" name="num_days_bh_intake_since_ia" value="0 - 7 Days" onclick="checkhideall()" >0 - 7 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="8 - 14 Days" onclick="checkhideall()" >8 - 14 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="15 - 30 Days" onclick="checkhideall()" >15 - 30 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="31 Or More Days" onclick="checkhideall()" >31 Or More Days</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6"><label class="label-top">If youth attended an intake, YES must be selected for either Mental Health, Substance Use or both.</label></div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col6 qmh_intake">
+    <div class="col6 fldmh_intake qmh_intake"><span class="qmh_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_intake required-field-label"><label class="label-top">||FIELDTAG mh_intake||Mental Health||ENDFIELDTAG||</label></span><span class="qmh_intake"><input type="radio" name="mh_intake" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mh_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    <div class="col6 qsu_intake">
+    <div class="col6 fldsu_intake qsu_intake"><span class="qsu_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_intake required-field-label"><label class="label-top">||FIELDTAG su_intake||Substance Use||ENDFIELDTAG||</label></span><span class="qsu_intake"><input type="radio" name="su_intake" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="su_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qmh_intake_agency">
+    <div class="col6 fldmh_intake_agency qmh_intake_agency"><span class="qmh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_intake_agency required-field-label"><label class="label-top">Where did Mental Health intake take place?</label></span><span class="qmh_intake_agency"><select size="1" name="mh_intake_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_intake_agency^^') and program_name='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE cmhc_agency||
+</span></div>
+     </div>
+    <div class="col6 qsu_intake_agency">
+    <div class="col6 fldsu_intake_agency qsu_intake_agency"><span class="qsu_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_intake_agency required-field-label"><label class="label-top">Where did Substance Use intake take place?</label></span><span class="qsu_intake_agency"><select size="1" name="su_intake_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_intake_agency^^') and program_name='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE ada_su_agency||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qother_mh_intake_agency">
+    <div class="col6 fldother_mh_intake_agency qother_mh_intake_agency"><span class="qother_mh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qother_mh_intake_agency required-field-label"><label class="label-top">||FIELDTAG other_mh_intake_agency||Other Mental Health Intake Agency||ENDFIELDTAG||</label></span><span class="qother_mh_intake_agency"><input type="text" name="other_mh_intake_agency" size="20" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col6 qother_su_intake_agency">
+    <div class="col6 fldother_su_intake_agency qother_su_intake_agency"><span class="qother_su_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qother_su_intake_agency required-field-label"><label class="label-top">||FIELDTAG other_su_intake_agency||Other Substance Use Intake Agency||ENDFIELDTAG||</label></span><span class="qother_su_intake_agency"><input type="text" name="other_su_intake_agency" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6 qtype_mh_intake">
+    <div class="col6 fldtype_mh_intake qtype_mh_intake"><span class="qtype_mh_intake"><label class="label-top">||FIELDTAG type_mh_intake||Type of Mental Health Intake||ENDFIELDTAG||</label></span><span class="qtype_mh_intake"><input type="checkbox" name="type_mh_intake_therapy" value="Therapy" onclick="checkhideall()">Therapy<br><input type="checkbox" name="type_mh_intake_case_mgmt" value="Case Management" onclick="checkhideall()">Case Management<br><input type="checkbox" name="type_mh_intake_psychiatry" value="Psychiatry" onclick="checkhideall()">Psychiatry
+<!-- FIELDOVERRIDE(type_mh_intake,10,250) -->
+</span></div>
+     </div>
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">Admission Status</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldadmitted_to_services qadmitted_to_services">
+    <div class="col12 fldadmitted_to_services qadmitted_to_services"><span class="qadmitted_to_services required-label">||PWRequiredFieldRequiredText||</span><span class="qadmitted_to_services required-field-label"><label class="label-top">||FIELDTAG admitted_to_services||Was youth admitted to services?||ENDFIELDTAG||</label></span><span class="qadmitted_to_services"><input type="radio" name="admitted_to_services" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="admitted_to_services" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldreason_not_admitted qreason_not_admitted">
+    <div class="col12 fldreason_not_admitted qreason_not_admitted"><span class="qreason_not_admitted required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_admitted required-field-label"><label class="label-top">||FIELDTAG reason_not_admitted||If youth was not admitted to services, indicate reason.||ENDFIELDTAG||</label></span><span class="qreason_not_admitted"><select size="1"  name="reason_not_admitted" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Caregiver Refused/Declined">Caregiver Refused/Declined</option>
+<option value="Unable To Locate Client/Caregiver">Unable To Locate Client/Caregiver</option>
+<option value="Agency Capacity Limitations">Agency Capacity Limitations</option>
+<option value="Ineligible">Ineligible</option>
+<option value="Other">Other</option>
+
+</select></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldreason_not_admitted_capacity qreason_not_admitted_capacity">
+    <div class="col12 fldreason_not_admitted_capacity qreason_not_admitted_capacity"><span class="qreason_not_admitted_capacity required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_admitted_capacity required-field-label"><label class="label-top">||FIELDTAG reason_not_admitted_capacity||If agency capacity limitations, please explain.||ENDFIELDTAG||</label></span><span class="qreason_not_admitted_capacity"><input type="text" name="reason_not_admitted_capacity" size="60" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldreason_not_admitted_ineligibility qreason_not_admitted_ineligibility">
+    <div class="col12 fldreason_not_admitted_ineligibility qreason_not_admitted_ineligibility"><span class="qreason_not_admitted_ineligibility required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_admitted_ineligibility required-field-label"><label class="label-top">||FIELDTAG reason_not_admitted_ineligibility||If ineligible, please explain.||ENDFIELDTAG||</label></span><span class="qreason_not_admitted_ineligibility"><input type="text" name="reason_not_admitted_ineligibility" size="60" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldreason_not_admitted_other qreason_not_admitted_other">
+    <div class="col12 fldreason_not_admitted_other qreason_not_admitted_other"><span class="qreason_not_admitted_other required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_not_admitted_other required-field-label"><label class="label-top">||FIELDTAG reason_not_admitted_other||If other reason youth was not admitted to services, please specify.||ENDFIELDTAG||</label></span><span class="qreason_not_admitted_other"><textarea rows="3" name="reason_not_admitted_other" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col4 qdate_admitted_services">
+    <div class="col4 flddate_admitted_services qdate_admitted_services"><span class="qdate_admitted_services required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_admitted_services required-field-label"><label class="label-top">||FIELDTAG date_admitted_services||Date Admitted to Services||ENDFIELDTAG||</label></span><span class="qdate_admitted_services"><input type="text" name="date_admitted_services" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  <div class="entire">
+    </div>
+    <div class="col4 qadmitting_program_dmh_or_nondmh">
+    <div class="col4 fldadmitting_program_dmh_or_nondmh qadmitting_program_dmh_or_nondmh"><span class="qadmitting_program_dmh_or_nondmh required-label">||PWRequiredFieldRequiredText||</span><span class="qadmitting_program_dmh_or_nondmh required-field-label"><label class="label-top">||FIELDTAG admitting_program_dmh_or_nondmh||Select DMH or Non-DMH||ENDFIELDTAG||</label></span><span class="qadmitting_program_dmh_or_nondmh"><input type="radio" name="admitting_program_dmh_or_nondmh" value="DMH" onclick="checkhideall()" >DMH&nbsp;&nbsp;<input type="radio" name="admitting_program_dmh_or_nondmh" value="Non-DMH" onclick="checkhideall()" >Non-DMH&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qnum_days_first_bh_service_since_date_admission">
+    <div class="col4 fldnum_days_first_bh_service_since_date_admission qnum_days_first_bh_service_since_date_admission"><span class="qnum_days_first_bh_service_since_date_admission"><label class="label-top">||FIELDTAG num_days_first_bh_service_since_date_admission||How many days was behavioral health intake from date of admission?||ENDFIELDTAG||</label></span><span class="qnum_days_first_bh_service_since_date_admission"><input type="radio" name="num_days_first_bh_service_since_date_admission" value="0 - 7 Days" onclick="checkhideall()" >0 - 7 Days<br><input type="radio" name="num_days_first_bh_service_since_date_admission" value="8 - 14 Days" onclick="checkhideall()" >8 - 14 Days<br><input type="radio" name="num_days_first_bh_service_since_date_admission" value="15 - 30 Days" onclick="checkhideall()" >15 - 30 Days<br><input type="radio" name="num_days_first_bh_service_since_date_admission" value="31 Or More Days" onclick="checkhideall()" >31 Or More Days</span></div>
+     </div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+  <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

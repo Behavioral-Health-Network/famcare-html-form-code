@@ -1,0 +1,1135 @@
+<html>
+
+<head>
+<title>EPICC Events</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<!-- FIELDOVERRIDE(EMS_PACKET,10,10) -->
+<!-- FIELDOVERRIDE(BADGE_BUDDIES),10,10) -->
+<!-- FIELDOVERRIDE(PENS,10,10) -->
+<!-- FIELDOVERRIDE(MAGNETS,10,10) -->
+<!-- FIELDOVERRIDE(BROCHURES,10,10) -->
+<!-- FIELDOVERRIDE(FLYERS,10,10) -->
+<!-- FIELDOVERRIDE(BUSINESS_CARDS,10,10) -->
+<!-- FIELDOVERRIDE(OTHER,10,10) -->
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<!-- CLincludes was moved before the initial script because the values needed to be defined before the JavaScript script started. We need some of these defined values so that the address information copied over from the CLIENT form will work properly.-->
+<script>
+var CLincludesv1 = "||CURRCWUSERID||";
+var CLincludesv2 = "||EXTCASEWORKER||";
+var CLincludesv3 = "||CASEWORKER||";
+var CLincludesv4 = "||TRBLSOCWORKER||";
+var CLincludesv5 = "||CPSWORKER||";
+var CLincludesv6 = "||SESSIONID||";
+var CLincludesv7 = "||ADDRESSVALIDATIONKEY||";
+var CLincludesv8 = "||SUPERFLAG||";
+var CLincludesv9 = "||ORGNAME||";
+var CLincludesv10 = "||CLIENTNUMBER||";
+var CLincludesv11 = "||DATE||";
+var CLincludesv13 = "||SCREENPARM OPTION||";
+var CLincludesv15 = "||CAPCLIENTNAMES||";
+var CLincludesv16 = "||DOCSERNO||";
+var CLincludesv17 = "||FIELDVALUE CLIENTINDICATOR||";
+var CLincludesv20 = "||ACCESSFORM||";
+var CLincludesv21 = "||FIELDVALUE RISKLEVEL||";
+var CLincludesv22 = "||FIELDVALUE SECURITYLEVEL||";
+var CLincludesv23 = "||SP OPTION||";
+var CLincludesv24 = "||FIELDVALUE PROVIDERCODECLIENT||";
+var CLincludesv25 = "||FIELDVALUE PROVTYPE||";
+var CLincludesv26 = "||TIME||";
+var CLincludesv32 = "||FIELDVALUE COUNTY||";
+var CLincludesv33 = "||FIELDVALUE COMMITTINGCOUNTY||";
+</script>
+<script language="JavaScript" src="script/IncludeClient2.js"></script>
+
+<script language="JavaScript">
+
+/**
+ * Waits for a DOM element to be available before executing a callback function.
+ * Useful for dynamically loaded or conditionally rendered form fields that might not
+ * be present in the DOM at the time of script execution (e.g., fields shown via checkhide()).
+ *
+ * @param {string} selector - A valid CSS selector (e.g., '#dropdownId').
+ * @param {function} callback - The function to run once the element is found.
+ * @param {number} interval - (Optional) How frequently to check for the element (ms). Default: 100.
+ * @param {number} timeout - (Optional) Maximum time to keep checking (ms). Default: 5000.
+ */
+
+function waitForElement(selector, callback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    callback(el);
+  } else {
+    window.requestAnimationFrame(() => waitForElement(selector, callback));
+  }
+}
+
+// Add MutationObserver as a fallback to the inclusion of the onchange event listener for
+// updateReportFields() fn in startup(). This should hopefully detect changes in the dropdown
+// if the function is run via startup() too early and does not run again dynamically upon change.
+// const observer = new MutationObserver(() => {
+// Use querySelectorAll to find all relevant dropdowns
+//  const dropdowns = document.querySelectorAll('#yere_mh_concerns, #yere_type_trauma_reported, #yere_substance_use_history, #yere_type_of_school_discipline'); // Add more IDs as needed
+
+
+//     console.log('MutationObserver triggered. Found dropdowns:', dropdowns);
+
+//     if (!dropdowns || dropdowns.length === 0) {
+//         console.error('No valid dropdowns found. Skipping updateReportFields.');
+//         return;
+//     }
+
+//  dropdowns.forEach(dropdown => {
+//    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+//     console.log(`Dropdown detected: ${dropdown.id}. Adding event listener.`);
+
+      // Add the onchange event listener
+//      dropdown.addEventListener('change', () => {
+//                 console.log(`Dropdown ${dropdown.id} changed. Updating report fields.`);
+//       updateReportFields([dropdown.id]); //  Pass the specific table ID to updateReportFields. Ensure it's correctly passed as an array
+//      });
+
+      // Initialize the table's hidden fields
+//      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+//    dropdown.dataset.initialized = true;
+//    }
+//     });
+
+//     if (dropdowns.length > 0) {
+    // Disconnect the observer if all dropdowns are found
+//    observer.disconnect();
+//  }
+//});
+
+// Start observing the document body for changes
+// observer.observe(document.body, { childList: true, subtree: true });
+
+/**
+ * Adds a change listener to the dropdown to update hidden report fields,
+ * and initializes the report field state immediately. This is modified to
+ * support forms with multiple dropdowns and to prevent duplicate listeners.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to observe.
+ */
+ function listenerSetup(dropdown) {
+  if (!dropdown.dataset.initialized) {
+    console.log(`Initializing dropdown: ${dropdown.id}`);
+
+    // Attach the onchange listener to trigger updateReportFields
+    dropdown.addEventListener('change', () => {
+      console.log(`Dropdown ${dropdown.id} changed.`);
+      updateReportFields([dropdown.id]);
+    });
+
+    // Run once on load in case values were pre-selected
+    updateReportFields([dropdown.id]);
+
+    // Prevent duplicate initialization
+    dropdown.dataset.initialized = true;
+  }
+}
+
+// Initialize all dropdowns that trigger updateReportFields
+waitForElement('#epicc_materials_distributed', listenerSetup);
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+        //** Associated with QuickSubmit function what allows users to save and overide the form without answering all the required fields.
+        //   f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+    setrequire('epicc_event_type');
+    setrequire('staff_delevering_epicc_event');
+    setrequire('inservice_type');
+    setrequire('outreaching_type');
+    setrequire('inservice_hosp_location');
+    setrequire('outreach_business');
+    setrequire('inservice_ems_fire_location');
+    setrequire('outreach_ems_fire_location');
+    setrequire('outreach_clinic');
+    setrequire('outreach_hosp_location');
+    setrequire('inservice_community');
+    setrequire('outreach_gvmt_center');
+    setrequire('inservice_law_enforcement');
+    setrequire('outreach_law_enforcement');
+    setrequire('outreach_library');
+    setrequire('outreach_shelter');
+    setrequire('outreach_university');
+    setrequire('outreach_other_org');
+$("#gvttimetime_of_inservice").timepicker({ 'scrollDefault': 'now'});
+    setrequire('time_of_inservice');
+    setrequire('outreach_method');
+    setrequire('outreach_purpose');
+    setrequire('new_inservice');
+    setrequire('epicc_events_programs_discussed');
+    setrequire('epicc_events_other_programs');
+    setrequire('epicc_events_materials_distributed');
+    setrequire('epicc_events_materials_distributed_other');
+    setrequire('epicc_events_number_of_attendees');
+    setrequire('STREET');
+    setrequire('CITY');
+    setrequire('STATE');
+    setrequire('COUNTY');
+    setrequire('ZIP');
+    setrequire('LATITUDE');
+    setrequire('LONGITUDE');
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+
+   // Call the function with the names of the tables you want to process.
+   // The table names are passed as an array. Add event listener for onchange to the dropdown
+  const dropdown = document.querySelectorAll('#epicc_materials_distributed'); // Add more IDs as needed
+  
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.dataset.initialized) { // Prevent duplicate listeners
+      console.log(`Initializing dropdown: ${dropdown.id}`);
+
+      // Add the onchange event listener
+      dropdown.addEventListener('change', () => {
+        updateReportFields([dropdown.id]); // Pass the specific table ID
+      });
+
+      // Initialize the table's hidden fields
+      updateReportFields([dropdown.id]);
+
+      // Mark as initialized to avoid redundant listeners
+      dropdown.dataset.initialized = true;
+    }
+  });
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.epicc_event_type,"inservice_type","In-Service");
+   checkhide(f.epicc_event_type,"outreaching_type","Outreach");
+   checkhide(f.inservice_type,"inservice_hosp_location","Hospital");
+   checkhide(f.outreaching_type,"outreach_business","Business");
+   checkhide(f.inservice_type,"inservice_ems_fire_location","EMS/Fire District");
+   checkhide(f.outreaching_type,"outreach_ems_fire_location","EMS/Fire District");
+   checkhide(f.outreaching_type,"outreach_clinic","Clinic");
+   checkhide(f.outreaching_type,"outreach_hosp_location","Hospital");
+   checkhide(f.inservice_type,"inservice_community","Community");
+   checkhide(f.outreaching_type,"outreach_gvmt_center","Government Center");
+   checkhide(f.inservice_type,"inservice_law_enforcement","Law Enforcement");
+   checkhide(f.outreaching_type,"outreach_law_enforcement","Law Enforcement");
+   checkhide(f.outreaching_type,"outreach_library","Library");
+   checkhide(f.outreaching_type,"outreach_shelter","Shelter");
+   checkhide(f.outreaching_type,"outreach_university","University");
+   checkhide(f.outreaching_type,"outreach_other_org","Other");
+   checkhide(f.epicc_event_type,"time_of_inservice","In-Service");
+   checkhide(f.epicc_event_type,"outreach_method","Outreach");
+   checkhide(f.epicc_event_type,"outreach_purpose","Outreach");
+   checkhide(f.epicc_event_type,"new_inservice","In-Service");
+   checkhide(f.epicc_event_type,"epicc_events_programs_discussed","In-Service,Outreach");
+   checkhide(f.epicc_events_programs_discussed,"epicc_events_other_programs","Other");
+   checkhide(f.epicc_event_type,"epicc_events_materials_distributed","In-Service,Outreach");
+   checkhide(f.epicc_events_materials_distributed,"epicc_events_materials_distributed_other","008");
+   checkhide(f.epicc_event_type,"epicc_events_number_of_attendees","In-Service,Outreach");
+   checkhide(f.epicc_event_type,"epicc_events_primary_contact_name","In-Service,Outreach");
+   checkhide(f.epicc_event_type,"epicc_events_contact_phone","In-Service");
+   checkhide(f.epicc_event_type,"epicc_events_primary_contact_email","In-Service,Outreach");
+   checkhide(f.epicc_event_type,"epicc_events_second_contact_name","In-Service,Outreach");
+   checkhide(f.epicc_event_type,"epicc_events_second_contact_phone","In-Service,Outreach");
+   checkhide(f.epicc_event_type,"epicc_events_second_contact_email","In-Service,Outreach");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('epicc_event_type') && gvtfieldvalue('epicc_event_type')=='') {edesc=edesc+`Must specify a value for Event Type\n`; seterror("epicc_event_type");}
+  if (!hiddenfield('staff_delevering_epicc_event') && gvtfieldvalue('staff_delevering_epicc_event')=='') {edesc=edesc+`Must specify a value for Name of EPICC Staff Who Completed Event\n`; seterror("staff_delevering_epicc_event");}
+  if (!hiddenfield('inservice_type') && gvtfieldvalue('inservice_type')=='') {edesc=edesc+`Must specify a value for In-Service Type\n`; seterror("inservice_type");}
+  if (!hiddenfield('outreaching_type') && gvtfieldvalue('outreaching_type')=='') {edesc=edesc+`Must specify a value for Type Of Organization\n`; seterror("outreaching_type");}
+  if (!hiddenfield('inservice_hosp_location') && gvtfieldvalue('inservice_hosp_location')=='') {edesc=edesc+`Must specify a value for Hospital Name\n`; seterror("inservice_hosp_location");}
+  if (!hiddenfield('outreach_business') && gvtfieldvalue('outreach_business')=='') {edesc=edesc+`Must specify a value for Business Name\n`; seterror("outreach_business");}
+  if (!hiddenfield('inservice_ems_fire_location') && gvtfieldvalue('inservice_ems_fire_location')=='') {edesc=edesc+`Must specify a value for EMS/Fire District Name\n`; seterror("inservice_ems_fire_location");}
+  if (!hiddenfield('outreach_ems_fire_location') && gvtfieldvalue('outreach_ems_fire_location')=='') {edesc=edesc+`Must specify a value for EMS/Fire District Name\n`; seterror("outreach_ems_fire_location");}
+  if (!hiddenfield('outreach_clinic') && gvtfieldvalue('outreach_clinic')=='') {edesc=edesc+`Must specify a value for Clinic Name\n`; seterror("outreach_clinic");}
+  if (!hiddenfield('outreach_hosp_location') && gvtfieldvalue('outreach_hosp_location')=='') {edesc=edesc+`Must specify a value for Hospital Name\n`; seterror("outreach_hosp_location");}
+  if (!hiddenfield('inservice_community') && gvtfieldvalue('inservice_community')=='') {edesc=edesc+`Must specify a value for Name of Location in the Community\n`; seterror("inservice_community");}
+  if (!hiddenfield('outreach_gvmt_center') && gvtfieldvalue('outreach_gvmt_center')=='') {edesc=edesc+`Must specify a value for Government Center Name\n`; seterror("outreach_gvmt_center");}
+  if (!hiddenfield('inservice_law_enforcement') && gvtfieldvalue('inservice_law_enforcement')=='') {edesc=edesc+`Must specify a value for Name of Law Enforcement Location\n`; seterror("inservice_law_enforcement");}
+  if (!hiddenfield('outreach_law_enforcement') && gvtfieldvalue('outreach_law_enforcement')=='') {edesc=edesc+`Must specify a value for Name of Law Enforcement Location\n`; seterror("outreach_law_enforcement");}
+  if (!hiddenfield('outreach_library') && gvtfieldvalue('outreach_library')=='') {edesc=edesc+`Must specify a value for Library Name\n`; seterror("outreach_library");}
+  if (!hiddenfield('outreach_shelter') && gvtfieldvalue('outreach_shelter')=='') {edesc=edesc+`Must specify a value for Shelter Name\n`; seterror("outreach_shelter");}
+  if (!hiddenfield('outreach_university') && gvtfieldvalue('outreach_university')=='') {edesc=edesc+`Must specify a value for University Name\n`; seterror("outreach_university");}
+  if (!hiddenfield('outreach_other_org') && gvtfieldvalue('outreach_other_org')=='') {edesc=edesc+`Must specify a value for Other Organization Name\n`; seterror("outreach_other_org");}
+  if (!hiddenfield('time_of_inservice') && gvtfieldvalue('time_of_inservice')=='') {edesc=edesc+`Must specify a value for Time of In-Service\n`; seterror("time_of_inservice");}
+  if (!hiddenfield('outreach_method') && gvtfieldvalue('outreach_method')=='') {edesc=edesc+`Must specify a value for Method of Outreach\n`; seterror("outreach_method");}
+  if (!hiddenfield('outreach_purpose') && gvtfieldvalue('outreach_purpose')=='') {edesc=edesc+`Must specify a value for Purpose of Meeting\n`; seterror("outreach_purpose");}
+  if (!hiddenfield('new_inservice') && gvtfieldvalue('new_inservice')=='') {edesc=edesc+`Must specify a value for Was this a new location for in-service?\n`; seterror("new_inservice");}
+  if (!hiddenfield('epicc_events_programs_discussed') && gvtfieldvalue('epicc_events_programs_discussed')=='') {edesc=edesc+`Must specify a value for Programs Discussed\n`; seterror("epicc_events_programs_discussed");}
+  if (!hiddenfield('epicc_events_other_programs') && gvtfieldvalue('epicc_events_other_programs')=='') {edesc=edesc+`Must specify a value for Other Programs Discussed\n`; seterror("epicc_events_other_programs");}
+  if (!hiddenfield('epicc_events_materials_distributed_other') && gvtfieldvalue('epicc_events_materials_distributed_other')=='') {edesc=edesc+`Must specify a value for Other Materials Distributed\n`; seterror("epicc_events_materials_distributed_other");}
+  if (!hiddenfield('epicc_events_number_of_attendees') && gvtfieldvalue('epicc_events_number_of_attendees')=='') {edesc=edesc+`Must specify a value for Number Of Attendees\n`; seterror("epicc_events_number_of_attendees");}
+  if (!hiddenfield('STREET') && gvtfieldvalue('STREET')=='') {edesc=edesc+`Must specify a value for Street\n`; seterror("STREET");}
+  if (!hiddenfield('CITY') && gvtfieldvalue('CITY')=='') {edesc=edesc+`Must specify a value for City\n`; seterror("CITY");}
+  if (!hiddenfield('STATE') && gvtfieldvalue('STATE')=='') {edesc=edesc+`Must specify a value for State\n`; seterror("STATE");} 
+  if (!hiddenfield('COUNTY') && gvtfieldvalue('COUNTY')=='') {edesc=edesc+`Must specify a value for County\n`; seterror("COUNTY");}
+  if (!hiddenfield('ZIP') && gvtfieldvalue('ZIP')=='') {edesc=edesc+`Must specify a value for ZIP\n`; seterror("ZIP");}
+  if (!hiddenfield('LATITUDE') && gvtfieldvalue('LATITUDE')=='') {edesc=edesc+`Must specify a value for Latitude\n`; seterror("LATITUDE");}
+  if (!hiddenfield('LONGITUDE') && gvtfieldvalue('LONGITUDE')=='') {edesc=edesc+`Must specify a value for Longitude\n`; seterror("LONGITUDE");}
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+    // Force update of report fields before submission
+    updateReportFields([
+      'epicc_materials_distributed'
+          // add other dropdown IDs here as needed
+   ]);
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+// Client form functions
+  function findplaces() {
+       f=document.forms[0];
+        if (f.LATITUDE.value=="" || f.LONGITUDE.value=="") {
+           alert("Cannot display map until latitude and longitude are retrieved.  Please enter a valid address and click 'Retrieve'");
+           return;
+        }
+        var lat=f.LATITUDE.value;
+        var long=f.LONGITUDE.value;
+        var info="Client home location";
+        var overlays="||LOADFIELDS SELECT dbo.udf_CheckedPlaceCodes() AS [Codes]||||LOADCURRENTALWAYS (0)||";
+        var pinradius="5";
+        var circleradius="0";
+
+        urlfunc="genfunc.exe?FULLFUNCTION^BLANKFORM|FORMNAME(GeoMapWithOverlays)|LATITUDE("+lat+")|LONGITUDE("+long+")|INFO("+info+")|OVERLAYS("+escape(overlays)+")|PINRADIUS("+escape(pinradius)+")|CIRCLERADIUS("+escape(circleradius)+")|SESSIONID(S||SESSIONID||)|TIMER("+Date().toString()+")^";
+        openhyperlink(urlfunc);
+
+  }
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+/**
+ * Updates hidden fields corresponding to selected dropdown options for one or more tables.
+ * 
+ * This function dynamically updates the values of hidden fields based on the selected options
+ * in dropdowns linked to specific tables. Each dropdown corresponds to a table (or context) 
+ * identified by its ID, and hidden fields are linked to the dropdown options via their
+ * `value` attributes and `data-source` attributes.
+ * 
+ * @param {Array} tableIds - An array of table IDs corresponding to dropdowns in the form.
+ *                           Example: ['epicc_materials_distributed', 'table2', 'table3'].
+ */
+
+ function updateReportFields(tableIds) {
+  // Iterate over each table ID provided
+
+  tableIds.forEach(id => {
+    // Locate the dropdown element for the current table ID
+    const dropdown = document.querySelector(`#${id}`);
+    
+    // Ensure the dropdown exists before proceeding
+    if (dropdown) {
+      console.log(`Processing dropdown for table ID: ${id}`);
+
+      // Loop through all options in the dropdown
+      dropdown.querySelectorAll('option').forEach(option => {
+        // Skip placeholder options or options without a value
+        if (option.value === '') return;
+
+        // Locate the hidden field linked to this option using its value and data-source attribute
+        const reportField = document.querySelector(
+          `.report-field.value-${option.value}[data-source="${id}"]`
+        );
+
+        // Log the mapping for debugging purposes
+        console.log(`Option value: ${option.value}, selected: ${option.selected}`);
+        console.log(`Hidden field found:`, reportField);
+
+        // If the corresponding hidden field exists, update its value
+        if (reportField) {
+          // Set the value to '1' if the option is selected, otherwise set it to '0'
+          reportField.value = option.selected ? '1' : '0';
+          console.log(`Set value of hidden field ${reportField.name} to ${reportField.value}`);
+        } else {
+          // Log a warning if no hidden field matches the option
+          console.warn(`No hidden field found for option value: ${option.value} in table ID: ${id}`);
+        }
+      });
+    } else {
+      // Log an error if the dropdown for the specified table ID is not found
+      console.error(`Dropdown with ID ${id} not found in the DOM.`);
+    }
+  });
+}
+</script>
+
+<script language="VBScript">
+</script>
+
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWEPICCEvents" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+       <!-- used by updateReportFields -->
+    <input type="hidden" name="eevents_ems_packet" value="||FIELDVALUE eevents_ems_packet||" class="report-field value-001" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_badge_buddies" value="||FIELDVALUE eevents_badge_buddies||" class="report-field value-002" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_pens" value="||FIELDVALUE eevents_pens||" class="report-field value-003" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_magnets" value="||FIELDVALUE eevents_magnets||" class="report-field value-004" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_brochures" value="||FIELDVALUE eevents_brochures||" class="report-field value-005" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_flyers" value="||FIELDVALUE eevents_flyers||" class="report-field value-006" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_business_cards" value="||FIELDVALUE eevents_business_cards||" class="report-field value-007" data-source="epicc_materials_distributed">
+    <input type="hidden" name="eevents_other" value="||FIELDVALUE eevents_other||" class="report-field value-008" data-source="epicc_materials_distributed">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>EPICC Events</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+<div class="deflist">
+<div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12 fldPathway_Date qPathway_Date">
+    <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_event_type qepicc_event_type">
+    <div class="col12 fldepicc_event_type qepicc_event_type"><span class="qepicc_event_type required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_event_type required-field-label"><label class="label-top">||FIELDTAG epicc_event_type||Event Type||ENDFIELDTAG||</label></span><span class="qepicc_event_type"><input type="radio" name="epicc_event_type" value="In-Service" onclick="checkhideall()" >In-Service&nbsp;&nbsp;<input type="radio" name="epicc_event_type" value="Outreach" onclick="checkhideall()" >Outreach&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldstaff_delevering_epicc_event qstaff_delevering_epicc_event">
+    <div class="col12 fldstaff_delevering_epicc_event qstaff_delevering_epicc_event"><span class="qstaff_delevering_epicc_event required-label">||PWRequiredFieldRequiredText||</span><span class="qstaff_delevering_epicc_event required-field-label"><label class="label-top">||FIELDTAG staff_delevering_epicc_event||Name of EPICC Staff Who Completed Event||ENDFIELDTAG||</label></span><span class="qstaff_delevering_epicc_event"><select size="1" name="staff_delevering_epicc_event" onchange="checkhideall()">
+<option value="||SELECT EMPLOYEENUMBER, [LASTNAME] & ', ' & [FIRSTNAME] & ' (' & EMPLOYEENUMBER & ')' FROM Q_HRFORM WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND EMPSTATUS='Active'  ORDER BY LASTNAME,FIRSTNAME||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldinservice_type qinservice_type">
+    <div class="col12 fldinservice_type qinservice_type"><span class="qinservice_type required-label">||PWRequiredFieldRequiredText||</span><span class="qinservice_type required-field-label"><label class="label-top">||FIELDTAG inservice_type||In-Service Type||ENDFIELDTAG||</label></span><span class="qinservice_type"><input type="radio" name="inservice_type" value="Community" onclick="checkhideall()" >Community<br><input type="radio" name="inservice_type" value="EMS/Fire District" onclick="checkhideall()" >EMS/Fire District<br><input type="radio" name="inservice_type" value="Hospital" onclick="checkhideall()" >Hospital<br><input type="radio" name="inservice_type" value="Law Enforcement" onclick="checkhideall()" >Law Enforcement</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreaching_type qoutreaching_type">
+    <div class="col12 fldoutreaching_type qoutreaching_type"><span class="qoutreaching_type required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreaching_type required-field-label"><label class="label-top">||FIELDTAG outreaching_type||Type Of Organization||ENDFIELDTAG||</label></span><span class="qoutreaching_type"><select size="1"  name="outreaching_type" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Business">Business</option>
+<option value="Clinic">Clinic</option>
+<option value="EMS/Fire District">EMS/Fire District</option>
+<option value="Government Center">Government Center</option>
+<option value="Hospital">Hospital</option>
+<option value="Law Enforcement">Law Enforcement</option>
+<option value="Library">Library</option>
+<option value="Shelter">Shelter</option>
+<option value="University">University</option>
+<option value="Other">Other</option>
+
+</select></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldinservice_hosp_location qinservice_hosp_location">
+    <div class="col12 fldinservice_hosp_location qinservice_hosp_location"><span class="qinservice_hosp_location required-label">||PWRequiredFieldRequiredText||</span><span class="qinservice_hosp_location required-field-label"><label class="label-top">Hospital Name</label></span><span class="qinservice_hosp_location"><select size="1" name="inservice_hosp_location" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE inservice_hosp_location^^') AND bhn_program='EPICC' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE program_referral_sources||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_business qoutreach_business">
+    <div class="col12 fldoutreach_business qoutreach_business"><span class="qoutreach_business required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_business required-field-label"><label class="label-top">||FIELDTAG outreach_business||Business Name||ENDFIELDTAG||</label></span><span class="qoutreach_business"><input type="text" name="outreach_business" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldinservice_ems_fire_location qinservice_ems_fire_location">
+    <div class="col12 fldinservice_ems_fire_location qinservice_ems_fire_location"><span class="qinservice_ems_fire_location required-label">||PWRequiredFieldRequiredText||</span><span class="qinservice_ems_fire_location required-field-label"><label class="label-top">EMS/Fire District Name</label></span><span class="qinservice_ems_fire_location"><select size="1" name="inservice_ems_fire_location" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE inservice_ems_fire_location^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_ems_fire_district||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_ems_fire_location qoutreach_ems_fire_location">
+    <div class="col12 fldoutreach_ems_fire_location qoutreach_ems_fire_location"><span class="qoutreach_ems_fire_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_ems_fire_location required-field-label"><label class="label-top">EMS/Fire District Name</label></span><span class="qoutreach_ems_fire_location"><select size="1" name="outreach_ems_fire_location" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE outreach_ems_fire_location^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_ems_fire_district||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_clinic qoutreach_clinic">
+    <div class="col12 fldoutreach_clinic qoutreach_clinic"><span class="qoutreach_clinic required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_clinic required-field-label"><label class="label-top">||FIELDTAG outreach_clinic||Clinic Name||ENDFIELDTAG||</label></span><span class="qoutreach_clinic"><input type="text" name="outreach_clinic" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_hosp_location qoutreach_hosp_location">
+    <div class="col12 fldoutreach_hosp_location qoutreach_hosp_location"><span class="qoutreach_hosp_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_hosp_location required-field-label"><label class="label-top">Hospital Name</label></span><span class="qoutreach_hosp_location"><select size="1" name="outreach_hosp_location" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE outreach_hosp_location^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE program_referral_sources||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldinservice_community qinservice_community">
+    <div class="col12 fldinservice_community qinservice_community"><span class="qinservice_community required-label">||PWRequiredFieldRequiredText||</span><span class="qinservice_community required-field-label"><label class="label-top">||FIELDTAG inservice_community||Name of Location in the Community||ENDFIELDTAG||</label></span><span class="qinservice_community"><input type="text" name="inservice_community" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_gvmt_center qoutreach_gvmt_center">
+    <div class="col12 fldoutreach_gvmt_center qoutreach_gvmt_center"><span class="qoutreach_gvmt_center required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_gvmt_center required-field-label"><label class="label-top">||FIELDTAG outreach_gvmt_center||Government Center Name||ENDFIELDTAG||</label></span><span class="qoutreach_gvmt_center"><input type="text" name="outreach_gvmt_center" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldinservice_law_enforcement qinservice_law_enforcement">
+    <div class="col12 fldinservice_law_enforcement qinservice_law_enforcement"><span class="qinservice_law_enforcement required-label">||PWRequiredFieldRequiredText||</span><span class="qinservice_law_enforcement required-field-label"><label class="label-top">||FIELDTAG inservice_law_enforcement||Name of Law Enforcement Location||ENDFIELDTAG||</label></span><span class="qinservice_law_enforcement"><input type="text" name="inservice_law_enforcement" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_law_enforcement qoutreach_law_enforcement">
+    <div class="col12 fldoutreach_law_enforcement qoutreach_law_enforcement"><span class="qoutreach_law_enforcement required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_law_enforcement required-field-label"><label class="label-top">||FIELDTAG outreach_law_enforcement||Name of Law Enforcement Location||ENDFIELDTAG||</label></span><span class="qoutreach_law_enforcement"><input type="text" name="outreach_law_enforcement" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_library qoutreach_library">
+    <div class="col12 fldoutreach_library qoutreach_library"><span class="qoutreach_library required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_library required-field-label"><label class="label-top">||FIELDTAG outreach_library||Library Name||ENDFIELDTAG||</label></span><span class="qoutreach_library"><input type="text" name="outreach_library" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_shelter qoutreach_shelter">
+    <div class="col12 fldoutreach_shelter qoutreach_shelter"><span class="qoutreach_shelter required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_shelter required-field-label"><label class="label-top">||FIELDTAG outreach_shelter||Shelter Name||ENDFIELDTAG||</label></span><span class="qoutreach_shelter"><input type="text" name="outreach_shelter" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_university qoutreach_university">
+    <div class="col12 fldoutreach_university qoutreach_university"><span class="qoutreach_university required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_university required-field-label"><label class="label-top">||FIELDTAG outreach_university||University Name||ENDFIELDTAG||</label></span><span class="qoutreach_university"><input type="text" name="outreach_university" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_other_org qoutreach_other_org">
+    <div class="col12 fldoutreach_other_org qoutreach_other_org"><span class="qoutreach_other_org required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_other_org required-field-label"><label class="label-top">||FIELDTAG outreach_other_org||Other Organization Name||ENDFIELDTAG||</label></span><span class="qoutreach_other_org"><input type="text" name="outreach_other_org" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+        <div class="entire">
+<div class="col12 term">Event Address Information</div>
+</div>
+          <ul>
+           <li id="_gvtStreet"><strong>||FIELDTAG Street||Street||ENDFIELDTAG|| : </strong><input type="text" name="STREET" size="40" onChange="getlatlong()" /></li>
+             <li id="_gvtCity"><strong>||FIELDTAG City||City||ENDFIELDTAG|| : </strong><input type="text" name="CITY" size="25" onChange="getlatlong()" /></li>
+             <li id="_gvtState"><strong>||FIELDTAG State||State||ENDFIELDTAG|| : </strong><select size="1" name="STATE" onchange="GetCountyList()" onChange="getlatlong()">
+                        <option value="||SELECT Code, Description From StatesUS Where (Status='Active' or Status='' or Status='1' or  Code='^^FIELDVALUE STATE^^') and code in(^^SetCountyTable^^) Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                     </select></li>
+             <li id="_gvtCounty"><strong>||FIELDTAG County||County||ENDFIELDTAG|| : </strong><select size="1" name="COUNTY" onChange="getlatlong()">
+                  <option value="||Select Code, Description From Counties Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE COUNTY^^') AND (State='^^FIELDVALUE STATE^^' OR (State='^^TOPPROVIDERSTATE^^' and '^^FIELDVALUE DOCSERNO^^'='')) Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+                  </select>
+             </li>
+             <li id="_gvtZIP"><strong>||FIELDTAG ZIP||ZIP||ENDFIELDTAG|| : </strong><input type="text" name="ZIP" size="14" onChange="getlatlong()" />                
+             </li>
+             ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||
+             <li><strong><a href="javascript:void getlatlong()">Retrieve latitude/longitude</a></strong>
+                       Latitude: <input type="text" name="LATITUDE" onfocus="this.blur()">
+                       Longitude: <input type="text" name="LONGITUDE" onfocus="this.blur()">
+                       <a href="javascript:void showmapAdjust()">Show on map</a>
+             </li>
+             ||ENDDISPLAY||
+             ||STARTDISPLAY|ALWAYS|X^^MAPPINGMODULE^^|XYES||
+                   <li id="_gvtFindPlaces"><strong>&nbsp;&nbsp;</strong><a href="javascript:void findplaces()">||MapPlaceTypeLabel||</a></li>
+             ||ENDDISPLAY||
+          </ul>
+                  <div class="entire">
+<div class="col12 term"></div>
+</div>
+ <div class="entire">
+    <div class="col12 fldtime_of_inservice qtime_of_inservice">
+    <div class="col12 fldtime_of_inservice qtime_of_inservice"><span class="qtime_of_inservice required-label">||PWRequiredFieldRequiredText||</span><span class="qtime_of_inservice required-field-label"><label class="label-top">||FIELDTAG time_of_inservice||Time of In-Service||ENDFIELDTAG||</label></span><span class="qtime_of_inservice"><input type="text" name="time_of_inservice" size="6" id="gvttimetime_of_inservice" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_method qoutreach_method">
+    <div class="col12 fldoutreach_method qoutreach_method"><span class="qoutreach_method required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_method required-field-label"><label class="label-top">||FIELDTAG outreach_method||Method of Outreach||ENDFIELDTAG||</label></span><span class="qoutreach_method"><select size="1"  name="outreach_method" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Phone">Phone</option>
+<option value="Email">Email</option>
+<option value="Scheduled Face-To-Face">Scheduled Face-To-Face</option>
+<option value="Scheduled Virtual Meeting">Scheduled Virtual Meeting</option>
+<option value="Drop In Face-To-Face">Drop In Face-To-Face</option>
+<option value="Left Materials">Left Materials</option>
+
+</select></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldoutreach_purpose qoutreach_purpose">
+    <div class="col12 fldoutreach_purpose qoutreach_purpose"><span class="qoutreach_purpose required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_purpose required-field-label"><label class="label-top">||FIELDTAG outreach_purpose||Purpose of Meeting||ENDFIELDTAG||</label></span><span class="qoutreach_purpose"><input type="text" name="outreach_purpose" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldnew_inservice qnew_inservice">
+    <div class="col12 fldnew_inservice qnew_inservice"><span class="qnew_inservice required-label">||PWRequiredFieldRequiredText||</span><span class="qnew_inservice required-field-label"><label class="label-top">||FIELDTAG new_inservice||Was this a new location for in-service?||ENDFIELDTAG||</label></span><span class="qnew_inservice"><input type="radio" name="new_inservice" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="new_inservice" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_programs_discussed qepicc_events_programs_discussed">
+    <div class="col12 fldepicc_events_programs_discussed qepicc_events_programs_discussed"><span class="qepicc_events_programs_discussed required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_events_programs_discussed required-field-label"><label class="label-top">||FIELDTAG epicc_events_programs_discussed||Programs Discussed||ENDFIELDTAG||</label></span><span class="qepicc_events_programs_discussed"><input type="radio" name="epicc_events_programs_discussed" value="PRO" onclick="checkhideall()" >PRO<br><input type="radio" name="epicc_events_programs_discussed" value="CORE" onclick="checkhideall()" >CORE<br><input type="radio" name="epicc_events_programs_discussed" value="Both" onclick="checkhideall()" >Both<br><input type="radio" name="epicc_events_programs_discussed" value="Other" onclick="checkhideall()" >Other</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_other_programs qepicc_events_other_programs">
+    <div class="col12 fldepicc_events_other_programs qepicc_events_other_programs"><span class="qepicc_events_other_programs required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_events_other_programs required-field-label"><label class="label-top">||FIELDTAG epicc_events_other_programs||Other Programs Discussed||ENDFIELDTAG||</label></span><span class="qepicc_events_other_programs"><input type="text" name="epicc_events_other_programs" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_materials_distributed qepicc_events_materials_distributed">
+    <div class="col12 fldepicc_events_materials_distributed qepicc_events_materials_distributed"><span class="qepicc_events_materials_distributed"><label class="label-top">Materials Distributed<br>(Hold down Ctrl to select multiple)</label></span><span class="qepicc_events_materials_distributed"><select size="8" name="epicc_events_materials_distributed" id="epicc_materials_distributed" onchange="updateReportFields(['epicc_materials_distributed']); checkhideall()" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_materials_distributed] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_events_materials_distributed^^') and epicc_events='1' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_materials_distributed||
+
+<!-- FIELDOVERRIDE(epicc_events_materials_distributed,10,200) -->
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_materials_distributed_other qepicc_events_materials_distributed_other">
+    <div class="col12 fldepicc_events_materials_distributed_other qepicc_events_materials_distributed_other"><span class="qepicc_events_materials_distributed_other required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_events_materials_distributed_other required-field-label"><label class="label-top">||FIELDTAG epicc_events_materials_distributed_other||Other Materials Distributed||ENDFIELDTAG||</label></span><span class="qepicc_events_materials_distributed_other"><input type="text" name="epicc_events_materials_distributed_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_number_of_attendees qepicc_events_number_of_attendees">
+    <div class="col12 fldepicc_events_number_of_attendees qepicc_events_number_of_attendees"><span class="qepicc_events_number_of_attendees required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_events_number_of_attendees required-field-label"><label class="label-top">||FIELDTAG epicc_events_number_of_attendees||Number Of Attendees||ENDFIELDTAG||</label></span><span class="qepicc_events_number_of_attendees"><input type="text" name="epicc_events_number_of_attendees" size="5" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_primary_contact_name qepicc_events_primary_contact_name">
+    <div class="col12 fldepicc_events_primary_contact_name qepicc_events_primary_contact_name"><span class="qepicc_events_primary_contact_name"><label class="label-top">||FIELDTAG epicc_events_primary_contact_name||Primary Contact Name||ENDFIELDTAG||</label></span><span class="qepicc_events_primary_contact_name"><input type="text" name="epicc_events_primary_contact_name" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_contact_phone qepicc_events_contact_phone">
+    <div class="col12 fldepicc_events_contact_phone qepicc_events_contact_phone"><span class="qepicc_events_contact_phone"><label class="label-top">||FIELDTAG epicc_events_contact_phone||Primary Contact Phone Number||ENDFIELDTAG||</label></span><span class="qepicc_events_contact_phone"><input type="text" name="epicc_events_contact_phone" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_primary_contact_email qepicc_events_primary_contact_email">
+    <div class="col12 fldepicc_events_primary_contact_email qepicc_events_primary_contact_email"><span class="qepicc_events_primary_contact_email"><label class="label-top">||FIELDTAG epicc_events_primary_contact_email||Primary Contact Email||ENDFIELDTAG||</label></span><span class="qepicc_events_primary_contact_email"><input type="text" name="epicc_events_primary_contact_email" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_second_contact_name qepicc_events_second_contact_name">
+    <div class="col12 fldepicc_events_second_contact_name qepicc_events_second_contact_name"><span class="qepicc_events_second_contact_name"><label class="label-top">||FIELDTAG epicc_events_second_contact_name||Secondary Contact Name||ENDFIELDTAG||</label></span><span class="qepicc_events_second_contact_name"><input type="text" name="epicc_events_second_contact_name" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_second_contact_phone qepicc_events_second_contact_phone">
+    <div class="col12 fldepicc_events_second_contact_phone qepicc_events_second_contact_phone"><span class="qepicc_events_second_contact_phone"><label class="label-top">||FIELDTAG epicc_events_second_contact_phone||Secondary Contact Phone Number||ENDFIELDTAG||</label></span><span class="qepicc_events_second_contact_phone"><input type="text" name="epicc_events_second_contact_phone" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_events_second_contact_email qepicc_events_second_contact_email">
+    <div class="col12 fldepicc_events_second_contact_email qepicc_events_second_contact_email"><span class="qepicc_events_second_contact_email"><label class="label-top">||FIELDTAG epicc_events_second_contact_email||Secondary Contact Email||ENDFIELDTAG||</label></span><span class="qepicc_events_second_contact_email"><input type="text" name="epicc_events_second_contact_email" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldepicc_event_notes qepicc_event_notes">
+    <div class="col12 fldepicc_event_notes qepicc_event_notes"><span class="qepicc_event_notes"><label class="label-top">||FIELDTAG epicc_event_notes||Notes||ENDFIELDTAG||</label></span><span class="qepicc_event_notes"><textarea name="epicc_event_notes" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

@@ -1,0 +1,911 @@
+<html>
+
+<head>
+<title>EPICC Referral</title>
+<link rel="stylesheet" href="css/PWstyles.css">
+</head> 
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTSERIAL||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+<script language="JavaScript">
+
+var genpdf='true';
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||"=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+		document.getElementById("SaveButtons").style.display = "";
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+
+          f._B1.style.display = "";
+          f._B2.style.display = "";
+          // f._B3.style.display = "";
+          document.getElementById("SaveButtons").style.display = "";
+
+		}
+	}
+            setrequire('Pathway_Date');
+$("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'});
+    setrequire('referrer_name');
+    setrequire('epicc_referring_agency');
+    setrequire('community_referral_source');
+    setrequire('specify_other_referring_agency');
+    // Removed on 08/07/2025 based on Jennifer saying this question is no longer needed
+    // setrequire('client_on_outreach_list');
+    setrequire('ems_fire_district_place_referral_in_transit');
+    setrequire('client_age_14_17');
+    setrequire('ems_involved_ref');
+    setrequire('ems_fire_district');
+    // setrequire('leo_involved_referral');
+    setrequire('epicc_program_participation_referral');
+    setrequire('housing_status_referral');
+    // Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly.
+    setrequire('suboxone_ems');
+    setrequire('why_not_suboxone_ems');
+    setrequire('who_administered_suboxone');
+    setrequire('milligrams_suboxone');
+    setrequire('ems_transport_to_hospital');
+    setrequire('other_ems_fire_district');
+    setrequire('TiedEnrollment');
+    setrequire('ineligible_reason');
+    setrequire('ineligible_referral');
+    
+  
+
+	checkhideall();
+
+  if ( "||PWREQUIREDFIELDSTYLE||" === "" ) addEventListeners()
+  return functionreturnvalue;
+}
+
+function checkhideall() {
+   f=document.forms[0];
+      checkhide(f.epicc_referring_agency,"community_referral_source","014");
+   checkhide(f.community_referral_source,"family_or_friend","031");
+   checkhide(f.community_referral_source,"specify_other_referring_agency","020");
+   checkhide(f.community_referral_source,"shelter","030");
+   checkhide(f.ems_involved_ref,"ems_fire_district","Yes");
+   checkhide(f.epicc_referring_agency,"ems_fire_district_place_referral_in_transit","015,073");
+   checkhide(f.epicc_referring_agency,"emergency_response_call","015,073");
+   checkhide(f.epicc_referring_agency,"suboxone_ems","015,073");
+   checkhide(f.suboxone_ems,'why_not_suboxone_ems','No');
+   checkhide(f.suboxone_ems,"who_administered_suboxone","Yes");
+   checkhide(f.suboxone_ems,"milligrams_suboxone","Yes");
+   checkhide(f.epicc_referring_agency,"ems_transport_to_hospital","073");
+   checkhide(f.client_age_14_17,"parent_caregiver_present_ref_or_notified","Yes");
+   checkhide(f.client_enrolled_su_before,"list_all_ada","Yes");
+   checkhide(f.ems_fire_district,"other_ems_fire_district","019");
+  checkhide(f.epicc_program_participation_referral,"ineligible_referral","025");
+  checkhide(f.ineligible_referral,"ineligible_reason","Doesn't Meet Program Criteria");
+
+}
+
+function addEventListeners(){
+  // find all elements with required class and add event listener to 
+  // element or parent, depending on type
+  
+ 
+  const eles = [...document.querySelectorAll(".required")]
+  eles.forEach( ele => {
+    //console.log( "ele:", ele, ele.type, ele.classList )
+    //console.log('testing = ', [...ele.classList].indexOf('pw-signaturepad') >= 0)
+    if ([...ele.classList].indexOf('pw-signaturepad') >= 0 ) {
+      ele.parentNode.parentNode.querySelector('canvas').addEventListener("mousedown", checkSignature)
+    }  else if ( ele.nodeName === "SPAN" ){
+      ele.addEventListener( "click", checkChecked )
+    } else if ( ele.type === "select-one" || ele.type === "select-multiple" ) {
+      ele.addEventListener( "change", checkTextOrSelect )
+    } else if ( ele.type === "file" ) {
+      ele.addEventListener( "change", checkFiles )
+    } else if ( ele.type === "date" ) {
+      ele.addEventListener( "change", checkValidDate )
+    } else if ( ele.type === "time" ) {
+      ele.addEventListener( "change", checkValidTime )
+    } else if ( ele.classList.contains("jdatepicker") ) {
+      // do nothing - function in footer that validates dates and times      
+    } else {
+      ele.addEventListener( "keyup", checkTextOrSelect )
+    }
+  })
+
+}
+function checkValidTime( evt ){
+  //console.log( "checkValidTime() needs to be written" )
+}
+function checkValidDate( evt ){
+  const eleTarget = evt.target
+  const inpDate = eleTarget.value
+  let dt = new Date( inpDate );
+  const isValid= inpDate !== "" && dt instanceof Date && !isNaN(dt);
+  isValid ? eleTarget.classList.add("d-none") : eleTarget.classList.remove("d-none") 
+}
+function checkAnyMissing(){
+  const numMissing  = document.querySelectorAll(".missing").length
+  numMissing === 0 ? document.querySelector("#divMissingMessage").classList.add("d-none") : document.querySelector("#divMissingMessage").classList.remove("d-none") 
+}
+function checkFiles( evt ){
+  const eleTarget = evt.target
+  eleTarget.files.length > 0 ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkChecked( evt ){
+  const eleTarget = evt.target
+  if ( eleTarget.type !== "radio" && eleTarget.type !== "checkbox" ) return
+  const eleSpan = eleTarget.parentElement
+  eleSpan.querySelectorAll("input:checked").length > 0 ? eleSpan.classList.remove("missing") : eleSpan.classList.add("missing")
+  checkAnyMissing()
+}
+function checkTextOrSelect( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.classList.remove("missing") : eleTarget.classList.add("missing")
+  checkAnyMissing()
+}
+function checkSignature( evt ){
+  const eleTarget = evt.target
+  eleTarget.value !== "" ? eleTarget.parentNode.parentNode.classList.remove("missing") : eleTarget.parentNode.parentNode.classList.add("missing")
+  checkAnyMissing()
+}
+
+function checkhide(o,o2fld,vx) {
+   o2=document.forms[0].elements[o2fld];
+   v=vx;
+   v1="";
+   typ="";
+   typ2="";
+// update in case of invalid field
+   try {
+     typ = o.type;
+     typ2 = o2.type;
+   } catch(e) {typ2="Nofield"}
+   nm=o.name;
+   nm2=o2fld;
+   multi=false;
+   multi2=false;
+   if (typ==undefined) {typ=o[0].type}
+   if (typ2==undefined) {typ2=o2[0].type}
+   if (nm==undefined) {nm=o[0].name}
+   if (nm2==undefined) {nm2=o2[0].name}
+   if (o.length>0) {multi=true}
+   try {
+     if (o2.length>0) {multi2=true}
+   } catch(e) {}
+   $(".fld"+nm2).hide();
+   vl="";
+   if (multi) {
+      for (gg=0; gg<o.length; gg++) {
+         if (o[gg].checked && o[gg].value!="") {vl=vl+o[gg].value+","}
+         if (o[gg].selected) {vl=vl+o[gg].value+","}
+      }   
+   } else {
+        vl=o.value;
+   }
+   showit=false;
+   v=v+",z";
+   while (v!="z") {
+      tt=instrjis(v,",");
+      if (instrjis(ucasejis(","+vl+","),ucasejis(","+leftjis(v,tt-1)+","))!=0) {showit=true}
+      v=midjis(v,tt+1);
+   }
+   if (showit) {
+        $(".fld"+nm2).show()
+   } else {
+     if (typ2=="Nofield") {return}
+     if (multi2) {
+        for (gg=0; gg<o2.length; gg++) {
+           try {
+             o2[gg].checked=false;
+           } catch (e) {}
+           try {
+             o2[gg].selected=false;
+           } catch (e) {}
+        }   
+     } else {
+        o2.value="";
+     }
+   }
+}
+
+
+function resetallflags() {
+  document.querySelectorAll('.missing').forEach(ele => ele.classList.remove('missing'))
+  document.querySelector("#divMissingMessage").classList.add("d-none");
+}
+
+function seterror(fname) {
+  const ele = document.querySelector(`[name=${fname}]`)
+  if('||PWREQUIREDFIELDSTYLE||'==='') {
+    // check if input is type checkbox or radio, if so, apply class to parent node
+    if ( ele.type === 'radio' || ele.type === 'checkbox') {
+      ele.parentElement.classList.add('missing')      
+    } else { 
+      // apply class directly to input 
+      ele.classList.add('missing')
+    }
+  } else {
+    // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+    ele.parentElement.parentElement.parentElement.classList.add('missing')   
+    // update text on tag for missing fields
+    document.querySelectorAll('.grandparent-required.missing span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldMissingText||")
+  }  
+  // check for required signature pads
+  if ( [...ele.classList].indexOf('pw-signaturepad') >= 0) {     
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('missing'))
+     return;
+  }  
+}
+
+function setgood(fname) {
+   // navigate to grandparent and add class there - easier to style from grandparent > parent > children
+   //document.querySelector(`[name=${fname}]`).parentElement.parentElement.parentElement.classList.add('good');
+   // update text on tag for good fields
+   //document.querySelectorAll('.grandparent-required.good span.required-label').forEach (ele => ele.textContent ="||PWRequiredFieldGoodText||");
+}
+
+function setrequire( fname ) {
+  //console.log( 'PWREQUIREDFIELDSTYLE = ', "||PWREQUIREDFIELDSTYLE||" === "" ? "default" : "alternative" )
+  if ( "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    $(".span"+fname).addClass("required");
+    // add some classes for styling
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.classList.add('parent-required'));
+    document.querySelectorAll('span.required-label').forEach(ele => ele.parentNode.parentNode.classList.add('grandparent-required'));    
+    return
+  }
+    
+  // check if input is type checkbox or radio, if so, apply class to parent node
+  const ele = document.querySelector(`[name=${fname}]`)
+  if ( ele.type === 'radio' || ele.type === 'checkbox') {
+    ele.parentElement.classList.add('required')
+  } else { 
+    // apply class directly to input 
+    ele.classList.add('required')
+  }
+  
+  // check for required signature pads
+  if ([...document.querySelector(`[name=${fname}]`).classList].every(value => ['required', 'pw-signaturepad'].includes(value))) {
+     document.querySelectorAll('.pw-signaturepad.required').forEach(ele => ele.parentNode.parentNode.querySelector('[id^=sigspan]').classList.add('required'))
+     return;
+  }   
+}
+
+function validateform(scope='all') {
+
+  resetallflags();
+  let edesc="";
+  if(scope=='all') {
+    // signature verification
+    try {edesc=verifysignatures()
+      } catch(e) {}  
+  }
+  
+  // now score test if present...
+   f=document.forms[0];
+   total=0.0;
+   right=0.0;
+   for (xx=0; xx<f.elements.length; xx++) {
+      gg=f.elements[xx].name;
+      if (rightjis(gg,10)=="_GVTANSWER") {
+           total=total+1.0;
+           hh=f.elements[xx].value;
+           if (numericjis(hh)) {hh=cintjis(hh)} else {hh=0}
+           gg=f.elements[leftjis(gg,lenjis(gg)-10)];
+          typ="";
+          try {
+            typ = gg.type;
+          } catch(e) {return}
+          if (typ==undefined) {typ=gg[0].type}
+          if (typ=="radio") {
+            if (gg[hh-1].checked) {right=right+1.0;}
+          } else {
+     //       if (gg.selectedIndex==0) {edesc=edesc+"Question "+cstrjis(total)+" has not been answered.\n";}
+            if (gg.selectedIndex==hh) {right=right+1.0;}
+          }
+      }
+   }
+   if (total!=0) {
+       f.TESTTOTALANSWERS.value=cstrjis(total);
+       f.TESTRIGHTANSWERS.value=cstrjis(right);
+       f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
+   }
+     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('referrer_name') && gvtfieldvalue('referrer_name')=='') {edesc=edesc+`Must specify a value for Referrer's Name\n`; seterror("referrer_name");}
+  if (!hiddenfield('epicc_referring_agency') && gvtfieldvalue('epicc_referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Agency\n`; seterror("epicc_referring_agency");}
+  if (!hiddenfield('community_referral_source') && gvtfieldvalue('community_referral_source')=='') {edesc=edesc+`Must specify a value for Select Community Referral Source\n`; seterror("community_referral_source");}
+  if (!hiddenfield('specify_other_referring_agency') && gvtfieldvalue('specify_other_referring_agency')=='') {edesc=edesc+`Must specify a value for If Other, Specify Agency\n`; seterror("specify_other_referring_agency");}
+  // if (!hiddenfield('client_on_outreach_list') && gvtfieldvalue('client_on_outreach_list')=='') {edesc=edesc+`Must specify a value for Is client on the outreach list?\n`; seterror("client_on_outreach_list");}
+  if (!hiddenfield('ems_fire_district_place_referral_in_transit') && gvtfieldvalue('ems_fire_district_place_referral_in_transit')=='') {edesc=edesc+`Must specify a value for Did EMS/Fire District place referral while in transit? \n`; seterror("ems_fire_district_place_referral_in_transit");}
+  if (!hiddenfield('client_age_14_17') && gvtfieldvalue('client_age_14_17')=='') {edesc=edesc+`Must specify a value for Is client age 14-17?\n`; seterror("client_age_14_17");}
+  if (!hiddenfield('ems_involved_ref') && gvtfieldvalue('ems_involved_ref')=='') {edesc=edesc+`Must specify a value for Was EMS involved with this referral?\n`; seterror("ems_involved_ref");}
+  // if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
+  if (!hiddenfield('epicc_program_participation_referral') && gvtfieldvalue('epicc_program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("epicc_program_participation_referral");}
+  // Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly.
+  if (!hiddenfield('suboxone_ems') && gvtfieldvalue('suboxone_ems')=='') {edesc=edesc+`Must specify a value for Suboxone administered by EMS?\n`; seterror("suboxone_ems");}
+  if (!hiddenfield('why_not_suboxone_ems') && gvtfieldvalue('why_not_suboxone_ems')=='') {edesc=edesc+`Must specify a value for Why not Suboxone administered by EMS?\n`; seterror("why_not_suboxone_ems");}
+  if (!hiddenfield('who_administered_suboxone') && gvtfieldvalue('who_administered_suboxone')=='') {edesc=edesc+`Must specify a value for Who Administered Suboxone?\n`; seterror("who_administered_suboxone");}
+  if (!hiddenfield('milligrams_suboxone') && gvtfieldvalue('milligrams_suboxone')=='') {edesc=edesc+`Must specify a value for Milligrams of Suboxone?\n`; seterror("milligrams_suboxone");}
+  if (!hiddenfield('ems_transport_to_hospital') && gvtfieldvalue('ems_transport_to_hospital')=='') {edesc=edesc+`Must specify a value for What hospital are they being transported to?\n`; seterror("ems_transport_to_hospital");}
+  if (!hiddenfield('ems_fire_district') && gvtfieldvalue('ems_fire_district')=='') {edesc=edesc+`Must specify a value for EMS/Fire District\n`; seterror("ems_fire_district");}
+  if (!hiddenfield('other_ems_fire_district') && gvtfieldvalue('other_ems_fire_district')=='') {edesc=edesc+`Must specify a value for Other EMS/Fire District\n`; seterror("other_ems_fire_district");}
+  if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
+    return edesc;
+}
+
+function gvtfieldvalue(fldname) {
+     var og=document.forms[0].elements[fldname];
+     var olen=og.length;
+     var oval=og.value;
+     oflen=-1;
+     try { 
+       oflen=$('[name="'+fldname+'"]')[0].files.length;
+     } catch(e) {}
+     if (oflen==undefined) {oflen=-1}
+     if (oflen==0 && "||DOCSERNO||"!="") {return "X"}  // return a value if edited record
+     if (oflen==0) {return ""}  // return empty value if no file specified
+     if (oflen>0) {return "X"}  // return dummy value to indicate we have a file.
+     if (oval==undefined) {oval=""}
+     if (olen==undefined) {return oval} 
+     var oval="";
+     for (x=0; x<olen; x++) {
+        if (og[x].checked || og[x].selected) {
+           var tval=og[x].value;
+           if (tval!="") {
+             if (oval!="") {oval=oval+","}
+             oval=oval+og[x].value;
+           }
+        }
+     }
+     return oval;
+}
+
+function hiddenfield(g) {
+ h="";
+ try {
+   h=document.forms[0].elements[g][0];
+   if (h==undefined) {h=document.forms[0].elements[g];}
+  } catch(e) {h=document.forms[0].elements[g]}
+   while (!(h==undefined)) {
+       var gg="";
+       try {gg=h.style.display;} catch(e) {}
+       if (ucasejis(gg)=="NONE") {
+          return true;
+       }
+       h=h.parentElement;
+   }
+   return false;
+}
+
+function submitit() {
+	
+ 
+  // use alert to display error messages
+  let errdesc = validateform();     
+  if ( errdesc !== "" && "||PWREQUIREDFIELDSTYLE||" !== "" ) {
+    alert(errdesc); 
+    return;
+  }
+  
+  // use inline div to display error messages
+  let signatureErrors="";
+  // signature verification
+  try {signatureErrors=verifysignatures()
+    } catch(e) {}  
+  
+  errdesc = validateform('signature errors separate');
+  if ( errdesc !== "" || signatureErrors !== "" ) {
+    if (signatureErrors !== "") {
+      document.querySelector("#divSignatureErrors").innerHTML = signatureErrors;
+      document.querySelector("#divSignatureErrors").classList.remove("d-none");    
+    } else {
+      document.querySelector("#divSignatureErrors").classList.add("d-none");
+    }    
+    errdesc !== "" ? document.querySelector("#divMissingMessage").classList.remove("d-none") :document.querySelector("#divMissingMessage").classList.add("d-none");
+    // set focus to error message at the top of the screen
+    document.querySelector('#divMissingMessageRow').scrollIntoView();
+    return;
+  }
+
+	const f = document.forms[0];
+   //***Error checking should be done here before a quick save
+	f.target="fvalidate";
+	if (genpdf) {buildhtmlclean()}
+	f.submit();
+  $(':button').prop('disabled',true);
+	f._B1.style.display = "none";
+	f._B2.style.display = "none";
+	// f._B3.style.display = "none";
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
+
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
+
+function resetsave() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	//***Reset the form after a quick submit here
+	f._B1.style.display = "";
+	f._B2.style.display = "";
+	// f._B3.style.display = "";
+	document.getElementById("SaveButtons").style.display = "";
+        $(':button').prop('disabled',false);
+	return functionreturnvalue;
+}
+
+function updatesignatures(){
+   if(document.getElementById("signaturedisplay")){
+      //CHECK TO SEE IF THE SIGNATURE AREA EXISTS ON THE FORM
+   }
+   else {
+      return;
+   }
+   var SigSection=document.getElementById("signaturedisplay")
+   Stamp = new Date();
+   var Hours;
+   var Mins;
+   var Time;
+   Hours = Stamp.getHours();
+   if (Hours >= 12) {
+      Time = " PM";
+   }
+   else {
+      Time = " AM";
+   }
+   if (Hours > 12) {
+      Hours -= 12;
+   }
+   if (Hours == 0) {
+      Hours = 12;
+   }
+   Mins = Stamp.getMinutes();
+   if (Mins < 10) {
+      Mins = "0" + Mins;
+   }
+   if (SigSection.innerHTML=="No signatures--new form") {
+      //THIS CODE FIRES IF IT IS THE FIRST TIME A FORM IS BEING SAVED
+      document.getElementById("signaturedisplay").innerHTML="Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   else {
+      var CurrentSigs=SigSection.innerHTML;
+      document.getElementById("signaturedisplay").innerHTML=CurrentSigs+"<br>Quick Saved by ||USERID|| of ||PROVIDERNAME|| (||PROVIDERCODE||) on ||DATE|| at " + Hours + ":" + Mins + Time + '';
+   }
+   return;
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+
+<body onLoad="startup()">
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
+    <input type="hidden" name="TABLENAME" value="PWEPICCReferral" />
+    <input type="hidden" name="VISITDT" value="||DATE||" />
+    <input type="hidden" name="VISITTM" value="||TIME||" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="" />
+    <input type="hidden" name="_PRESERVE" value="YES" />
+    <input type="text" name="TESTRIGHTANSWERS" style="display:none">
+    <input type="text" name="TESTTOTALANSWERS" style="display:none">
+    <input type="text" name="TESTPERCENT" style="display:none">
+<!--STARTOFPROVIDERFORM -->
+    <h1><span>EPICC Referral</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+    <div class="entire" id="divMissingMessageRow">
+       <div class="col12 d-none alert-warning" style="text-align:center" id="divMissingMessage">
+         You must complete all the mandatory fields on this form. Please review those highlighted below.
+       </div>
+       <div id="divSignatureErrors" class="col12 d-none alert-warning" onclick="findSignatureError()"></div>
+    </div>
+    <div class="deflist">
+      <div class="entire">
+      </div>
+      
+      <div class="entire">
+    <div class="qTiedEnrollment">
+    <!--The value of this dropdown will be the docserno of the enrollment record that is selected-->
+    <div class="fldTiedEnrollment qTiedEnrollment"><span class="qTiedEnrollment required-label">||PWRequiredFieldRequiredText||</span><span class="qTiedEnrollment required-field-label"><label class="label-top">Select Pathway Assignment</label></span><span class="qTiedEnrollment"><select size="1" name="TiedEnrollment" onchange="checkhideall()">
+<option value="||select pc.docserno, p.pathwayname + ' - ' + CONVERT(VARCHAR(20),pc.STARTDATE,101) + case when pc.enddate is null then ' - No End Date' else ' - '+CONVERT(VARCHAR(20),pc.ENDDATE,101) end from pathway p,pathwayclient pc where pc.parentdocserno=p.docserno and p.docrevno=' 0 ' and pc.docrevno=' 0 ' and pc.clientnumber = '^^CLIENTNUMBER^^' ORDER BY pc.STARTDATE||">||CHOICETABLESQLD||</option>
+</select>
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qPathway_Date">
+    <div class="col4 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qtime_call_received">
+    <div class="col4 fldtime_call_received qtime_call_received"><span class="qtime_call_received"><label class="label-top">||FIELDTAG time_call_received||Call Time||ENDFIELDTAG||</label></span><span class="qtime_call_received"><input type="text" name="time_call_received" size="20" id="gvttimetime_call_received" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qreferrer_name">
+    <div class="col4 fldreferrer_name qreferrer_name"><span class="qreferrer_name required-label">||PWRequiredFieldRequiredText||</span><span class="qreferrer_name required-field-label"><label class="label-top">||FIELDTAG referrer_name||Referrer's Name||ENDFIELDTAG||</label></span><span class="qreferrer_name"><input type="text" name="referrer_name" size="20" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qreferrer_phone">
+    <div class="col4 fldreferrer_phone qreferrer_phone"><span class="qreferrer_phone"><label class="label-top">||FIELDTAG referrer_phone||Referrer's Phone||ENDFIELDTAG||</label></span><span class="qreferrer_phone"><input type="text" name="referrer_phone" size="20" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qepicc_referring_agency">
+    <div class="col4 fldepicc_referring_agency qepicc_referring_agency"><span class="qepicc_referring_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_referring_agency required-field-label"><label class="label-top">Referring Agency</label></span><span class="qepicc_referring_agency"><select size="1" name="epicc_referring_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_referral_sources^^') AND bhn_program='EPICC' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE program_referral_sources||
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qcommunity_referral_source">
+    <div class="col4 fldcommunity_referral_source qcommunity_referral_source"><span class="qcommunity_referral_source required-label">||PWRequiredFieldRequiredText||</span><span class="qcommunity_referral_source required-field-label"><label class="label-top">Select Community Referral Source</label></span><span class="qcommunity_referral_source"><select size="1" name="community_referral_source" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [community_referral_source] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE community_referral_source^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE community_referral_source||
+</span></div>
+     </div>
+  </div>
+    <div class="col4 qfamily_or_friend">
+    <div class="col4 fldfamily_or_friend qfamily_or_friend"><span class="qfamily_or_friend"><label class="label-top">||FIELDTAG family_or_friend||Family Or Friend||ENDFIELDTAG||</label></span><span class="qfamily_or_friend"><select size="1"  name="family_or_friend" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Spouse">Spouse</option>
+<option value="Boyfriend/Girlfriend">Boyfriend/Girlfriend</option>
+<option value="Friend">Friend</option>
+<option value="Parent">Parent</option>
+<option value="Relative">Relative</option>
+
+</select></span></div>
+     </div>
+ <div class="entire">
+    <div class="col4 qspecify_other_referring_agency">
+    <div class="col4 fldspecify_other_referring_agency qspecify_other_referring_agency"><span class="qspecify_other_referring_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qspecify_other_referring_agency required-field-label"><label class="label-top">||FIELDTAG specify_other_referring_agency||If Other, Specify Agency||ENDFIELDTAG||</label></span><span class="qspecify_other_referring_agency"><input type="text" name="specify_other_referring_agency" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qshelter">
+    <div class="col4 fldshelter qshelter"><span class="qshelter"><label class="label-top">||FIELDTAG shelter||Shelter||ENDFIELDTAG||</label></span><span class="qshelter"><input type="text" name="shelter" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <!-- Removed on 8/7/25 based on Jennifer saying this question is no longer needed -->
+   <!-- <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+    <div class="col4 qclient_on_outreach_list">
+    <div class="col4 fldclient_on_outreach_list qclient_on_outreach_list"><span class="qclient_on_outreach_list required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_on_outreach_list required-field-label"><label class="label-top">||FIELDTAG client_on_outreach_list||Is client on the outreach list?||ENDFIELDTAG||</label></span><span class="qclient_on_outreach_list"><input type="radio" name="client_on_outreach_list" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_on_outreach_list" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div> -->
+   <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col4 qclient_age_14_17">
+    <div class="col4 fldclient_age_14_17 qclient_age_14_17"><span class="qclient_age_14_17 required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_age_14_17 required-field-label"><label class="label-top">||FIELDTAG client_age_14_17||Is client age 14-17?||ENDFIELDTAG||</label></span><span class="qclient_age_14_17"><input type="radio" name="client_age_14_17" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_age_14_17" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4 qparent_caregiver_present_ref_or_notified">
+    <div class="col4 fldparent_caregiver_present_ref_or_notified qparent_caregiver_present_ref_or_notified"><span class="qparent_caregiver_present_ref_or_notified"><label class="label-top">||FIELDTAG parent_caregiver_present_ref_or_notified||Was parent/caregiver notified about the referral and/or present at time of referral?||ENDFIELDTAG||</label></span><span class="qparent_caregiver_present_ref_or_notified"><input type="radio" name="parent_caregiver_present_ref_or_notified" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="parent_caregiver_present_ref_or_notified" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Housing Status</div>
+</div>
+<div class="col6 qhousing_status_referral">
+  <div class="col6 fldhousing_status_referral qhousing_status_referral"><span class="qhousing_status_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qhousing_status_referral required-field-label"><label class="label-top">||FIELDTAG housing_status_referral||Housing Status at Referral||ENDFIELDTAG||</label></span><span class="qhousing_status_referral"><input type="radio" name="housing_status_referral" value="Housed" onclick="checkhideall()" >Housed&nbsp;&nbsp;<input type="radio" name="housing_status_referral" value="Unhoused" onclick="checkhideall()" >Unhoused&nbsp;&nbsp;<input type="radio" name="housing_status_referral" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+<div class="col12 term">Law Enforcement/Police Custody</div>
+</div>
+ <!-- <div class="entire">
+    <div class="col4 qleo_involved_referral">
+    <div class="col4 fldleo_involved_referral qleo_involved_referral"><span class="qleo_involved_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qleo_involved_referral required-field-label"><label class="label-top">||FIELDTAG leo_involved_referral||Was law enforcement involved with this referral? ||ENDFIELDTAG||</label></span><span class="qleo_involved_referral"><input type="radio" name="leo_involved_referral" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="leo_involved_referral" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div> -->
+ <div class="entire">
+    <div class="col4 qin_police_custody">
+    <div class="col4 fldin_police_custody qin_police_custody"><span class="qin_police_custody"><label class="label-top">||FIELDTAG in_police_custody||Is client in police custody? ||ENDFIELDTAG||</label></span><span class="qin_police_custody"><input type="radio" name="in_police_custody" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="in_police_custody" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+  <!-- Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly. -->
+  <div class="entire">
+<div class="col12 term">EMS/Fire District</div>
+</div>
+   <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4 qems_involved_ref">
+    <div class="col4 fldems_involved_ref qems_involved_ref"><span class="qems_involved_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qems_involved_ref required-field-label"><label class="label-top">||FIELDTAG ems_involved_ref||Was EMS involved with this referral?||ENDFIELDTAG||</label></span><span class="qems_involved_ref"><input type="radio" name="ems_involved_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_involved_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+    <div class="entire">
+    <div class="col4 qems_fire_district">
+    <div class="col4 fldems_fire_district qems_fire_district"><span class="qems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district required-field-label"><label class="label-top">Which EMS/Fire District?</label></span><span class="qems_fire_district"><select size="1" name="ems_fire_district" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_ems_fire_district] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_ems_fire_district^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_ems_fire_district||
+</span></div>
+     </div>
+    </div>
+ <div class="entire">
+    <div class="col4 qother_ems_fire_district">
+    <div class="col4 fldother_ems_fire_district qother_ems_fire_district"><span class="qother_ems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qother_ems_fire_district required-field-label"><label class="label-top">||FIELDTAG other_ems_fire_district||Other EMS/Fire District||ENDFIELDTAG||</label></span><span class="qother_ems_fire_district"><input type="text" name="other_ems_fire_district" size="20" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>    
+ <div class="entire">
+    <div class="col6 qems_fire_district_place_referral_in_transit">
+    <div class="col6 fldems_fire_district_place_referral_in_transit qems_fire_district_place_referral_in_transit"><span class="qems_fire_district_place_referral_in_transit required-label">||PWRequiredFieldRequiredText||</span><span class="qems_fire_district_place_referral_in_transit required-field-label"><label class="label-top">||FIELDTAG ems_fire_district_place_referral_in_transit||Did EMS/Fire District place referral while in transit? ||ENDFIELDTAG||</label></span><span class="qems_fire_district_place_referral_in_transit"><input type="radio" name="ems_fire_district_place_referral_in_transit" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_fire_district_place_referral_in_transit" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col6 qemergency_response_call">
+    <div class="col6 fldemergency_response_call qemergency_response_call"><span class="qemergency_response_call"><label class="label-top">||FIELDTAG emergency_response_call||Was this a response to a 911 call?||ENDFIELDTAG||</label></span><span class="qemergency_response_call"><input type="radio" name="emergency_response_call" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="emergency_response_call" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+    <div class="col6 qsuboxone_ems">
+    <div class="col6 fldsuboxone_ems qsuboxone_ems"><span class="qsuboxone_ems required-label">||PWRequiredFieldRequiredText||</span><span class="qsuboxone_ems required-field-label"><label class="label-top">||FIELDTAG suboxone_ems||Was suboxone administered by EMS?||ENDFIELDTAG||</label></span><span class="qsuboxone_ems"><input type="radio" name="suboxone_ems" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="suboxone_ems" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="suboxone_ems" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+      <div class="col6 qwhy_not_suboxone_ems">
+    <div class="col6 fldwhy_not_suboxone_ems qwhy_not_suboxone_ems"><span class="qwhy_not_suboxone_ems"><label class="label-top">||FIELDTAG why_not_suboxone_ems||Why was suboxone not administered?||ENDFIELDTAG||</label></span><span class="qwhy_not_suboxone_ems"><select size="1"  name="why_not_suboxone_ems" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="EMS District Does Not Carry Suboxone">EMS District Does Not Carry Suboxone</option>
+<option value="Already Received Suboxone">Already Received Suboxone</option>
+<option value="COWS Score Too Low Or Did Not Meet Withdrawal Scale">COWS Score Too Low Or Did Not Meet Withdrawal Scale</option>
+<option value="No Overdose Or Not In Withdrawal">No Overdose Or Not In Withdrawal</option>
+<option value="Person Took Methadone Within 48 Hours">Person Took Methadone Within 48 Hours</option>
+<option value="Narcan Was Used; Suboxone Not Appropriate">Narcan Was Used Or Suboxone Not Appropriate</option>
+<option value="Person Declined">Person Declined</option>
+<option value="Short Transport Time">Short Transport Time</option>
+<option value="Other">Other</option>
+
+</select></span></div>
+     </div>
+      <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+     <div class="entire">
+    <div class="col6 qwho_administered_suboxone">
+    <div class="col6 fldwho_administered_suboxone qwho_administered_suboxone"><span class="qwho_administered_suboxone required-label">||PWRequiredFieldRequiredText||</span><span class="qwho_administered_suboxone required-field-label"><label class="label-top">||FIELDTAG who_administered_suboxone||Who administered the suboxone?||ENDFIELDTAG||</label></span><span class="qwho_administered_suboxone"><input type="radio" name="who_administered_suboxone" value="Community Paramedic" onclick="checkhideall()" >Community Paramedic&nbsp;&nbsp;<input type="radio" name="who_administered_suboxone" value="EMS Field Crew" onclick="checkhideall()" >EMS Field Crew&nbsp;&nbsp;<input type="radio" name="who_administered_suboxone" value="Other" onclick="checkhideall()" >Other&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+     <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+    <div class="col6 qmilligrams_suboxone">
+    <div class="col6 fldmilligrams_suboxone"><span class="qmilligrams_suboxone required-label">||PWRequiredFieldRequiredText||</span><span class="qmilligrams_suboxone required-field-label"><label class="label-top">||FIELDTAG milligrams_suboxone||How many milligrams of suboxone were administered?||ENDFIELDTAG||</label></span><span class="qmilligrams_suboxone"><input type="text" name="milligrams_suboxone" size="20" onchange="checkhideall()"></span></div>
+     </div>
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+    <div class="col6"><label class="label-top"></label></div>
+  </div>
+   <div class="entire">
+    <div class="col6 qems_transport_to_hospital">
+    <div class="col6 fldems_transport_to_hospital qems_transport_to_hospital"><span class="qems_transport_to_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qems_transport_to_hospital required-field-label"><label class="label-top">What hospital are they being transported to?</label></span><span class="qems_transport_to_hospital"><select size="1" name="ems_transport_to_hospital" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_referral_sources^^') AND bhn_program='EPICC' AND CODE NOT IN ('014','073','015') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="Other">Other</option>
+</select>||CONFIGURE program_referral_sources||
+</span></div>
+     </div>
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col4"><label class="label-top"></label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">Program Participation</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldepicc_program_participation_referral qepicc_program_participation_referral">
+    <div class="col12 fldepicc_program_participation_referral qepicc_program_participation_referral"><span class="qepicc_program_participation_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qepicc_program_participation_referral required-field-label"><label class="label-top">Program Participation</label></span><span class="qepicc_program_participation_referral"><select size="1" name="epicc_program_participation_referral" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [epicc_program_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE epicc_program_participation_referral^^') and referral = 1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_program_participation||
+</span></div>
+     </div>
+  </div>
+<!-- Ineligible Referral -->
+<div class="entire">
+  <div class="col12 fldineligible_referral qineligible_referral">
+    <span class="qineligible_referral required-label">||PWRequiredFieldRequiredText||</span>
+    <span class="qineligible_referral required-field-label"></span>
+    <label class="label-top">
+      ||FIELDTAG ineligible_referral||Reason Client is Ineligible at Referral||ENDFIELDTAG||
+    </label>
+    <span class="qineligible_referral">
+      <select size="1" name="ineligible_referral" onchange="checkhideall()">
+        <option value="">(please select)</option>
+        <option value="Client Deceased">Client Deceased</option>
+        <option value="Client Declined EPICC Services">Client Declined EPICC Services</option>
+        <option value="Client In Jail/Incarcerated">Client In Jail/Incarcerated</option>
+        <option value="Doesn't Meet Program Criteria">Doesn't Meet Program Criteria</option>
+        <option value="Not Clinically Appropriate">Not Clinically Appropriate</option>
+      </select>
+    </span>
+  </div>
+</div>
+
+<!-- Ineligible Reason -->
+<div class="entire">
+  <div class="col12 fldineligible_reason qineligible_reason">
+    <span class="qineligible_reason required-label">||PWRequiredFieldRequiredText||</span>
+    <span class="qineligible_reason required-field-label"></span>
+    <label class="label-top">
+      ||FIELDTAG ineligible_reason||Criteria Not Met For Eligibility||ENDFIELDTAG||
+    </label>
+    <span class="qineligible_reason">
+      <select size="1" name="ineligible_reason" onchange="checkhideall()">
+        <option value="">(please select)</option>
+        <option value="Under Age 14">Under Age 14</option>
+        <option value="Does Not Reside In Region">Not A Missouri Resident</option>
+        <option value="Non-Opioid User">Non-Opioid User</option>
+        <option value="Missouri Resident But Outside Eastern Region">
+          Missouri Resident But Outside Eastern Region
+        </option>
+      </select>
+    </span>
+  </div>
+</div>
+
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddm3700_status qdm3700_status">
+    <div class="col12 flddm3700_status qdm3700_status"><span class="qdm3700_status"><label class="label-top">||FIELDTAG dm3700_status||DM3700/ADA-DM Status||ENDFIELDTAG||</label></span><span class="qdm3700_status"><input type="radio" name="dm3700_status" value="Found (DM3700)" onclick="checkhideall()" >Found (DM3700)<br><input type="radio" name="dm3700_status" value="Found (ADA-DM)" onclick="checkhideall()" >Found (ADA-DM)<br><input type="radio" name="dm3700_status" value="Not Found" onclick="checkhideall()" >Not Found</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldclient_enrolled_su_before qclient_enrolled_su_before">
+    <div class="col12 fldclient_enrolled_su_before qclient_enrolled_su_before"><span class="qclient_enrolled_su_before"><label class="label-top">||FIELDTAG client_enrolled_su_before||Has client been enrolled in substance use services before?||ENDFIELDTAG||</label></span><span class="qclient_enrolled_su_before"><input type="radio" name="client_enrolled_su_before" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_enrolled_su_before" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlist_all_ada qlist_all_ada">
+    <div class="col12 fldlist_all_ada qlist_all_ada"><span class="qlist_all_ada"><label class="label-top">||FIELDTAG list_all_ada||List all ADA (Substance Use) providers with whom client has been admitted to services and dates.||ENDFIELDTAG||</label></span><span class="qlist_all_ada"><textarea name="list_all_ada" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldpresenting_notes qpresenting_notes">
+    <div class="col12 fldpresenting_notes qpresenting_notes"><span class="qpresenting_notes"><label class="label-top">||FIELDTAG presenting_notes||Presenting Notes||ENDFIELDTAG||</label></span><span class="qpresenting_notes"><textarea name="presenting_notes" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><div align="Left"><img src="images/custom/EPICC  Logo Vector.png" width="250px"></div></div>
+  </div>
+
+</div>
+</div>
+<!--ENDOFMAINFORM -->
+||STARTSTRIP||
+    <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
+    Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
+||ENDSTRIP||
+</form>
+</body>
+</html>

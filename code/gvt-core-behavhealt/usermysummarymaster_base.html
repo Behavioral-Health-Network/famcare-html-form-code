@@ -1,0 +1,388 @@
+<html>
+
+<head>
+<title>||MASTERMAINTAINDESCRIPTION||</title>
+</head> 
+
+<!-- FIELDOVERRIDE(GROUPLIST,12,0) -->
+<!-- FIELDOVERRIDE(PROVIDERLIST,12,0) -->
+
+<script language="JavaScript">
+
+var hascodefield=0;
+var codefieldnme="";
+var numericonly=0;
+var maxcode=0;
+var maxlen=3;
+var disablecode=true;
+var disablecodemessage=" <span style=\"cursor: pointer\" onclick=\"enablecode()\">(click to allow edit of this field)</span>";
+
+function enablecode() {
+    functionreturnvalue=null;
+// check msgbox (yes/no) to confirm (ok/cancel) wording
+    var msgtemp=confirm("Are you sure you want to enable this field?  Care must be taken when changing the CODE field in a master table");
+    if (msgtemp) {gg=1} else {gg=7}
+    if (gg==7) {
+       return functionreturnvalue;
+    }
+    disablecode=false;
+    disablecodemessage="";
+    document.forms[0].elements[codefieldnme].disabled=disablecode;
+    document.getElementById("codemessagespan").innerHTML=disablecodemessage;
+    return functionreturnvalue;
+}
+
+function setupcodeoptions(numelementsper,totalelements,identifier,results) {
+    functionreturnvalue=null;
+    if (results[1][1]=="0" || results[1][1]=="") {
+      maxlen=3;
+    } else {
+      maxlen=cintjis(results[1][1]);
+    }
+    if (results[1][3]=="") {
+         if (numericjis(results[1][2])) {
+            maxcode=cintjis(results[1][2]);
+            numericonly=1;
+         } else {
+            maxcode=0;
+            numericonly=1;
+         }
+    }
+    var f=document.forms[0];
+    if (f.DOCSERNO.value=="") {addnewrecord()}
+    GetGroupListing();
+    GetProviderListing();
+}
+
+function copynewrecord() {
+    functionreturnvalue=null;
+    var f=document.forms[0];
+    f.RECORDID.value="0";
+    if (hascodefield==1) {
+       f.elements[codefieldnme].value="";
+    }
+    if (numericonly==1) {
+        if (lenjis(cstrjis(maxcode+1))>maxlen) {
+            maxlen=maxlen+1;
+        }
+        var newcode=rightjis("000000000000000"+cstrjis(maxcode+1),maxlen);
+        f.elements[codefieldnme].value=newcode;
+        document.getElementById("codemessagespan").innerHTML=" (this is the next available number, you can override it)";
+    } else {
+        if (hascodefield==1) {
+           document.getElementById("codemessagespan").innerHTML=" (code is mandatory)";
+        }
+    }
+    if (hascodefield==1) {
+      f.elements[codefieldnme].disabled=false;
+      f.elements[codefieldnme].focus();
+    }
+    return functionreturnvalue;
+}
+
+function addnewrecord() {
+    functionreturnvalue=null;
+    var f=document.forms[0];
+    if (hascodefield==1) {
+       f.elements[codefieldnme].disabled=false;
+    }
+    if (numericonly==1) {
+        if (lenjis(cstrjis(maxcode+1))>maxlen) {
+            maxlen=maxlen+1;
+        }
+        var newcode=rightjis("000000000000000"+cstrjis(maxcode+1),maxlen);
+        f.elements[codefieldnme].value=newcode;
+        document.getElementById("codemessagespan").innerHTML=" (this is the next available number, you can override it)";
+    } else {
+        if (hascodefield==1) {
+            document.getElementById("codemessagespan").innerHTML=" (code is mandatory)";
+        }
+    }
+    return functionreturnvalue;
+}
+
+function saverecordstep2(numelementsper,totalelements,identifier,results) {
+    functionreturnvalue=null;
+    if (totalelements!=0) {
+        alert("This code is already in the database.  All CODE fields must be unique");
+        document.getElementById("fieldspan").disabled=false;
+        return functionreturnvalue;
+    }
+    document.getElementById("fieldspan").disabled=false;
+    document.forms[0].submit();
+    document.getElementById("fieldspan").disabled=disablecode;
+    return functionreturnvalue;
+}
+
+function startup() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+// following is when coming in from SAVE then NEw, confirm screen is same as our form name so clear docserno
+	if (f.DOCSERNO.value=="") {
+		//***Commands here will execute when the record is new
+		f._B2.style.display = 'none';
+	} else {
+		if("||SCREENPARM OPTION||" == "PRINTFORMAT") {
+			//***Commands here will execute when the form is printed
+		} else {
+			//***Commands here will execute when the form is being edited
+			f._B1.style.display = "";
+			f._B2.style.display = "";
+		}
+	}
+	hascodefield=0;
+	try {
+		hascodefield=f.CODE.size; codefieldnme="CODE";} catch(e) {}
+	try {
+		hascodefield=f.Code.size; codefieldnme="Code";} catch(e) {}
+	if (hascodefield!=0) {
+		hascodefield=1;
+	}
+	if (hascodefield==1) {
+		if (!(document.getElementById("codemessagespan")==undefined)) {
+			document.getElementById("codemessagespan").innerHTML=disablecodemessage;
+		}
+		f.elements[codefieldnme].disabled=disablecode;
+		var tbl=f.TABLENAME.value
+		var sql="SELECT (SELECT MAX(LEN(CODE)) FROM ["+tbl+"] WHERE DOCREVNO=' 0 ') AS [RAW],(SELECT MAX(CODE) FROM ["+tbl+"] WHERE LEN(CODE)=(SELECT MAX(LEN(CODE)) FROM ["+tbl+"] WHERE DOCREVNO=' 0 ') AND DOCREVNO=' 0 ' And PrivateProvider='||PRIVATEPROVIDER||'),(SELECT MAX(ID) FROM ["+tbl+"] WHERE ISNUMERIC(CODE)=0 and CODE<>'' AND CODE<>'-' AND DOCREVNO=' 0 ' And PrivateProvider='||PRIVATEPROVIDER||')";
+		sql=escape(sql);
+		var url="genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|SQL("+escape(sql)+")|IDENTIFIER(X)|ERROR(SUPRESS)|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(setupcodeoptions)|TIMER("+cstrjis(Date())+")^";
+		parent.fvalidate.location=url;
+	} else {
+		GetGroupListing();
+		GetProviderListing();
+	}
+}
+
+var optsave=0;
+
+function submitit(opt) {
+// opt=0 for regular save, opt=1 for save and new
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	var ProvList = "|";
+	var GroupList = "|";
+	var cbname = "";
+	for(var x = 20; x <= f.elements.length - 1; x++){
+		if(f.elements[x].type == "checkbox" && f.elements[x].name.substr(0,2) == "GR"){
+			cbname = f.elements[x].name.substr(2,200);
+			if(f.elements[x].checked  && cbname != ""){
+				GroupList = GroupList + cbname + "|";
+			}
+		}
+	}
+	f.GROUPLIST.value = GroupList;
+
+	var GroupList = "|";
+	cbname = "";
+	for(var x = 20; x <= f.elements.length - 1; x++){
+		if(f.elements[x].type == "checkbox" && f.elements[x].name.substr(0,2) == "PR"){
+			cbname = f.elements[x].name.substr(2,200);
+			if(f.elements[x].checked  && cbname != ""){
+				ProvList = ProvList + cbname + "|";
+			}
+		}
+	}
+	f.PROVIDERLIST.value = ProvList;
+
+	f.elements["_B1"].disabled=true;
+	f.elements["_B1X"].disabled=true;
+	f.SUMMATION.value=f.SUMMARYDIVID.value;
+	optsave=opt;
+	if (hascodefield==1) {
+		var sql="SELECT DOCSERNO FROM ["+f.TABLENAME.value+"] WHERE CODE='"+f.elements[codefieldnme].value+"' And PrivateProvider='||PRIVATEPROVIDER||' AND DOCSERNO<>'"+f.DOCSERNO.value+"' AND DOCREVNO=' 0 '";
+		var url="genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|SQL("+escape(sql)+")|IDENTIFIER(X)|POPULATEFUNCTION(submititstep2)|ERROR(SUPRESS)|SESSIONID("+f.SESSIONID.value+")|TIMER("+cstrjis(Date())+")^";
+		parent.fvalidate.location=url;
+		return functionreturnvalue;
+	}
+	f.target="";
+	if (optsave==0) {f.CONFIRMSCREEN.value="SAVECONFIRMREFRESHSUMMARY"} else {f.CONFIRMSCREEN.value="CODEMAINTAINSAVEANDNEW"}  
+	f.elements["Code"].disabled = false; 
+	f.submit();
+	return functionreturnvalue;
+}
+
+function submititstep2(numelementsper,totalelements,identifier,results) {
+   var f=document.forms[0];
+   if (totalelements==0) {
+      if (optsave==0) {f.CONFIRMSCREEN.value="SAVECONFIRMREFRESHSUMMARY"} else {f.CONFIRMSCREEN.value="CODEMAINTAINSAVEANDNEW"}   
+      f.elements["Code"].disabled = false;
+      document.forms[0].submit();
+   } else {
+      alert("The Code specified already exists in the table.  All Codes must be unique");
+      f.elements["_B1"].disabled=false;
+      f.elements["_B1X"].disabled=false;
+   }
+}
+
+function deleteit() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	if ("||DOCSERNO||" == "") {
+		alert("Just click the X in the upper right hand corner to delete this.");
+		return functionreturnvalue;
+	}
+	// check msgbox (yes/no) to confirm (ok/cancel) wording
+	var msgtemp = confirm("Are you sure you want to delete this record?");
+	if (!msgtemp) {
+		return functionreturnvalue;
+	}
+	f.FUNCTION.value = "DELETEDATA";
+	f.submit();
+	return functionreturnvalue;
+}
+
+function resetsave() {
+   //***Commands here will reset the form if there is an error during save
+   document.forms[0]._B1.style.display = "";
+   document.forms[0]._B2.style.display = "";
+   f.elements["_B1"].disabled=false;
+   f.elements["_B1X"].disabled=false;
+}
+
+function test() {
+   f=document.forms[0];
+   f.FUNCTION.value="BLANKFORM";
+   f.target="_blank";
+   f.submit();
+   f.target="";
+   f.FUNCTION.value="SAVE";
+}
+
+function GetGroupListing() {
+	var totalelements = 0;
+///PULLDATA SELECT UCase(GroupName), GroupName As LilGroupName From SecurityGroups Where Left(GroupName,3) != 'OTP' Order By GroupName
+	var f = document.forms[0];
+	var TheGroups = new String(f.GROUPLIST.value);
+	var IsChecked = "";
+	var TheList = new String("<table width=\"100%\"><tr><td width=\"100%\" valign=\"top\" align=\"left\"><u><b>Groups to Access</b></u><br>(leave all unchecked for all to have access)<br><a href=\"javascript:void SelectAllBoxes('Groups','Check');\">Select All</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href=\"javascript:void SelectAllBoxes('Groups','Uncheck');\">Deselect All</a></td></tr><tr><td width=\"100%\">");
+	if (totalelements > 0) {
+		for (var x = 1; x <= totalelements; x++) {
+			if (TheGroups.indexOf("|" + results[x][1] + "|") > -1) {
+				IsChecked = "checked";
+			} else {
+				IsChecked = "";
+			}
+			TheList = TheList + "<input type=\"checkbox\" listtype=\"Groups\" name=\"GR" + results[x][1] + "\"" + IsChecked + "> " + results[x][2] + "<br>";
+		}
+		TheList = TheList + "</td></tr></table>";
+	} else {
+		TheList = "No Groups To Select From.";
+	}
+	document.getElementById("GroupListing").innerHTML = TheList;
+}
+
+function GetProviderListing() {
+	var totalelements = 0;
+///PULLDATA Select Distinct Provider.ProviderCode, CASE WHEN P2.PROVIDERNAME IS NULL THEN Provider.ProviderName ELSE P2.PROVIDERNAME + ' ' + Provider.ProviderName END AS [PROVIDERNAME] From Provider Inner Join SecurityClientProvider SCP On Provider.ProviderCode = SCP.Provider LEFT JOIN PROVIDER P2 ON PROVIDER.ParentOrganization = P2.PROVIDERCODE AND P2.DOCREVNO = ' 0 ' AND P2.SiteProvider <> 'YES' AND P2.Master <> 'YES' AND P2.ProviderType <> 'SP' AND (P2.EXCLUDEQR IS NULL OR P2.EXCLUDEQR = '') Where PROVIDER.DocRevNo = ' 0 ' Order By 2
+	var f = document.forms[0];
+	var TheProviders = new String(f.PROVIDERLIST.value);
+	var IsChecked = "";
+	var TheList = new String("<table width=\"100%\"><tr><td width=\"100%\" valign=\"top\" align=\"left\"><u><b>Providers to Access</b></u><br>(leave all unchecked for all to have access)<br><a href=\"javascript:void SelectAllBoxes('Providers','Check');\">Select All</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href=\"javascript:void SelectAllBoxes('Providers','Uncheck');\">Deselect All</a></td></tr><tr><td width=\"100%\">");
+	if (totalelements > 0) {
+		for (var x = 1; x <= totalelements; x++) {
+			if (TheProviders.indexOf("|" + results[x][1] + "|") > -1) {
+				IsChecked = "checked";
+			} else {
+				IsChecked = "";
+			}
+			TheList = TheList + "<input type=\"checkbox\" listtype=\"Providers\" name=\"PR" + results[x][1] + "\"" + IsChecked + "> " + results[x][2] + "<br>";
+		}
+		TheList = TheList + "</td></tr></table>";
+	} else {
+		TheList = "No Providers To Select From.";
+	}
+	document.getElementById("ProviderListing").innerHTML = TheList;
+}
+
+function SelectAllBoxes(opt,opt2) {
+	var f = document.forms[0];
+	for (var y = 12; y <= f.elements.length - 1; y++) {
+		if (f.elements[y].type == "checkbox" && f.elements[y].getAttribute("listtype") == opt) {
+			if (opt2 == "Check") {
+				f.elements[y].checked = true;
+			} else {
+				f.elements[y].checked = false;
+            }
+		}
+	}
+	return;
+}
+//_NOSPELLCHECK=YES
+</script>
+
+<script language="VBScript">
+</script>
+
+<body onLoad="startup()">
+<!-- Field Override Area -->||INCLUDE FUNCTIONSUMMATIONLIBRARY.HTM||
+<form method="post" action="genfunc.exe">    
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" /> 
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" /> 
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="TABLENAME" value="UserMySummaryMaster_BASE" /> 
+    <input type="hidden" name="VISITDT" value="||DATE||" /> 
+    <input type="hidden" name="FORMNAME" value="UserAlertsTest">
+    <input type="hidden" name="VISITTM" value="||TIME||" /> 
+    <input type="hidden" name="AUTOCLOSE" value="YES" /> 
+    <input type="hidden" name="CONFIRMSCREEN" />
+    <input type="hidden" name="SUMMATION" />
+    <input type="hidden" name="GROUPLIST" value = "||FIELDVALUE GROUPLIST||">
+    <input type="hidden" name="PROVIDERLIST" value = "||FIELDVALUE PROVIDERLIST||">
+    <h1><span>User My Summary Master</span> (Master Table)</h1>
+    <div class="extrawidecol">
+    <div class="deflist">
+    <div class="term">User My Summary Master</div>
+    <div class="def">
+    <ul>
+        <li><strong>Code</strong> <input type="text" name="Code" size="30" /> <span id="codemessagespan">&nbsp;</span></li>
+        <li><strong>Description</strong> <input type="text" name="Description" size="100" /></li>
+        <li><strong>Status</strong> <select size="1" name="StatusDesc">
+           <option value="">(please select)</option>
+           <option value="Active">Active</option>
+           <option value="Inactive">Inactive</option>
+           </select>
+        </li>
+        <li><strong>SQLField</strong><textarea rows="10" cols="90" name="SQLField"></textarea></li>
+        <li><strong>SQLField Provider</strong><textarea rows="10" cols="90" name="SQLFieldProvider"></textarea></li>
+        <li><strong>Drill Down Report</strong><select size="1" name="QuickReport">
+           <option value="||SELECT QueryName AS [RAW],Queryname as [D2] From SavedQueries Where RIGHT(QUERYNAME,6)<>'_GRAPH' AND PRIVATE!='ON' And (PrivateProvider='^^PRIVATEPROVIDER^^' Or PrivateProvider='' or PrivateProvider Is Null) AND QUERYSQL NOT LIKE '%^%' AND ((SELECT TOP 1 ID FROM SecurityForms WHERE FormName='QuickReport '+Queryname AND PRIVATEPROVIDER='^^PRIVATEPROVIDER^^') IS NOT NULL or (SELECT TOP 1 ID FROM SECURITYFORMS WHERE FORMNAME LIKE 'QuickReport %') IS NULL) Order By QueryTitle||">||CHOICETABLESQLD||</option>
+          </select></li>
+        <li><strong>&nbsp;</strong><input type="button" value="Test" onclick="test()"></li>
+        <span  id="_gvtSecurity_Options">
+        <li><strong>Instructions</strong>                  
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td>||GROUPROVIDERSECURITYINSTRUCTIONS||</td>
+                        <tr>
+                      </tbody>
+                  </table>                
+             </li>
+        <li><strong>Group/Provider Security</strong> 
+        	<table border="0" cellpadding="2" cellspacing="2">
+            	<td valign="top" style="border-right: solid 1pt;"><span id="GroupListing">&nbsp;</span></td>
+            	<td valign="top"><span id="ProviderListing">&nbsp;</span></td>            
+                </table>
+        </li>
+         <div class="entire">
+         <div class="col12">||INCLUDESUMMATION SummationSecurityGroups||</div>
+         </div>
+        </span>
+<!-- INSERT POINT DO NOT MOVE OR REMOVE THIS COMMENT -->        
+    </ul>
+    ||STARTSTRIP||
+    <p>&nbsp;</p>
+    <div align="center"><center>
+    <p><font size="1"><span id="signaturedisplay">||Signatures||</span><br />
+    </font>Signature: <input type="password" name="SIGNATURE" /><br />
+    <input type="button" name="_B1" onclick="submitit(0)" value="SAVE" /><input type="button" name="_B1X" onclick="submitit(1)" value="SAVE then NEW" /><input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></p>
+    </center></div>
+    ||ENDSTRIP||</div>
+    </div>
+    </div>
+</form>
+
+</body>
+</html>

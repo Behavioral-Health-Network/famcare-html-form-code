@@ -59,6 +59,7 @@ function startup() {
     setrequire('event_type_other');
     setrequire('reside_stl_city');
     setrequire('prior_mh_bh_services');
+    setrequire('reason_if_ineligible_ic');
 
 	checkhideall();
 
@@ -68,6 +69,12 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
+   // adds checkhide() rules for values of bcr_prog_participation that should prompt the rest of the form to show.
+   // These are the values that should show the rest of the form: 001, 002, 006.
+   // Value "003" (Declined Services) and "004" (Unable To Contact) should cause the rest of the form to remain hidden.
+   checkhide(f.bcr_prog_participation,"RestOfForm","001");
+   checkhide(f.bcr_prog_participation,"RestOfForm","002");
+   checkhide(f.bcr_prog_participation,"RestOfForm","006");
       checkhide(f.church_home,"bcr_churches","Yes");
    checkhide(f.client_pcp_ic,"agreeable_pcp_ref","No");
    checkhide(f.phq9_completed,"phq9_score","Yes");
@@ -80,6 +87,11 @@ function checkhideall() {
    checkhide(f.bcr_prog_participation,"bcr_grant","001");
    checkhide(f.planned_event,"event_type", "Yes");
    checkhide(f.event_type,"event_type_other", "Other");
+    // Force override if a valid code is selected for bcr_program_participation
+   let val = f.bcr_prog_participation.value;
+   if (["001","002","006"].includes(val)) {
+     document.querySelector(".fldRestOfForm").style.display = "block";
+   }
 
 }
 
@@ -324,6 +336,10 @@ function validateform(scope='all') {
   if (!hiddenfield('crim_justice_involvement') && gvtfieldvalue('crim_justice_involvement')=='') {edesc=edesc+`Must specify a value for Has client ever had involvement with the criminal justice system?\n`; seterror("crim_justice_involvement");}
   if (!hiddenfield('EDUCATIONLEVEL') && gvtfieldvalue('EDUCATIONLEVEL')=='') {edesc=edesc+`Must specify a value for Highest Level of Education\n`; seterror("EDUCATIONLEVEL");}
   if (!hiddenfield('bcr_prog_participation') && gvtfieldvalue('bcr_prog_participation')=='') {edesc=edesc+`Must specify a value for Program Participation at Initial Contact\n`; seterror("bcr_prog_participation");}
+   // If Program Participation is "Unable To Contact" (004), skip validation of other fields
+   if (gvtfieldvalue('bcr_prog_participation') === '004') {
+      return edesc; // only require Program Participation and preceding fields
+   }
   if (!hiddenfield('bcr_grant') && gvtfieldvalue('bcr_grant')=='') {edesc=edesc+`Must specify a value for Which grant will the participant be covered by?\n`; seterror("bcr_grant");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
   if (!hiddenfield('planned_event') && gvtfieldvalue('planned_event')=='') {edesc=edesc+`Must specify a value for Did client attend a planned BCR event?\n`; seterror("planned_event");}
@@ -332,6 +348,7 @@ function validateform(scope='all') {
   if (!hiddenfield('reside_stl_city') && gvtfieldvalue('reside_stl_city')=='') {edesc=edesc+`Must specify if client lives in St. Louis City or not.\n`; seterror("reside_stl_city");}
   if (!hiddenfield('prior_mh_bh_services') && gvtfieldvalue('prior_mh_bh_services')=='') {edesc=edesc+`Must specify if client previously received mental or behavioral health services or not.\n`; seterror("prior_mh_bh_services");}
     return edesc;
+  if (!hiddenfield('reason_if_ineligible_ic') && gvtfieldvalue('reason_if_ineligible_ic')=='') {edesc=edesc+`Must specify a value for Reason for Ineligibility\n`; seterror("reason_if_ineligible_ic");}
 }
 
 function gvtfieldvalue(fldname) {
@@ -551,6 +568,7 @@ function updatesignatures(){
     <input type="text" name="TESTRIGHTANSWERS" style="display:none">
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
+    <input type="hidden" name="RestOfForm" value="" />
 <!--STARTOFPROVIDERFORM -->
     <h1><span>BCR Initial Contact</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
@@ -581,7 +599,43 @@ function updatesignatures(){
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
+<div class="entire">
+<div class="col12 term">Program Participation</div>
+</div>
  <div class="entire">
+    <div class="col12 fldbcr_prog_participation qbcr_prog_participation">
+    <div class="col12 fldbcr_prog_participation qbcr_prog_participation"><span class="qbcr_prog_participation required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_prog_participation required-field-label"><label class="label-top">Program Participation at Initial Contact</label></span><span class="qbcr_prog_participation"><select size="1" name="bcr_prog_participation" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_prog_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_prog_participation^^') and initial_contact=1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_prog_participation||
+</span></div>
+     </div>
+  </div>
+
+ <div class="col12 fldRestOfForm qRestOfForm">
+ <div class="entire">
+    <div class="col12 fldreason_if_ineligible_ic qreason_if_ineligible_ic">
+    <div class="col12 fldreason_if_ineligible_ic qreason_if_ineligible_ic"><span class="qreason_if_ineligible_ic"><label class="label-top">||FIELDTAG reason_if_ineligible_ic||Reason for Ineligibility||ENDFIELDTAG||</label></span><span class="qreason_if_ineligible_ic"><select size="1"  name="reason_if_ineligible_ic" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Need/Primary Concern Out Of BCR Scope">Need/Primary Concern Out Of BCR Scope</option>
+<option value="Residency Out Of Service Area">Residency Out Of Service Area</option>
+<option value="Other">Other</option>
+</select></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldother_reason_ineligible_ic qother_reason_ineligible_ic">
+    <div class="col12 fldother_reason_ineligible_ic qother_reason_ineligible_ic"><span class="qother_reason_ineligible_ic"><label class="label-top">||FIELDTAG other_reason_ineligible_ic||If "Other", Explain||ENDFIELDTAG||</label></span><span class="qother_reason_ineligible_ic"><input type="text" name="other_reason_ineligible_ic" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbcr_grant qbcr_grant">
+    <div class="col12 fldbcr_grant qbcr_grant"><span class="qbcr_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_grant required-field-label"><label class="label-top">Which grant will the participant be covered by?</label></span><span class="qbcr_grant"><select size="1" name="bcr_grant" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_grant] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_grant^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_grant||
+</span></div>
+     </div>
+  </div>
+    <div class="entire">
     <div class="col12 fldmethod_of_ic qmethod_of_ic">
     <div class="col12 fldmethod_of_ic qmethod_of_ic"><span class="qmethod_of_ic required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_of_ic required-field-label"><label class="label-top">||FIELDTAG method_of_ic||Method of Initial Contact||ENDFIELDTAG||</label></span><span class="qmethod_of_ic"><input type="radio" name="method_of_ic" value="In-Person" onclick="checkhideall()" >In-Person&nbsp;&nbsp;<input type="radio" name="method_of_ic" value="Phone" onclick="checkhideall()" >Phone&nbsp;&nbsp;</span></div>
      </div>
@@ -766,45 +820,10 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
-<div class="entire">
-<div class="col12 term">Program Participation</div>
-</div>
- <div class="entire">
-    <div class="col12 fldbcr_prog_participation qbcr_prog_participation">
-    <div class="col12 fldbcr_prog_participation qbcr_prog_participation"><span class="qbcr_prog_participation required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_prog_participation required-field-label"><label class="label-top">Program Participation at Initial Contact</label></span><span class="qbcr_prog_participation"><select size="1" name="bcr_prog_participation" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_prog_participation] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_prog_participation^^') and initial_contact=1 ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_prog_participation||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldreason_if_ineligible_ic qreason_if_ineligible_ic">
-    <div class="col12 fldreason_if_ineligible_ic qreason_if_ineligible_ic"><span class="qreason_if_ineligible_ic"><label class="label-top">||FIELDTAG reason_if_ineligible_ic||Reason for Ineligibility||ENDFIELDTAG||</label></span><span class="qreason_if_ineligible_ic"><select size="1"  name="reason_if_ineligible_ic" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Need/Primary Concern Out Of BCR Scope">Need/Primary Concern Out Of BCR Scope</option>
-<option value="Residency Out Of Service Area">Residency Out Of Service Area</option>
-<option value="Other">Other</option>
-
-</select></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldother_reason_ineligible_ic qother_reason_ineligible_ic">
-    <div class="col12 fldother_reason_ineligible_ic qother_reason_ineligible_ic"><span class="qother_reason_ineligible_ic"><label class="label-top">||FIELDTAG other_reason_ineligible_ic||If "Other", Explain||ENDFIELDTAG||</label></span><span class="qother_reason_ineligible_ic"><input type="text" name="other_reason_ineligible_ic" size="20" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
   <!-- Added reside_stl_city on 10/30/25 -->
    <div class="entire">
     <div class="col12 fldreside_stl_city qreside_stl_city">
     <div class="col12 fldreside_stl_city qreside_stl_city"><span class="qreside_stl_city required-label">||PWRequiredFieldRequiredText||</span><span class="qreside_stl_city required-field-label"><label class="label-top">||FIELDTAG reside_stl_city||Does client reside in St. Louis City?||ENDFIELDTAG||</label></span><span class="qreside_stl_city"><input type="radio" name="reside_stl_city" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="reside_stl_city" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="reside_stl_city" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldbcr_grant qbcr_grant">
-    <div class="col12 fldbcr_grant qbcr_grant"><span class="qbcr_grant required-label">||PWRequiredFieldRequiredText||</span><span class="qbcr_grant required-field-label"><label class="label-top">Which grant will the participant be covered by?</label></span><span class="qbcr_grant"><select size="1" name="bcr_grant" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_grant] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bcr_grant^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bcr_grant||
-</span></div>
      </div>
   </div>
  <div class="entire">
@@ -813,6 +832,7 @@ function updatesignatures(){
      </div>
   </div>
 
+</div>
 </div>
 </div>
 <!--ENDOFMAINFORM -->

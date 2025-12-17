@@ -35,7 +35,7 @@ join_logic:
         - source: PWBCRINITIALCONTACT.CLIENT_NUMBER
           target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-12-03
+last_updated: 2025-12-17
 status: active
 ---
 
@@ -51,6 +51,7 @@ status: active
 
 2025
 
+- **2025-12-17**: Moves `bcr_program_participation` up in the form to immediately follow `Pathway_Date`. Adds a hidden container (field `fldRestOfForm`) to only conditionally show all fields after `bcr_program_participation` if the values of "003" or "004" are NOT selected. This allows for Initial Contacts to be recorded when a client is unable to contact or when a client declines services without requiring us to modify all other fields to allow for an "Unknown" option. Adds an override to `checkhideall()` to force a change from `style="display: none;"` in the `fldRestOfForm` container to `style="display: block;"`. When the form is loaded, GVT's JavaScript injects inline `style="display:none;"` and jQuery `.show()` doesn't override it. With the override, `fldRestOfForm` container is forced to `style="display: block;"` allowing the rest of the form to be shown as expected. Moves fields `reason_if_ineligible_ic`, `other_reason_ineligible_ic`, and `bcr_grant` to the top of the hidden container `RestOfForm` so that they will be close to `bcr_program_participation` when they are conditionally shown. Sets field `reason_if_ineligible_ic` as required.
 - **2025-12-03**: Adds initial Markdown documentation file.
 - **2025-11-20**: Comments out `pregnant_ic` and `preg_child_last_90_ic`. Changes location of `planned_event`, `event_type`, and `event_type_other` to be right after `zip_of_initial_contact`.
 - **2025-11-20**: Adds planned_event, event_type, event_type_other, reside_stl_city, and prior_mh_bh_service fields to the IC. These fields were requested to be movef from the Referral form to the IC by Tamela and Wendy to make the referral form shorter.

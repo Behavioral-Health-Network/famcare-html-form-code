@@ -51,6 +51,7 @@ status: active
 
 2025
 
+- **2025-12-23**: Updates `referred_family_support_specialist` field text from, "Is youth being referred to a Family Support Specialist?" to "Has youth been referred to a YERE Family Support Provider through Vision for Children at Risk?".
 - **2025-12-03**: Adds initial Markdown documentation file.
 
 </details>

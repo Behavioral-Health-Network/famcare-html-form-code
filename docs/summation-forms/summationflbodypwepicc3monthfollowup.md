@@ -1,4 +1,4 @@
-# ERE Six-Month Follow-Up Form Summation Form
+# EPICC Three-Month Follow-Up Summation Form
 
 ## Changelog
 
@@ -19,7 +19,7 @@
 
 ### 2025
 
-- **2025-12-22**: Adds initial Markdown documentation file. Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
+- **2025-12-19**: Adds initial Markdown documentation file. Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
 
 </details>
 </details>

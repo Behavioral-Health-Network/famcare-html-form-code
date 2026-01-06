@@ -11,12 +11,19 @@
 
 <body>
 <div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
-<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWPayorSource].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,JTBL2.DESCRIPTION AS JDESC2 ,[PWPayorSource].[show_me_healthy_kids] ,[PWPayorSource].[payor_source_start_date] ,[PWPayorSource].[payor_source_end_date] ,[PWPayorSource].[payor_is_current]  FROM ^^SP FORMNAME^^  LEFT JOIN [payor_source] as JTBL1 ON JTBL1.CODE=[PWPayorSource].[payor_source] LEFT JOIN [managed_medicaid_provider] as JTBL2 ON JTBL2.CODE=[PWPayorSource].[managed_medicaid_provider] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.PARENTDOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWPayorSource].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,JTBL2.DESCRIPTION AS JDESC2 ,[PWPayorSource].[show_me_healthy_kids] ,[PWPayorSource].[payor_source_start_date] ,[PWPayorSource].[payor_source_end_date] ,[PWPayorSource].[payor_is_current]  FROM ^^SP FORMNAME^^  LEFT JOIN [payor_source] as JTBL1 ON JTBL1.CODE=[PWPayorSource].[payor_source] LEFT JOIN [managed_medicaid_provider] as JTBL2 ON JTBL2.CODE=[PWPayorSource].[managed_medicaid_provider] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
 <table cellspacing="0" class="summary">
     <thead>
         <tr>
             <th class="colAction">Action</th>
-<th>Pathway Date</th><th>Payor Source</th><th>Managed Medicaid Provider</th><th>Show Me Healthy Kids</th><th>Start Date</th><th>End Date</th><th>Payor is Current</th>
+            <th>Pathway Date</th>
+            <th>PARENTDOCSERNO</th>
+            <th>Payor Source</th>
+            <th>Managed Medicaid Provider</th>
+            <th>Show Me Healthy Kids</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Payor is Current</th>
             <th>||SORTCOL|ID;descending||Edited On</th>
             <th>||SORTCOL|USERID;ascending||Edited By</th>
         </tr>
@@ -24,7 +31,14 @@
     <tbody>
         <tr class="||ALTERNATE |altrow||">
             <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
-<td>||SF Pathway_Date||</td><td>||SF JDESC1||</td><td>||SF JDESC2||</td><td>||SF show_me_healthy_kids||</td><td>||SF payor_source_start_date||</td><td>||SF payor_source_end_date||</td><td>||SF payor_is_current||</td>
+            <td>||SF Pathway_Date||</td>
+            <td>||SF PARENTDOCSERNO||</td>
+            <td>||SF JDESC1||</td>
+            <td>||SF JDESC2||</td>
+            <td>||SF show_me_healthy_kids||</td>
+            <td>||SF payor_source_start_date||</td>
+            <td>||SF payor_source_end_date||</td>
+            <td>||SF payor_is_current||</td>
             <td>||SF VISITDT|| ||SF VISITTM||</td>
             <td>||SF USERID||</td>
         </tr>

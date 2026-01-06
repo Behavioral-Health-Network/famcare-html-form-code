@@ -1,4 +1,4 @@
-# ERE Six-Month Follow-Up Form Summation Form
+# ERE Hospital Visit Note Summation Form
 
 ## Changelog
 

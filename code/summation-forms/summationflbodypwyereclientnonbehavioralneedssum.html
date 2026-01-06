@@ -11,12 +11,27 @@
 
 <body>
 <div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
-<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWYEREClientNonBehavioralNeedsSum].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_basic_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_crisis_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_dental_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_dds_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_edu_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_employ_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_housing_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_legal_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_medication_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_phys_health_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_specialized_tx_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_support_groups_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_transportation_status]  FROM ^^SP FORMNAME^^  LEFT JOIN [yere_youth_program_needs] as JTBL1 ON JTBL1.CODE=[PWYEREClientNonBehavioralNeedsSum].[youth_needs] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.PARENTDOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWYEREClientNonBehavioralNeedsSum].[Pathway_Date] ,JTBL1.DESCRIPTION AS JDESC1 ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_basic_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_crisis_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_dental_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_dds_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_edu_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_employ_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_housing_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_legal_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_medication_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_phys_health_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_specialized_tx_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_support_groups_status] ,[PWYEREClientNonBehavioralNeedsSum].[youth_need_transportation_status]  FROM ^^SP FORMNAME^^  LEFT JOIN [yere_youth_program_needs] as JTBL1 ON JTBL1.CODE=[PWYEREClientNonBehavioralNeedsSum].[youth_needs] WHERE ^^SP FORMNAME^^.CLIENTNUMBER='^^CLIENTNUMBER^^' AND ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
 <table cellspacing="0" class="summary">
     <thead>
         <tr>
             <th class="colAction">Action</th>
-<th>Pathway Date</th><th>Youth Program Needs</th><th>Basic Needs Referral Status </th><th>Crisis Services Referral Status </th><th>Dental Care Referral Status </th><th>Developmental Disabilities Referral Status </th><th>Education Services/School-Related Supports Referral Status </th><th>Employment Services Referral Status</th><th>Housing Referral Status </th><th>Legal Services Referral Status </th><th>Medication Assistance Referral Status </th><th>Physical Health Referral Status</th><th>Specialized Treatment Referral Status </th><th>Support Groups/Mentorship Referral Status </th><th>Transportation Assistance Referral Status </th>
+            <th>Pathway Date</th>
+            <th>PARENTDOCSERNO</th>
+            <th>Youth Program Needs</th>
+            <th>Basic Needs Referral Status </th>
+            <th>Crisis Services Referral Status </th>
+            <th>Dental Care Referral Status </th>
+            <th>Developmental Disabilities Referral Status </th>
+            <th>Education Services/School-Related Supports Referral Status </th>
+            <th>Employment Services Referral Status</th>
+            <th>Housing Referral Status </th>
+            <th>Legal Services Referral Status </th>
+            <th>Medication Assistance Referral Status </th>
+            <th>Physical Health Referral Status</th>
+            <th>Specialized Treatment Referral Status </th>
+            <th>Support Groups/Mentorship Referral Status </th>
+            <th>Transportation Assistance Referral Status </th>
             <th>||SORTCOL|ID;descending||Edited On</th>
             <th>||SORTCOL|USERID;ascending||Edited By</th>
         </tr>
@@ -24,7 +39,22 @@
     <tbody>
         <tr class="||ALTERNATE |altrow||">
             <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
-<td>||SF Pathway_Date||</td><td>||SF JDESC1||</td><td>||SF youth_need_basic_status||</td><td>||SF youth_need_crisis_status||</td><td>||SF youth_need_dental_status||</td><td>||SF youth_need_dds_status||</td><td>||SF youth_need_edu_status||</td><td>||SF youth_need_employ_status||</td><td>||SF youth_need_housing_status||</td><td>||SF youth_need_legal_status||</td><td>||SF youth_need_medication_status||</td><td>||SF youth_need_phys_health_status||</td><td>||SF youth_need_specialized_tx_status||</td><td>||SF youth_need_support_groups_status||</td><td>||SF youth_need_transportation_status||</td>
+            <td>||SF Pathway_Date||</td>
+            <td>||SF PARENTDOCSERNO||</td>
+            <td>||SF JDESC1||</td>
+            <td>||SF youth_need_basic_status||</td>
+            <td>||SF youth_need_crisis_status||</td>
+            <td>||SF youth_need_dental_status||</td>
+            <td>||SF youth_need_dds_status||</td>
+            <td>||SF youth_need_edu_status||</td>
+            <td>||SF youth_need_employ_status||</td>
+            <td>||SF youth_need_housing_status||</td>
+            <td>||SF youth_need_legal_status||</td>
+            <td>||SF youth_need_medication_status||</td>
+            <td>||SF youth_need_phys_health_status||</td>
+            <td>||SF youth_need_specialized_tx_status||</td>
+            <td>||SF youth_need_support_groups_status||</td>
+            <td>||SF youth_need_transportation_status||</td>
             <td>||SF VISITDT|| ||SF VISITTM||</td>
             <td>||SF USERID||</td>
         </tr>

@@ -16,7 +16,12 @@
     <thead>
         <tr>
             <th class="colAction">Action</th>
-<th>Pathway Date</th><th>Cohort Selection Date</th><th>Enrollment Date</th><th>Complete Admission Service Date</th><th>Treatment Team Assignment Date</th>
+            <th>Pathway Date</th>
+            <th>DOCSERNO</th>
+            <th>Cohort Selection Date</th>
+            <th>Enrollment Date</th>
+            <th>Complete Admission Service Date</th>
+            <th>Treatment Team Assignment Date</th>
             <th>||SORTCOL|ID;descending||Edited On</th>
             <th>||SORTCOL|USERID;ascending||Edited By</th>
         </tr>
@@ -24,7 +29,12 @@
     <tbody>
         <tr class="||ALTERNATE |altrow||">
             <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
-<td>||SF Pathway_Date||</td><td>||SF added_cohort_date||</td><td>||SF enrollment_date||</td><td>||SF complete_admission_service_date||</td><td>||SF treatment_team_assignment_date||</td>
+            <td>||SF Pathway_Date||</td>
+            <td>||SF DOCSERNO||</td>
+            <td>||SF added_cohort_date||</td>
+            <td>||SF enrollment_date||</td>
+            <td>||SF complete_admission_service_date||</td>
+            <td>||SF treatment_team_assignment_date||</td>
             <td>||SF VISITDT|| ||SF VISITTM||</td>
             <td>||SF USERID||</td>
         </tr>

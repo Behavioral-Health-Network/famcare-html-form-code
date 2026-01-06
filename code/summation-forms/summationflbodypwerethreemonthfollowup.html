@@ -16,7 +16,9 @@
     <thead>
         <tr>
             <th class="colAction">Action</th>
-<th>Pathway Date</th><th>Is individual still actively engaged in ERE services?</th>
+            <th>Pathway Date</th>
+            <th>DOCSERNO</th>
+            <th>Is individual still actively engaged in ERE services?</th>
             <th>||SORTCOL|ID;descending||Edited On</th>
             <th>||SORTCOL|USERID;ascending||Edited By</th>
         </tr>
@@ -24,7 +26,9 @@
     <tbody>
         <tr class="||ALTERNATE |altrow||">
             <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
-<td>||SF Pathway_Date||</td><td>||SF still_engaged_ere_services_three_month||</td>
+            <td>||SF Pathway_Date||</td>
+            <td>||SF DOCSERNO||</td>
+            <td>||SF still_engaged_ere_services_three_month||</td>
             <td>||SF VISITDT|| ||SF VISITTM||</td>
             <td>||SF USERID||</td>
         </tr>

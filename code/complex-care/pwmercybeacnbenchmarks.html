@@ -31,7 +31,8 @@ function startup() {
 
           f._B1.style.display = "";
           f._B2.style.display = "";
-          f._B3.style.display = "";
+          // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+          // f._B3.style.display = "";
           document.getElementById("SaveButtons").style.display = "";
 
 		}
@@ -367,7 +368,8 @@ function submitit() {
   $(':button').prop('disabled',true);
 	f._B1.style.display = "none";
 	f._B2.style.display = "none";
-	f._B3.style.display = "none";
+  // Commented out because B3 is associated with the QUICK SUBMIT feature, which is disabled.
+	// f._B3.style.display = "none";
 }
 
 function deleteit() {
@@ -386,41 +388,41 @@ function deleteit() {
 	f.submit();
 	return functionreturnvalue;
 }
+// Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
+// function quicksubmitit() {
+// //	errdesc=validateform();
+// //	if (errdesc!="") {alert(errdesc); return;}
+// 	var f=document.forms[0];
+// 	//***Error checking should be done here before a quick save
+// 	f._B1.style.display = "none";
+// 	f._B2.style.display = "none";
+// 	f._B3.style.display = "none";
+// 	document.getElementById("SaveButtons").style.display = "";
+// 	f.target = "fvalidate";
+// 	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
+// 	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+// 	if (genpdf) {buildhtmlclean()}
+//     // restore signature options after buildhtmlclean
+//     document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
+// 	f.submit();
+//         $(':button').prop('disabled',true);
+// 	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
+// 	return;
+// }
 
-function quicksubmitit() {
-//	errdesc=validateform();
-//	if (errdesc!="") {alert(errdesc); return;}
-	var f=document.forms[0];
-	//***Error checking should be done here before a quick save
-	f._B1.style.display = "none";
-	f._B2.style.display = "none";
-	f._B3.style.display = "none";
-	document.getElementById("SaveButtons").style.display = "";
-	f.target = "fvalidate";
-	var DefaultSaveConfirm=f.CONFIRMSCREEN.value;
-	f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
-	if (genpdf) {buildhtmlclean()}
-    // restore signature options after buildhtmlclean
-    document.querySelectorAll('[id^=sigoption]').forEach(ele => ele.style.display="")
-	f.submit();
-        $(':button').prop('disabled',true);
-	f.CONFIRMSCREEN.value=DefaultSaveConfirm;
-	return;
-}
-
-function QuickSubmitReturn() {
-	var functionreturnvalue = null;
-	var f = document.forms[0];
-	//***Reset the form after a quick submit here
-	f._B1.style.display = "";
-	f._B2.style.display = "";
-	f._B3.style.display = "";
-	document.getElementById("SaveButtons").style.display = "";
-        $(':button').prop('disabled',false);
-	updatesignatures();
-	alert("Record Saved");
-	return functionreturnvalue;
-}
+// function QuickSubmitReturn() {
+// 	var functionreturnvalue = null;
+// 	var f = document.forms[0];
+// 	//***Reset the form after a quick submit here
+// 	f._B1.style.display = "";
+// 	f._B2.style.display = "";
+// 	f._B3.style.display = "";
+// 	document.getElementById("SaveButtons").style.display = "";
+//         $(':button').prop('disabled',false);
+// 	updatesignatures();
+// 	alert("Record Saved");
+// 	return functionreturnvalue;
+// }
 
 function resetsave() {
 	var functionreturnvalue = null;
@@ -428,7 +430,7 @@ function resetsave() {
 	//***Reset the form after a quick submit here
 	f._B1.style.display = "";
 	f._B2.style.display = "";
-	f._B3.style.display = "";
+	// f._B3.style.display = "";
 	document.getElementById("SaveButtons").style.display = "";
         $(':button').prop('disabled',false);
 	return functionreturnvalue;
@@ -604,6 +606,9 @@ function popCohortDate(numelementsper, totalelements, identifier, results) {
  <div class="entire">
     <div class="col12"><b>Click "Add" below to enter the client's housing status. A new housing status should be entered monthly regardless of whether or not housing status has changed. The Pathway Date should correspond to the month being documented. &nbsp;</b></div>
   </div>
+<div class="entire">
+  <div class="col12"><i>For example, if the client's BEACN enrollment date is 11/19/2025, the initial Housing Start Date would be 11/19/2025. If that same client's December Housing Status is obtained on 12/7/2025, the Housing Start Date for that status would be 12/1/2025. &nbsp;</i></div>
+</div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWHousingStatus||</div>
   </div>
@@ -612,6 +617,9 @@ function popCohortDate(numelementsper, totalelements, identifier, results) {
 </div>
  <div class="entire">
     <div class="col12"><b>Click "Add" below to enter the client's insurance status. A new status should be entered monthly regardless of whether or not payor source has changed. The Pathway Date should correspond to the month being documented.&nbsp;&nbsp;</b></div>
+ </div>
+    <div class="entire">
+    <div class="col12"><i>For example, if the client's BEACN enrollment date is 11/19/2025, the initial Payor Start Date would be 11/19/2025. If that same client's December Payor Source is obtained on 12/7/2025, the Payor Start Date for that status would be 12/1/2025.&nbsp;&nbsp;</i></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
@@ -642,8 +650,9 @@ function popCohortDate(numelementsper, totalelements, identifier, results) {
     <div align="center" id="SaveButtons"><font size="1"><span id="signaturedisplay">||Signatures||</span></font><br />
     Signature: <input type="password" name="SIGNATURE" /><br />
     <input type="button" name="_B1" onclick="submitit()" value="SAVE" />
-    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" />
-    <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div>
+    <input type="button" name="_B2" onclick="deleteit()" value="DELETE" /></div>
+    <!-- Commented out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions. -->
+    <!-- <input type="button" name="_B3" onclick="quicksubmitit()" value="QUICK SUBMIT" /></div> -->
 ||ENDSTRIP||
 </form>
 </body>

@@ -139,29 +139,25 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 - **2025-11-21**: Makes `reason_ic_not_success` a required question and adds 'Client Not Responsive Upon Coach Arrival' as a new option.
 - **2025-11-20**: Fixes URLs in cross references.
 - **2025-10-29**: Makes `current_script_mat_referral` and `mat_script_discharge` required questions. Adds `mat_script_discharge_unknown` as a new question conditional upon 'Unknown' being selected for `mat_script_discharge`.
-- **2025-10-17**: Changes Field Prompt for `status_unable_to_contact_transfer` to just `status`.
-- **2025-10-17**: Fixes typo in `transfer_type_ic` from transfered to transferred.
-- **2025-10-01**: Updates the `epicc_program_participation` master table to inactivate '002 - Ineligible, Does Not Meet Project Criteria', '003 - Ineligible, Not Clinically Appropriate', '004 - Client Declined Services', '006 - Client In Jail/Incarcerated', '007 - Client Deceased', '010 - Regional Transfer', '011 - Services Transferred To LINCS IO', '014 - Services Transferred To Youth ERE Program', and '012 - Already Enrolled in SUD Services'. Adds values '024 - Not Participating In EPICC Program' (to replace the various reasons the client is not participation or is ineligible) and '022 - Transfer' (to replace the three transfer conditions that were previously listed separately). Updates the conditional logic based on those options. Adds new question `transfer_type_ic` and `reason_not_participating_ic`.
+- **2025-10-17**: Fixes typo in `transfer_type_ic` from transfered to transferred. Changes Field Prompt for `status_unable_to_contact_transfer` to just `status`.
+- **2025-10-01**: Updates the `epicc_program_participation` master table to inactivate '002' - ('Ineligible, Does Not Meet Project Criteria'), '003' - ('Ineligible, Not Clinically Appropriate'), '004' - ('Client Declined Services'), '006' - ('Client In Jail/Incarcerated'), '007' -(' Client Deceased'), '010' - ('Regional Transfer'), '011' - ('Services Transferred To LINCS IO'), '014' -(' Services Transferred To Youth ERE Program'), and '012' - ('Already Enrolled in SUD Services'). Adds values '024' - ('Not Participating In EPICC Program') (to replace the various reasons the client is not participation or is ineligible) and '022' - ('Transfer') (to replace the three transfer conditions that were previously listed separately). Updates the conditional logic based on those options. Adds new question `transfer_type_ic` and `reason_not_participating_ic`.
 - **2025-09-18**: Changes Field Name of `TiedEnrollment` from 'Select Pathway Enrollment' to 'Select Pathway Assignment'.
 - **2025-08-25**: Adds HTML and JavaScript code for `TiedEnrollment` fix that GVT created to help join all our pathway forms together.
 - **2025-08-20**: Adds `treatment_path_ic_unknown`, `overdose_event_referral_unknown`, `most_recent_past_overdose_date_unknown`, `su_treatment_past_twelve_mos_unknown`, `current_su_treatment_unknown`, `opioid_prescription_long_term_pain_mgmt_unknown`, `ever_prescription_mat_not_referral_unknown`, `current_script_mat_not_referral_unknown`, `preg_post_part_ic_unknown`. All of these are conditional and required questions when 'Unknown' is selected. Adds 'Unknown' dropdown option to `most_recent_past_overdose_date`.
-- **2025-08-15**: Adds radio button option for `mat_prescribed_physician_appt_six_month`, Unable To Contact Client Or Treatment Agency.
-- **2025-08-12**: Disables '012 - Already Enrolled In SUD Services' program participation value due to ongoing concerns on the part of the EPICC leadership that Recovery Coaches were misusing this value and would likely continue to do so despite retraining efforts.
+- **2025-08-15**: Adds radio button option for `mat_prescribed_physician_appt_six_month`, 'Unable To Contact Client Or Treatment Agency'.
+- **2025-08-12**: Disables '012 - ('Already Enrolled In SUD Services') program participation value due to ongoing concerns on the part of the EPICC leadership that Recovery Coaches were misusing this value and would likely continue to do so despite retraining efforts.
 - **2025-08-01**: Updates `epicc_program_participation` code '011' to description 'Services Transferred To ERE' to update the program name from 'LINCS IO'.
-- **2025-07-30**: Refactors 0206 pivot fields and deprecates Notes column. Commentary relocated here.
-- **2025-07-18**: Adds Southeast region to `if_transfer_what_region_ic` LOV.
-- **2025-02-28**: Updates `epicc_program_participation` master table to remove '019 - Enrolled With EPICC' and replace it with '001 - Eligible For Services' after discussion with EPICC leadership team. The intention was to help clarify the distinction between enrollment with EPICC and enrollment with a treatment agency.
+- **2025-07-30**: Refactors `0206` pivot fields and deprecates Notes column. Commentary relocated here.
+- **2025-07-18**: Adds 'Southeast' region to `if_transfer_what_region_ic` LOV.
+- **2025-02-28**: Updates `epicc_program_participation` master table to remove '019' - ('Enrolled With EPICC') and replace it with '001' - ('Eligible For Services') after discussion with EPICC leadership team. The intention was to help clarify the distinction between enrollment with EPICC and enrollment with a treatment agency.
 - **2025-02-08**: Updates headers and instructional text for the summations. Moved Housing Status summation to above the Payor Source summation to ensure consistency in layout across all program forms.
 - **2024-12-31**: Adds 'Unknown' value to pregnancy field response options because Recovery Coaches may not know the answer to this question.
 - **2024-12-02**: Changes `program_participation_*` fields to use a master table `epicc_program_participation`.
-- **2024-11-30**: `ic_successful` removed from the form. The program participation field handles this logic.
-- **2024-11-19**: Converts `epicc_opioids_of_use` to use a master table instead of using an independent checkbox field. It needs a conditional question to specify 'Other' opioids if that option is selected.
-- **2024-11-19**: Adds 'Not Appliable' option to `consent_cric_referral_ic` to allow for instances where the client is already covered by insurance. We need to distinish 'NA' values from 'No' values to ensure accurate reporting.
-- **2024-11-19**: Removes Recovery Coach summation. The Program Worker field on PROVIDERPLACEMENT is to be used in its place.
+- **2024-11-30**: Removes `ic_successful` from the form. The program participation field handles this logic.
+- **2024-11-19**: Removes Recovery Coach summation. The Program Worker field on PROVIDERPLACEMENT is to be used in its place. Adds 'Not Appliable' option to `consent_cric_referral_ic` to allow for instances where the client is already covered by insurance. We need to distinish 'NA' values from 'No' values to ensure accurate reporting. Converts `epicc_opioids_of_use` to use a master table instead of using an independent checkbox field. It needs a conditional question to specify 'Other' opioids if that option is selected.
 - **2024-11-18**: Renames independent checkboxes under 0206 for audit clarity.
 - **2024-10-16**: Adds pregnancy question. It had recently been added to the form in ETO, and the decision was reached to leave it on the form.
-- **2024-10-15**: Removes `coach_ic` for Recovery Coach performing Initial Contact and adds a summation instead.
-- **2024-10-15**: Removes `agency_ic` for agency of Recovery Coach and adds a summation instead.
+- **2024-10-15**: Removes `agency_ic` for agency of Recovery Coach and adds a summation instead. Removes `coach_ic` for Recovery Coach performing Initial Contact and adds a summation instead.
 
 </details>
 </details>

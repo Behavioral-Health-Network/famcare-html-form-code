@@ -1,11 +1,11 @@
 ---
-form_title: EPICC SU Treatment Agency Summation
-form_file: code/summation-forms/summationflbodypwsubroadtreatmentagency.html
-table_name: SUMMATIONFLBODYPWSUBROADTREATMENTAGENCY
+form_title: BCR Referral Summation
+form_file: code/summation-forms/summationflbodypwbcrreferral.html
+table_name: SUMMATIONFLBODYPWBCRREFERRAL
 program_scope: single
 programs:
-  - epicc
-form_type: 
+  - bcr
+form_type: summation
 client_form: true
 tags:
   - summation-view
@@ -38,7 +38,7 @@ last_updated: 2026-01-08
 status: active
 ---
 
-# EPICC SU Treatment Agency Summation Form
+# BCR Referral Summation
 
 ## Changelog
 
@@ -50,7 +50,7 @@ status: active
 
 ### 2026
 
-- **2026-01-08**: Adds initial Markdown documentation. Adds `PARENTDOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
+- **2026-01-08**: Adds initial Markdown documentation file. Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
 
 </details>
 

@@ -4,10 +4,6 @@ form_file: code/summation-forms/summationflbodypwyereclientnonbehavioralneeds.ht
 table_name: SUMMATIONFLBODYPWYERECLIENTNONBEHAVIORALNEEDS
 program_scope: single
 programs:
-  - bcr
-  - complex-care
-  - epicc
-  - ere
   - yere
 form_type: 
 client_form: true

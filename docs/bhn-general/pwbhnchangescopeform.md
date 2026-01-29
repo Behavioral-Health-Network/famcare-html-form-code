@@ -1,7 +1,7 @@
 ---
-form_title: BHN Change Request Form
-form_file: code/pwbhnchangerequestform.html
-table_name: PWCBHNCHANGEREQUESTFORM
+form_title: BHN Change Scope Form
+form_file: code/pwbhnchangescopeform.html
+table_name: PWCBHNCHANGESCOPEFORM
 program_scope: none
 programs:
   - none
@@ -9,7 +9,7 @@ form_type:
 client_form: false
 tags:
   - change-management
-  - change-request-form
+  - change-scope-form
 pathway_name: 
 pathway_id: 
 pathway_event: 
@@ -35,11 +35,11 @@ join_logic:
         - source: 
           target: 
 quick_submit_enabled: false
-last_updated: 2025-01-22
+last_updated: 2025-01-23
 status: active
 ---
 
-# BHN Change Request Form
+# BHN Change Scope Form
 
 ## Changelog
 
@@ -51,7 +51,7 @@ status: active
 
 ### 2026
 
-- **2026-01-22**: Renames field `bhn_data_request_business_impact` to `bhn_change_request_business_impact` and renames field `bhn_data_request_cate` to `bhn_change_request_category`. Updates field `bhn_change_request_business_impact` to use `bhn_change_request_business_impact` master table and updates field `bhn_change_request_category` to use `bhn_change_request_category` master table.
+- **2026-01-23**: Adds the initial Markdown documentation file for the HTML form.
 
 </details>
 </details>

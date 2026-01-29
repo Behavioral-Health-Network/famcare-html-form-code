@@ -34,7 +34,7 @@ join_logic:
         - source: 
           target: 
 quick_submit_enabled: false
-last_updated: 2025-12-24
+last_updated: 2026-01-08
 status: active
 ---
 
@@ -50,7 +50,7 @@ status: active
 
 ### 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2026-01-08**: Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
 
 </details>
 
@@ -59,7 +59,7 @@ status: active
 
 ### 2025
 
-- **2025-12-24**: Adds inital Markdown documentation file. Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
+- **2025-12-24**: Adds inital Markdown documentation file.
 
 </details>
 </details>

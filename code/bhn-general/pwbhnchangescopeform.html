@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>BHN Change Request Form</title>
+<title>BHN Change Scope Form</title>
 <link rel="stylesheet" href="css/PWstyles.css">
 </head> 
 
@@ -35,17 +35,8 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('HR_Dropdown');
-    setrequire('Provider_Dropdown');
-    setrequire('bhn_change_request_category');
-    setrequire('change_request_other');
-    setrequire('bhn_change_request_business_impact');
-    setrequire('business_impact_other');
-    setrequire('priority_level');
-    setrequire('requested_completion_date');
-    setrequire('is_request_external');
-    setrequire('Single_File_Upload');
-    setrequire('preferred_communication');
+    setrequire('bhn_data_team');
+    setrequire('bhn_data_team_1');
 
 	checkhideall();
 
@@ -285,17 +276,8 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('HR_Dropdown') && gvtfieldvalue('HR_Dropdown')=='') {edesc=edesc+`Must specify a value for Submitted By\n`; seterror("HR_Dropdown");}
-  if (!hiddenfield('Provider_Dropdown') && gvtfieldvalue('Provider_Dropdown')=='') {edesc=edesc+`Must specify a value for Program/Agency\n`; seterror("Provider_Dropdown");}
-  if (!hiddenfield('bhn_change_request_category') && gvtfieldvalue('bhn_change_request_category')=='') {edesc=edesc+`Must specify a value for Request Category\n`; seterror("bhn_change_request_category");}
-  if (!hiddenfield('change_request_other') && gvtfieldvalue('change_request_other')=='') {edesc=edesc+`Must specify a value for Other Request\n`; seterror("change_request_other");}
-  if (!hiddenfield('bhn_change_request_business_impact') && gvtfieldvalue('bhn_change_request_business_impact')=='') {edesc=edesc+`Must specify a value for Business Impact\n`; seterror("bhn_change_request_business_impact");}
-  if (!hiddenfield('business_impact_other') && gvtfieldvalue('business_impact_other')=='') {edesc=edesc+`Must specify a value for Other Business Impact\n`; seterror("business_impact_other");}
-  if (!hiddenfield('priority_level') && gvtfieldvalue('priority_level')=='') {edesc=edesc+`Must specify a value for Priority Level:\n`; seterror("priority_level");}
-  if (!hiddenfield('requested_completion_date') && gvtfieldvalue('requested_completion_date')=='') {edesc=edesc+`Must specify a value for Requested Completion Date:\n`; seterror("requested_completion_date");}
-  if (!hiddenfield('is_request_external') && gvtfieldvalue('is_request_external')=='') {edesc=edesc+`Must specify a value for Is this an external request?\n`; seterror("is_request_external");}
-  if (!hiddenfield('Single_File_Upload') && gvtfieldvalue('Single_File_Upload')=='') {edesc=edesc+`Must specify a value for Single File Upload\n`; seterror("Single_File_Upload");}
-  if (!hiddenfield('preferred_communication') && gvtfieldvalue('preferred_communication')=='') {edesc=edesc+`Must specify a value for How would you like the Data Team to follow up?\n`; seterror("preferred_communication");}
+  if (!hiddenfield('bhn_data_team') && gvtfieldvalue('bhn_data_team')=='') {edesc=edesc+`Must specify a value for BHN Data Team\n`; seterror("bhn_data_team");}
+  if (!hiddenfield('bhn_data_team_1') && gvtfieldvalue('bhn_data_team_1')=='') {edesc=edesc+`Must specify a value for Scoped by\n`; seterror("bhn_data_team_1");}
 
     return edesc;
 }
@@ -504,7 +486,7 @@ function updatesignatures(){
     <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" />
     <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" />
     <input type="hidden" name="SESSIONID" value="||SESSIONID||" />
-    <input type="hidden" name="TABLENAME" value="PWBHNChangeRequestForm" />
+    <input type="hidden" name="TABLENAME" value="PWBHNChangeScopeForm" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
     <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
@@ -517,7 +499,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>BHN Change Request Form</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>BHN Change Scope Form</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -529,258 +511,276 @@ function updatesignatures(){
     </div>
 <div class="deflist">
 <div class="entire">
-<div class="col12 term">Estimated Form Completion Time <5 minutes</div>
 </div>
  <div class="entire">
     <div class="col12 fldPathway_Date qPathway_Date">
     <div class="col12 fldPathway_Date qPathway_Date"><span class="qPathway_Date required-label">||PWRequiredFieldRequiredText||</span><span class="qPathway_Date required-field-label"><label class="label-top">||FIELDTAG Pathway_Date||Pathway Date||ENDFIELDTAG||</label></span><span class="qPathway_Date"><input type="text" name="Pathway_Date" size="8" value="||DATEJS||" class="jdatepicker"></span></div>
      </div>
   </div>
+<div class="entire">
+<div class="col12 term">Linked Request - Placeholder (question)</div>
+</div>
  <div class="entire">
-    <div class="col12 fldHR_Dropdown qHR_Dropdown">
-    <div class="col12 fldHR_Dropdown qHR_Dropdown"><span class="qHR_Dropdown required-label">||PWRequiredFieldRequiredText||</span><span class="qHR_Dropdown required-field-label"><label class="label-top">||FIELDTAG HR_Dropdown||Submitted By||ENDFIELDTAG||</label></span><span class="qHR_Dropdown"><select size="1" name="HR_Dropdown" onchange="checkhideall()">
-<option value="||SELECT EMPLOYEENUMBER, [LASTNAME] & ', ' & [FIRSTNAME] & ' (' & EMPLOYEENUMBER & ')' FROM Q_HRFORM WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND EMPSTATUS='Active'  ORDER BY LASTNAME,FIRSTNAME||">||CHOICETABLESQLD||</option>
-</select>
+    <div class="col12"><label class="label-top">Info from BHN Change Request Form</label></div>
+  </div>
+<div class="entire">
+<div class="col12 term">Staff Assignment</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldbhn_data_team qbhn_data_team">
+    <div class="col12 fldbhn_data_team qbhn_data_team"><span class="qbhn_data_team required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_data_team required-field-label"><label class="label-top">||FIELDTAG bhn_data_team||BHN Data Team||ENDFIELDTAG||</label></span><span class="qbhn_data_team"><select size="1" name="bhn_data_team" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_data_team] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_data_team^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bhn_data_team||
 </span></div>
      </div>
   </div>
 <div class="entire">
+<div class="col12 term">Summary of Requested Change</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">If Program/Agency does not show on the drop down list, select Behavioral Health Network of Greater St. Louis.</label></div>
+    <div class="col12"><label class="label-top">Business Needs - Info from BHN Change Request Form</label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldProvider_Dropdown qProvider_Dropdown">
-    <div class="col12 fldProvider_Dropdown qProvider_Dropdown"><span class="qProvider_Dropdown required-label">||PWRequiredFieldRequiredText||</span><span class="qProvider_Dropdown required-field-label"><label class="label-top">||FIELDTAG Provider_Dropdown||Program/Agency||ENDFIELDTAG||</label></span><span class="qProvider_Dropdown"><select size="1" name="Provider_Dropdown" onchange="checkhideall()">
-<option value="||SELECT PROVIDERCODE,PROVIDERNAME & ' (' & PROVIDERCODE & ')' FROM PROVIDER WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND DOCREVNO=' 0 ' ORDER BY PROVIDERNAME||">||CHOICETABLESQLD||</option>
-</select>
-</span></div>
+    <div class="col12 flddata_team_interpretation qdata_team_interpretation">
+    <div class="col12 flddata_team_interpretation qdata_team_interpretation"><span class="qdata_team_interpretation"><label class="label-top">||FIELDTAG data_team_interpretation||Data Team Interpretation||ENDFIELDTAG||</label></span><span class="qdata_team_interpretation"><textarea rows="3" name="data_team_interpretation" class="autoexpand"></textarea></span></div>
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Request Category</div>
+<div class="col12 term">Impacted Assets</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
+    <div class="col12"><label class="label-top">SQL Views / Tables</label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Select the best match. If none apply, use "Other" and describe in the text box.</label></div>
+    <div class="col12 fldsqul_views_tables_impacted_assets qsqul_views_tables_impacted_assets">
+    <div class="col12 fldsqul_views_tables_impacted_assets qsqul_views_tables_impacted_assets"><span class="qsqul_views_tables_impacted_assets"><label class="label-top">||FIELDTAG squl_views_tables_impacted_assets||List all impacted assets.||ENDFIELDTAG||</label></span><span class="qsqul_views_tables_impacted_assets"><textarea rows="3" name="squl_views_tables_impacted_assets" class="autoexpand"></textarea></span></div>
+     </div>
   </div>
-<div class="entire">
-</div>
  <div class="entire">
-    <div class="col12 fldbhn_change_request_category qbhn_change_request_category">
-    <div class="col12 fldbhn_change_request_category qbhn_change_request_category"><span class="qbhn_change_request_category required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_change_request_category required-field-label"><label class="label-top">Request Category</label></span><span class="qbhn_change_request_category"><select size="1" name="bhn_change_request_category" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_change_request_category] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_change_request_category^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bhn_change_request_category||
-</span></div>
+    <div class="col12"><label class="label-top">Reports / Dashboards</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldreports_dashboards_impacted_assets qreports_dashboards_impacted_assets">
+    <div class="col12 fldreports_dashboards_impacted_assets qreports_dashboards_impacted_assets"><span class="qreports_dashboards_impacted_assets"><label class="label-top">||FIELDTAG reports_dashboards_impacted_assets||List all impacted assets.||ENDFIELDTAG||</label></span><span class="qreports_dashboards_impacted_assets"><textarea rows="3" name="reports_dashboards_impacted_assets" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Documentation Assets to Update</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 flddocumentation_impacted_assets qdocumentation_impacted_assets">
+    <div class="col12 flddocumentation_impacted_assets qdocumentation_impacted_assets"><span class="qdocumentation_impacted_assets"><label class="label-top">||FIELDTAG documentation_impacted_assets||List all impacted assets.||ENDFIELDTAG||</label></span><span class="qdocumentation_impacted_assets"><textarea rows="3" name="documentation_impacted_assets" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldchange_request_other qchange_request_other">
-    <div class="col12 fldchange_request_other qchange_request_other"><span class="qchange_request_other required-label">||PWRequiredFieldRequiredText||</span><span class="qchange_request_other required-field-label"><label class="label-top">||FIELDTAG change_request_other||Other Request||ENDFIELDTAG||</label></span><span class="qchange_request_other"><textarea rows="3" name="change_request_other" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldentities_to_train qentities_to_train">
+    <div class="col12 fldentities_to_train qentities_to_train"><span class="qentities_to_train"><label class="label-top">||FIELDTAG entities_to_train||Entities to Train||ENDFIELDTAG||</label></span><span class="qentities_to_train"><input type="radio" name="entities_to_train" value="Outreach Staff" onclick="checkhideall()" >Outreach Staff&nbsp;&nbsp;<input type="radio" name="entities_to_train" value="Stakeholders" onclick="checkhideall()" >Stakeholders&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Business Impact</div>
+<div class="col12 term">Blockers / Contraints</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">What will happen if this change is not made?</label></div>
+    <div class="col12"><label class="label-top">Purpose: Data Team staff should use this field while scoping to explicitly record any active blockers, dependencies, or constraints that would prevent or delay implementation. This information is stored in the database and remains editable through the scoping process so the team and partners can track resolution.</label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Operational Disruption Examples:</label></div>
+    <div class="col12"><label class="label-top">What is blocked and why (keep short):</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldblocker_description qblocker_description">
+    <div class="col12 fldblocker_description qblocker_description"><span class="qblocker_description"><label class="label-top">||FIELDTAG blocker_description||Blocker Description||ENDFIELDTAG||</label></span><span class="qblocker_description"><input type="text" name="blocker_description" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Who is responsible for resolving (e.g. partner agency, vendor, Data Team):</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldblocker_owner qblocker_owner">
+    <div class="col12 fldblocker_owner qblocker_owner"><span class="qblocker_owner"><label class="label-top">||FIELDTAG blocker_owner||Blocker Owner||ENDFIELDTAG||</label></span><span class="qblocker_owner"><input type="text" name="blocker_owner" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldblocker_status qblocker_status">
+    <div class="col12 fldblocker_status qblocker_status"><span class="qblocker_status"><label class="label-top">||FIELDTAG blocker_status||Status||ENDFIELDTAG||</label></span><span class="qblocker_status"><input type="radio" name="blocker_status" value="In Progress" onclick="checkhideall()" >In Progress&nbsp;&nbsp;<input type="radio" name="blocker_status" value="Monitoring" onclick="checkhideall()" >Monitoring&nbsp;&nbsp;<input type="radio" name="blocker_status" value="Open" onclick="checkhideall()" >Open&nbsp;&nbsp;<input type="radio" name="blocker_status" value="Resolved" onclick="checkhideall()" >Resolved&nbsp;&nbsp;</span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Forces partner agencies to rely on manual/parallel processes involving phone calls or spreadsheets</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Leads to clients "falling through the cracks" due to not filling a known gap</label></div>
+    <div class="col12 fldblocker_estimated_date qblocker_estimated_date">
+    <div class="col12 fldblocker_estimated_date qblocker_estimated_date"><span class="qblocker_estimated_date"><label class="label-top">||FIELDTAG blocker_estimated_date||Estimated Resolution Date||ENDFIELDTAG||</label></span><span class="qblocker_estimated_date"><input type="text" name="blocker_estimated_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Prevents outreach workers from entering data needed for day-to-day work with clients
-
+    <div class="col12"><label class="label-top">Brief note of operational or timeline consequences:</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldblocker_no_resolution_impact qblocker_no_resolution_impact">
+    <div class="col12 fldblocker_no_resolution_impact qblocker_no_resolution_impact"><span class="qblocker_no_resolution_impact"><label class="label-top">||FIELDTAG blocker_no_resolution_impact||Impact if Not Resolved||ENDFIELDTAG||</label></span><span class="qblocker_no_resolution_impact"><textarea rows="3" name="blocker_no_resolution_impact" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Steps needed to clear the blocker:</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldblocker_notes_actions qblocker_notes_actions">
+    <div class="col12 fldblocker_notes_actions qblocker_notes_actions"><span class="qblocker_notes_actions"><label class="label-top">||FIELDTAG blocker_notes_actions||Notes / Required Actions||ENDFIELDTAG||</label></span><span class="qblocker_notes_actions"><textarea rows="3" name="blocker_notes_actions" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Examples:</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Program Manager sign-off pending meeting with agency supervisors; prevents finalizing ____ form. (Owner: Program Manager; Status: Open)</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">No configuration module access for setting security group filters on Case Notes form; prevents customization for EPICC. (Owner: GVT; Status: Open)</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Data sharing agreement not executed; prevents sharing PII across hospitals/agencies. (Owner: Hospital Legal Dept / Partner; Status: Open)</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Review Guidance:</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">If one or more blockers are marked Open or In Progress, include a mitigation plan or acceptance criteria for proceeding (for example, a documented temporary workaround, a committed resolution date, or explicit approval to proceed with limited scope). Reviewers may flag the scope as "Blocked" until key blockers are resolved.
 
 </label></div>
   </div>
+<div class="entire">
+<div class="col12 term">Logic Summary</div>
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Example: Exclude enrollments dismissed before FY2025</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlogic_new_filters qlogic_new_filters">
+    <div class="col12 fldlogic_new_filters qlogic_new_filters"><span class="qlogic_new_filters"><label class="label-top">||FIELDTAG logic_new_filters||New Filters / Conditions||ENDFIELDTAG||</label></span><span class="qlogic_new_filters"><textarea name="logic_new_filters" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldbhn_change_request_business_impact qbhn_change_request_business_impact">
-    <div class="col12 fldbhn_change_request_business_impact qbhn_change_request_business_impact"><span class="qbhn_change_request_business_impact required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_change_request_business_impact required-field-label"><label class="label-top">Business Impact</label></span><span class="qbhn_change_request_business_impact"><select size="1" name="bhn_change_request_business_impact" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_change_request_business_impact] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_change_request_business_impact^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bhn_change_request_business_impact||
+    <div class="col12"><label class="label-top">Example:  Join PATHWAYCLIENT.DOCSERNO to PROVIDERPLACEMENT.DOCSERNO</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlogic_joins_relationships qlogic_joins_relationships">
+    <div class="col12 fldlogic_joins_relationships qlogic_joins_relationships"><span class="qlogic_joins_relationships"><label class="label-top">||FIELDTAG logic_joins_relationships||Joins / Relationships||ENDFIELDTAG||</label></span><span class="qlogic_joins_relationships"><textarea name="logic_joins_relationships" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Example: Tag records missing PWSUBROADTREATMENTAGENCY.END_DATE as Missing End Date</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlogic_exception_handling qlogic_exception_handling">
+    <div class="col12 fldlogic_exception_handling qlogic_exception_handling"><span class="qlogic_exception_handling"><label class="label-top">||FIELDTAG logic_exception_handling||Exception Handling:||ENDFIELDTAG||</label></span><span class="qlogic_exception_handling"><textarea name="logic_exception_handling" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">Example: Clients with multiple overlapping enrollments</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldlogic_edge_cases qlogic_edge_cases">
+    <div class="col12 fldlogic_edge_cases qlogic_edge_cases"><span class="qlogic_edge_cases"><label class="label-top">||FIELDTAG logic_edge_cases||Edge Cases to Flag:||ENDFIELDTAG||</label></span><span class="qlogic_edge_cases"><textarea name="logic_edge_cases" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+<div class="entire">
+<div class="col12 term">Lifetime & Development</div>
+</div>
+ <div class="entire">
+    <div class="col12 fldlife_development_status qlife_development_status">
+    <div class="col12 fldlife_development_status qlife_development_status"><span class="qlife_development_status"><label class="label-top">||FIELDTAG life_development_status||Status||ENDFIELDTAG||</label></span><span class="qlife_development_status"><input type="radio" name="life_development_status" value="Approved" onclick="checkhideall()" >Approved&nbsp;&nbsp;<input type="radio" name="life_development_status" value="Deployed" onclick="checkhideall()" >Deployed&nbsp;&nbsp;<input type="radio" name="life_development_status" value="Deprecated" onclick="checkhideall()" >Deprecated&nbsp;&nbsp;<input type="radio" name="life_development_status" value="In Review" onclick="checkhideall()" >In Review&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldscope_date qscope_date">
+    <div class="col12 fldscope_date qscope_date"><span class="qscope_date"><label class="label-top">||FIELDTAG scope_date||Date Scoped||ENDFIELDTAG||</label></span><span class="qscope_date"><input type="text" name="scope_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbhn_data_team_1 qbhn_data_team_1">
+    <div class="col12 fldbhn_data_team_1 qbhn_data_team_1"><span class="qbhn_data_team_1 required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_data_team_1 required-field-label"><label class="label-top">Scoped by</label></span><span class="qbhn_data_team_1"><select size="1" name="bhn_data_team_1" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_data_team] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_data_team_1^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bhn_data_team||
 </span></div>
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldbusiness_impact_other qbusiness_impact_other">
-    <div class="col12 fldbusiness_impact_other qbusiness_impact_other"><span class="qbusiness_impact_other required-label">||PWRequiredFieldRequiredText||</span><span class="qbusiness_impact_other required-field-label"><label class="label-top">||FIELDTAG business_impact_other||Other Business Impact||ENDFIELDTAG||</label></span><span class="qbusiness_impact_other"><textarea rows="3" name="business_impact_other" class="autoexpand"></textarea></span></div>
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldscope_est_completion_date qscope_est_completion_date">
+    <div class="col12 fldscope_est_completion_date qscope_est_completion_date"><span class="qscope_est_completion_date"><label class="label-top">||FIELDTAG scope_est_completion_date||Estimated Completion Date||ENDFIELDTAG||</label></span><span class="qscope_est_completion_date"><input type="text" name="scope_est_completion_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">For Example: Deployed to ALPHA on YYYY-MM-DD, pending internal review (e.g., deployed to PROD on YYYY-MM-DD, pending UAT)</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldscope_deployment_notes qscope_deployment_notes">
+    <div class="col12 fldscope_deployment_notes qscope_deployment_notes"><span class="qscope_deployment_notes"><label class="label-top">||FIELDTAG scope_deployment_notes||Deployment Notes||ENDFIELDTAG||</label></span><span class="qscope_deployment_notes"><textarea name="scope_deployment_notes" class="autoexpand"></textarea></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top">For Example: Revert to `PWEPICCIC commit 5a146d5`</label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldscope_rollback_plan qscope_rollback_plan">
+    <div class="col12 fldscope_rollback_plan qscope_rollback_plan"><span class="qscope_rollback_plan"><label class="label-top">||FIELDTAG scope_rollback_plan||Rollback Plan||ENDFIELDTAG||</label></span><span class="qscope_rollback_plan"><textarea name="scope_rollback_plan" class="autoexpand"></textarea></span></div>
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Describe the Change</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Use the prompts below to guide your response. You don’t need to answer every question, but more detail helps us scope your request.</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Short Description:</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Limit character amount to 100.</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrequested_change qrequested_change">
-    <div class="col12 fldrequested_change qrequested_change"><span class="qrequested_change"><label class="label-top">||FIELDTAG requested_change||What needs to change?||ENDFIELDTAG||</label></span><span class="qrequested_change"><textarea rows="3" name="requested_change" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldwhy_requested_change qwhy_requested_change">
-    <div class="col12 fldwhy_requested_change qwhy_requested_change"><span class="qwhy_requested_change"><label class="label-top">||FIELDTAG why_requested_change||Why is this change needed?||ENDFIELDTAG||</label></span><span class="qwhy_requested_change"><textarea rows="3" name="why_requested_change" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldwho_is_affected qwho_is_affected">
-    <div class="col12 fldwho_is_affected qwho_is_affected"><span class="qwho_is_affected"><label class="label-top">||FIELDTAG who_is_affected||Who will be affected?||ENDFIELDTAG||</label></span><span class="qwho_is_affected"><textarea rows="3" name="who_is_affected" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldchange_downstream_implications qchange_downstream_implications">
-    <div class="col12 fldchange_downstream_implications qchange_downstream_implications"><span class="qchange_downstream_implications"><label class="label-top">||FIELDTAG change_downstream_implications||What are the downstream implications?||ENDFIELDTAG||</label></span><span class="qchange_downstream_implications"><textarea rows="3" name="change_downstream_implications" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Examples include impact on other forms, reports, staff workflows, training needs, etc.</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrequested_deadline qrequested_deadline">
-    <div class="col12 fldrequested_deadline qrequested_deadline"><span class="qrequested_deadline"><label class="label-top">||FIELDTAG requested_deadline||Is there a deadline or time sensitivity?||ENDFIELDTAG||</label></span><span class="qrequested_deadline"><input type="radio" name="requested_deadline" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="requested_deadline" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Priority and Timing</div>
-</div>
- <div class="entire">
-    <div class="col12 fldpriority_level qpriority_level">
-    <div class="col12 fldpriority_level qpriority_level"><span class="qpriority_level required-label">||PWRequiredFieldRequiredText||</span><span class="qpriority_level required-field-label"><label class="label-top">||FIELDTAG priority_level||Priority Level:||ENDFIELDTAG||</label></span><span class="qpriority_level"><input type="radio" name="priority_level" value="High (Urgent Operational Impact)" onclick="checkhideall()" >High (Urgent Operational Impact)&nbsp;&nbsp;<input type="radio" name="priority_level" value="Medium (Important But Not Urgent)" onclick="checkhideall()" >Medium (Important But Not Urgent)&nbsp;&nbsp;<input type="radio" name="priority_level" value="Low (Can Be Batched Or Deferred)" onclick="checkhideall()" >Low (Can Be Batched Or Deferred)&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrequested_completion_date qrequested_completion_date">
-    <div class="col12 fldrequested_completion_date qrequested_completion_date"><span class="qrequested_completion_date required-label">||PWRequiredFieldRequiredText||</span><span class="qrequested_completion_date required-field-label"><label class="label-top">||FIELDTAG requested_completion_date||Requested Completion Date:||ENDFIELDTAG||</label></span><span class="qrequested_completion_date"><input type="text" name="requested_completion_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Note: This does not guarantee fulfillment by the requested date.</label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">External Request</div>
-</div>
- <div class="entire">
-    <div class="col12 fldis_request_external qis_request_external">
-    <div class="col12 fldis_request_external qis_request_external"><span class="qis_request_external required-label">||PWRequiredFieldRequiredText||</span><span class="qis_request_external required-field-label"><label class="label-top">||FIELDTAG is_request_external||Is this an external request?||ENDFIELDTAG||</label></span><span class="qis_request_external"><input type="radio" name="is_request_external" value="Yes (Request Originates Outside BHN)" onclick="checkhideall()" >Yes (Request Originates Outside BHN)&nbsp;&nbsp;<input type="radio" name="is_request_external" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Supporting Materials (Optional)</div>
-</div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Upload any templates, screenshots, or sample outputs that clarify the request.</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Accepted formats: Word, Excel, PDF, PNG, JPG</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Max size: 10MG</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldSingle_File_Upload qSingle_File_Upload">
-    <div class="col12 fldSingle_File_Upload qSingle_File_Upload"><span class="qSingle_File_Upload required-label">||PWRequiredFieldRequiredText||</span><span class="qSingle_File_Upload required-field-label"><label class="label-top">||FIELDTAG Single_File_Upload||Single File Upload||ENDFIELDTAG||</label></span><span class="qSingle_File_Upload"><input type="file" name="Single_File_Upload" size="40" class="input-file-pw"></span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Follow-Up Preference</div>
-</div>
- <div class="entire">
-    <div class="col12 fldpreferred_communication qpreferred_communication">
-    <div class="col12 fldpreferred_communication qpreferred_communication"><span class="qpreferred_communication required-label">||PWRequiredFieldRequiredText||</span><span class="qpreferred_communication required-field-label"><label class="label-top">||FIELDTAG preferred_communication||How would you like the Data Team to follow up?||ENDFIELDTAG||</label></span><span class="qpreferred_communication"><input type="radio" name="preferred_communication" value="Email Summary" onclick="checkhideall()" >Email Summary&nbsp;&nbsp;<input type="radio" name="preferred_communication" value="Meeting Or Call" onclick="checkhideall()" >Meeting Or Call&nbsp;&nbsp;<input type="radio" name="preferred_communication" value="No Follow-Up Needed Unless Clarification Is Required" onclick="checkhideall()" >No Follow-Up Needed Unless Clarification Is Required&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Program Outcomes Affected (Optional)</div>
-</div>
- <div class="entire">
-    <div class="col12 flddescribe_how_change_supports_goals qdescribe_how_change_supports_goals">
-    <div class="col12 flddescribe_how_change_supports_goals qdescribe_how_change_supports_goals"><span class="qdescribe_how_change_supports_goals"><label class="label-top">||FIELDTAG describe_how_change_supports_goals||If applicable, describe how this change supports program goals or outcomes.||ENDFIELDTAG||</label></span><span class="qdescribe_how_change_supports_goals"><textarea rows="5" name="describe_how_change_supports_goals" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
-<div class="entire">
-<div class="col12 term">Additional Notes</div>
-</div>
- <div class="entire">
-    <div class="col12 fldadditional_notes qadditional_notes">
-    <div class="col12 fldadditional_notes qadditional_notes"><span class="qadditional_notes"><label class="label-top">||FIELDTAG additional_notes||Use this space for anything not captured above.||ENDFIELDTAG||</label></span><span class="qadditional_notes"><textarea rows="10" name="additional_notes" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldscope_lifetime_development_notes qscope_lifetime_development_notes">
+    <div class="col12 fldscope_lifetime_development_notes qscope_lifetime_development_notes"><span class="qscope_lifetime_development_notes"><label class="label-top">||FIELDTAG scope_lifetime_development_notes||Notes||ENDFIELDTAG||</label></span><span class="qscope_lifetime_development_notes"><textarea rows="3" name="scope_lifetime_development_notes" class="autoexpand"></textarea></span></div>
      </div>
   </div>
 

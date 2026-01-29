@@ -35,7 +35,7 @@ join_logic:
         - source: PWMERCYBEACNBENCHMARKS.CLIENT_NUMBER
           target: Q_CLIENT_BHN.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-11-06
+last_updated: 2026-01-29
 status: active
 ---
 
@@ -59,7 +59,7 @@ status: active
 
 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2026-01-29**: Removes a couple stray `</div>` elements from within the housing status and payor source summation sections that were prematurely closing `<div class="extrawidecol">` and `<div class="deflist">`, which resulted in some unclosed div sections covering up the `Save` button, preventing users from saving forms. Comments out the all code for `quicksubmitit()` and `QuickSubmitReturn()`. These functions allow for Quick Submit to be on the form which allows users to save the form and bypass any required questions.
 
 2025
 

@@ -8,20 +8,20 @@ programs:
 form_type: pathways-governed
 client_form: true
 tags:
-  - pathway-event
-pathway_name: Complex Care
-pathway_id: 55320240920114308822
-pathway_event: Complex Care Roster
+  - 
+pathway_name: 
+pathway_id: 
+pathway_event: 
 pathway_event_logic:
-    start_period: 0 - D
-    end_period: 0 - D
-    early_period: 0
-    late_period: 0
-    recurring_period: 0 - D
-    lag_period: 0 - D
-    number_occurrences: 1
+    start_period:
+    end_period:
+    early_period:
+    late_period:
+    recurring_period:
+    lag_period:
+    number_occurrences:
     depends_on: 
-    completion_check_table: PWCOMPLEXCARECLINICALNOTES
+    completion_check_table:
 date_field: PATHWAY_DATE
 parent_linkage: null
 join_logic:

@@ -66,8 +66,7 @@ status: active
 - **2025-11-05**: Adds `date_added_cohort` field as a non-required input to allow for recording 'Cohort Selection Date'.
 - **2025-10-31**: Adds `complex_care_referral_source` field.
 - **2025-10-30**: Adds `dm3700_status` field.
-- **2025-10-28**: Changes the `WHERE` clause for `cmhc_agency` and `ada_su_agency` to filter to ERE instead of LINCS NAV.
-- **2025-08-27**: Comments out quicksubmitit and QuickSubmitReturn functions to disable the QUICK SUBMIT feature on the form. The QUICK SUBMIT feature would allow the user to save the form and bypass any required questions.
-- **2025-08-27**: Adds HTML and JavaScript code for TiedEnrollment fix that GVT created to help join all our pathway forms together.
+- **2025-10-28**: Changes the `WHERE` clause for `cmhc_agency` and `ada_su_agency` to filter to 'ERE' instead of 'LINCS NAV'.
+- **2025-08-27**: Adds HTML and JavaScript code for `TiedEnrollment` fix that GVT created to help join all our pathway forms together. Comments out `quicksubmitit` and `QuickSubmitReturn` functions to disable the `QUICK SUBMIT` feature on the form. The `QUICK SUBMIT` feature would allow the user to save the form and bypass any required questions.
 
 </details>

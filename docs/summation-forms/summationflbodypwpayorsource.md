@@ -2,13 +2,8 @@
 form_title: Payor Source Summation
 form_file: code/summation-forms/summationflbodypwpayorsource.html
 table_name: SUMMATIONFLBODYPWPAYORSOURCE
-program_scope: single
+program_scope: all
 programs:
-  - bcr
-  - complex-care
-  - epicc
-  - ere
-  - yere
 form_type: 
 client_form: true
 tags:
@@ -38,7 +33,7 @@ join_logic:
         - source: 
           target: 
 quick_submit_enabled: false
-last_updated: 2025-12-22
+last_updated: 2026-01-29
 status: active
 ---
 

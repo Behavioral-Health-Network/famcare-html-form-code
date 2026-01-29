@@ -34,7 +34,7 @@ join_logic:
         - source: 
           target: 
 quick_submit_enabled: false
-last_updated: 2025-12-24
+last_updated: 2026-01-12
 status: active
 ---
 
@@ -50,7 +50,8 @@ status: active
 
 ### 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2026-01-12**: Adds `CLIENTNUMBER` to the `WHERE` clause explicitly because adding `DOCSERNO` to the display table appears to have caused the summation to switch to treating `DOCSERNO` as the key instead of `ID`. With no fallback filter for `CLIENTNUMBER`, the result was that all forms were listed in the table instead of being filtered by client.
+- **2026-01-08**: Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
 
 </details>
 
@@ -59,7 +60,7 @@ status: active
 
 ### 2025
 
-- **2025-12-24**: Adds inital Markdown documentation file. Adds `DOCSERNO` to the summation table so that users may identify the correct duplicate form to delete when appropriate to avoid creating orphan child summation forms.
+- **2025-12-24**: Adds inital Markdown documentation file.
 
 </details>
 </details>

@@ -165,6 +165,7 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
     setrequire('current_script_mat_type');
 	 setrequire('current_script_mat_not_referral_unknown');
     setrequire('mat_initiated_hospital');
+    setrequire('mat_initiated_hospital_unknown');
     setrequire('what_mat_initiated_hospital');
     setrequire('mat_script_discharge');
     setrequire('what_mat_script_discharge');
@@ -176,12 +177,14 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
     setrequire('preg_post_part_ic');
 	 setrequire('preg_post_part_ic_unknown');
     setrequire('veteran_status');
+    setrequire('veteran_status_unknown');
     setrequire('TiedEnrollment');
     setrequire('transfer_type_ic');
     setrequire('status_unable_contact_transfer');
     setrequire('reason_not_participating_ic');
     setrequire('why_not_meet_prog_eligibility_ic');
     setrequire('reason_ic_not_success');
+    
 
 	checkhideall();
 
@@ -249,6 +252,8 @@ function checkhideall() {
     checkhide(f.program_participation_ic,"reason_not_participating_ic","024");
     checkhide(f.reason_not_participating_ic,"why_not_meet_prog_eligibility_ic","Doesn't Meet Program Criteria");
     checkhide(f.mat_script_discharge,"mat_script_discharge_unknown","Unknown");
+    checkhide(f.veteran_status,"veteran_status_unknown","Unknown");
+    checkhide(f.mat_initiated_hospital,"mat_initiated_hospital_unknown","Unknown");
 
 
 }
@@ -527,6 +532,8 @@ function validateform(scope='all') {
   if (!hiddenfield('mat_script_discharge_unknown') && gvtfieldvalue('mat_script_discharge_unknown')=='') {edesc=edesc+`Must specify reason for Unknown.\n`; seterror("mat_script_discharge_unknown");}
   if (!hiddenfield('mat_script_discharge') && gvtfieldvalue('mat_script_discharge')=='') {edesc=edesc+`Must specify a value for Will client have a MAT script at discharge?\n`; seterror("mat_script_discharge");} 
   if (!hiddenfield('reason_ic_not_success') && gvtfieldvalue('reason_ic_not_success')=='') {edesc=edesc+`Must specify a value for Reason for Not Successful Outcome\n`; seterror("reason_ic_not_success");}
+  if (!hiddenfield('veteran_status_unknown') && gvtfieldvalue('veteran_status_unknown')=='') {edesc=edesc+`Must specify a value for Veteran Status Unknown\n`; seterror("veteran_status_unknown");}
+  if (!hiddenfield('mat_initiated_hospital_unknown') && gvtfieldvalue('mat_initiated_hospital_unknown')=='') {edesc=edesc+`Must specify a value for Was MAT Initiated in Hospital Unknown\n`; seterror("mat_initiated_hospital_unknown");}   
   return edesc;
 }
 
@@ -1168,9 +1175,14 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldmat_initiated_hospital qmat_initiated_hospital">
-    <div class="col12 fldmat_initiated_hospital qmat_initiated_hospital"><span class="qmat_initiated_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_initiated_hospital required-field-label"><label class="label-top">||FIELDTAG mat_initiated_hospital||Was MAT initiated in the hospital?||ENDFIELDTAG||</label></span><span class="qmat_initiated_hospital"><input type="radio" name="mat_initiated_hospital" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_initiated_hospital" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldmat_initiated_hospital qmat_initiated_hospital"><span class="qmat_initiated_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_initiated_hospital required-field-label"><label class="label-top">||FIELDTAG mat_initiated_hospital||Was MAT initiated in the hospital?||ENDFIELDTAG||</label></span><span class="qmat_initiated_hospital"><input type="radio" name="mat_initiated_hospital" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="mat_initiated_hospital" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="mat_initiated_hospital" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+     <div class="entire">
+   <div class="col6 fldmat_initiated_hospital_unknown qmat_initiated_hospital_unknown">
+   <div class="col6 fldmat_initiated_hospital_unknown qmat_initiated_hospital_unknown"><span class="qmat_initiated_hospital_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qmat_initiated_hospital_unknown required-field-label"><label class="label-top">||FIELDTAG mat_initiated_hospital_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qmat_initiated_hospital_unknown"><textarea name="mat_initiated_hospital_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+			</div>
  <div class="entire">
     <div class="col12 fldwhat_mat_initiated_hospital qwhat_mat_initiated_hospital">
     <div class="col12 fldwhat_mat_initiated_hospital qwhat_mat_initiated_hospital"><span class="qwhat_mat_initiated_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qwhat_mat_initiated_hospital required-field-label"><label class="label-top">Type of MAT in Hospital</label></span><span class="qwhat_mat_initiated_hospital"><select size="1" name="what_mat_initiated_hospital" onchange="checkhideall()">
@@ -1248,9 +1260,14 @@ function updatesignatures(){
   </div>  
  <div class="entire">
     <div class="col12 fldveteran_status qveteran_status">
-    <div class="col12 fldveteran_status qveteran_status"><span class="qveteran_status required-label">||PWRequiredFieldRequiredText||</span><span class="qveteran_status required-field-label"><label class="label-top">||FIELDTAG veteran_status||Is client a veteran?||ENDFIELDTAG||</label></span><span class="qveteran_status"><input type="radio" name="veteran_status" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="veteran_status" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldveteran_status qveteran_status"><span class="qveteran_status required-label">||PWRequiredFieldRequiredText||</span><span class="qveteran_status required-field-label"><label class="label-top">||FIELDTAG veteran_status||Is client a veteran?||ENDFIELDTAG||</label></span><span class="qveteran_status"><input type="radio" name="veteran_status" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="veteran_status" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="veteran_status" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
+  <div class="entire">
+   <div class="col6 fldveteran_status_unknown qveteran_status_unknown ">
+   <div class="col6 fldveteran_status_unknown  qveteran_status_unknown"><span class="qveteran_status_unknown required-label">||PWRequiredFieldRequiredText||</span><span class="qveteran_status_unknown required-field-label"><label class="label-top">||FIELDTAG veteran_status_unknown||Explain Why Unknown||ENDFIELDTAG||</label></span><span class="qveteran_status_unknown"><textarea name="veteran_status_unknown" class="autoexpand"></textarea></span></div>
+      </div>
+			</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>

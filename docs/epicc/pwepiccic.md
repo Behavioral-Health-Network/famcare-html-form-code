@@ -127,7 +127,7 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 ### 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2026-02-09**: Adds Unknown option to `mat_initiated_hospital` and `veteran_status`. Adds two new fields for `mat_initiated_hospital_unknown` and `veteran_status_unknown`. Makes those two new open text fields required when Unknown is selected at either `mat_initiated_hospital` or `veteran_status`.
 
 </details>
 

@@ -62,7 +62,7 @@ status: active
 
 ### 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2026-01-29**: Updates text field prompt for `attending_sud_tx_verify_two_week` from "Can you verify if a client is attending SUD Treatment at an agency at this time?" to "SUD agency confirms that client is actively attending treatment at the SUD agency at this time."
 
 </details>
 

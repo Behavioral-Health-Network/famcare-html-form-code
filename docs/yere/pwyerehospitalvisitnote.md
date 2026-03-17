@@ -1,5 +1,5 @@
 ---
-form_title: YERE Hospital Visit Note
+form_title: YERE Hospital Visit Note Form
 form_file: code/yere/pwyerehopsitalvisitnote.html
 table_name: PWYEREHOSPITALVISITNOTE
 program_scope: single

@@ -35,7 +35,7 @@ join_logic:
         - source: PWBCRREFERRAL.CLIENT_NUMBER
           target: PATHWAYCLIENT.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-12-03
+last_updated: 2025-02-12
 status: active
 ---
 
@@ -47,7 +47,7 @@ status: active
 
 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2026-02-12**: Adds values 'Co-Location' and 'BCR Staff' to field `ref_source_type`.
 
 2025
 

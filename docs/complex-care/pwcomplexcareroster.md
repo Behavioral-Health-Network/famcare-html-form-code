@@ -34,7 +34,7 @@ join_logic:
         - source: PWCOMPLEXCAREROSTER.CLIENT_NUMBER
           target: Q_CLIENT_BHN.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-12-01
+last_updated: 2025-02-19
 status: active
 ---
 
@@ -58,7 +58,7 @@ status: active
 
 2026
 
-- **YYYY-MM-DD**: Adds change.
+- **2018-02-18**: Adds `payor_is_optum_uhc` field to the HTML form.
 
 2025
 
@@ -68,5 +68,6 @@ status: active
 - **2025-10-30**: Adds `dm3700_status` field.
 - **2025-10-28**: Changes the `WHERE` clause for `cmhc_agency` and `ada_su_agency` to filter to 'ERE' instead of 'LINCS NAV'.
 - **2025-08-27**: Adds HTML and JavaScript code for `TiedEnrollment` fix that GVT created to help join all our pathway forms together. Comments out `quicksubmitit` and `QuickSubmitReturn` functions to disable the `QUICK SUBMIT` feature on the form. The `QUICK SUBMIT` feature would allow the user to save the form and bypass any required questions.
+- **2025-08-12**: Adds initial Markdown documentation file for the HTML form.
 
 </details>

@@ -1,5 +1,5 @@
 ---
-form_title: YERE 30 Day Follow-Up
+form_title: YERE Thirty-Day Follow-Up Form
 form_file: code/yere/pwyere30dayfu.html
 table_name: PWYERE30DAYFOLLOWUPTP
 program_scope: single
@@ -39,7 +39,7 @@ last_updated: 2025-12-03
 status: active
 ---
 
-# YERE 30 Day Follow-Up Form
+# YERE Thirty-Day Follow-Up Form
 
 ## Changelog
 

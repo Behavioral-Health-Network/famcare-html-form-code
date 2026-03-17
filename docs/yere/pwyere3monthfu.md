@@ -1,5 +1,5 @@
 ---
-form_title: YERE 3 Month Follow-Up
+form_title: YERE Three-Month Follow-Up Form
 form_file: code/yere/pwyere3monthfu.html
 table_name: PWYERE3MONTHFOLLOWUPTP
 program_scope: single
@@ -39,7 +39,7 @@ last_updated: 2025-12-03
 status: active
 ---
 
-# YERE 3 Month Follow-Up Form
+# YERE Three-Month Follow-Up Form
 
 ## Changelog
 

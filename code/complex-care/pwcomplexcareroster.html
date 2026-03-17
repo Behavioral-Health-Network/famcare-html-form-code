@@ -38,6 +38,7 @@ function startup() {
     setrequire('Pathway_Date');
     setrequire('program_assigned');
     setrequire('complex_care_referral_source');
+    setrequire('payor_is_optum_uhc');
     setrequire('cmhc_status');
     setrequire('ada_su_status');
     setrequire('dm3700_status');
@@ -286,6 +287,7 @@ function validateform(scope='all') {
    }
   if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('program_assigned') && gvtfieldvalue('program_assigned')=='') {edesc=edesc+`Must specify a value for Program Assigned\n`; seterror("program_assigned");}
+  if (!hiddenfield('payor_is_optum_uhc') && gvtfieldvalue('payor_is_optum_uhc')=='') {edesc=edesc+`Must specify if client's payor is'Optum/UHC\n`; seterror("payor_is_optum_uhc");}
   if (!hiddenfield('cmhc_status') && gvtfieldvalue('cmhc_status')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_status");}
   if (!hiddenfield('ada_su_status') && gvtfieldvalue('ada_su_status')=='') {edesc=edesc+`Must specify a value for ADA/SU\n`; seterror("ada_su_status");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}	
@@ -559,6 +561,11 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldprogram_assigned qprogram_assigned">
     <div class="col12 fldprogram_assigned qprogram_assigned"><span class="qprogram_assigned required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_assigned required-field-label"><label class="label-top">||FIELDTAG program_assigned||Program Assigned||ENDFIELDTAG||</label></span><span class="qprogram_assigned"><input type="radio" name="program_assigned" value="Adult ERE" onclick="checkhideall()" >Adult ERE<br><input type="radio" name="program_assigned" value="Mercy BEACN" onclick="checkhideall()" >Mercy BEACN<br><input type="radio" name="program_assigned" value="BJC/H2H" onclick="checkhideall()" >BJC/H2H<br><input type="radio" name="program_assigned" value="SSM Complex Care" onclick="checkhideall()" >SSM Complex Care</span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldpayor_is_optum_uhc qpayor_is_optum_uhc">
+    <div class="col12 fldpayor_is_optum_uhc qpayor_is_optum_uhc"><span class="qpayor_is_optum_uhc required-label">||PWRequiredFieldRequiredText||</span><span class="qpayor_is_optum_uhc required-field-label"><label class="label-top">||FIELDTAG payor_is_optum_uhc||Payor is Optum/UHC||ENDFIELDTAG||</label></span><span class="qpayor_is_optum_uhc"><input type="radio" name="payor_is_optum_uhc" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="payor_is_optum_uhc" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="payor_is_optum_uhc" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">

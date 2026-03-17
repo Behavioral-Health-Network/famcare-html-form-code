@@ -1,5 +1,5 @@
 ---
-form_title: YERE Behavioral Health Services
+form_title: YERE Behavioral Health Services Form
 form_file: code/yere/pwyerebhs.html
 table_name: PWYEREBEHAVIORALHEALTHSERVICESTP
 program_scope: single

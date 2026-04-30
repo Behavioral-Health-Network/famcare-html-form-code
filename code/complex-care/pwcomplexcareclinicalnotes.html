@@ -37,9 +37,16 @@ function startup() {
 	}
     setrequire('Pathway_Date');
     setrequire('clinical_committee_meeting_date');
+    setrequire('note_type');
+    setrequire('pcc_notification');
+    setrequire('num_pcc_alerts');
+    setrequire('outreach_response');
+    setrequire('reason_no_outreach');
+    setrequire('other_reason_no_outreach');
     setrequire('decision');
     setrequire('complex_care_clinical_committee_rationale');
     setrequire('complex_care_reasons_ineligible');
+
 	setrequire('TiedEnrollment');
 
 	checkhideall();
@@ -51,6 +58,13 @@ function startup() {
 function checkhideall() {
    f=document.forms[0];
    checkhide(f.complex_care_clinical_committee_rationale,"complex_care_reasons_ineligible","006");
+   checkhide(f.note_type,"decision","Cohort Selection");
+   checkhide(f.note_type,"pcc_notification","Alerting Follow-up");
+   checkhide(f.pcc_notification,"num_pcc_alerts","Yes");
+   checkhide(f.pcc_notification,"outreach_response","Yes");
+   checkhide(f.outreach_response,"reason_no_outreach","No");
+   checkhide(f.reason_no_outreach,"other_reason_no_outreach","005");
+   checkhide(f.decision,"complex_care_other_outcomes","Do Not Select To BEACN Cohort");
    checkhide(f.decision,"complex_care_clinical_committee_rationale","Do Not Select To BEACN Cohort");
 }
 
@@ -286,6 +300,12 @@ function validateform(scope='all') {
   if (!hiddenfield('complex_care_clinical_committee_rationale') && gvtfieldvalue('complex_care_clinical_committee_rationale')=='') {edesc=edesc+`Must specify a value for Rationale For Decision\n`; seterror("complex_care_clinical_committee_rationale");}
   if (!hiddenfield('complex_care_reasons_ineligible') && gvtfieldvalue('complex_care_reasons_ineligible')=='') {edesc=edesc+`Must specify a value for Why Does Patient Not Meet BEACN criteria?\n`; seterror("complex_care_reasons_ineligible");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}	
+  if (!hiddenfield('note_type') && gvtfieldvalue('note_type')=='') {edesc=edesc+`Must enter a Note Type\n`; seterror("note_type");}	
+  if (!hiddenfield('pcc_notification') && gvtfieldvalue('pcc_notification')=='') {edesc=edesc+`Must enter a value for Point Click Care Notification\n`; seterror("pcc_notification");}	
+  if (!hiddenfield('num_pcc_alerts') && gvtfieldvalue('num_pcc_alerts')=='') {edesc=edesc+`Must enter a number for the amount of Point Click Care Notifications\n`; seterror("num_pcc_alerts");}	
+  if (!hiddenfield('outreach_response') && gvtfieldvalue('outreach_response')=='') {edesc=edesc+`Must enter an Outreach Response\n`; seterror("outreach_response");}	
+  if (!hiddenfield('reason_no_outreach') && gvtfieldvalue('reason_no_outreach')=='') {edesc=edesc+`Must enter a reason for no outreach\n`; seterror("reason_no_outreach");}	
+  if (!hiddenfield('other_reason_no_outreach') && gvtfieldvalue('other_reason_no_outreach')=='') {edesc=edesc+`Must enter what the other reason for no outreach was\n`; seterror("other_reason_no_outreach");}	
 
   return edesc;
 }
@@ -540,9 +560,41 @@ function updatesignatures(){
     <div class="col1 qclinical_committee_meeting_date"><span class="qclinical_committee_meeting_date required-label">||PWRequiredFieldRequiredText||</span><span class="qclinical_committee_meeting_date required-field-label"><label class="label-left">||FIELDTAG clinical_committee_meeting_date||Date Of Clinical Committee Meeting||ENDFIELDTAG||&nbsp;</label></span></div>
     <div class="col9 qclinical_committee_meeting_date"><span class="qclinical_committee_meeting_date"><input type="text" name="clinical_committee_meeting_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
   </div>
+  <div class="entire">
+    <div class="col12 fldnote_type qnote_type">
+    <div class="col12 fldnote_type qnote_type"><span class="qnote_type required-label">||PWRequiredFieldRequiredText||</span><span class="qnote_type required-field-label"><label class="label-left">||FIELDTAG note_type||Note Type||ENDFIELDTAG||</label></span><span class="qnote_type"><input type="radio" name="note_type" value="Cohort Selection" onclick="checkhideall()" >Cohort Selection&nbsp;&nbsp;<input type="radio" name="note_type" value="Alerting Follow-up" onclick="checkhideall()" >Alerting Follow-up&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldpcc_notification qpcc_notification">
+    <div class="col12 fldpcc_notification qppcc_notification"><span class="qpcc_notification required-label">||PWRequiredFieldRequiredText||</span><span class="qpcc_notification required-field-label"><label class="label-left">||FIELDTAG pcc_notification ||Were there PointClickCare Notifications for this client in the past week?||ENDFIELDTAG||</label></span><span class="qpcc_notification"><input type="radio" name="pcc_notification" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="pcc_notification" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldnum_pcc_alerts qnum_pcc_alerts">
+    <div class="col12 fldnum_pcc_alerts qnum_pcc_alerts"><span class="qnum_pcc_alerts required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_pcc_alerts required-field-label"><label class="label-left">||FIELDTAG num_pcc_alerts||Number of Alerts||ENDFIELDTAG||</label></span><span class="qnum_pcc_alerts"><input type="text" name="num_pcc_alerts" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+   <div class="entire">
+    <div class="col12 fldoutreach_response qoutreach_response">
+    <div class="col12 fldoutreach_response qoutreach_response"><span class="qoutreach_response required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_response required-field-label"><label class="label-left">||FIELDTAG outreach_response||Were there outreach attempts in response to the alerts?||ENDFIELDTAG||</label></span><span class="qoutreach_response"><input type="radio" name="outreach_response" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="outreach_response" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;<input type="radio" name="outreach_response" value="Unknown" onclick="checkhideall()" >Unknown&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col1 fldreason_no_outreach qreason_no_outreach"><span class="qreason_no_outreach"><label class="label-left">Reason For No Outreach&nbsp;</label></span></div>
+    <div class="col9 fldreason_no_outreach qreason_no_outreach"><span class="qreason_no_outreach"><select size="1" name="reason_no_outreach" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_reason_no_outreach] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE reason_no_outreach^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE complex_care_reason_no_outreach||
+</span></div>
+  </div>
+<div class="entire">
+    <div class="col12 fldother_reason_no_outreach qother_reason_no_outreach">
+    <div class="col12 fldother_reason_no_outreach qother_reason_no_outreach"><span class="qother_reason_no_outreach required-label">||PWRequiredFieldRequiredText||</span><span class="qother_reason_no_outreach required-field-label"><label class="label-left">||FIELDTAG other_reason_no_outreach||Other Reason For No Outreach||ENDFIELDTAG||</label></span><span class="qother_reason_no_outreach"><input type="text" name="other_reason_no_outreach" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>  
  <div class="entire">
-    <div class="col1 qdecision"><span class="qdecision required-label">||PWRequiredFieldRequiredText||</span><span class="qdecision required-field-label"><label class="label-left">||FIELDTAG decision||Decision||ENDFIELDTAG||&nbsp;</label></span></div>
-    <div class="col9 qdecision"><span class="qdecision"><select size="1"  name="decision" onchange="checkhideall()" >
+    <div class="col1 flddecision qdecision"><span class="qdecision required-label">||PWRequiredFieldRequiredText||</span><span class="qdecision required-field-label"><label class="label-left">||FIELDTAG decision||Decision||ENDFIELDTAG||&nbsp;</label></span></div>
+    <div class="col9 flddecision qdecision"><span class="qdecision"><select size="1"  name="decision" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Select To BEACN Cohort">Select To BEACN Cohort</option>
 <option value="Do Not Select To BEACN Cohort">Do Not Select To BEACN Cohort</option>
@@ -564,8 +616,8 @@ function updatesignatures(){
 </span></div>
   </div>
  <div class="entire">
-    <div class="col1 qcomplex_care_other_outcomes"><span class="qcomplex_care_other_outcomes"><label class="label-left">Other Outcomes&nbsp;</label></span></div>
-    <div class="col9 qcomplex_care_other_outcomes"><span class="qcomplex_care_other_outcomes"><select size="1" name="complex_care_other_outcomes" onchange="checkhideall()">
+    <div class="col1 fldcomplex_care_other_outcomes qcomplex_care_other_outcomes"><span class="qcomplex_care_other_outcomes"><label class="label-left">Other Outcomes&nbsp;</label></span></div>
+    <div class="col9 fldcomplex_care_other_outcomes qcomplex_care_other_outcomes"><span class="qcomplex_care_other_outcomes"><select size="1" name="complex_care_other_outcomes" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [complex_care_other_outcomes] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE complex_care_other_outcomes^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE complex_care_other_outcomes||
 </span></div>

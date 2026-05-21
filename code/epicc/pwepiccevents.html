@@ -933,7 +933,7 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldoutreach_hosp_location qoutreach_hosp_location">
     <div class="col12 fldoutreach_hosp_location qoutreach_hosp_location"><span class="qoutreach_hosp_location required-label">||PWRequiredFieldRequiredText||</span><span class="qoutreach_hosp_location required-field-label"><label class="label-top">Hospital Name</label></span><span class="qoutreach_hosp_location"><select size="1" name="outreach_hosp_location" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE outreach_hosp_location^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE outreach_hosp_location^^') AND bhn_program='EPICC' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE program_referral_sources||
 </span></div>
      </div>

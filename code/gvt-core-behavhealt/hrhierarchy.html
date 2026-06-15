@@ -1,0 +1,139 @@
+<html>
+
+<head>
+<title>Template Client Form</title>
+</head> 
+
+<script language="JavaScript">
+
+  var rg=new Array();
+  var rgc;
+
+function startup() {
+  
+///PULLDATA SELECT P.EMPLOYEENUMBER,PO.EMPLOYEENUMBER,P.DOCSERNO,P.LASTNAME+', '+P.FIRSTNAME + ' (' + P.EMPLOYEENUMBER + ')','','','',UPPER(P.EMPSTATUS) FROM HRFORM AS P LEFT JOIN HRFORM AS PO ON PO.EMPLOYEENUMBER=P.EMPSUPERVISOR AND PO.DOCREVNO=' 0 ' WHERE P.DOCREVNO=' 0 ' AND (P.EMPSTATUS!='Inactive' OR (select top 1 P3.id from HRFORM AS P3 WHERE P3.EMPSUPERVISOR=P.EMPLOYEENUMBER AND P3.DOCREVNO=' 0 ') IS NOT NULL) ORDER BY P.LASTNAME,P.FIRSTNAME  
+    // 1-providercode, 2-parent prov code 3-docserno 4-name 5-7: dummy 8-status
+    popprovider(numelementsper,totalelements,"",results);
+  }
+
+  function popprovider(numelementsper,totalelements,identifier,results) {
+    rgc=totalelements;
+    for (x=1; x<=rgc; x++) {
+       rg[x]=new Array(10);
+      for (y=1; y<=numelementsper; y++) {
+        rg[x][y]=results[x][y];
+      }
+    }
+    tall="<table border=1 cellpadding=0 cellspacing=0>";
+    for (xx=1; xx<=rgc; xx++) {
+      if (rg[xx][2]=="") {
+       // we have a master task here.....
+        tall=tall+"<tr><td"+buildbg(xx)+">"+buildcell(rg[xx][4],rg[xx][1],xx)+"</td>"+buildsub(rg[xx][1])
+        tall=tall+"</tr>";
+      }
+    }
+    document.getElementById("outgrid").innerHTML=tall;
+  }
+  
+  function buildsub(mserno) {
+    tall2="";
+    for (xxx=1; xxx<=rgc; xxx++) {
+      if (rg[xxx][2]==mserno) {
+        if (tall2=="") {tall2=tall2+"<td><table border=1 cellpadding=0 cellspacing=0>"} 
+        tall2=tall2+"<tr><td"+buildbg(xxx)+">"+buildcell(rg[xxx][4],rg[xxx][1],xxx)+"</td>"+buildsub2(rg[xxx][1])+"</tr>";
+      }
+    }
+    if (tall2!="") {tall2=tall2+"</table></td>";}
+    return tall2;
+  }
+    
+  function buildsub2(mserno2) {
+    tall3="";
+    for (xxxx=1; xxxx<=rgc; xxxx++) {
+      if (rg[xxxx][2]==mserno2) {
+        if (tall3=="") {tall3=tall3+"<td><table border=1 cellpadding=0 cellspacing=0>"} 
+        tall3=tall3+"<tr><td"+buildbg(xxxx)+">"+buildcell(rg[xxxx][4],rg[xxxx][1],xxxx)+"</td>"+buildsub3(rg[xxxx][1])+"</tr>";
+      }
+    }
+    if (tall3!="") {tall3=tall3+"</table></td>";}
+    return tall3;
+  }
+    
+  function buildsub3(mserno3) {
+    tall4="";
+    for (xxxxx=1; xxxxx<=rgc; xxxxx++) {
+      if (rg[xxxxx][2]==mserno3) {
+        if (tall4=="") {tall4=tall4+"<td><table border=1 cellpadding=0 cellspacing=0>"} 
+        tall4=tall4+"<tr><td"+buildbg(xxxxx)+">"+buildcell(rg[xxxxx][4],rg[xxxxx][1],xxxxx)+"</td>"+buildsub4(rg[xxxxx][1])+"</tr>";
+      }
+    }
+    if (tall4!="") {tall4=tall4+"</table></td>";}
+    return tall4;
+  }
+    
+  function buildsub4(mserno4) {
+    tall5="";
+    for (xxxxxx=1; xxxxxx<=rgc; xxxxxx++) {
+      if (rg[xxxxxx][2]==mserno4) {
+        if (tall5=="") {tall5=tall5+"<td><table border=1 cellpadding=0 cellspacing=0>"} 
+        tall5=tall5+"<tr><td"+buildbg(xxxxxx)+">"+buildcell(rg[xxxxxx][4],rg[xxxxxx][1],xxxxxx)+"</td></tr>";
+      }
+    }
+    if (tall5!="") {tall5=tall5+"</table></td>";}
+    return tall5;
+  }
+  
+  function buildbg(hgx) {
+//    return ""; // just return no background color
+    if (rg[hgx][8]!="INACTIVE") {return ""}
+      return " bgcolor=e0e0e0 "; 
+  }
+  
+  function buildcell(d,dser,hgx) {
+    
+    extra="";
+    if (rg[hgx][7]!="") {extra="color: green;"}
+    return "<span onclick=\"showprovider('"+rg[hgx][3]+"')\" style=\"cursor: pointer;"+extra+"\">"+d+"</span>";   
+  }    
+
+function showprovider(serno) {
+    urlassist="genfunc.exe?FULLFUNCTION^EDITDATA|CLIENTNUMBER()|DOCSERNO("+serno+")|TABLENAME(HRFORM)|SESSIONID(S||SESSIONID||)|SUMMATION(DummyDiv)|CONFIRMSCREEN(SAVECONFIRMREFRESHSUMMARY)^";
+    openhyperlink(urlassist);
+    return;
+}
+
+function RefreshSummationHRFORM(divid) {
+    document.getElementById("outgrid").innerHTML="Please wait while the HR structure is refreshed";
+    sql="SELECT P.EMPLOYEENUMBER,PO.EMPLOYEENUMBER,P.DOCSERNO,P.LASTNAME & ', ' & P.FIRSTNAME & ' (' & P.EMPLOYEENUMBER & ')','','','',UPPER(P.EMPSTATUS) FROM HRFORM AS P LEFT JOIN HRFORM AS PO ON PO.EMPLOYEENUMBER=P.EMPSUPERVISOR AND PO.DOCREVNO=' 0 ' WHERE P.DOCREVNO=' 0 ' AND (P.EMPSTATUS!='Inactive' OR (select top 1 P3.id from HRFORM AS P3 WHERE P3.EMPSUPERVISOR=P.EMPLOYEENUMBER AND P3.DOCREVNO=' 0 ') IS NOT NULL) ORDER BY P.LASTNAME,P.FIRSTNAME";
+    url="genfunc.exe?FULLFUNCTION^PULLDATA|ERROR(SUPRESS)|JAVASCRIPT(MULTIARRAY)|IDENTIFER(X)|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(popprovider)|SQL("+escape(sql)+")|TIMER("+Date().toString()+")^";
+    parent.fvalidate.location=url;
+    return;
+}
+
+</script>
+
+<script language="VBScript">
+</script>
+
+<body onLoad="startup()">
+
+<!-- Field Override Area -->
+
+<form action="genfunc.exe" method="post" enctype="multipart/form-data">
+
+    <h1><span>Current HR Structure</span></h1>
+
+<!--This is the basic format for a form section-->
+<div class="extrawidecol">
+<div class="deflist">
+<div class="term">Structure</div>
+<div class="def highlighted">
+<ul>
+  <span id="outgrid">Please wait while grid is built</span>
+</ul>
+</div>
+</div>
+</div>
+</form>
+</body>
+</html>

@@ -34,7 +34,7 @@ function startup() {
 
 		}
 	}
-            setrequire('Pathway_Date');
+    setrequire('Pathway_Date');
     setrequire('event_type');
     setrequire('event_topic');
     setrequire('event_format');
@@ -49,7 +49,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.event_type,"event_topic","Training,Other");
+   checkhide(f.event_type,"event_topic","Training,Other");
    checkhide(f.event_topic,"if_other_explain","Other");
    checkhide(f.event_topic,"num_inc_knowledge","Question; Persuade; Refer (QPR),Mental Health First Aid (MHFA),Trauma Awareness,Sharing Hope");
    checkhide(f.event_topic,"num_new_attendees","Mental Health First Aid (MHFA)");
@@ -284,7 +284,7 @@ function validateform(scope='all') {
        f.TESTRIGHTANSWERS.value=cstrjis(right);
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
-     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('event_type') && gvtfieldvalue('event_type')=='') {edesc=edesc+`Must specify a value for Event Type \n`; seterror("event_type");}
   if (!hiddenfield('event_topic') && gvtfieldvalue('event_topic')=='') {edesc=edesc+`Must specify a value for Event Topic\n`; seterror("event_topic");}
   if (!hiddenfield('event_format') && gvtfieldvalue('event_format')=='') {edesc=edesc+`Must specify a value for Event Format \n`; seterror("event_format");}
@@ -576,6 +576,50 @@ function updatesignatures(){
     <div class="col12 fldevent_location qevent_location"><span class="qevent_location"><label class="label-top">||FIELDTAG event_location||Event Location ||ENDFIELDTAG||</label></span><span class="qevent_location"><input type="text" name="event_location" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
+<div class="entire">
+    <div class="col12 term">Event Participants</div>
+    </div>
+    <div class="entire">
+</div>
+    <div class="entire">
+</div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"><i>Using the dropdown menus below, please select all individuals and churches that participated in the event. Select all that apply.</i></label></div>
+  </div>
+  <div class="entire">
+</div>
+    <div class="entire">
+</div>
+<div class="entire">
+    <div class="col12 fldevent_wc qevent_wc">
+    <div class="col12 fldevent_wc qevent_wc"><span class="qevent_wc"></span><span class="qevent_wc"><label class="label-top">Wellness Champion(s)</label></span><span class="qevent_wc"><select size="8" name="event_wc" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,name_last+''+','+' '+name_first+' ('+CODE+')' AS DESCRIP FROM [bcr_wellness_champions] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE event_wc^^') ORDER BY name_last, name_first||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_wellness_champions||
+</span></div>
+  </div>
+  </div>
+
+<div class="entire">
+    <div class="col12 fldevent_pastors qevent_pastors">
+    <div class="col12 fldevent_pastors qevent_pastors"><span class="qevent_pastors"></span><span class="qevent_pastors"><label class="label-top">Pastor(s)</label></span><span class="qevent_pastors"><select size="8" name="event_pastors" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,name_last+''+','+' '+name_middle+' '+name_first+' ('+CODE+')' AS DESCRIP FROM [bcr_pastors] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE event_pastors^^') ORDER BY name_last, name_first||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_pastors||
+</span></div>
+  </div>
+  </div>
+
+<div class="entire">
+    <div class="col12 fldevent_church qevent_church">
+    <div class="col12 fldevent_church qevent_church"><span class="qevent_church"></span><span class="qevent_church"><label class="label-top">Church(es)</label></span><span class="qevent_church"><select size="8" name="event_church" onchange="checkhideall()" multiple>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bcr_churches] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE event_church^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bcr_churches||
+</span></div>
+  </div>
+  </div>
+    <div class="entire">
+</div>
+    <div class="entire">
+</div>
  <div class="entire">
     <div class="col12 fldtotal_num_attendees qtotal_num_attendees">
     <div class="col12 fldtotal_num_attendees qtotal_num_attendees"><span class="qtotal_num_attendees required-label">||PWRequiredFieldRequiredText||</span><span class="qtotal_num_attendees required-field-label"><label class="label-top">||FIELDTAG total_num_attendees||Total Number of Attendees||ENDFIELDTAG||</label></span><span class="qtotal_num_attendees"><input type="text" name="total_num_attendees" size="20" onchange="checkhideall()"></span></div>

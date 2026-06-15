@@ -1,34 +1,20 @@
 ---
-form_title: Closing Reasons Summation
+form_title: Closing Reasons Summation Form
 form_file: code/summation-forms/summationflbodyclosingreasons_base.html
-table_name: SUMMATIONFLBODYCLOSINGREASONS_BASE
-program_scope: multi
-programs:
-  - bcr
-  - complex-care
-  - epicc
-  - ere
-  - yere
-form_type: summation
+summation_source_table: CLOSINGREASONS_BASE
+program_scope: all
+programs: []
+form_type: summation_form
 client_form: true
 tags:
-  - summation-view
-pathway_name: 
-pathway_id: 
-pathway_event: 
-pathway_event_logic:
-    start_period: 
-    end_period:
-    early_period: 
-    late_period:
-    recurring_period: 
-    lag_period: 
-    number_occurrences: 
-    depends_on: 
-    completion_check_table: 
-date_field:
+  - summation
+pathway_name: null
+pathway_id: null
+pathway_event: null
+pathway_event_logic: null
+date_field: null
 parent_linkage: null
-join_logic:
+join_logic: null
   targets:
     - table: 
       join_type: 

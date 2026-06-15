@@ -43,6 +43,8 @@ function startup() {
     setrequire('ada_su_status');
     setrequire('dm3700_status');
 	  setrequire('TiedEnrollment');
+    setrequire('bh_supplemental_support_agency');
+    setrequire('other_bh_supplemental_support_agency');
 
 	checkhideall();
 
@@ -53,10 +55,11 @@ function startup() {
 function checkhideall() {
    f=document.forms[0];
    checkhide(f.cmhc_status,"cmhc_agency","001,002");
-   checkhide(f.cmhc_agency,"other_cmhc_agency","006");
+   checkhide(f.cmhc_agency,"other_cmhc_agency","020");
    checkhide(f.ada_su_status,"ada_su_agency","001,002");
-   checkhide(f.ada_su_agency,"other_ada_su_agency","008");
-
+   checkhide(f.ada_su_agency,"other_ada_su_agency","038");
+   checkhide(f.program_assigned,"bh_supplemental_support_agency", "Mercy BEACN - Supplemental Support");
+   checkhide(f.bh_supplemental_support_agency,"other_bh_supplemental_support_agency", "029");
 }
 
 function addEventListeners(){
@@ -291,7 +294,8 @@ function validateform(scope='all') {
   if (!hiddenfield('cmhc_status') && gvtfieldvalue('cmhc_status')=='') {edesc=edesc+`Must specify a value for CMHC\n`; seterror("cmhc_status");}
   if (!hiddenfield('ada_su_status') && gvtfieldvalue('ada_su_status')=='') {edesc=edesc+`Must specify a value for ADA/SU\n`; seterror("ada_su_status");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}	
-
+  if (!hiddenfield('bh_supplemental_support_agency') && gvtfieldvalue('bh_supplemental_support_agency')=='') {edesc=edesc+`Must specify a value for Supplemental Support Agency\n`; seterror("bh_supplemental_support_agency");}
+  if (!hiddenfield('other_bh_supplemental_support_agency') && gvtfieldvalue('other_bh_supplemental_support_agency')=='') {edesc=edesc+`Must specify a value for Other Supplemental Support Agency\n`; seterror("other_bh_supplemental_support_agency");}
     return edesc;
 }
 
@@ -560,7 +564,20 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldprogram_assigned qprogram_assigned">
-    <div class="col12 fldprogram_assigned qprogram_assigned"><span class="qprogram_assigned required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_assigned required-field-label"><label class="label-top">||FIELDTAG program_assigned||Program Assigned||ENDFIELDTAG||</label></span><span class="qprogram_assigned"><input type="radio" name="program_assigned" value="Adult ERE" onclick="checkhideall()" >Adult ERE<br><input type="radio" name="program_assigned" value="Mercy BEACN" onclick="checkhideall()" >Mercy BEACN<br><input type="radio" name="program_assigned" value="BJC/H2H" onclick="checkhideall()" >BJC/H2H<br><input type="radio" name="program_assigned" value="SSM Complex Care" onclick="checkhideall()" >SSM Complex Care</span></div>
+    <div class="col12 fldprogram_assigned qprogram_assigned"><span class="qprogram_assigned required-label">||PWRequiredFieldRequiredText||</span><span class="qprogram_assigned required-field-label"><label class="label-top">||FIELDTAG program_assigned||Program Assigned||ENDFIELDTAG||</label></span><span class="qprogram_assigned"><input type="radio" name="program_assigned" value="Adult ERE" onclick="checkhideall()" >Adult ERE<br><input type="radio" name="program_assigned" value="Mercy BEACN" onclick="checkhideall()" >Mercy BEACN<br><input type="radio" name="program_assigned" value="Mercy BEACN - Supplemental Support" onclick="checkhideall()" >Mercy BEACN - Supplemental Support<br><input type="radio" name="program_assigned" value="BJC/H2H" onclick="checkhideall()" >BJC/H2H<br><input type="radio" name="program_assigned" value="SSM Complex Care" onclick="checkhideall()" >SSM Complex Care</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbh_supplemental_support_agency qbh_supplemental_support_agency">
+    <div class="col12 fldbh_supplemental_support_agency qbh_supplemental_support_agency"><span class="qbh_supplemental_support_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qbh_supplemental_support_agency required-field-label"><label class="label-top">Supplemental Support Agency</label></span><span class="qbh_supplemental_support_agency"><select size="1" name="bh_supplemental_support_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bh_supplemental_support_agency^^') and program_name='BEACN - SS' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE cmhc_agency||
+</span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldother_bh_supplemental_support_agency qother_bh_supplemental_support_agency">
+    <div class="col12 fldother_bh_supplemental_support_agency qother_bh_supplemental_support_agency"><span class="qother_bh_supplemental_support_agency"><label class="label-top">||FIELDTAG other_bh_supplemental_support_agency||Other Supplemental Support Agency||ENDFIELDTAG||</label></span><span class="qother_bh_supplemental_support_agency"><input type="text" name="other_bh_supplemental_support_agency" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
    <div class="entire">
@@ -641,7 +658,7 @@ function updatesignatures(){
   </div>
 <div class="entire">
 <div class="col12 term"></div>
-</div>
+<!--</div> -->
 </div>
 </div>
 <!--ENDOFMAINFORM -->

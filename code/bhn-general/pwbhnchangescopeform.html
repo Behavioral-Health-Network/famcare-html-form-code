@@ -34,7 +34,8 @@ function startup() {
 
 		}
 	}
-            setrequire('Pathway_Date');
+    setrequire('Pathway_Date');
+    setrequire('life_development_status');
     setrequire('bhn_data_team');
     setrequire('bhn_data_team_1');
 
@@ -275,7 +276,8 @@ function validateform(scope='all') {
        f.TESTRIGHTANSWERS.value=cstrjis(right);
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
-     if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
+  if (!hiddenfield('life_development_status') && gvtfieldvalue('life_development_status')=='') {edesc=edesc+`Must specify a value for Life Development Status\n`; seterror("life_development_status");}
   if (!hiddenfield('bhn_data_team') && gvtfieldvalue('bhn_data_team')=='') {edesc=edesc+`Must specify a value for BHN Data Team\n`; seterror("bhn_data_team");}
   if (!hiddenfield('bhn_data_team_1') && gvtfieldvalue('bhn_data_team_1')=='') {edesc=edesc+`Must specify a value for Scoped by\n`; seterror("bhn_data_team_1");}
 
@@ -489,7 +491,6 @@ function updatesignatures(){
     <input type="hidden" name="TABLENAME" value="PWBHNChangeScopeForm" />
     <input type="hidden" name="VISITDT" value="||DATE||" />
     <input type="hidden" name="VISITTM" value="||TIME||" />
-    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" />
     <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" />
     <input type="hidden" name="AUTOCLOSE" value="YES" />
     <input type="hidden" name="CONFIRMSCREEN" value="||||"/>
@@ -499,7 +500,7 @@ function updatesignatures(){
     <input type="text" name="TESTTOTALANSWERS" style="display:none">
     <input type="text" name="TESTPERCENT" style="display:none">
 <!--STARTOFPROVIDERFORM -->
-    <h1><span>BHN Change Scope Form</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
+    <h1><span>BHN Change Scope Form</span> ||PARENTDOCSERNO||</h1>
 
 <!--This is the basic format for a form section-->
 <div class="extrawidecol">
@@ -518,17 +519,69 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Linked Request - Placeholder (question)</div>
+  <div class="col12 term">Linked Request</div>
+</div>
+
+<div class="entire">
+  <div class="col12">
+    <label class="label-top">What is the program scope? (from Request)</label>
+  </div>
+</div>
+
+<div class="entire">
+  <div class="col12">||LOADFIELDS SELECT p.ProviderName FROM PWBHNChangeRequestForm r INNER JOIN Provider p ON r.program = p.ProviderCode WHERE r.DOCSERNO='^^SCREENPARM PARENTDOCSERNO^^' AND r.DOCREVNO=' 0 '||||LOADCURRENTALWAYS (0)||</div>
+</div>
+
+<div class="entire">
+  <div class="col12">
+    <label class="label-top">What needs to change? (from Request)</label>
+  </div>
+</div>
+
+<div class="entire">
+  <div class="col12">||LOADFIELDS SELECT requested_change FROM PWBHNChangeRequestForm WHERE DOCSERNO='^^SCREENPARM PARENTDOCSERNO^^' AND DOCREVNO=' 0 '||||LOADCURRENTALWAYS (0)||</div>
+</div>
+
+ <div class="col12 term">Lifetime & Development</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Info from BHN Change Request Form</label></div>
+    <div class="col12 fldlife_development_status qlife_development_status">
+    <div class="col12 fldlife_development_status qlife_development_status"><span class="qlife_development_status required-label">||PWRequiredFieldRequiredText||</span><span class="qlife_development_status required-field-label"><label class="label-top">||FIELDTAG life_development_status||Status||ENDFIELDTAG||</label></span><span class="qlife_development_status"><input type="radio" name="life_development_status" value="Not Started" onclick="checkhideall()" >Not Started&nbsp;&nbsp;<input type="radio" name="life_development_status" value="In Progress" onclick="checkhideall()" >In Progress&nbsp;&nbsp;<input type="radio" name="life_development_status" value="On Hold" onclick="checkhideall()" >On Hold&nbsp;&nbsp;<input type="radio" name="life_development_status" value="In Review" onclick="checkhideall()" >In Review&nbsp;&nbsp;<input type="radio" name="life_development_status" value="Completed" onclick="checkhideall()" >Completed&nbsp;&nbsp;<input type="radio" name="life_development_status" value="Cancelled" onclick="checkhideall()" >Cancelled&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldbhn_data_team_1 qbhn_data_team_1">
+    <div class="col12 fldbhn_data_team_1 qbhn_data_team_1"><span class="qbhn_data_team_1 required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_data_team_1 required-field-label"><label class="label-top">Scoped by</label></span><span class="qbhn_data_team_1"><select size="5" name="bhn_data_team_1" multiple onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_data_team] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_data_team_1^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE bhn_data_team||
+</span></div>
+     </div>
+  </div>
+<div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldscope_date qscope_date">
+    <div class="col12 fldscope_date qscope_date"><span class="qscope_date"><label class="label-top">||FIELDTAG scope_date||Date Scoped||ENDFIELDTAG||</label></span><span class="qscope_date"><input type="text" name="scope_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldscope_est_completion_date qscope_est_completion_date">
+    <div class="col12 fldscope_est_completion_date qscope_est_completion_date"><span class="qscope_est_completion_date"><label class="label-top">||FIELDTAG scope_est_completion_date||Estimated Completion Date||ENDFIELDTAG||</label></span><span class="qscope_est_completion_date"><input type="text" name="scope_est_completion_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
   </div>
 <div class="entire">
 <div class="col12 term">Staff Assignment</div>
 </div>
  <div class="entire">
     <div class="col12 fldbhn_data_team qbhn_data_team">
-    <div class="col12 fldbhn_data_team qbhn_data_team"><span class="qbhn_data_team required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_data_team required-field-label"><label class="label-top">||FIELDTAG bhn_data_team||BHN Data Team||ENDFIELDTAG||</label></span><span class="qbhn_data_team"><select size="1" name="bhn_data_team" onchange="checkhideall()">
+    <div class="col12 fldbhn_data_team qbhn_data_team"><span class="qbhn_data_team required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_data_team required-field-label"><label class="label-top">||FIELDTAG bhn_data_team||BHN Data Team||ENDFIELDTAG||</label></span><span class="qbhn_data_team"><select size="5" name="bhn_data_team" multiple onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_data_team] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_data_team^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE bhn_data_team||
 </span></div>
@@ -548,30 +601,53 @@ function updatesignatures(){
 <div class="entire">
 <div class="col12 term">Impacted Assets</div>
 </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">SQL Views / Tables</label></div>
+ 
+<PREADD SETPARM PROGRAM="||SCREENPARM PROGRAM||">
+
+ <!-- SQL Dependencies -->
+  <div class="entire">
+    <div class="col12 term">SQL Assets</div>
+    <div class="col12"><label class="label-top"><i>Select all impacted SQL assets.</i></label></div>
+    <div class="col12">
+      <select name="sql_dependencies" multiple size="8">
+        <option value="||SELECT DISTINCT L.DEPENDENCY_CODE AS CODE, L.NORMALIZED_OBJECT AS DESCRIP FROM Q_BHN_FULL_DEPENDENCY_LINEAGE L JOIN PWBHNChangeRequestForm R ON R.DOCSERNO = ^^SCREENPARM PARENTDOCSERNO^^ LEFT JOIN PROVIDER P ON R.PROGRAM = P.PROVIDERCODE WHERE L.ROOT_SOURCE_TYPE = 'SQL_OBJECT' AND (L.ROOT_PROGRAM_SCOPE = 'all' OR (L.ROOT_PROGRAM_SCOPE = 'single' AND L.ROOT_PROGRAMS = CASE WHEN LOWER(REPLACE(REPLACE(P.PROVIDERNAME,' ',''),'_','')) LIKE 'complexcare%' THEN 'complex-care' WHEN LOWER(P.PROVIDERNAME) LIKE 'bcr%' THEN 'bcr' WHEN LOWER(P.PROVIDERNAME) LIKE 'epicc%' THEN 'epicc' WHEN LOWER(P.PROVIDERNAME) LIKE 'ere%' THEN 'ere' WHEN LOWER(P.PROVIDERNAME) LIKE 'yere%' THEN 'yere' ELSE '' END) OR L.ROOT_PROGRAM_SCOPE = 'none') ORDER BY L.NORMALIZED_OBJECT||">||CHOICETABLESQLD||</option>
+      </select>
+    </div>
   </div>
- <div class="entire">
-    <div class="col12 fldsqul_views_tables_impacted_assets qsqul_views_tables_impacted_assets">
-    <div class="col12 fldsqul_views_tables_impacted_assets qsqul_views_tables_impacted_assets"><span class="qsqul_views_tables_impacted_assets"><label class="label-top">||FIELDTAG squl_views_tables_impacted_assets||List all impacted assets.||ENDFIELDTAG||</label></span><span class="qsqul_views_tables_impacted_assets"><textarea rows="3" name="squl_views_tables_impacted_assets" class="autoexpand"></textarea></span></div>
-     </div>
+
+  <!-- Report Dependencies -->
+  <div class="entire">
+    <div class="col12 term">Report Assets</div>
+    <div class="col12"><label class="label-top"><i>Select all impacted Report assets.</i></label></div>
+    <div class="col12">
+      <select name="report_dependencies" multiple size="8">
+        <option value="||SELECT DISTINCT L.DEPENDENCY_CODE AS CODE, L.ROOT_SOURCE_NAME AS DESCRIP FROM Q_BHN_FULL_DEPENDENCY_LINEAGE L JOIN PWBHNChangeRequestForm R ON R.DOCSERNO = ^^SCREENPARM PARENTDOCSERNO^^ LEFT JOIN PROVIDER P ON R.PROGRAM = P.PROVIDERCODE WHERE L.ROOT_SOURCE_TYPE = 'SAVEDQUERY' AND (L.ROOT_PROGRAM_SCOPE = 'all' OR (L.ROOT_PROGRAM_SCOPE = 'single' AND L.ROOT_PROGRAMS = CASE WHEN LOWER(REPLACE(REPLACE(P.PROVIDERNAME,' ',''),'_','')) LIKE 'complexcare%' THEN 'complex-care' WHEN LOWER(P.PROVIDERNAME) LIKE 'bcr%' THEN 'bcr' WHEN LOWER(P.PROVIDERNAME) LIKE 'epicc%' THEN 'epicc' WHEN LOWER(P.PROVIDERNAME) LIKE 'ere%' THEN 'ere' WHEN LOWER(P.PROVIDERNAME) LIKE 'yere%' THEN 'yere' ELSE '' END) OR L.ROOT_PROGRAM_SCOPE = 'none') ORDER BY L.ROOT_SOURCE_NAME||">||CHOICETABLESQLD||</option>
+      </select>
+    </div>
   </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Reports / Dashboards</label></div>
+
+  <!-- Master Table Dependencies -->
+  <div class="entire">
+    <div class="col12 term">Master Table Assets</div>
+    <div class="col12"><label class="label-top"><i>Select all impacted Master Table assets.</i></label></div>
+    <div class="col12">
+      <select name="master_table_dependencies" multiple size="8">
+        <option value="||SELECT DISTINCT L.DEPENDENCY_CODE AS CODE, L.ROOT_SOURCE_NAME AS DESCRIP FROM Q_BHN_FULL_DEPENDENCY_LINEAGE L JOIN PWBHNChangeRequestForm R ON R.DOCSERNO = ^^SCREENPARM PARENTDOCSERNO^^ LEFT JOIN PROVIDER P ON R.PROGRAM = P.PROVIDERCODE WHERE L.ROOT_SOURCE_TYPE = 'MASTER_TABLE' AND (L.ROOT_PROGRAM_SCOPE = 'all' OR (L.ROOT_PROGRAM_SCOPE = 'single' AND L.ROOT_PROGRAMS = CASE WHEN LOWER(REPLACE(REPLACE(P.PROVIDERNAME,' ',''),'_','')) LIKE 'complexcare%' THEN 'complex-care' WHEN LOWER(P.PROVIDERNAME) LIKE 'bcr%' THEN 'bcr' WHEN LOWER(P.PROVIDERNAME) LIKE 'epicc%' THEN 'epicc' WHEN LOWER(P.PROVIDERNAME) LIKE 'ere%' THEN 'ere' WHEN LOWER(P.PROVIDERNAME) LIKE 'yere%' THEN 'yere' ELSE '' END) OR L.ROOT_PROGRAM_SCOPE = 'none') ORDER BY L.ROOT_SOURCE_NAME||">||CHOICETABLESQLD||</option>
+      </select>
+    </div>
   </div>
- <div class="entire">
-    <div class="col12 fldreports_dashboards_impacted_assets qreports_dashboards_impacted_assets">
-    <div class="col12 fldreports_dashboards_impacted_assets qreports_dashboards_impacted_assets"><span class="qreports_dashboards_impacted_assets"><label class="label-top">||FIELDTAG reports_dashboards_impacted_assets||List all impacted assets.||ENDFIELDTAG||</label></span><span class="qreports_dashboards_impacted_assets"><textarea rows="3" name="reports_dashboards_impacted_assets" class="autoexpand"></textarea></span></div>
-     </div>
+
+  <!-- Documentation Dependencies -->
+  <div class="entire">
+    <div class="col12 term">Documentation Assets</div>
+    <div class="col12"><label class="label-top"><i>Select all impacted Documentation assets.</i></label></div>
+    <div class="col12">
+      <select name="doc_dependencies" multiple size="8">
+        <option value="||SELECT DISTINCT L.DEPENDENCY_CODE AS CODE, L.NORMALIZED_OBJECT AS DESCRIP FROM Q_BHN_FULL_DEPENDENCY_LINEAGE L JOIN PWBHNChangeRequestForm R ON R.DOCSERNO = ^^SCREENPARM PARENTDOCSERNO^^ LEFT JOIN PROVIDER P ON R.PROGRAM = P.PROVIDERCODE WHERE L.ROOT_SOURCE_TYPE = 'DOCUMENTATION' AND (L.ROOT_PROGRAM_SCOPE = 'all' OR (L.ROOT_PROGRAM_SCOPE = 'single' AND L.ROOT_PROGRAMS = CASE WHEN LOWER(REPLACE(REPLACE(P.PROVIDERNAME,' ',''),'_','')) LIKE 'complexcare%' THEN 'complex-care' WHEN LOWER(P.PROVIDERNAME) LIKE 'bcr%' THEN 'bcr' WHEN LOWER(P.PROVIDERNAME) LIKE 'epicc%' THEN 'epicc' WHEN LOWER(P.PROVIDERNAME) LIKE 'ere%' THEN 'ere' WHEN LOWER(P.PROVIDERNAME) LIKE 'yere%' THEN 'yere' ELSE '' END) OR L.ROOT_PROGRAM_SCOPE = 'none' ) ORDER BY L.NORMALIZED_OBJECT||">||CHOICETABLESQLD||</option>
+      </select>
+    </div>
   </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Documentation Assets to Update</label></div>
-  </div>
- <div class="entire">
-    <div class="col12 flddocumentation_impacted_assets qdocumentation_impacted_assets">
-    <div class="col12 flddocumentation_impacted_assets qdocumentation_impacted_assets"><span class="qdocumentation_impacted_assets"><label class="label-top">||FIELDTAG documentation_impacted_assets||List all impacted assets.||ENDFIELDTAG||</label></span><span class="qdocumentation_impacted_assets"><textarea rows="3" name="documentation_impacted_assets" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
+
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -673,87 +749,35 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top">If one or more blockers are marked Open or In Progress, include a mitigation plan or acceptance criteria for proceeding (for example, a documented temporary workaround, a committed resolution date, or explicit approval to proceed with limited scope). Reviewers may flag the scope as "Blocked" until key blockers are resolved.
 
-</label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Logic Summary</div>
+<div class="col12 term">Supporting Materials (Optional)</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Example: Exclude enrollments dismissed before FY2025</label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldlogic_new_filters qlogic_new_filters">
-    <div class="col12 fldlogic_new_filters qlogic_new_filters"><span class="qlogic_new_filters"><label class="label-top">||FIELDTAG logic_new_filters||New Filters / Conditions||ENDFIELDTAG||</label></span><span class="qlogic_new_filters"><textarea name="logic_new_filters" class="autoexpand"></textarea></span></div>
-     </div>
+    <div class="col12"><label class="label-top">Upload any templates, screenshots, or sample outputs that clarify the request.</label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Example:  Join PATHWAYCLIENT.DOCSERNO to PROVIDERPLACEMENT.DOCSERNO</label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldlogic_joins_relationships qlogic_joins_relationships">
-    <div class="col12 fldlogic_joins_relationships qlogic_joins_relationships"><span class="qlogic_joins_relationships"><label class="label-top">||FIELDTAG logic_joins_relationships||Joins / Relationships||ENDFIELDTAG||</label></span><span class="qlogic_joins_relationships"><textarea name="logic_joins_relationships" class="autoexpand"></textarea></span></div>
-     </div>
+    <div class="col12"><label class="label-top">Accepted formats: Word, Excel, PDF, PNG, JPG</label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Example: Tag records missing PWSUBROADTREATMENTAGENCY.END_DATE as Missing End Date</label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldlogic_exception_handling qlogic_exception_handling">
-    <div class="col12 fldlogic_exception_handling qlogic_exception_handling"><span class="qlogic_exception_handling"><label class="label-top">||FIELDTAG logic_exception_handling||Exception Handling:||ENDFIELDTAG||</label></span><span class="qlogic_exception_handling"><textarea name="logic_exception_handling" class="autoexpand"></textarea></span></div>
-     </div>
+    <div class="col12"><label class="label-top">Max size: 10MG</label></div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">Example: Clients with multiple overlapping enrollments</label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldlogic_edge_cases qlogic_edge_cases">
-    <div class="col12 fldlogic_edge_cases qlogic_edge_cases"><span class="qlogic_edge_cases"><label class="label-top">||FIELDTAG logic_edge_cases||Edge Cases to Flag:||ENDFIELDTAG||</label></span><span class="qlogic_edge_cases"><textarea name="logic_edge_cases" class="autoexpand"></textarea></span></div>
+    <div class="col12 fldSingle_File_Upload qSingle_File_Upload">
+    <div class="col12 fldSingle_File_Upload qSingle_File_Upload"><span class="qSingle_File_Upload"></span><span class="qSingle_File_Upload"><label class="label-top">||FIELDTAG Single_File_Upload||Single File Upload||ENDFIELDTAG||</label></span><span class="qSingle_File_Upload"><input type="file" name="Single_File_Upload" size="40" class="input-file-pw"></span></div>
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Lifetime & Development</div>
+<div class="entire">
+<div class="col12 term">Deployment Notes and Rollback Plan</div>
 </div>
- <div class="entire">
-    <div class="col12 fldlife_development_status qlife_development_status">
-    <div class="col12 fldlife_development_status qlife_development_status"><span class="qlife_development_status"><label class="label-top">||FIELDTAG life_development_status||Status||ENDFIELDTAG||</label></span><span class="qlife_development_status"><input type="radio" name="life_development_status" value="Approved" onclick="checkhideall()" >Approved&nbsp;&nbsp;<input type="radio" name="life_development_status" value="Deployed" onclick="checkhideall()" >Deployed&nbsp;&nbsp;<input type="radio" name="life_development_status" value="Deprecated" onclick="checkhideall()" >Deprecated&nbsp;&nbsp;<input type="radio" name="life_development_status" value="In Review" onclick="checkhideall()" >In Review&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldscope_date qscope_date">
-    <div class="col12 fldscope_date qscope_date"><span class="qscope_date"><label class="label-top">||FIELDTAG scope_date||Date Scoped||ENDFIELDTAG||</label></span><span class="qscope_date"><input type="text" name="scope_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldbhn_data_team_1 qbhn_data_team_1">
-    <div class="col12 fldbhn_data_team_1 qbhn_data_team_1"><span class="qbhn_data_team_1 required-label">||PWRequiredFieldRequiredText||</span><span class="qbhn_data_team_1 required-field-label"><label class="label-top">Scoped by</label></span><span class="qbhn_data_team_1"><select size="1" name="bhn_data_team_1" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [bhn_data_team] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE bhn_data_team_1^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
-</select>||CONFIGURE bhn_data_team||
-</span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldscope_est_completion_date qscope_est_completion_date">
-    <div class="col12 fldscope_est_completion_date qscope_est_completion_date"><span class="qscope_est_completion_date"><label class="label-top">||FIELDTAG scope_est_completion_date||Estimated Completion Date||ENDFIELDTAG||</label></span><span class="qscope_est_completion_date"><input type="text" name="scope_est_completion_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-     </div>
-  </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>

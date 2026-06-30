@@ -44,6 +44,10 @@ status: active
 
 ## Cross References
 
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
 ## Changelog
 
 <details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
@@ -61,3 +65,4 @@ status: active
 - **2024-11-08**: Initial creation of EPICC Re-Engagement Form in Pathway Wizard.
 
 </details>
+<!---CHANGELOG-END--->

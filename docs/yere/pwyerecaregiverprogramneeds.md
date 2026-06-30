@@ -34,4 +34,8 @@ status: active
 
 # YERE Caregiver Program Needs Form
 
-## Changelog
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
+<!---CHANGELOG-END--->

@@ -1,0 +1,89 @@
+<html>
+
+<head>
+</head>
+
+<script language="VBScript">
+</script>
+
+<body>
+
+<script language="JavaScript">
+
+    function deletesummationrecordCW(serno) {
+        var f=document.forms[0];
+        f.target="";
+        var urlassist;
+        urlassist="genfunc.exe?FULLFUNCTION^DELETEDATA|TABLENAME(USERCASELOAD)|NOFORMATFILE(YES)|AUTOCLOSE(YES)|FORMNAME(USERCASELOADEDIT)|CONFIRMSCREEN(SAVECONFIRMREFRESHSUMMARY)|CLIENTNUMBER(||CLIENTNUMBER||)|SUMMARYDIVID(SummationClientCaseWorkerHistory)|DOCSERNO("+serno+")|SESSIONID(||SESSIONID||)^";
+        openhyperlink(urlassist);
+//        parent.fvalidate.location.replace(urlassist);        
+       return;
+    }
+
+    function DeletesummationrecordCW(serno) {
+        deletesummationrecord(serno);
+        return;
+    }
+
+
+</script>
+
+||SQC SELECT UserCaseLoad.ID, 
+
+Case When CharIndex('|ADMIN','^^SV GROUPLIST^^') = 0 And CharIndex('|INTAKE','^^SV GROUPLIST^^') = 0 Then 
+
+  Case When Q_HRFORM.EmployeeName Is Null Then UserCaseLoad.UseriD Else Q_HRFORM.EmployeeName End 
+
+Else 
+
+    Case When (Select Count(GroupMember) From SecurityGroupsMembers Where (SecurityGroupsMembers.GroupName='Therapists or Clinicians' or SecurityGroupsMembers.GroupName='CASE WORKERS' or SecurityGroupsMembers.GroupName='Case Worker or Social Worker Supervision') And UserCaseLoad.UserId=SecurityGroupsMembers.GroupMember) = 0 Then 
+
+       Case When Q_HRFORM.EmployeeName Is Null Then UserCaseLoad.UseriD Else Q_HRFORM.EmployeeName End 
+
+    Else '' End
+
+End As IsNotCaseWorker,
+
+
+
+Case When CharIndex('|ADMIN','^^SV GROUPLIST^^') = 0 And CharIndex('|INTAKE','^^SV GROUPLIST^^') = 0 Then 
+
+  '' 
+
+Else 
+
+    Case When (Select Count(GroupMember) From SecurityGroupsMembers Where (SecurityGroupsMembers.GroupName='Therapists or Clinicians' or SecurityGroupsMembers.GroupName='CASE WORKERS' or SecurityGroupsMembers.GroupName='Case Worker or Social Worker Supervision') And UserCaseLoad.UserId=SecurityGroupsMembers.GroupMember) > 0 Then 
+
+       Case When Q_HRFORM.EmployeeName Is Null Then UserCaseLoad.UseriD Else Q_HRFORM.EmployeeName End 
+
+    Else '' End
+
+End As IsCaseWorker, 
+
+Case When CharIndex('|ADMIN','^^SV GROUPLIST^^') &gt; 0 or CharIndex('|INTAKE','^^SV GROUPLIST^^') &gt; 0 Then 'Delete' Else '' End As CanDelete, 
+
+UserCaseLoad.CLIENTNUMBER, UserCaseLoad.BeginDate, UserCaseLoad.ENDDATE, usup.UserName As SupName
+
+
+FROM UserCaseLoad Left JOIN Q_HRFORM ON UserCaseLoad.UserID = Q_HRFORM.FamCareUserID Left Join UserId u on u.UserID = UserCaseLoad.UserID Left Join UserId usup on u.SupervisorId = usup.UserId Where UserCaseLoad.Clientnumber='^^SV CLIENTNUMBER^^' Order By UserCaseLoad.BeginDate DESC, UserCaseLoad.ID DESC||||TSSTART||
+
+<table class="summary">
+ <thead>
+  <tr>
+    <th width="25%">Case Worker</th>
+    <th width="25%">Supervisor</th>
+    <th width="25%">Starting Date</th>
+    <th width="25%">Ending Date</th>
+  </tr>
+ </thead>
+ <tbody>
+     <tr class="||ALTERNATE |altrow||" align="center">
+        <td width="25%">||SF IsNotCaseWorker||<a href="javascript:void editsummationrecordaltform('||SP SUMMATION||','UserCaseLoadEDIT','||SF ID||','UserCaseLoadEDIT)|CLIENTNUMBER(||CLIENTNUMBER||')">||SF IsCaseWorker||</a> <a href="javascript:void deletesummationrecordCW('||SF ID||')">||SF CanDelete||</a></td>
+        <td width="25%">||SF SupName||</td>
+        <td width="25%">||SF BeginDate||</td>
+        <td width="25%">||SF EndDate||</td>
+      </tr>
+ </tbody>
+</table>
+</body>
+</html>

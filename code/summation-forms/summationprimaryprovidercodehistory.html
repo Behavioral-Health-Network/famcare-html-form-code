@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<title>PrimaryProviderCode History Summation</title>
+</head>
+
+<body topmargin="0">
+
+||SQC SELECT 
+ppc.ID, 
+ppc.DocSerNo, 
+ppc.UserID, 
+ppc.VISITDT, 
+ppc.VISITTM, 
+ppc.EndingDate, 
+ppc.StartingDate, 
+p.ProviderName As TheProgram
+
+FROM PrimaryProviderCodeHistory ppc Left Join Q_Provider p on p.ProviderCode = ppc.PrimaryProviderCode 
+
+WHERE ppc.CLIENTNUMBER='^^SV CLIENTNUMBER^^' AND 
+ppc.DOCREVNO=' 0 ' And 
+ppc.ParentDocSerNo='^^SP CURRENTSERIAL^^' And
+Coalesce(ppc.PrimaryProviderCode,'') != ''
+
+Order by StartingDate DESC||||TSSTART||
+
+<div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a></div>
+
+<table class="summary">
+<thead>
+  <tr>
+    <th>Action</th>
+    <th align="left">Provider</th>
+    <th align="left">Start Date</th>
+    <th align="left">End Date</th>
+    <th align="left">Edited By / Date</th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+    <td class="colAction"><span id="spanslimPrimProvCodeEdit||SF DocSerNo||">&nbsp;</span><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','PrimaryProviderCodeHistory','||SF DOCSERNO||','||SP CURRENTSERIAL||)|CLIENTNUMBER(||CLIENTNUMBER||)|SETVALUE(CLIENTNUMBER)|CLIENTNAME(||CLIENTNAME||)|SETVALUE(CLIENTNAME','PrimProvCodeEdit')">Edit</a></td>
+    <td align="left">||SF TheProgram||</td>
+    <td align="left">||SF StartingDate||</a></td>
+    <td align="left">||SF EndingDate||</td>
+    <td align="left">||SF UserID|| / ||SF VISITDT|| ||SF VISITTM||</td>
+  </tr>
+</tbody>
+</table>
+</body>
+</html>

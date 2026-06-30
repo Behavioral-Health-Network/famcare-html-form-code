@@ -41,17 +41,8 @@ status: active
 
 # YERE Initial Assessment Form
 
-## Changelog
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
 
-<details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
-
-2026
-
-- **YYYY-MM-DD**: Adds change.
-
-2025
-
-- **2025-12-23**: Updates `referred_family_support_specialist` field text from, 'Is youth being referred to a Family Support Specialist?' to 'Has youth been referred to a YERE Family Support Provider through Vision for Children at Risk?'.
-- **2025-12-03**: Adds initial Markdown documentation file.
-
-</details>
+<!---CHANGELOG-START--->
+<!---CHANGELOG-END--->

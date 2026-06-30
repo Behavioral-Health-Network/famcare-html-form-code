@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<title>Case Worker Change</title>
+</head>
+
+ <PREADD SETPARM TYPEOFFUNCTION="SAVEDATARAW">
+<PREEDIT SETPARM TYPEOFFUNCTION="UPDATE">
+
+ <PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||">
+<PREEDIT SETPARM CURRENTSERIAL="||FIELDVALUE DOCSERNO||">
+ <PREADD SETPARM CURRENTPARENT="||SCREENPARM PARENTDOCSERNO||">
+<PREEDIT SETPARM CURRENTPARENT="||FIELDVALUE PARENTDOCSERNO||">
+
+ <PREADD UPDATEQUERY DUMMY1="Update Client Set FACM = '||SP PROGRAMWORKER||' Where Client.ClientNumber = '||CLIENTNUMBER||' And Client.DocRevNo = ' 0 '">
+
+ <PREADD UPDATEQUERY DUMMY="UPDATE UserCaseLoad SET ENDDATE = Case When Convert(varchar(10),BEGINDATE,101) > Convert(varchar(10),Cast('||DATE||' as DateTime)-1,101) Then '||DATE||' Else Convert(varchar(10),Cast('||DATE||' as DateTime)-1,101) End,ENDTIME = '||TIME||' Where IsNull(EndDate) And ClientNumber='||CLIENTNUMBER||'">
+ <PREADD SETPARM CWUSERID="||LOADFIELDS Select UserID.UserID From Q_HRFORM Inner Join UserID on Q_HRFORM.FamCareUserID=UserID.UserID Where EmployeeNumber='^^SP PROGRAMWORKER^^'||||LOADCURRENTALWAYS (0)||">
+
+ <PREADD SETPARM ISINCASELOAD="||LOADFIELDS Select UserID From UserCaseLoad Where UserID='^^CWUSERID^^' And ClientNumber='^^SP CLIENTNUMBER^^' and IsNull(EndDate)||||LOADCURRENTALWAYS (0)||">
+ <PREADD UPDATEQUERY DUMMY1="INSERT INTO USERCASELOAD (USERID,CLIENTNUMBER,BEGINDATE,BEGINTIME) Select '||SP CWUSERID||','||SP CLIENTNUMBER||','||DATE||','||TIME||' Where '||ISINCASELOAD||'=''">
+
+ <PREADD SAVEFORM NEWPROGRAMWORKER="(PlacementProgramWorkerHistory)|DOCSERNO[||PREGENDOCSERNO||]|PARENTDOCSERNO[||SP PARENTDOCSERNO||]|CLIENTNUMBER[||CLIENTNUMBER||]|USERID[||USERID||]|SIGNATURE[]|VISITDT[||DATE||]|VISITTM[||TIME||]|PROGRAM_WORKER[||SP PROGRAMWORKER||]|BEGIN_DATE[||DATE||]">
+
+
+<script language="JavaScript">
+
+  function submitit() {
+    var f=document.forms[0];
+    f.target="";
+    //   f.CONFIRMSCREEN.value="SaveConfirmRefreshsummaryUserId";
+    if(f.end_date.value=="") {f.end_time.value=""};
+    f.submit();
+    return;
+  }
+
+  function StartUp() {
+    var f=document.forms[0];
+    f.CLIENTNUMBER.value = "||CLIENTNUMBER||";
+
+    try { 
+      // call the callback on ProviderPlacement form
+      parent.main.UpdateProgramWorkerCallback('SummationPlacementProgramWorkerHistory')
+    } catch (e) { console.log('PlacementProgramWorkerHistory StartUp error ', e) }
+  }
+
+</script>
+
+<body onLoad="StartUp()">
+
+<form action="genfunc.exe" method="post">
+    <input type="hidden" name="FUNCTION" value="SAVE" />
+    <input type="hidden" name="DOCSERNO" value="||SP CURRENTSERIAL||" /><!-- SEE PREADD/PREEDIT - generated for new records -->  
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="TABLENAME" value="PlacementProgramWorkerHistory" /> 
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||">
+    <input type="hidden" name="PARENTDOCSERNO" value="||SP CURRENTPARENT||" /><!-- Will be passed to form as SCREENPARM parameter -->
+    <input type="hidden" name="CONFIRMSCREEN" value="SAVECONFIRMREFRESHSUMMARY" />
+    <input type="hidden" name="_PRESERVE" value="YES" /> <!-- this preserves the existing values for a record that was not specified with update and/or changed -->
+    <input type="hidden" name="_NOEDITBUTTON" value="Yes" /> 
+    <input type="hidden" name="_NOPRINTBUTTON" value="Yes" />
+    <input type="hidden" name="_NOSPELLCHECK" value="YES">
+    <input type="hidden" name="begin_time" value="||FIELDVALUE begin_time||">
+    <input type="hidden" name="end_time" value="||FIELDVALUE end_time||">
+    <h1 align="center">Program Worker Change</h1>
+    <div class="extrawidecol">
+      <div class="deflist">
+        <div class="term">Update Program Worker</div>
+        <div class="def">
+          <ul cellspacing="0" cellpadding="0" width="100%" border="1">
+            <li>
+              <strong>Program Worker&nbsp;:</strong>
+              <select size="1" name="program_worker">
+                <option value="||SELECT DISTINCT EMPLOYEENUMBER, Q_HRFORM.[LASTNAME] + ', ' + Q_HRFORM.[FIRSTNAME],Q_HRFORM.[LASTNAME] ,Q_HRFORM.[FIRSTNAME] FROM (Q_HRFORM Inner Join UserID on Q_HRFORM.FamCareUserID=UserID.UserID) Inner join SecurityGroupsMembers on UserId.UserId=SecurityGroupsMembers.GroupMember WHERE (SecurityGroupsMembers.GroupName='Therapists or Clinicians' or SecurityGroupsMembers.GroupName='CASE WORKERS' or SecurityGroupsMembers.GroupName='Case Worker or Social Worker Supervision') And Q_HRFORM.PrivateProvider='^^PRIVATEPROVIDER^^' And (Q_HRFORM.[LASTNAME]&lt;&gt;'' And AccountStatus='Active' And (ExcludeFromLicenseCount IS NULL OR ExcludeFromLicenseCount&lt;&gt;'Yes')) Or EMPLOYEENUMBER='^^FIELDVALUE program_worker^^' ORDER BY Q_HRFORM.[LASTNAME]||" selected="selected">||CHOICETABLESQLD||</option>
+              </select>
+            </li>
+            <li>
+              <strong>Start Date</strong>
+              <input type="text" name="begin_date" size="8" value="||FIELDVALUE begin_date||" class="jdatepicker">
+            </li>
+            <li>
+              <strong>End Date</strong>
+              <input type="text" name="end_date" size="8" value="||FIELDVALUE end_date||" class="jdatepicker">
+            </li>
+            <li>
+              <strong>Change Reason</strong>          
+              <select size="1" name="change_reason">
+                <option value="||SELECT CODE, DESCRIPTION FROM CHANGEREASON WHERE (Status='Active' Or CODE='^^FIELDVALUE change_reason^^') ORDER BY CODE||" selected="selected">||CHOICETABLESQLD||</option>
+              </select>||CONFIGURE CHANGEREASON||
+            </li>
+          </ul>     
+        </div>	
+      </div>
+      <div align="center"><input type="button" name="_B1" onclick="submitit()" value="SAVE" /></div>
+    </div>
+
+</form>
+</body>
+</html>

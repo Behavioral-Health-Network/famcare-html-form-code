@@ -53,6 +53,10 @@ status: active
 
 ## Cross References
 
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
 ## Changelog
 
 <details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
@@ -77,9 +81,10 @@ status: active
 - **2025-08-15**: Changes the `MAT_PRESCRIBED_PHYSICIAN_APPT_SIX_MONTH` data type from `varchar(30)` to `varchar(50)` to accommodate the newly added value of 'Unable To Contact Client Or Treatment Agency', which was too long for the field. Adds radio button option for `mat_prescribed_physician_appt_six_month`, 'Unable To Contact Client Or Treatment Agency'.
 - **2025-08-12**: Restores 'Not Engaged' as an active program participation value after consulting with Carla.
 - **2025-06-03**: Comments out any code for function `quicksubmitit()` and anything related to `Quick Submit`.
-- **2025-03-14**: Removed Regional Transfer questions since they are not asked at 6 months.
+- **2025-03-14**: Removes Regional Transfer questions since they are not asked at 6 months.
 - **2025-03-10**: Comments out `client_attend_intake_appt_six_month` and `intake_appt_date_six_month`. These questions are going to be answered on the `PWSUBroadTreatmentAgency summation` now.
 - **2025-02-21**: Updates headers and instructional text for summations.
 
 </details>
 </details>
+<!---CHANGELOG-END--->

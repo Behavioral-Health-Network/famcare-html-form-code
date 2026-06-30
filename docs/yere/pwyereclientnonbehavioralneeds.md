@@ -34,4 +34,8 @@ status: active
 
 # YERE Client Non-Behavioral Needs Form
 
-## Changelog
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
+<!---CHANGELOG-END--->

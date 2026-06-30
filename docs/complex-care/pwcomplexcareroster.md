@@ -34,11 +34,11 @@ join_logic:
         - source: PWCOMPLEXCAREROSTER.CLIENT_NUMBER
           target: Q_CLIENT_BHN.CLIENTNUMBER
 quick_submit_enabled: false
-last_updated: 2025-02-19
+last_updated: 2026-04-30
 status: active
 ---
 
-# Comeplex Care Roster
+# Complex Care Roster
 
 ## YAML Notes
 
@@ -52,6 +52,10 @@ status: active
 
 ## Cross References
 
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
 ## Changelog
 
 <details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
@@ -71,3 +75,4 @@ status: active
 - **2025-08-12**: Adds initial Markdown documentation file for the HTML form.
 
 </details>
+<!---CHANGELOG-END--->

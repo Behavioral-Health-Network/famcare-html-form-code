@@ -118,6 +118,10 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 - [EPICC Initial Contact Form](https://github.com/Behavioral-Health-Network/FAMCare-HTML-Form-Code/blob/main/code/epicc/pwepiccic.html)
 - [EPICC Initial Contact Data Dictionary](https://github.com/Behavioral-Health-Network/BHN-Data-Team-Wiki/blob/main/docs/data-dictionaries/epicc-data-dictionaries/epicc-initial-contact.md)
 
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
 ## Changelog
 
 <details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
@@ -161,3 +165,4 @@ Hidden fields such as `opioid_of_use_fentanyl` are pivoted and updated via funct
 
 </details>
 </details>
+<!---CHANGELOG-END--->

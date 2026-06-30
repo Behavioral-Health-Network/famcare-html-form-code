@@ -53,6 +53,10 @@ status: active
 
 ## Cross References
 
+<!---DEPENDENCIES-START--->
+<!---DEPENDENCIES-END--->
+
+<!---CHANGELOG-START--->
 ## Changelog
 
 <details markdown="1"> <summary><strong>View Changelog Details</strong></summary>
@@ -82,3 +86,4 @@ status: active
 
 </details>
 </details>
+<!---CHANGELOG-END--->

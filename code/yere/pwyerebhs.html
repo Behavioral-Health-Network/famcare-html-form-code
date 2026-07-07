@@ -46,13 +46,16 @@ function startup() {
     setrequire('su_intake_agency');
     setrequire('other_mh_intake_agency');
     setrequire('other_su_intake_agency');
-    setrequire('admitted_to_services');
-    setrequire('reason_not_admitted');
-    setrequire('reason_not_admitted_capacity');
-    setrequire('reason_not_admitted_ineligibility');
-    setrequire('reason_not_admitted_other');
-    setrequire('date_admitted_services');
-    setrequire('admitting_program_dmh_or_nondmh');
+    setrequire('mh_non_cmhc_agency');
+    setrequire('date_mh_intake');
+    setrequire('date_su_intake');
+    // setrequire('admitted_to_services');
+    // setrequire('reason_not_admitted');
+    // setrequire('reason_not_admitted_capacity');
+    // setrequire('reason_not_admitted_ineligibility');
+    // setrequire('reason_not_admitted_other');
+    // setrequire('date_admitted_services');
+    // setrequire('admitting_program_dmh_or_nondmh');
     setrequire('TiedEnrollment');
 
 	checkhideall();
@@ -71,17 +74,21 @@ function checkhideall() {
    checkhide(f.attend_bh_intake,"su_intake","Yes");
    checkhide(f.mh_intake,"mh_intake_agency","Yes");
    checkhide(f.su_intake,"su_intake_agency","Yes");
-   checkhide(f.mh_intake_agency,"other_mh_intake_agency","013");
+   // checkhide(f.mh_intake_agency,"other_mh_intake_agency","013");
+   checkhide(f.mh_intake_agency,"mh_non_cmhc_agency","013");
+   checkhide(f.mh_non_cmhc_agency,"other_mh_intake_agency","020");
    checkhide(f.su_intake_agency,"other_su_intake_agency","023");
+   checkhide(f.mh_intake,"date_mh_intake","Yes");
+   checkhide(f.su_intake,"date_su_intake","Yes");
    checkhide(f.mh_intake,"type_mh_intake","Yes");
-   checkhide(f.attend_bh_intake,"admitted_to_services","Yes");
-   checkhide(f.admitted_to_services,"reason_not_admitted","No");
-   checkhide(f.reason_not_admitted,"reason_not_admitted_capacity","Agency Capacity Limitations");
-   checkhide(f.reason_not_admitted,"reason_not_admitted_ineligibility","Ineligible");
-   checkhide(f.reason_not_admitted,"reason_not_admitted_other","Other");
-   checkhide(f.admitted_to_services,"date_admitted_services","Yes");
-   checkhide(f.admitted_to_services,"admitting_program_dmh_or_nondmh","Yes");
-   checkhide(f.admitted_to_services,"num_days_first_bh_service_since_date_admission","Yes");
+   // checkhide(f.attend_bh_intake,"admitted_to_services","Yes");
+   // checkhide(f.admitted_to_services,"reason_not_admitted","No");
+   // checkhide(f.reason_not_admitted,"reason_not_admitted_capacity","Agency Capacity Limitations");
+   // checkhide(f.reason_not_admitted,"reason_not_admitted_ineligibility","Ineligible");
+   // checkhide(f.reason_not_admitted,"reason_not_admitted_other","Other");
+   // checkhide(f.admitted_to_services,"date_admitted_services","Yes");
+   // checkhide(f.admitted_to_services,"admitting_program_dmh_or_nondmh","Yes");
+   // checkhide(f.admitted_to_services,"num_days_first_bh_service_since_date_admission","Yes");
 
 }
 
@@ -318,17 +325,21 @@ function validateform(scope='all') {
   if (!hiddenfield('attend_bh_intake') && gvtfieldvalue('attend_bh_intake')=='') {edesc=edesc+`Must specify a value for Was a behavioral health intake attended?\n`; seterror("attend_bh_intake");}
   if (!hiddenfield('mh_intake') && gvtfieldvalue('mh_intake')=='') {edesc=edesc+`Must specify a value for Mental Health\n`; seterror("mh_intake");}
   if (!hiddenfield('su_intake') && gvtfieldvalue('su_intake')=='') {edesc=edesc+`Must specify a value for Substance Use\n`; seterror("su_intake");}
+  if (gvtfieldvalue('attend_bh_intake')=='Yes' && gvtfieldvalue('mh_intake')=='No' && gvtfieldvalue('su_intake')=='No') {edesc=edesc+`Either the Mental Health or Substance Use question must be Yes, when the intake/admission question is Yes\n`; seterror("mh_intake"); seterror("su_intake");} // error if both questions are No and attend_bh_intake is yes
   if (!hiddenfield('mh_intake_agency') && gvtfieldvalue('mh_intake_agency')=='') {edesc=edesc+`Must specify a value for Where did Mental Health intake take place?\n`; seterror("mh_intake_agency");}
   if (!hiddenfield('su_intake_agency') && gvtfieldvalue('su_intake_agency')=='') {edesc=edesc+`Must specify a value for Where did Substance Use intake take place?\n`; seterror("su_intake_agency");}
   if (!hiddenfield('other_mh_intake_agency') && gvtfieldvalue('other_mh_intake_agency')=='') {edesc=edesc+`Must specify a value for Other Mental Health Intake Agency\n`; seterror("other_mh_intake_agency");}
   if (!hiddenfield('other_su_intake_agency') && gvtfieldvalue('other_su_intake_agency')=='') {edesc=edesc+`Must specify a value for Other Substance Use Intake Agency\n`; seterror("other_su_intake_agency");}
-  if (!hiddenfield('admitted_to_services') && gvtfieldvalue('admitted_to_services')=='') {edesc=edesc+`Must specify a value for Was youth admitted to services?\n`; seterror("admitted_to_services");}
-  if (!hiddenfield('reason_not_admitted') && gvtfieldvalue('reason_not_admitted')=='') {edesc=edesc+`Must specify a value for If youth was not admitted to services, indicate reason.\n`; seterror("reason_not_admitted");}
-  if (!hiddenfield('reason_not_admitted_capacity') && gvtfieldvalue('reason_not_admitted_capacity')=='') {edesc=edesc+`Must specify a value for If agency capacity limitations, please explain.\n`; seterror("reason_not_admitted_capacity");}
-  if (!hiddenfield('reason_not_admitted_ineligibility') && gvtfieldvalue('reason_not_admitted_ineligibility')=='') {edesc=edesc+`Must specify a value for If ineligible, please explain.\n`; seterror("reason_not_admitted_ineligibility");}
-  if (!hiddenfield('reason_not_admitted_other') && gvtfieldvalue('reason_not_admitted_other')=='') {edesc=edesc+`Must specify a value for If other reason youth was not admitted to services, please specify.\n`; seterror("reason_not_admitted_other");}
-  if (!hiddenfield('date_admitted_services') && gvtfieldvalue('date_admitted_services')=='') {edesc=edesc+`Must specify a value for Date Admitted to Services\n`; seterror("date_admitted_services");}
-  if (!hiddenfield('admitting_program_dmh_or_nondmh') && gvtfieldvalue('admitting_program_dmh_or_nondmh')=='') {edesc=edesc+`Must specify a value for Select DMH or Non-DMH\n`; seterror("admitting_program_dmh_or_nondmh");}
+  if (!hiddenfield('mh_non_cmhc_agency') && gvtfieldvalue('mh_non_cmhc_agency')=='') {edesc=edesc+`Must specify a value for non-CMHC Agency\n`; seterror("mh_non_cmhc_agency");}
+  if (!hiddenfield('date_mh_intake') && gvtfieldvalue('date_mh_intake')=='') {edesc=edesc+`Must specify a value for Date of Mental Health Intake and/or Admission\n`; seterror("date_mh_intake");}
+  if (!hiddenfield('date_su_intake') && gvtfieldvalue('date_su_intake')=='') {edesc=edesc+`Must specify a value for Date of Substance Use Intake and/or Admission\n`; seterror("date_su_intake");}
+  // if (!hiddenfield('admitted_to_services') && gvtfieldvalue('admitted_to_services')=='') {edesc=edesc+`Must specify a value for Was youth admitted to services?\n`; seterror("admitted_to_services");}
+  // if (!hiddenfield('reason_not_admitted') && gvtfieldvalue('reason_not_admitted')=='') {edesc=edesc+`Must specify a value for If youth was not admitted to services, indicate reason.\n`; seterror("reason_not_admitted");}
+  // if (!hiddenfield('reason_not_admitted_capacity') && gvtfieldvalue('reason_not_admitted_capacity')=='') {edesc=edesc+`Must specify a value for If agency capacity limitations, please explain.\n`; seterror("reason_not_admitted_capacity");}
+  // if (!hiddenfield('reason_not_admitted_ineligibility') && gvtfieldvalue('reason_not_admitted_ineligibility')=='') {edesc=edesc+`Must specify a value for If ineligible, please explain.\n`; seterror("reason_not_admitted_ineligibility");}
+  // if (!hiddenfield('reason_not_admitted_other') && gvtfieldvalue('reason_not_admitted_other')=='') {edesc=edesc+`Must specify a value for If other reason youth was not admitted to services, please specify.\n`; seterror("reason_not_admitted_other");}
+  // if (!hiddenfield('date_admitted_services') && gvtfieldvalue('date_admitted_services')=='') {edesc=edesc+`Must specify a value for Date Admitted to Services\n`; seterror("date_admitted_services");}
+  // if (!hiddenfield('admitting_program_dmh_or_nondmh') && gvtfieldvalue('admitting_program_dmh_or_nondmh')=='') {edesc=edesc+`Must specify a value for Select DMH or Non-DMH\n`; seterror("admitting_program_dmh_or_nondmh");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
@@ -582,12 +593,12 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Intake</div>
+<div class="col12 term">Intake / Admission</div>
 </div>
 <div class="entire">
 </div>
   <div class="entire">
-    <div class="col4"><label class="label-top">Only complete this form if client is attending an intake or being admitted to services.
+    <div class="col6"><label class="label-top">Only complete this form for Behavioral Health, Mental Health, or Substance Use services.
 </label></div>
     <div class="col4"><label class="label-top"></label></div>
   <!-- Commented out bhs_service_path and open_cmhc_and_reconnected fields since we are switching to only use the BHS form for intakes and admissions. Reconnects will be completed on ProviderPlacement as a dismissal reason. -->
@@ -606,17 +617,14 @@ function updatesignatures(){
 </div>
  <div class="entire">
     <div class="col6 qattend_bh_intake">
-    <div class="col6 fldattend_bh_intake qattend_bh_intake"><span class="qattend_bh_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_bh_intake required-field-label"><label class="label-top">||FIELDTAG attend_bh_intake||Was a behavioral health intake attended?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake"><input type="radio" name="attend_bh_intake" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 fldattend_bh_intake qattend_bh_intake"><span class="qattend_bh_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qattend_bh_intake required-field-label"><label class="label-top">||FIELDTAG attend_bh_intake||Did Youth Complete An Intake And/Or Was Admitted To Behavioral Health Services?||ENDFIELDTAG||</label></span><span class="qattend_bh_intake"><input type="radio" name="attend_bh_intake" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_bh_intake" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
   <div class="entire">
     </div>
-    <div class="col6 qnum_days_bh_intake_since_ia">
-    <div class="col6 fldnum_days_bh_intake_since_ia qnum_days_bh_intake_since_ia"><span class="qnum_days_bh_intake_since_ia"><label class="label-top">||FIELDTAG num_days_bh_intake_since_ia||How many days was behavioral health intake from date of initial contact?||ENDFIELDTAG||</label></span><span class="qnum_days_bh_intake_since_ia"><input type="radio" name="num_days_bh_intake_since_ia" value="0 - 7 Days" onclick="checkhideall()" >0 - 7 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="8 - 14 Days" onclick="checkhideall()" >8 - 14 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="15 - 30 Days" onclick="checkhideall()" >15 - 30 Days<br><input type="radio" name="num_days_bh_intake_since_ia" value="31 Or More Days" onclick="checkhideall()" >31 Or More Days</span></div>
-     </div>
   </div>
  <div class="entire">
-    <div class="col6"><label class="label-top">If youth attended an intake, YES must be selected for either Mental Health, Substance Use or both.</label></div>
+    <div class="col6"><label class="label-top">If youth attended an intake and/or was admitted, YES must be selected for either Mental Health, Substance Use or both.</label></div>
   </div>
 <div class="entire">
 </div>
@@ -630,34 +638,55 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col6 qmh_intake_agency">
-    <div class="col6 fldmh_intake_agency qmh_intake_agency"><span class="qmh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_intake_agency required-field-label"><label class="label-top">Where did Mental Health intake take place?</label></span><span class="qmh_intake_agency"><select size="1" name="mh_intake_agency" onchange="checkhideall()">
+    <div class="col6 fldmh_intake_agency qmh_intake_agency"><span class="qmh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_intake_agency required-field-label"><label class="label-top">Where Did Mental Health Intake And/Or Admission Take Place?</label></span><span class="qmh_intake_agency"><select size="1" name="mh_intake_agency" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [cmhc_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_intake_agency^^') and program_name='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE cmhc_agency||
 </span></div>
      </div>
     <div class="col6 qsu_intake_agency">
-    <div class="col6 fldsu_intake_agency qsu_intake_agency"><span class="qsu_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_intake_agency required-field-label"><label class="label-top">Where did Substance Use intake take place?</label></span><span class="qsu_intake_agency"><select size="1" name="su_intake_agency" onchange="checkhideall()">
+    <div class="col6 fldsu_intake_agency qsu_intake_agency"><span class="qsu_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_intake_agency required-field-label"><label class="label-top">Where Did Substance Use Intake And/Or Admission Take Place?</label></span><span class="qsu_intake_agency"><select size="1" name="su_intake_agency" onchange="checkhideall()">
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ada_su_agency] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_intake_agency^^') and program_name='YERE' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE ada_su_agency||
 </span></div>
      </div>
   </div>
- <div class="entire">
+  <div class="entire">
+    <div id="_gvtnon_cmhc_agency" class="col6 qmh_non_cmhc_agency">
+    <div class="col6 fldmh_non_cmhc_agency qmh_non_cmhc_agency"><span class="qmh_non_cmhc_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_non_cmhc_agency required-field-label"><label class="label-top">Did Mental Health Intake And/Or Admission Take Place At A Non-CMHC Agency (If Not, Then Select Other Agency)?</label></span><span class="qmh_non_cmhc_agency"><select size="1" name="mh_non_cmhc_agency" onchange="checkhideall()">
+<option value="||SELECT CMHC.CODE, CMHC.DESCRIPTION + ' (' + CMHC.CODE + ')' AS [DISPLAYVALUE] FROM NON_CMHC_AGENCY_BASE AS [CMHC] INNER JOIN PROVIDER AS [P] ON P.DOCREVNO = ' 0 ' AND CMHC.STATUSDESC = 'Active' AND CMHC.DOCREVNO = ' 0 ' AND (CMHC.PROVIDERLIST LIKE '%|' + P.PROVIDERCODE+ '|%' or Code='^^FIELDVALUE non_cmhc_agency^^')  WHERE P.PROVIDERNAME= 'YERE - Youth Emergency Room Enhancement' ORDER BY CMHC.DESCRIPTION;||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE non_cmhc_agency||
+</span></div>
+     </div>
+  </div>
+  <div class="entire">
     <div class="col6 qother_mh_intake_agency">
-    <div class="col6 fldother_mh_intake_agency qother_mh_intake_agency"><span class="qother_mh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qother_mh_intake_agency required-field-label"><label class="label-top">||FIELDTAG other_mh_intake_agency||Other Mental Health Intake Agency||ENDFIELDTAG||</label></span><span class="qother_mh_intake_agency"><input type="text" name="other_mh_intake_agency" size="20" onchange="checkhideall()"></span></div>
+    <div class="col6 fldother_mh_intake_agency qother_mh_intake_agency"><span class="qother_mh_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qother_mh_intake_agency required-field-label"><label class="label-top">||FIELDTAG other_mh_intake_agency||Other Mental Health Agency||ENDFIELDTAG||</label></span><span class="qother_mh_intake_agency"><input type="text" name="other_mh_intake_agency" size="20" onchange="checkhideall()"></span></div>
      </div>
     <div class="col6 qother_su_intake_agency">
-    <div class="col6 fldother_su_intake_agency qother_su_intake_agency"><span class="qother_su_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qother_su_intake_agency required-field-label"><label class="label-top">||FIELDTAG other_su_intake_agency||Other Substance Use Intake Agency||ENDFIELDTAG||</label></span><span class="qother_su_intake_agency"><input type="text" name="other_su_intake_agency" size="20" onchange="checkhideall()"></span></div>
+    <div class="col6 fldother_su_intake_agency qother_su_intake_agency"><span class="qother_su_intake_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qother_su_intake_agency required-field-label"><label class="label-top">||FIELDTAG other_su_intake_agency||Other Substance Use Agency||ENDFIELDTAG||</label></span><span class="qother_su_intake_agency"><input type="text" name="other_su_intake_agency" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+<div class="entire">
+  <div class="col6 qdate_mh_intake">
+    <div class="col6 flddate_mh_intake qdate_mh_intake"><span class="qdate_mh_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_mh_intake required-field-label"><label class="label-top">||FIELDTAG date_mh_intake||Date Of Mental Health Intake And/Or Admission||ENDFIELDTAG||</label></span><span class="qdate_mh_intake"><input type="text" name="date_mh_intake" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+     </div>
+  <div class="col6 qdate_su_intake">
+    <div class="col6 flddate_su_intake qdate_su_intake"><span class="qdate_su_intake required-label">||PWRequiredFieldRequiredText||</span><span class="qdate_su_intake required-field-label"><label class="label-top">||FIELDTAG date_su_intake||Date Of Substance Use Intake And/Or Admission||ENDFIELDTAG||</label></span><span class="qdate_su_intake"><input type="text" name="date_su_intake" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col6 qtype_mh_intake">
-    <div class="col6 fldtype_mh_intake qtype_mh_intake"><span class="qtype_mh_intake"><label class="label-top">||FIELDTAG type_mh_intake||Type of Mental Health Intake||ENDFIELDTAG||</label></span><span class="qtype_mh_intake"><input type="checkbox" name="type_mh_intake_therapy" value="Therapy" onclick="checkhideall()">Therapy<br><input type="checkbox" name="type_mh_intake_case_mgmt" value="Case Management" onclick="checkhideall()">Case Management<br><input type="checkbox" name="type_mh_intake_psychiatry" value="Psychiatry" onclick="checkhideall()">Psychiatry
+    <div class="col6 fldtype_mh_intake qtype_mh_intake"><span class="qtype_mh_intake"><label class="label-top">||FIELDTAG type_mh_intake||Type Of Mental Health Intake||ENDFIELDTAG||</label></span><span class="qtype_mh_intake">
+      <input type="checkbox" name="type_mh_intake_therapy" value="Therapy" onclick="checkhideall()">Therapy<br>
+      <input type="checkbox" name="type_mh_intake_case_mgmt" value="Case Management" onclick="checkhideall()">Case Management<br>
+      <input type="checkbox" name="type_mh_intake_psychiatry" value="Psychiatry" onclick="checkhideall()">Psychiatry
 <!-- FIELDOVERRIDE(type_mh_intake,10,250) -->
 </span></div>
      </div>
     <div class="col6"><label class="label-top"></label></div>
   </div>
+
+<!-- Taking out the admission section
 <div class="entire">
 <div class="col12 term">Admission Status</div>
 </div>
@@ -711,6 +740,7 @@ function updatesignatures(){
     <div class="col4 fldnum_days_first_bh_service_since_date_admission qnum_days_first_bh_service_since_date_admission"><span class="qnum_days_first_bh_service_since_date_admission"><label class="label-top">||FIELDTAG num_days_first_bh_service_since_date_admission||How many days was behavioral health intake from date of admission?||ENDFIELDTAG||</label></span><span class="qnum_days_first_bh_service_since_date_admission"><input type="radio" name="num_days_first_bh_service_since_date_admission" value="0 - 7 Days" onclick="checkhideall()" >0 - 7 Days<br><input type="radio" name="num_days_first_bh_service_since_date_admission" value="8 - 14 Days" onclick="checkhideall()" >8 - 14 Days<br><input type="radio" name="num_days_first_bh_service_since_date_admission" value="15 - 30 Days" onclick="checkhideall()" >15 - 30 Days<br><input type="radio" name="num_days_first_bh_service_since_date_admission" value="31 Or More Days" onclick="checkhideall()" >31 Or More Days</span></div>
      </div>
   </div>
+-->
 
 </div>
 </div>

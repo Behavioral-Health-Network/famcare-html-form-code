@@ -181,6 +181,11 @@ function startup() {
     // setrequire('contact_result_ppc_ihna');
     setrequire('still_engaged_ihna');
     setrequire('ineligible_reason_ihna');
+    setrequire('completion_helper_ihna');
+    setrequire('other_completion_helper_ihna');
+    setrequire('method_of_contact_ihna');
+    setrequire('method_of_contact_other_ihna');
+    setrequire('military_status_ihna');
     setrequire('employment_status_ihna');
     setrequire('probation_parole_ihna');
     setrequire('mh_history');
@@ -222,6 +227,8 @@ function startup() {
 function checkhideall() {
    f=document.forms[0];
       checkhide(f.still_engaged_ihna,"ineligible_reason_ihna","No");
+      checkhide(f.completion_helper_ihna,"other_completion_helper_ihna","Other");
+      checkhide(f.method_of_contact_ihna,"method_of_contact_other_ihna","Other");
       checkhide(f.probation_parole_ihna,"specify_probation_parole_ihna","Yes");
 
 }
@@ -457,6 +464,11 @@ function validateform(scope='all') {
   // if (!hiddenfield('contact_result_ppc_ihna') && gvtfieldvalue('contact_result_ppc_ihna')=='') {edesc=edesc+`Must specify a value for Was this contact a direct result of an alert message from PointClickCare?\n`; seterror("contact_result_ppc_ihna");}
   if (!hiddenfield('still_engaged_ihna') && gvtfieldvalue('still_engaged_ihna')=='') {edesc=edesc+`Must specify a value for Is individual still actively engaged in ERE services?\n`; seterror("still_engaged_ihna");}
   if (!hiddenfield('ineligible_reason_ihna') && gvtfieldvalue('ineligible_reason_ihna')=='') {edesc=edesc+`Must specify a value for Reason Not Engaged\n`; seterror("ineligible_reason_ihna");}
+  if (!hiddenfield('completion_helper_ihna') && gvtfieldvalue('completion_helper_ihna')=='') {edesc=edesc+`Must specify a value for Who Helped Complete This Form?\n`; seterror("completion_helper_ihna");}
+  if (!hiddenfield('other_completion_helper_ihna') && gvtfieldvalue('other_completion_helper_ihna')=='') {edesc=edesc+`Must specify a value for Other - Who Helped Complete This Form?\n`; seterror("other_completion_helper_ihna");}
+  if (!hiddenfield('method_of_contact_ihna') && gvtfieldvalue('method_of_contact_ihna')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_of_contact_ihna");}
+  if (!hiddenfield('method_of_contact_other_ihna') && gvtfieldvalue('method_of_contact_other_ihna')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_of_contact_other_ihna");}
+  if (!hiddenfield('military_status_ihna') && gvtfieldvalue('military_status_ihna')=='') {edesc=edesc+`Must specify a value for Military Status\n`; seterror("military_status_ihna");}
   if (!hiddenfield('employment_status_ihna') && gvtfieldvalue('employment_status_ihna')=='') {edesc=edesc+`Must specify a value for Employment Status\n`; seterror("employment_status_ihna");}
   if (!hiddenfield('probation_parole_ihna') && gvtfieldvalue('probation_parole_ihna')=='') {edesc=edesc+`Must specify a value for Is individual currently on probation or parole?\n`; seterror("probation_parole_ihna");}
   if (!hiddenfield('mh_history') && gvtfieldvalue('mh_history')=='') {edesc=edesc+`Must specify a value for Mental Health History\n`; seterror("mh_history");}
@@ -721,6 +733,7 @@ function updatesignatures(){
   });
 }
 
+
 </script>
 
 <script language="VBScript">
@@ -769,6 +782,8 @@ function updatesignatures(){
     <input type="hidden" name="mh_hx_other" value="||FIELDVALUE mh_hx_other||" class="report-field value-018" data-source="ere_mental_health_history">
     <input type="hidden" name="mh_hx_unknown_refused" value="||FIELDVALUE mh_hx_unknown_refused||" class="report-field value-019" data-source="ere_mental_health_history">
     <input type="hidden" name="mh_hx_none" value="||FIELDVALUE mh_hx_none||" class="report-field value-020" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_nonsuicide_selfharm" value="||FIELDVALUE mh_hx_none||" class="report-field value-021" data-source="ere_mental_health_history">
+    <input type="hidden" name="mh_hx_suicide_ideation_attempt" value="||FIELDVALUE mh_hx_none||" class="report-field value-022" data-source="ere_mental_health_history">
     <input type="hidden" name="su_hx_alcohol" value="||FIELDVALUE su_hx_alcohol||" class="report-field value-001" data-source="ere_substance_use_history">
     <input type="hidden" name="su_hx_cocaine" value="||FIELDVALUE su_hx_cocaine||" class="report-field value-002" data-source="ere_substance_use_history">
     <input type="hidden" name="su_hx_hallucinogens" value="||FIELDVALUE su_hx_hallucinogens||" class="report-field value-003" data-source="ere_substance_use_history">
@@ -854,6 +869,34 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col12 fldcompletion_helper_ihna qcompletion_helper_ihna">
+    <div class="col12 fldcompletion_helper_ihna qcompletion_helper_ihna"><span class="qcompletion_helper_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qcompletion_helper_ihna required-field-label"><label class="label-top">||FIELDTAG completion_helper_ihna||Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qcompletion_helper_ihna">
+      <input type="radio" name="completion_helper_ihna" value="Client Enrolled In ERE" onclick="checkhideall()" >Client Enrolled In ERE<br>
+      <input type="radio" name="completion_helper_ihna" value="Parent/Legal Guardian" onclick="checkhideall()" >Parent/Legal Guardian<br>
+      <input type="radio" name="completion_helper_ihna" value="Member Of BH Care Team" onclick="checkhideall()" >Member Of BH Care Team<br>
+      <input type="radio" name="completion_helper_ihna" value="Completed Using Chart Review" onclick="checkhideall()" >Completed Using Chart Review<br>
+      <input type="radio" name="completion_helper_ihna" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6 qother_completion_helper_ihna">
+    <div class="col6 fldother_completion_helper_ihna qother_completion_helper_ihna"><span class="qother_completion_helper_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qother_completion_helper_ihna required-field-label"><label class="label-top">||FIELDTAG other_completion_helper_ihna||Other - Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qother_completion_helper_ihna"><input type="text" name="other_completion_helper_ihna" size="50" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldmethod_of_contact_ihna qmethod_of_contact_ihna">
+    <div class="col12 fldmethod_of_contact_ihna qmethod_of_contact_ihna"><span class="qmethod_of_contact_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_of_contact_ihna required-field-label"><label class="label-top">||FIELDTAG method_of_contact_ihna||Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_of_contact_ihna">
+      <input type="radio" name="method_of_contact_ihna" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br>
+      <input type="radio" name="method_of_contact_ihna" value="By Phone" onclick="checkhideall()" >By Phone<br>
+      <input type="radio" name="method_of_contact_ihna" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+  </div>
+  <div class="col6 qmethod_of_contact_other_ihna">
+    <div class="col6 fldmethod_of_contact_other_ihna qmethod_of_contact_other_ihna"><span class="qmethod_of_contact_other_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_of_contact_other_ihna required-field-label"><label class="label-top">||FIELDTAG method_of_contact_ihna||Other Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_of_contact_other_ihna"><input type="text" name="method_of_contact_other_ihna" size="50" onchange="checkhideall()"></span></div>
+     </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -874,6 +917,18 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWPayorSource||</div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldmilitary_status_ihna qmilitary_status_ihna">
+    <div class="col12 fldmilitary_status_ihna qmilitary_status_ihna"><span class="qmilitary_status_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qmilitary_status_ihna required-field-label"><label class="label-top">||FIELDTAG military_status_ihna||Military Status||ENDFIELDTAG||</label></span><span class="qmilitary_status_ihna"><select size="1"  name="military_status_ihna" onchange="checkhideall()" >
+<option value="">(please select)</option>
+<option value="Currently Serving In The National Guard">Currently Serving In The National Guard</option>
+<option value="Currently Serving On Active Duty">Currently Serving On Active Duty</option>
+<option value="Never Served">Never Served</option>
+<option value="Veteran Or Prior Military Service">Veteran Or Prior Military Service</option>
+<option value="Unknown">Unknown</option>
+</select></span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>

@@ -130,7 +130,6 @@ function startup() {
 		}
 	}
             setrequire('Pathway_Date');
-    setrequire('client_status_hvn');
     setrequire('yere_visit_hosp');
     setrequire('hosp_ftf');
     setrequire('other_ftf');
@@ -401,7 +400,6 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
-  if (!hiddenfield('client_status_hvn') && gvtfieldvalue('client_status_hvn')=='') {edesc=edesc+`Must specify a value for Client Status\n`; seterror("client_status_hvn");}
   if (!hiddenfield('yere_visit_hosp') && gvtfieldvalue('yere_visit_hosp')=='') {edesc=edesc+`Must specify a value for Did YERE visit the hospital?\n`; seterror("yere_visit_hosp");}
   if (!hiddenfield('hosp_ftf') && gvtfieldvalue('hosp_ftf')=='') {edesc=edesc+`Must specify a value for Who did staff meet face-to-face with?\n`; seterror("hosp_ftf");}
   if (!hiddenfield('other_ftf') && gvtfieldvalue('other_ftf')=='') {edesc=edesc+`Must specify a value for Other\n`; seterror("other_ftf");}
@@ -728,11 +726,6 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldclient_status_hvn qclient_status_hvn">
-    <div class="col12 fldclient_status_hvn qclient_status_hvn"><span class="qclient_status_hvn required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_status_hvn required-field-label"><label class="label-top">||FIELDTAG client_status_hvn||Client Status||ENDFIELDTAG||</label></span><span class="qclient_status_hvn"><input type="radio" name="client_status_hvn" value="Engaged" onclick="checkhideall()" >Engaged&nbsp;&nbsp;<input type="radio" name="client_status_hvn" value="Outreach" onclick="checkhideall()" >Outreach&nbsp;&nbsp;</span></div>
-     </div>
-  </div>
- <div class="entire">
     <div class="col12 fldyere_visit_hosp qyere_visit_hosp">
     <div class="col12 fldyere_visit_hosp qyere_visit_hosp"><span class="qyere_visit_hosp required-label">||PWRequiredFieldRequiredText||</span><span class="qyere_visit_hosp required-field-label"><label class="label-top">||FIELDTAG yere_visit_hosp||Did YERE visit the hospital?||ENDFIELDTAG||</label></span><span class="qyere_visit_hosp"><input type="radio" name="yere_visit_hosp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="yere_visit_hosp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
@@ -756,11 +749,15 @@ function updatesignatures(){
     <div class="col12 fldno_hosp_visit_reason qno_hosp_visit_reason">
     <div class="col12 fldno_hosp_visit_reason qno_hosp_visit_reason"><span class="qno_hosp_visit_reason required-label">||PWRequiredFieldRequiredText||</span><span class="qno_hosp_visit_reason required-field-label"><label class="label-top">||FIELDTAG no_hosp_visit_reason||Why not?||ENDFIELDTAG||</label></span><span class="qno_hosp_visit_reason"><select size="1"  name="no_hosp_visit_reason" onchange="checkhideall()" >
 <option value="">(please select)</option>
-<option value="Referral Received At Or Too Close To The Time Of Discharge">Referral Received At Or Too Close To The Time Of Discharge</option>
-<option value="Referral Was Received After Hours Or Youth Was Discharged By The Next Business Day">Referral Was Received After Hours Or Youth Was Discharged By The Next Business Day</option>
-<option value="Hospital Staff Indicated Visit Was Not Recommended">Hospital Staff Indicated Visit Was Not Recommended</option>
+<option value="Referral Received Within 30 Minutes Of Discharge">Referral Received Within 30 Minutes Of Discharge</option>
+<option value="Referral Received Outside Of Program Business Hours">Referral Received Outside Of Program Business Hours</option>
+<option value="OW Went To The Hospital, But Youth Had Already Been Discharged">OW Went To The Hospital, But Youth Had Already Been Discharged</option>
+<option value="Tried To Meet With Youth, But They Were Unable To Engage (Medicated, Psychosis, Unavailable)">Tried To Meet With Youth, But They Were Unable To Engage (Medicated, Psychosis, Unavailable)</option>
 <option value="Referral Originally Considered Ineligible">Referral Originally Considered Ineligible</option>
-<option value="Staff Out Of Office Or Unable To Schedule A Visit">Staff Out Of Office Or Unable To Schedule A Visit</option>
+<option value="Hospital Staff Indicated A Visit Was Not Recommended">Hospital Staff Indicated A Visit Was Not Recommended</option>
+<option value="OW On PTO/Leave">OW On PTO/Leave</option>
+<option value="Outreaching Another Youth">Outreaching Another Youth</option>
+<option value="OW Unable To Respond To Referral In-Person, But Scheduled To Meet With Youth In-Person Within 48 hours Of Referral">OW Unable To Respond To Referral In-Person, But Scheduled To Meet With Youth In-Person Within 48 hours Of Referral</option>
 <option value="Other ">Other </option>
 
 </select>

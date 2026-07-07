@@ -296,6 +296,7 @@ function validateform(scope='all') {
   if (!hiddenfield('su_admission') && gvtfieldvalue('su_admission')=='') {edesc=edesc+`Must specify a value for Substance Use Admission\n`; seterror("su_admission");}
   if (!hiddenfield('su_admission_agency') && gvtfieldvalue('su_admission_agency')=='') {edesc=edesc+`Must specify a value for Where did substance use admission take place?\n`; seterror("su_admission_agency");}
   if (!hiddenfield('su_admission_date') && gvtfieldvalue('su_admission_date')=='') {edesc=edesc+`Must specify a value for Date Admitted to Substance Use Services\n`; seterror("su_admission_date");}
+  if (gvtfieldvalue('admitted_to_services')=='Yes' && gvtfieldvalue('bh_admission')=='No' && gvtfieldvalue('su_admission')=='No') {edesc=edesc+`Either the Behavioral Health or Substance Use question must be Yes, when the admission question is Yes\n`; seterror("bh_admission"); seterror("su_admission");} // error if both questions are No and admitted_to_services is yes
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }

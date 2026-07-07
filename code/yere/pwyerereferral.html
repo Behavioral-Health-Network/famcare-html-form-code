@@ -39,6 +39,7 @@ function startup() {
     setrequire('answerfirst_case_num');
 $("#gvttimetime_of_call_ref").timepicker({  'step':1, 'scrollDefault': 'now'});
     setrequire('time_of_call_ref');
+    setrequire('callers_first_last_name');
     setrequire('transfer_from_epicc');
     setrequire('yere_referring_hospital');
     setrequire('other_referral_source');
@@ -306,6 +307,7 @@ function validateform(scope='all') {
      if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
   if (!hiddenfield('answerfirst_case_num') && gvtfieldvalue('answerfirst_case_num')=='') {edesc=edesc+`Must specify a value for AnswerFirst Case Number\n`; seterror("answerfirst_case_num");}
   if (!hiddenfield('time_of_call_ref') && gvtfieldvalue('time_of_call_ref')=='') {edesc=edesc+`Must specify a value for Time of Call \n`; seterror("time_of_call_ref");}
+  if (!hiddenfield('callers_first_last_name') && gvtfieldvalue('callers_first_last_name')=='') {edesc=edesc+`Must specify a value for Caller's First and Last Name\n`; seterror("callers_first_last_name");}
   if (!hiddenfield('transfer_from_epicc') && gvtfieldvalue('transfer_from_epicc')=='') {edesc=edesc+`Must specify a value for Transfer from EPICC\n`; seterror("transfer_from_epicc");}
   if (!hiddenfield('yere_referring_hospital') && gvtfieldvalue('yere_referring_hospital')=='') {edesc=edesc+`Must specify a value for Referring Organization\n`; seterror("yere_referring_hospital");}
   if (!hiddenfield('other_referral_source') && gvtfieldvalue('other_referral_source')=='') {edesc=edesc+`Must specify a value for Other Youth ERE Referral Source\n`; seterror("other_referral_source");}
@@ -617,11 +619,13 @@ function updatesignatures(){
     <div class="col12 fldcallers_first_last_name qcallers_first_last_name"><span class="qcallers_first_last_name"><label class="label-top">||FIELDTAG callers_first_last_name||Caller's First and Last Name||ENDFIELDTAG||</label></span><span class="qcallers_first_last_name"><input type="text" name="callers_first_last_name" size="50" onchange="checkhideall()"></span></div>
      </div>
   </div>
+  <!-- 
  <div class="entire">
     <div class="col12 fldcallers_direct_phone_number qcallers_direct_phone_number">
     <div class="col12 fldcallers_direct_phone_number qcallers_direct_phone_number"><span class="qcallers_direct_phone_number"><label class="label-top">||FIELDTAG callers_direct_phone_number||Caller's Direct Phone Number||ENDFIELDTAG||</label></span><span class="qcallers_direct_phone_number"><input type="text" name="callers_direct_phone_number" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
+  -->
  <div class="entire">
     <div class="col12 fldtransfer_from_epicc qtransfer_from_epicc">
     <div class="col12 fldtransfer_from_epicc qtransfer_from_epicc"><span class="qtransfer_from_epicc required-label">||PWRequiredFieldRequiredText||</span><span class="qtransfer_from_epicc required-field-label"><label class="label-top">||FIELDTAG transfer_from_epicc||Transfer from EPICC||ENDFIELDTAG||</label></span><span class="qtransfer_from_epicc"><input type="radio" name="transfer_from_epicc" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="transfer_from_epicc" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
@@ -682,7 +686,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col6 qprimary_reason_referral">
-    <div class="col6 fldprimary_reason_referral qprimary_reason_referral"><span class="qprimary_reason_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qprimary_reason_referral required-field-label"><label class="label-top">||FIELDTAG primary_reason_referral||Primary Reason for Referral||ENDFIELDTAG||</label></span><span class="qprimary_reason_referral"><select size="1"  name="primary_reason_referral" onchange="checkhideall()" >
+    <div class="col6 fldprimary_reason_referral qprimary_reason_referral"><span class="qprimary_reason_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qprimary_reason_referral required-field-label"><label class="label-top">||FIELDTAG primary_reason_referral||Primary Reason For Referral||ENDFIELDTAG||</label></span><span class="qprimary_reason_referral"><select size="1"  name="primary_reason_referral" onchange="checkhideall()" >
 <option value="">(please select)</option>
 <option value="Risk Of Harm To Self">Risk Of Harm To Self</option>
 <option value="Risk Of Harm To Others (Homicidal Thoughts/Threats; Aggressive Behavior)">Risk Of Harm To Others (Homicidal Thoughts/Threats; Aggressive Behavior)</option>

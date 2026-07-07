@@ -130,9 +130,9 @@ function startup() {
 		}
 	}
             setrequire('pathway_date');
-    setrequire('name_of_person_providing_response');
-    setrequire('relationship_of_respondent_to_client');
     setrequire('actively_engaged_bh_services_six_month');
+    setrequire('completion_helper_six_month');
+    setrequire('other_completion_helper_six_month');
     setrequire('method_contact_six_month');
     setrequire('other_contact_method_six_month');
     setrequire('residency_change_since_referral_six_month');
@@ -179,7 +179,8 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.method_contact_six_month,"other_contact_method_six_month","Other");
+      checkhide(f.completion_helper_six_month,"other_completion_helper_six_month","Other");
+   checkhide(f.method_contact_six_month,"other_contact_method_six_month","Other");
    checkhide(f.residency_change_since_referral_six_month,"residency_change_type_six_month","Yes");
    checkhide(f.residency_change_type_six_month,"specify_other_residency_change_type_six_month","Other");
    checkhide(f.involved_jj_system_past_three_months_six_month,"djo_dys_sro_involvement_six_month","Yes");
@@ -421,9 +422,9 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
-  if (!hiddenfield('name_of_person_providing_response') && gvtfieldvalue('name_of_person_providing_response')=='') {edesc=edesc+`Must specify a value for Full Name of Person Providing Responses to Team Member\n`; seterror("name_of_person_providing_response");}
-  if (!hiddenfield('relationship_of_respondent_to_client') && gvtfieldvalue('relationship_of_respondent_to_client')=='') {edesc=edesc+`Must specify a value for Relationship of Respondent\n`; seterror("relationship_of_respondent_to_client");}
   if (!hiddenfield('actively_engaged_bh_services_six_month') && gvtfieldvalue('actively_engaged_bh_services_six_month')=='') {edesc=edesc+`Must specify a value for Is client actively engaged in  behavioral services? \n`; seterror("actively_engaged_bh_services_six_month");}
+  if (!hiddenfield('completion_helper_six_month') && gvtfieldvalue('completion_helper_six_month')=='') {edesc=edesc+`Must specify a value for Who helped complete this form?\n`; seterror("completion_helper_six_month");}
+  if (!hiddenfield('other_completion_helper_six_month') && gvtfieldvalue('other_completion_helper_six_month')=='') {edesc=edesc+`Must specify a value for Other - Who helped complete this form?\n`; seterror("other_completion_helper_six_month");}
   if (!hiddenfield('method_contact_six_month') && gvtfieldvalue('method_contact_six_month')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_contact_six_month");}
   if (!hiddenfield('other_contact_method_six_month') && gvtfieldvalue('other_contact_method_six_month')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_six_month");}
   if (!hiddenfield('residency_change_since_referral_six_month') && gvtfieldvalue('residency_change_since_referral_six_month')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral? \n`; seterror("residency_change_since_referral_six_month");}
@@ -762,27 +763,38 @@ function updatesignatures(){
   </div>
 <div class="entire">
 </div>
- <div class="entire">
-    <div class="col12 fldname_of_person_providing_response qname_of_person_providing_response">
-    <div class="col12 fldname_of_person_providing_response qname_of_person_providing_response"><span class="qname_of_person_providing_response required-label">||PWRequiredFieldRequiredText||</span><span class="qname_of_person_providing_response required-field-label"><label class="label-top">||FIELDTAG name_of_person_providing_response||Full Name of Person Providing Responses to Team Member||ENDFIELDTAG||</label></span><span class="qname_of_person_providing_response"><input type="text" name="name_of_person_providing_response" size="50" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12 fldrelationship_of_respondent_to_client qrelationship_of_respondent_to_client">
-    <div class="col12 fldrelationship_of_respondent_to_client qrelationship_of_respondent_to_client"><span class="qrelationship_of_respondent_to_client required-label">||PWRequiredFieldRequiredText||</span><span class="qrelationship_of_respondent_to_client required-field-label"><label class="label-top">||FIELDTAG relationship_of_respondent_to_client||Relationship of Respondent||ENDFIELDTAG||</label></span><span class="qrelationship_of_respondent_to_client"><input type="text" name="relationship_of_respondent_to_client" size="50" onchange="checkhideall()"></span></div>
-     </div>
-  </div>
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col4 qactively_engaged_bh_services_six_month">
-    <div class="col4 fldactively_engaged_bh_services_six_month qactively_engaged_bh_services_six_month"><span class="qactively_engaged_bh_services_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qactively_engaged_bh_services_six_month required-field-label"><label class="label-top">||FIELDTAG actively_engaged_bh_services_six_month||Is client actively engaged in  behavioral services? ||ENDFIELDTAG||</label></span><span class="qactively_engaged_bh_services_six_month"><input type="radio" name="actively_engaged_bh_services_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="actively_engaged_bh_services_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 qactively_engaged_bh_services_six_month">
+    <div class="col12 fldactively_engaged_bh_services_six_month qactively_engaged_bh_services_six_month"><span class="qactively_engaged_bh_services_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qactively_engaged_bh_services_six_month required-field-label"><label class="label-top">||FIELDTAG actively_engaged_bh_services_six_month||Is Youth Regularly Keeping Case Management, Therapy, And/Or Psychiatry Appointments?||ENDFIELDTAG||</label></span><span class="qactively_engaged_bh_services_six_month"><input type="radio" name="actively_engaged_bh_services_six_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="actively_engaged_bh_services_six_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col4 qmethod_contact_six_month">
-    <div class="col4 fldmethod_contact_six_month qmethod_contact_six_month"><span class="qmethod_contact_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_six_month required-field-label"><label class="label-top">||FIELDTAG method_contact_six_month||Method of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_six_month"><input type="radio" name="method_contact_six_month" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_six_month" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_six_month" value="Other" onclick="checkhideall()" >Other</span></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldcompletion_helper_six_month qcompletion_helper_six_month">
+    <div class="col12 fldcompletion_helper_six_month qcompletion_helper_six_month"><span class="qcompletion_helper_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qcompletion_helper_six_month required-field-label"><label class="label-top">||FIELDTAG completion_helper_six_month||Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qcompletion_helper_six_month">
+      <input type="radio" name="completion_helper_six_month" value="Youth Enrolled In ERE" onclick="checkhideall()" >Youth Enrolled In ERE<br>
+      <input type="radio" name="completion_helper_six_month" value="Parent/Legal Guardian" onclick="checkhideall()" >Parent/Legal Guardian<br>
+      <input type="radio" name="completion_helper_six_month" value="Caregiver" onclick="checkhideall()" >Caregiver<br>
+      <input type="radio" name="completion_helper_six_month" value="Member Of BH Care Team" onclick="checkhideall()" >Member Of BH Care Team<br>
+      <input type="radio" name="completion_helper_six_month" value="Completed Using Chart Review" onclick="checkhideall()" >Completed Using Chart Review<br>
+      <input type="radio" name="completion_helper_six_month" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
      </div>
-    <div class="col4 qother_contact_method_six_month">
-    <div class="col4 fldother_contact_method_six_month qother_contact_method_six_month"><span class="qother_contact_method_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_six_month required-field-label"><label class="label-top">||FIELDTAG other_contact_method_six_month||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_six_month"><textarea name="other_contact_method_six_month" class="autoexpand"></textarea></span></div>
+  </div>
+  <div class="entire">
+    <div class="col6 qother_completion_helper_six_month">
+    <div class="col6 fldother_completion_helper_six_month qother_completion_helper_six_month"><span class="qother_completion_helper_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_completion_helper_six_month required-field-label"><label class="label-top">||FIELDTAG other_completion_helper_six_month||Other - Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qother_completion_helper_six_month"><input type="text" name="other_completion_helper_six_month" size="50" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 qmethod_contact_six_month">
+    <div class="col12 fldmethod_contact_six_month qmethod_contact_six_month"><span class="qmethod_contact_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_six_month required-field-label"><label class="label-top">||FIELDTAG method_contact_six_month||Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_six_month"><input type="radio" name="method_contact_six_month" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_six_month" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_six_month" value="Other" onclick="checkhideall()" >Other</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 qother_contact_method_six_month">
+    <div class="col12 fldother_contact_method_six_month qother_contact_method_six_month"><span class="qother_contact_method_six_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_six_month required-field-label"><label class="label-top">||FIELDTAG other_contact_method_six_month||Other Method Of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_six_month"><input type="text" name="other_contact_method_six_month" size="50" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">
@@ -929,28 +941,16 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Youth Program Needs</div>
+<div class="col12 term">Youth / Family Program Needs</div>
 </div>
 <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
+    <div class="col12"><label class="label-top"><i>If client or family's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
   </div>
  <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientFamilyNeeds||</div> 
   </div>
   <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
-  </div>
-<div class="entire">
-<div class="col12 term">Caregiver Program Needs</div>
-</div>
-  <div class="entire">
-    <div class="col12"><label class="label-top"><i>If caregiver's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
   </div>
 <div class="entire">
 </div>

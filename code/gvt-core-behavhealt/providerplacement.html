@@ -307,7 +307,7 @@ function GetProvList() {
 
         var iwhere="";
         var SQL1=escape("SELECT PROVIDER.ProviderCode,PROVIDER.PROVIDERNAME FROM PROVIDER WHERE PROVIDER.DOCREVNO=' 0 ' And (CharIndex('"+f.Region.value+"',Provider.ParentOrganization) > 0) ORDER BY PROVIDERNAME");
-	var SQL2=escape("Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('"+f.Region.value+"',PROVIDERLIST) > 0 or Code='||FIELDVALUE ClosingReason||') And Coalesce([Status],'') != 'Inactive') Order by [Description]");
+	var SQL2=escape("Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('"+f.Region.value+"',PROVIDERLIST) > 0 or Code='||FIELDVALUE ClosingReason||') And [Statusdesc] = 'Active') Order by [Description]");
 	var SQL3=escape("SELECT DOCSERNO,PATHWAYNAME FROM PATHWAY WHERE DOCREVNO=' 0 ' AND (CharIndex('"+f.Region.value+"',PROVIDERLIST) > 0 or DOCSERNO = '^^FIELDVALUE PATHWAY^^') ORDER BY PATHWAYNAME");
         var fullhlink="genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER1(W)|IDENTIFIER2(ClosingReason)|IDENTIFIER3(PATHWAY)|ERROR(SUPPRESS)|SQL1("+SQL1+")|SQL2("+SQL2+")|SQL3("+SQL3+")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION1(PopProvs)|POPULATEFUNCTION2(PopDropDown)|POPULATEFUNCTION3(PopDropDown)|SUBMITTIME("+Date()+")^";
         parent.fvalidate.location=fullhlink;
@@ -1450,7 +1450,7 @@ GetProvList = function() {
      <li id="_gvtClosingReason">
        <strong>||FIELDTAG ClosingReason||Closing Reason||ENDFIELDTAG|| : </strong>        
        <select size="1" name="ClosingReason" onChange="ShowConditionalAgencyFields()">
-       <option value="||Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or Code='^^FIELDVALUE ClosingReason^^') And Coalesce([Status],'') != 'Inactive') Order by [Description]||">||CHOICETABLESQLD||</option>
+       <option value="||Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or Code='^^FIELDVALUE ClosingReason^^') And [Statusdesc] = 'Active') Order by [Description]||">||CHOICETABLESQLD||</option>
        </select>&nbsp;||CONFIGURE CLOSINGREASONS||</li>
      <li id="ReconnectionAgencyRow" style="display:none;">
         <strong>Reconnection Agency : </strong>

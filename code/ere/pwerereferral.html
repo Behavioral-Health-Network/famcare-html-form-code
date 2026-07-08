@@ -37,7 +37,9 @@ function startup() {
 	}
             setrequire('Pathway_Date');
     setrequire('patient_location_referral');
-    setrequire('first_ip_hosp');
+    setrequire('answerfirst_case_num');
+$("#gvttimetime_of_call_ref").timepicker({  'step':1, 'scrollDefault': 'now'});
+    setrequire('time_of_call_ref');
     setrequire('caller_name');
     setrequire('referring_agency');
     setrequire('referral_method');
@@ -59,7 +61,6 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.patient_location_referral,"first_ip_hosp","Inpatient Phychiatric Unit");
    checkhide(f.client_eligible,"ineligible_reason_referral","No");
    checkhide(f.ineligible_reason_referral,"other_ineligible_reason","004");
 
@@ -293,7 +294,8 @@ function validateform(scope='all') {
    }
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('patient_location_referral') && gvtfieldvalue('patient_location_referral')=='') {edesc=edesc+`Must specify a value for Where was the patient located in the hospital?\n`; seterror("patient_location_referral");}
-  if (!hiddenfield('first_ip_hosp') && gvtfieldvalue('first_ip_hosp')=='') {edesc=edesc+`Must specify a value for Is this the patients first inpatient hospitilization?\n`; seterror("first_ip_hosp");}
+  if (!hiddenfield('answerfirst_case_num') && gvtfieldvalue('answerfirst_case_num')=='') {edesc=edesc+`Must specify a value for AnswerFirst Case Number\n`; seterror("answerfirst_case_num");}
+  if (!hiddenfield('time_of_call_ref') && gvtfieldvalue('time_of_call_ref')=='') {edesc=edesc+`Must specify a value for Time of Call\n`; seterror("time_of_call_ref");}
   if (!hiddenfield('caller_name') && gvtfieldvalue('caller_name')=='') {edesc=edesc+`Must specify a value for Caller's First and Last Name\n`; seterror("caller_name");}
   if (!hiddenfield('referring_agency') && gvtfieldvalue('referring_agency')=='') {edesc=edesc+`Must specify a value for Referring Agency\n`; seterror("referring_agency");}
   if (!hiddenfield('referral_method') && gvtfieldvalue('referral_method')=='') {edesc=edesc+`Must specify a value for Method of Referral\n`; seterror("referral_method");}
@@ -561,15 +563,12 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldpatient_location_referral qpatient_location_referral">
-    <div class="col12 fldpatient_location_referral qpatient_location_referral"><span class="qpatient_location_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qpatient_location_referral required-field-label"><label class="label-top">||FIELDTAG patient_location_referral||Where was the patient located in the hospital?||ENDFIELDTAG||</label></span><span class="qpatient_location_referral"><input type="radio" name="patient_location_referral" value="Emergency Department" onclick="checkhideall()" >Emergency Department<br><input type="radio" name="patient_location_referral" value="Inpatient Phychiatric Unit" onclick="checkhideall()" >Inpatient Psychiatric Unit<br><input type="radio" name="patient_location_referral" value="Urgent Care Or Crisis Community Center" onclick="checkhideall()" >Urgent Care Or Crisis Community Center<br><input type="radio" name="patient_location_referral" value="Other Hospital Unit" onclick="checkhideall()" >Other Hospital Unit<br><input type="radio" name="patient_location_referral" value="Other" onclick="checkhideall()" >Other<br></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 fldfirst_ip_hosp qfirst_ip_hosp">
-    <div class="col12 fldfirst_ip_hosp qfirst_ip_hosp"><span class="qfirst_ip_hosp required-label">||PWRequiredFieldRequiredText||</span><span class="qfirst_ip_hosp required-field-label"><label class="label-top">||FIELDTAG first_ip_hosp||Is this the patient's first inpatient hospitilization?||ENDFIELDTAG||</label></span><span class="qfirst_ip_hosp"><input type="radio" name="first_ip_hosp" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="first_ip_hosp" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpatient_location_referral qpatient_location_referral"><span class="qpatient_location_referral required-label">||PWRequiredFieldRequiredText||</span><span class="qpatient_location_referral required-field-label"><label class="label-top">||FIELDTAG patient_location_referral||Where was the patient located in the hospital?||ENDFIELDTAG||</label></span><span class="qpatient_location_referral">
+      <input type="radio" name="patient_location_referral" value="Emergency Department" onclick="checkhideall()" >Emergency Department<br>
+      <input type="radio" name="patient_location_referral" value="Inpatient Phychiatric Unit" onclick="checkhideall()" >Inpatient Psychiatric Unit<br>
+      <input type="radio" name="patient_location_referral" value="Urgent Care Or Crisis Community Center" onclick="checkhideall()" >Urgent Care Or Crisis Community Center<br>
+      <input type="radio" name="patient_location_referral" value="Other Hospital Unit" onclick="checkhideall()" >Other Hospital Unit<br>
+      <input type="radio" name="patient_location_referral" value="Other" onclick="checkhideall()" >Other<br></div> 
      </div>
   </div>
  <div class="entire">
@@ -578,6 +577,11 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12 fldanswerfirst_case_num qanswerfirst_case_num">
     <div class="col12 fldanswerfirst_case_num qanswerfirst_case_num"><span class="qanswerfirst_case_num"><label class="label-top">||FIELDTAG answerfirst_case_num||AnswerFirst Case Number||ENDFIELDTAG||</label></span><span class="qanswerfirst_case_num"><input type="text" name="answerfirst_case_num" size="20" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6 qtime_of_call_ref">
+    <div class="col6 fldtime_of_call_ref qtime_of_call_ref"><span class="qtime_of_call_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qtime_of_call_ref required-field-label"><label class="label-top">||FIELDTAG time_of_call_ref||Time of Call||ENDFIELDTAG||</label></span><span class="qtime_of_call_ref"><input type="text" name="time_of_call_ref" size="10" id="gvttimetime_of_call_ref" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">

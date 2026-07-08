@@ -130,6 +130,8 @@ function startup() {
 		}
 	}
             setrequire('pathway_date');
+    setrequire('completion_helper_three_month');
+    setrequire('other_completion_helper_three_month');
     setrequire('method_contact_three_month');
     setrequire('other_contact_method_three_month');
     setrequire('residency_change_since_referral_three_month');
@@ -177,7 +179,8 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.method_contact_three_month,"other_contact_method_three_month","Other");
+      checkhide(f.completion_helper_three_month,"other_completion_helper_three_month","Other");
+   checkhide(f.method_contact_three_month,"other_contact_method_three_month","Other");
    checkhide(f.residency_change_since_referral_three_month,"residency_change_type_three_month","Yes");
    checkhide(f.residency_change_type_three_month,"specify_other_residency_change_type_three_month","Other");
    checkhide(f.residency_change_since_referral_three_month,"residency_change_address_existing_barrier_service_plan_goal_three_month","Yes");
@@ -423,6 +426,8 @@ function validateform(scope='all') {
        f.TESTPERCENT.value=trimjis(formatnumberjis(right/total*100,2));
    }
      if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
+  if (!hiddenfield('completion_helper_three_month') && gvtfieldvalue('completion_helper_three_month')=='') {edesc=edesc+`Must specify a value for Who helped complete this form?\n`; seterror("completion_helper_three_month");}
+  if (!hiddenfield('other_completion_helper_three_month') && gvtfieldvalue('other_completion_helper_three_month')=='') {edesc=edesc+`Must specify a value for Other - Who helped complete this form?\n`; seterror("other_completion_helper_three_month");}
   if (!hiddenfield('method_contact_three_month') && gvtfieldvalue('method_contact_three_month')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_contact_three_month");}
   if (!hiddenfield('other_contact_method_three_month') && gvtfieldvalue('other_contact_method_three_month')=='') {edesc=edesc+`Must specify a value for Other Method of Contact\n`; seterror("other_contact_method_three_month");}
   if (!hiddenfield('residency_change_since_referral_three_month') && gvtfieldvalue('residency_change_since_referral_three_month')=='') {edesc=edesc+`Must specify a value for Residency change since Youth ERE referral? \n`; seterror("residency_change_since_referral_three_month");}
@@ -762,15 +767,31 @@ function updatesignatures(){
   </div>
 <div class="entire">
 </div>
+<div class="entire">
+    <div class="col12 fldcompletion_helper_three_month qcompletion_helper_three_month">
+    <div class="col12 fldcompletion_helper_three_month qcompletion_helper_three_month"><span class="qcompletion_helper_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qcompletion_helper_three_month required-field-label"><label class="label-top">||FIELDTAG completion_helper_three_month||Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qcompletion_helper_three_month">
+      <input type="radio" name="completion_helper_three_month" value="Youth Enrolled In ERE" onclick="checkhideall()" >Youth Enrolled In ERE<br>
+      <input type="radio" name="completion_helper_three_month" value="Parent/Legal Guardian" onclick="checkhideall()" >Parent/Legal Guardian<br>
+      <input type="radio" name="completion_helper_three_month" value="Caregiver" onclick="checkhideall()" >Caregiver<br>
+      <input type="radio" name="completion_helper_three_month" value="Member Of BH Care Team" onclick="checkhideall()" >Member Of BH Care Team<br>
+      <input type="radio" name="completion_helper_three_month" value="Completed Using Chart Review" onclick="checkhideall()" >Completed Using Chart Review<br>
+      <input type="radio" name="completion_helper_three_month" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6 qother_completion_helper_three_month">
+    <div class="col6 fldother_completion_helper_three_month qother_completion_helper_three_month"><span class="qother_completion_helper_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_completion_helper_three_month required-field-label"><label class="label-top">||FIELDTAG other_completion_helper_three_month||Other - Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qother_completion_helper_three_month"><input type="text" name="other_completion_helper_three_month" size="50" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
  <div class="entire">
-    <div class="col4 qstill_actively_engaged_yere_three_month">
-    <div class="col4 fldstill_actively_engaged_yere_three_month qstill_actively_engaged_yere_three_month"><span class="qstill_actively_engaged_yere_three_month"><label class="label-top">||FIELDTAG still_actively_engaged_yere_three_month||Is youth still actively engaged in ERE services?||ENDFIELDTAG||</label></span><span class="qstill_actively_engaged_yere_three_month"><input type="radio" name="still_actively_engaged_yere_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="still_actively_engaged_yere_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
-     </div>
     <div class="col4 qmethod_contact_three_month">
-    <div class="col4 fldmethod_contact_three_month qmethod_contact_three_month"><span class="qmethod_contact_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_three_month required-field-label"><label class="label-top">||FIELDTAG method_contact_three_month||Method of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_three_month"><input type="radio" name="method_contact_three_month" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_three_month" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_three_month" value="Other" onclick="checkhideall()" >Other</span></div>
+    <div class="col4 fldmethod_contact_three_month qmethod_contact_three_month"><span class="qmethod_contact_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_three_month required-field-label"><label class="label-top">||FIELDTAG method_contact_three_month||Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_three_month"><input type="radio" name="method_contact_three_month" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_three_month" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_three_month" value="Other" onclick="checkhideall()" >Other</span></div>
      </div>
-    <div class="col4 qother_contact_method_three_month">
-    <div class="col4 fldother_contact_method_three_month qother_contact_method_three_month"><span class="qother_contact_method_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_three_month required-field-label"><label class="label-top">||FIELDTAG other_contact_method_three_month||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_three_month"><textarea name="other_contact_method_three_month" class="autoexpand"></textarea></span></div>
+     </div>
+  <div class="entire">
+    <div class="col6 qother_contact_method_three_month">
+    <div class="col6 fldother_contact_method_three_month qother_contact_method_three_month"><span class="qother_contact_method_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_contact_method_three_month required-field-label"><label class="label-top">||FIELDTAG other_contact_method_three_month||Other Method Of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_three_month"><input type="text" name="other_contact_method_three_month" size="50" onchange="checkhideall()"></span></div>
      </div>
   </div>
   <div class="entire">
@@ -794,7 +815,7 @@ function updatesignatures(){
 </span></div>
      </div>
     <div class="col4 qspecify_other_residency_change_type_three_month">
-    <div class="col4 fldspecify_other_residency_change_type_three_month qspecify_other_residency_change_type_three_month"><span class="qspecify_other_residency_change_type_three_month"><label class="label-top">||FIELDTAG specify_other_residency_change_type_three_month||Other Type of Residency Change||ENDFIELDTAG||</label></span><span class="qspecify_other_residency_change_type_three_month"><textarea name="specify_other_residency_change_type_three_month" class="autoexpand"></textarea></span></div>
+    <div class="col4 fldspecify_other_residency_change_type_three_month qspecify_other_residency_change_type_three_month"><span class="qspecify_other_residency_change_type_three_month"><label class="label-top">||FIELDTAG specify_other_residency_change_type_three_month||Other Type Of Residency Change||ENDFIELDTAG||</label></span><span class="qspecify_other_residency_change_type_three_month"><textarea name="specify_other_residency_change_type_three_month" class="autoexpand"></textarea></span></div>
      </div>
   </div>
  <div class="entire">
@@ -866,7 +887,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldtype_of_school_discipline_three_month qtype_of_school_discipline_three_month">
-    <div class="col12 fldtype_of_school_discipline_three_month qtype_of_school_discipline_three_month"><span class="qtype_of_school_discipline_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline_three_month required-field-label"><label class="label-top">Type of School Discipline<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_of_school_discipline_three_month"><select size="8" name="type_of_school_discipline_three_month" id="yere_type_of_school_discipline" onchange="updateReportFields(['yere_type_of_school_discipline']);checkhideall()" multiple>
+    <div class="col12 fldtype_of_school_discipline_three_month qtype_of_school_discipline_three_month"><span class="qtype_of_school_discipline_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline_three_month required-field-label"><label class="label-top">Type Of School Discipline<br>(Hold Down Ctrl To Select Multiple)</label></span><span class="qtype_of_school_discipline_three_month"><select size="8" name="type_of_school_discipline_three_month" id="yere_type_of_school_discipline" onchange="updateReportFields(['yere_type_of_school_discipline']);checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_type_of_school_discipline] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE type_of_school_discipline_three_month^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_type_of_school_discipline||
 
@@ -876,32 +897,32 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 flddetention_number_three_month qdetention_number_three_month">
-    <div class="col12 flddetention_number_three_month qdetention_number_three_month"><span class="qdetention_number_three_month"><label class="label-top">||FIELDTAG detention_number||Number of Detentions||ENDFIELDTAG||</label></span><span class="qdetention_number"><input type="text" name="detention_number_three_month" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 flddetention_number_three_month qdetention_number_three_month"><span class="qdetention_number_three_month"><label class="label-top">||FIELDTAG detention_number||Number Of Detentions||ENDFIELDTAG||</label></span><span class="qdetention_number"><input type="text" name="detention_number_three_month" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
   <div class="entire">
     <div class="col12 flddetention_duration_three_month qdetention_duration_three_month">
-    <div class="col12 flddetention_duration_three_month qdetention_duration_three_month"><span class="qdetention_duration_three_month"><label class="label-top">||FIELDTAG detention_duration||Duration of Detentions (in hours)||ENDFIELDTAG||</label></span><span class="qdetention_duration_three_month"><input type="text" name="detention_duration_three_month" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 flddetention_duration_three_month qdetention_duration_three_month"><span class="qdetention_duration_three_month"><label class="label-top">||FIELDTAG detention_duration||Duration Of Detentions (In Hours)||ENDFIELDTAG||</label></span><span class="qdetention_duration_three_month"><input type="text" name="detention_duration_three_month" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldiss_number_three_month qiss_number_three_month">
-    <div class="col12 fldiss_number_three_month qiss_number_three_month"><span class="qiss_number_three_month"><label class="label-top">||FIELDTAG iss_number||Number of In-School Suspensions||ENDFIELDTAG||</label></span><span class="qiss_number_three_month"><input type="text" name="iss_number_three_month" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldiss_number_three_month qiss_number_three_month"><span class="qiss_number_three_month"><label class="label-top">||FIELDTAG iss_number||Number Of In-School Suspensions||ENDFIELDTAG||</label></span><span class="qiss_number_three_month"><input type="text" name="iss_number_three_month" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldiss_duration_three_month qiss_duration_three_month">
-    <div class="col12 fldiss_duration_three_month qiss_duration_three_month"><span class="qiss_duration_three_month"><label class="label-top">||FIELDTAG iss_duration||Duration of In-School Suspensions (in days)||ENDFIELDTAG||</label></span><span class="qiss_duration_three_month"><input type="text" name="iss_duration_three_month" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldiss_duration_three_month qiss_duration_three_month"><span class="qiss_duration_three_month"><label class="label-top">||FIELDTAG iss_duration||Duration Of In-School Suspensions (In Days)||ENDFIELDTAG||</label></span><span class="qiss_duration_three_month"><input type="text" name="iss_duration_three_month" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldoss_number_three_month qoss_number_three_month">
-    <div class="col12 fldoss_number_three_month qoss_number_three_month"><span class="qoss_number_three_month"><label class="label-top">||FIELDTAG oss_number||Number of Out of School Suspensions||ENDFIELDTAG||</label></span><span class="qoss_number_three_month"><input type="text" name="oss_number_three_month" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldoss_number_three_month qoss_number_three_month"><span class="qoss_number_three_month"><label class="label-top">||FIELDTAG oss_number||Number Of Out Of School Suspensions||ENDFIELDTAG||</label></span><span class="qoss_number_three_month"><input type="text" name="oss_number_three_month" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
   <div class="entire">
     <div class="col12 fldoss_duration_three_month qoss_duration_three_month">
-    <div class="col12 fldoss_duration_three_month qoss_duration_three_month"><span class="qoss_duration_three_month"><label class="label-top">||FIELDTAG oss_duration||Duration of Out of School Suspensions (in days)||ENDFIELDTAG||</label></span><span class="qoss_duration_three_month"><input type="text" name="oss_duration_three_month" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldoss_duration_three_month qoss_duration_three_month"><span class="qoss_duration_three_month"><label class="label-top">||FIELDTAG oss_duration||Duration Of Out Of School Suspensions (In Days)||ENDFIELDTAG||</label></span><span class="qoss_duration_three_month"><input type="text" name="oss_duration_three_month" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -914,17 +935,17 @@ function updatesignatures(){
 </div>
  <div class="entire">
     <div class="col12 fldnum_ed_visits_past_three_months_three_month qnum_ed_visits_past_three_months_three_month">
-    <div class="col12 fldnum_ed_visits_past_three_months_three_month qnum_ed_visits_past_three_months_three_month"><span class="qnum_ed_visits_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_ed_visits_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_ed_visits_past_three_months_three_month||Emergency Dept Visits in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_ed_visits_past_three_months_three_month"><input type="text" name="num_ed_visits_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_ed_visits_past_three_months_three_month qnum_ed_visits_past_three_months_three_month"><span class="qnum_ed_visits_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_ed_visits_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_ed_visits_past_three_months_three_month||Emergency Dept Visits In Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_ed_visits_past_three_months_three_month"><input type="text" name="num_ed_visits_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldnum_hosp_past_three_months_three_month qnum_hosp_past_three_months_three_month">
-    <div class="col12 fldnum_hosp_past_three_months_three_month qnum_hosp_past_three_months_three_month"><span class="qnum_hosp_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_hosp_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_hosp_past_three_months_three_month||Hospitalizations in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_hosp_past_three_months_three_month"><input type="text" name="num_hosp_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_hosp_past_three_months_three_month qnum_hosp_past_three_months_three_month"><span class="qnum_hosp_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_hosp_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_hosp_past_three_months_three_month||Hospitalizations In Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_hosp_past_three_months_three_month"><input type="text" name="num_hosp_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldnum_leo_contacts_past_three_months_three_month qnum_leo_contacts_past_three_months_three_month">
-    <div class="col12 fldnum_leo_contacts_past_three_months_three_month qnum_leo_contacts_past_three_months_three_month"><span class="qnum_leo_contacts_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_leo_contacts_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_leo_contacts_past_three_months_three_month||Law Enforcement Contacts in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_leo_contacts_past_three_months_three_month"><input type="text" name="num_leo_contacts_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_leo_contacts_past_three_months_three_month qnum_leo_contacts_past_three_months_three_month"><span class="qnum_leo_contacts_past_three_months_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_leo_contacts_past_three_months_three_month required-field-label"><label class="label-top">||FIELDTAG num_leo_contacts_past_three_months_three_month||Law Enforcement Contacts In Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_leo_contacts_past_three_months_three_month"><input type="text" name="num_leo_contacts_past_three_months_three_month" size="10" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -973,33 +994,30 @@ function updatesignatures(){
      </div>
   </div>
 <div class="entire">
-<div class="col12 term">Youth Program Needs</div>
+<div class="col12 term">Youth / Family Program Needs</div>
 </div>
 <div class="entire">
-    <div class="col12"><label class="label-top"><i>If client's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
+    <div class="col12"><label class="label-top"><i>If client or family's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
   </div>
  <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientFamilyNeeds||</div> 
   </div>
 <div class="entire">
 </div>
 <div class="entire">
-    <div class="col12 term">Caregiver Program Needs</div>
-    </div>
-    <div class="entire">
-        <div class="col12"><label class="label-top"><i>If caregiver's needs or statuses haven't changed, leave as is. If needing to add more needs or update existing needs statuses, click "View/Edit" and update as necessary.</i></label></div>
-      </div>
-     <div class="entire">
-        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
-      </div>
-    <div class="entire">
-    </div>
+   
     <div class="entire">
         <div class="col12 term"></div>
         </div>
- <div class="entire">
+ <!-- taking out the old version of this question and replacing it with a new version
+    <div class="entire">
     <div class="col12 fldattend_new_bh_intake_between_thirty_days_three_month qattend_new_bh_intake_between_thirty_days_three_month">
     <div class="col12 fldattend_new_bh_intake_between_thirty_days_three_month qattend_new_bh_intake_between_thirty_days_three_month"><span class="qattend_new_bh_intake_between_thirty_days_three_month"><label class="label-top">||FIELDTAG attend_new_bh_intake_between_thirty_days_three_month||Did youth attend a new behavioral health intake between the Thirty Day Follow-Up and now?||ENDFIELDTAG||</label></span><span class="qattend_new_bh_intake_between_thirty_days_three_month"><input type="radio" name="attend_new_bh_intake_between_thirty_days_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_new_bh_intake_between_thirty_days_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+    -->
+  <div class="entire">
+    <div class="col12 fldattend_new_bh_intake_between_referral_three_month qattend_new_bh_intake_between_referral_three_month">
+    <div class="col12 fldattend_new_bh_intake_between_referral_three_month qattend_new_bh_intake_between_referral_three_month"><span class="qattend_new_bh_intake_between_referral_three_month"><label class="label-top">||FIELDTAG attend_new_bh_intake_between_referral_three_month||Did youth attend a new behavioral health intake in the last three months?||ENDFIELDTAG||</label></span><span class="qattend_new_bh_intake_between_referral_three_month"><input type="radio" name="attend_new_bh_intake_between_referral_three_month" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="attend_new_bh_intake_between_referral_three_month" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
   <div class="entire">
@@ -1018,7 +1036,7 @@ function updatesignatures(){
     <div class="col6 fldyouth_dla20_score_three_month qyouth_dla20_score_three_month"><span class="qyouth_dla20_score_three_month"><label class="label-top">||FIELDTAG youth_dla20_score_three_month||Youth DLA-20 score at this appointment.||ENDFIELDTAG||</label></span><span class="qyouth_dla20_score_three_month"><input type="text" name="youth_dla20_score_three_month" size="10" onchange="checkhideall()"></span></div>
      </div>
     <div class="col6 qdate_youth_dla20_three_month">
-    <div class="col6 flddate_youth_dla20_three_month qdate_youth_dla20_three_month"><span class="qdate_youth_dla20_three_month"><label class="label-top">||FIELDTAG date_youth_dla20_three_month||Date of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_three_month"><input type="text" name="date_youth_dla20_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
+    <div class="col6 flddate_youth_dla20_three_month qdate_youth_dla20_three_month"><span class="qdate_youth_dla20_three_month"><label class="label-top">||FIELDTAG date_youth_dla20_three_month||Date Of Youth DLA-20||ENDFIELDTAG||</label></span><span class="qdate_youth_dla20_three_month"><input type="text" name="date_youth_dla20_three_month" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
      </div>
   </div>
   <div class="entire">

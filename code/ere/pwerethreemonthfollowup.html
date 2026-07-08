@@ -38,6 +38,10 @@ function startup() {
             setrequire('Pathway_Date');
     setrequire('still_engaged_ere_services_three_month');
     setrequire('ineligible_reason_three_month');
+    setrequire('completion_helper_three_month');
+    setrequire('other_completion_helper_three_month');
+    setrequire('method_of_contact_three_month');
+    setrequire('method_of_contact_other_three_month');
     // Commenting out code for PPC contact as a result of not needing the question now but might want it in the future.
     // setrequire('contact_result_ppc_three_month');
     setrequire('employment_status_three_month');
@@ -56,6 +60,8 @@ function startup() {
 function checkhideall() {
    f=document.forms[0];
       checkhide(f.still_engaged_ere_services_three_month,"ineligible_reason_three_month","No");
+      checkhide(f.completion_helper_three_month,"other_completion_helper_three_month","Other");
+      checkhide(f.method_of_contact_three_month,"method_of_contact_other_three_month","Other");
 
 }
 
@@ -288,6 +294,10 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('still_engaged_ere_services_three_month') && gvtfieldvalue('still_engaged_ere_services_three_month')=='') {edesc=edesc+`Must specify a value for Is individual still actively engaged in ERE services?\n`; seterror("still_engaged_ere_services_three_month");}
   if (!hiddenfield('ineligible_reason_three_month') && gvtfieldvalue('ineligible_reason_three_month')=='') {edesc=edesc+`Must specify a value for Reason Not Engaged\n`; seterror("ineligible_reason_three_month");}
+  if (!hiddenfield('completion_helper_three_month') && gvtfieldvalue('completion_helper_three_month')=='') {edesc=edesc+`Must specify a value for Who helped complete this form?\n`; seterror("completion_helper_three_month");}
+  if (!hiddenfield('other_completion_helper_three_month') && gvtfieldvalue('other_completion_helper_three_month')=='') {edesc=edesc+`Must specify a value for Other - Who helped complete this form?\n`; seterror("other_completion_helper_three_month");}
+  if (!hiddenfield('method_of_contact_three_month') && gvtfieldvalue('method_of_contact_three_month')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_of_contact_three_month");}
+  if (!hiddenfield('method_of_contact_other_three_month') && gvtfieldvalue('method_of_contact_other_three_month')=='') {edesc=edesc+`Must specify a value for Method of Contact\n`; seterror("method_of_contact_other_three_month");}
   // Commenting out code for PPC contact as a result of not needing the question now but might want it in the future.
   // if (!hiddenfield('contact_result_ppc_three_month') && gvtfieldvalue('contact_result_ppc_three_month')=='') {edesc=edesc+`Must specify a value for Was this contact a direct result of an alert message from PointClickCare?\n`; seterror("contact_result_ppc_three_month");}
   if (!hiddenfield('employment_status_three_month') && gvtfieldvalue('employment_status_three_month')=='') {edesc=edesc+`Must specify a value for Employment Status\n`; seterror("employment_status_three_month");}
@@ -566,6 +576,34 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
+  <div class="entire">
+    <div class="col12 fldcompletion_helper_three_month qcompletion_helper_three_month">
+    <div class="col12 fldcompletion_helper_three_month qcompletion_helper_three_month"><span class="qcompletion_helper_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qcompletion_helper_three_month required-field-label"><label class="label-top">||FIELDTAG completion_helper_three_month||Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qcompletion_helper_three_month">
+      <input type="radio" name="completion_helper_three_month" value="Client Enrolled In ERE" onclick="checkhideall()" >Client Enrolled In ERE<br>
+      <input type="radio" name="completion_helper_three_month" value="Parent/Legal Guardian" onclick="checkhideall()" >Parent/Legal Guardian<br>
+      <input type="radio" name="completion_helper_three_month" value="Member Of BH Care Team" onclick="checkhideall()" >Member Of BH Care Team<br>
+      <input type="radio" name="completion_helper_three_month" value="Completed Using Chart Review" onclick="checkhideall()" >Completed Using Chart Review<br>
+      <input type="radio" name="completion_helper_three_month" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col6 qother_completion_helper_three_month">
+    <div class="col6 fldother_completion_helper_three_month qother_completion_helper_three_month"><span class="qother_completion_helper_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qother_completion_helper_three_month required-field-label"><label class="label-top">||FIELDTAG other_completion_helper_three_month||Other - Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qother_completion_helper_three_month"><input type="text" name="other_completion_helper_three_month" size="50" onchange="checkhideall()"></span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldmethod_of_contact_three_month qmethod_of_contact_three_month">
+    <div class="col12 fldmethod_of_contact_three_month qmethod_of_contact_three_month"><span class="qmethod_of_contact_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_of_contact_three_month required-field-label"><label class="label-top">||FIELDTAG method_of_contact_three_month||Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_of_contact_three_month">
+      <input type="radio" name="method_of_contact_three_month" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br>
+      <input type="radio" name="method_of_contact_three_month" value="By Phone" onclick="checkhideall()" >By Phone<br>
+      <input type="radio" name="method_of_contact_three_month" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+  </div>
+  <div class="col6 qmethod_of_contact_other_three_month">
+    <div class="col6 fldmethod_of_contact_other_three_month qmethod_of_contact_other_three_month"><span class="qmethod_of_contact_other_three_month required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_of_contact_other_three_month required-field-label"><label class="label-top">||FIELDTAG method_of_contact_three_month||Other Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_of_contact_other_three_month"><input type="text" name="method_of_contact_other_three_month" size="50" onchange="checkhideall()"></span></div>
+     </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>

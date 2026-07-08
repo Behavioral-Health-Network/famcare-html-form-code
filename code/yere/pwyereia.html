@@ -181,10 +181,10 @@ function startup() {
 	}
             setrequire('pathway_date');
     setrequire('program_participation_ia');
-    setrequire('ineligible_reason_ia');
-    setrequire('referred_from_ed_or_ip');
-    setrequire('client_discharged_hospital');
+    setrequire('completion_helper_ia');
+    setrequire('other_completion_helper_ia');
     setrequire('method_contact_ia');
+    setrequire('other_contact_method_ia');
     setrequire('met_client_at_hospital');
     setrequire('reason_didnt_meet_at_hospital');
     setrequire('in_foster_care_cd_custody');
@@ -240,9 +240,7 @@ function startup() {
 
 function checkhideall() {
    f=document.forms[0];
-      checkhide(f.program_participation_ia,"ineligible_reason_ia","Ineligible");
-   checkhide(f.referred_from_ed_or_ip,"client_discharged_hospital","Yes");
-   checkhide(f.client_discharged_hospital,"discharge_date","Yes");
+      checkhide(f.completion_helper_ia,"other_completion_helper_ia","Other");
    checkhide(f.method_contact_ia,"other_contact_method_ia","Other");
    checkhide(f.met_client_at_hospital,"reason_didnt_meet_at_hospital","No");
    checkhide(f.residency_change_prior_six_months_before_referral,"how_many_residency_changes","Yes");
@@ -505,10 +503,10 @@ function validateform(scope='all') {
    }
      if (!hiddenfield('pathway_date') && gvtfieldvalue('pathway_date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("pathway_date");}
   if (!hiddenfield('program_participation_ia') && gvtfieldvalue('program_participation_ia')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_ia");}
-  if (!hiddenfield('ineligible_reason_ia') && gvtfieldvalue('ineligible_reason_ia')=='') {edesc=edesc+`Must specify a value for Reason Ineligible\n`; seterror("ineligible_reason_ia");}
-  if (!hiddenfield('referred_from_ed_or_ip') && gvtfieldvalue('referred_from_ed_or_ip')=='') {edesc=edesc+`Must specify a value for Referred from the ED or Inpatient?\n`; seterror("referred_from_ed_or_ip");}
-  if (!hiddenfield('client_discharged_hospital') && gvtfieldvalue('client_discharged_hospital')=='') {edesc=edesc+`Must specify a value for Has client been discharged from the hospital?\n`; seterror("client_discharged_hospital");}
+  if (!hiddenfield('completion_helper_ia') && gvtfieldvalue('completion_helper_ia')=='') {edesc=edesc+`Must specify a value for Who helped complete this form?\n`; seterror("completion_helper_ia");}
+  if (!hiddenfield('other_completion_helper_ia') && gvtfieldvalue('other_completion_helper_ia')=='') {edesc=edesc+`Must specify a value for Other - Who helped complete this form?\n`; seterror("other_completion_helper_ia");}
   if (!hiddenfield('method_contact_ia') && gvtfieldvalue('method_contact_ia')=='') {edesc=edesc+`Must specify a value for How was the initial assessment completed?\n`; seterror("method_contact_ia");}
+  if (!hiddenfield('other_contact_method_ia') && gvtfieldvalue('other_contact_method_ia')=='') {edesc=edesc+`Must specify the Other Method of Contact\n`; seterror("other_contact_method_ia");}
   if (!hiddenfield('met_client_at_hospital') && gvtfieldvalue('met_client_at_hospital')=='') {edesc=edesc+`Must specify a value for Did Outreach Team meet with client at the hospital?\n`; seterror("met_client_at_hospital");}
   if (!hiddenfield('reason_didnt_meet_at_hospital') && gvtfieldvalue('reason_didnt_meet_at_hospital')=='') {edesc=edesc+`Must specify a value for If no, specify.\n`; seterror("reason_didnt_meet_at_hospital");}
   if (!hiddenfield('in_foster_care_cd_custody') && gvtfieldvalue('in_foster_care_cd_custody')=='') {edesc=edesc+`Must specify a value for Is youth in the foster care system/Children's Division custody/is CD involved?\n`; seterror("in_foster_care_cd_custody");}
@@ -913,45 +911,47 @@ function updatesignatures(){
 </span></div>
      </div>
   </div>
- <div class="entire">
-    <div class="col6 qineligible_reason_ia">
-    <div class="col6 fldineligible_reason_ia qineligible_reason_ia"><span class="qineligible_reason_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qineligible_reason_ia required-field-label"><label class="label-top">||FIELDTAG ineligible_reason_ia||Reason Ineligible||ENDFIELDTAG||</label></span><span class="qineligible_reason_ia"><input type="radio" name="ineligible_reason_ia" value="Resides Outside Of Eastern Region" onclick="checkhideall()" >Resides Outside Of Eastern Region&nbsp;&nbsp;<input type="radio" name="ineligible_reason_ia" value="Age" onclick="checkhideall()" >Age&nbsp;&nbsp;
-<!-- FIELDOVERRIDE(ineligible_reason_ia,10,33) -->
-</span></div>
-     </div>
-  </div>
 <div class="entire">
+  <div class="entire">
+  <div class="col6 fldcompletion_helper_ia qcompletion_helper_ia">
+    <div class="col6 fldcompletion_helper_ia qcompletion_helper_ia"><span class="qcompletion_helper_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qcompletion_helper_ia required-field-label"><label class="label-top">||FIELDTAG completion_helper_ia||Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qcompletion_helper_ia">
+      <input type="radio" name="completion_helper_ia" value="Youth Enrolled In ERE" onclick="checkhideall()" >Youth Enrolled In ERE<br>
+      <input type="radio" name="completion_helper_ia" value="Parent/Legal Guardian" onclick="checkhideall()" >Parent/Legal Guardian<br>
+      <input type="radio" name="completion_helper_ia" value="Caregiver" onclick="checkhideall()" >Caregiver<br>
+      <input type="radio" name="completion_helper_ia" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+   </div>
+  <div class="entire">
+  <div class="col6 qother_completion_helper_ia">
+    <div class="col6 fldother_completion_helper_ia qother_completion_helper_ia"><span class="qother_completion_helper_ia"><label class="label-top">||FIELDTAG other_completion_helper_ia||Other - Who Helped Complete This Form?||ENDFIELDTAG||</label></span><span class="qother_completion_helper_ia"><input type="text" name="other_completion_helper_ia" size="50" onchange="checkhideall()"></span></div>
+     </div>
+     <div class="col6"><label class="label-top"></label></div>
 </div>
  <div class="entire">
-    <div class="col4 qreferred_from_ed_or_ip">
-    <div class="col4 fldreferred_from_ed_or_ip qreferred_from_ed_or_ip"><span class="qreferred_from_ed_or_ip required-label">||PWRequiredFieldRequiredText||</span><span class="qreferred_from_ed_or_ip required-field-label"><label class="label-top">||FIELDTAG referred_from_ed_or_ip||Referred from the ED or Inpatient?||ENDFIELDTAG||</label></span><span class="qreferred_from_ed_or_ip"><input type="radio" name="referred_from_ed_or_ip" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="referred_from_ed_or_ip" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qmethod_contact_ia">
+    <div class="col6 fldmethod_contact_ia qmethod_contact_ia"><span class="qmethod_contact_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_ia required-field-label"><label class="label-top">||FIELDTAG method_contact_ia||Method Of Contact||ENDFIELDTAG||</label></span><span class="qmethod_contact_ia">
+      <input type="radio" name="method_contact_ia" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br>
+      <input type="radio" name="method_contact_ia" value="By Phone" onclick="checkhideall()" >By Phone<br>
+      <input type="radio" name="method_contact_ia" value="Other" onclick="checkhideall()" >Other</span></div>
      </div>
-    <div class="col4 qclient_discharged_hospital">
-    <div class="col4 fldclient_discharged_hospital qclient_discharged_hospital"><span class="qclient_discharged_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qclient_discharged_hospital required-field-label"><label class="label-top">||FIELDTAG client_discharged_hospital||Has client been discharged from the hospital?||ENDFIELDTAG||</label></span><span class="qclient_discharged_hospital"><input type="radio" name="client_discharged_hospital" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="client_discharged_hospital" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    </div>
+  <div class="entire">
+    <div class="col6 qother_contact_method_ia">
+    <div class="col6 fldother_contact_method_ia qother_contact_method_ia"><span class="qother_contact_method_ia"><label class="label-top">||FIELDTAG other_contact_method_ia||Other Method Of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_ia"><input type="text" name="other_contact_method_ia" size="50" onchange="checkhideall()"></span></div>
      </div>
-       <div class="col4 flddischarge_date qdischarge_date">
-       <div class="col4 flddischarge_date qdischarge_date"><span class="qdischarge_date"><label class="label-top">||FIELDTAG discharge_date||Date of Discharge||ENDFIELDTAG||</label></span><span class="qdischarge_date"><input type="text" name="discharge_date" size="20" onchange="checkhideall()" class="jdatepicker"></span></div>
-        </div>
-  </div>
-<div class="entire">
-</div>
- <div class="entire">
-    <div class="col4 qmethod_contact_ia">
-    <div class="col4 fldmethod_contact_ia qmethod_contact_ia"><span class="qmethod_contact_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmethod_contact_ia required-field-label"><label class="label-top">||FIELDTAG method_contact_ia||How was the initial assessment completed?||ENDFIELDTAG||</label></span><span class="qmethod_contact_ia"><input type="radio" name="method_contact_ia" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br><input type="radio" name="method_contact_ia" value="By Phone" onclick="checkhideall()" >By Phone<br><input type="radio" name="method_contact_ia" value="Other" onclick="checkhideall()" >Other</span></div>
-     </div>
-    <div class="col4 qother_contact_method_ia">
-    <div class="col4 fldother_contact_method_ia qother_contact_method_ia"><span class="qother_contact_method_ia"><label class="label-top">||FIELDTAG other_contact_method_ia||Other Method of Contact||ENDFIELDTAG||</label></span><span class="qother_contact_method_ia"><textarea name="other_contact_method_ia" class="autoexpand"></textarea></span></div>
-     </div>
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col6"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col4 qmet_client_at_hospital">
-    <div class="col4 fldmet_client_at_hospital qmet_client_at_hospital"><span class="qmet_client_at_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qmet_client_at_hospital required-field-label"><label class="label-top">||FIELDTAG met_client_at_hospital||Did Outreach Team meet with client at the hospital?||ENDFIELDTAG||</label></span><span class="qmet_client_at_hospital"><input type="radio" name="met_client_at_hospital" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="met_client_at_hospital" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col6 qmet_client_at_hospital">
+    <div class="col6 fldmet_client_at_hospital qmet_client_at_hospital"><span class="qmet_client_at_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qmet_client_at_hospital required-field-label"><label class="label-top">||FIELDTAG met_client_at_hospital||Did Outreach Team meet with client at the hospital?||ENDFIELDTAG||</label></span><span class="qmet_client_at_hospital"><input type="radio" name="met_client_at_hospital" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="met_client_at_hospital" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
-    <div class="col4 qreason_didnt_meet_at_hospital">
-    <div class="col4 fldreason_didnt_meet_at_hospital qreason_didnt_meet_at_hospital"><span class="qreason_didnt_meet_at_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_didnt_meet_at_hospital required-field-label"><label class="label-top">||FIELDTAG reason_didnt_meet_at_hospital||If no, specify.||ENDFIELDTAG||</label></span><span class="qreason_didnt_meet_at_hospital"><textarea name="reason_didnt_meet_at_hospital" class="autoexpand"></textarea></span></div>
+  </div>
+  <div class="entire">
+    <div class="col6 qreason_didnt_meet_at_hospital">
+    <div class="col6 fldreason_didnt_meet_at_hospital qreason_didnt_meet_at_hospital"><span class="qreason_didnt_meet_at_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qreason_didnt_meet_at_hospital required-field-label"><label class="label-top">||FIELDTAG reason_didnt_meet_at_hospital||If no, specify.||ENDFIELDTAG||</label></span><span class="qreason_didnt_meet_at_hospital"><input type="text" name="reason_didnt_meet_at_hospital" size="50" onchange="checkhideall()"></span></div>
      </div>
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col6"><label class="label-top"></label></div>
   </div>
 <div class="entire">
 <div class="col12 term">Housing Status</div>
@@ -1046,7 +1046,7 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline">
-    <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline"><span class="qtype_of_school_discipline required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline required-field-label"><label class="label-top">Type of School Discipline<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_of_school_discipline"><select size="8" name="type_of_school_discipline" id="yere_type_of_school_discipline" onchange="updateReportFields(['yere_type_of_school_discipline']);checkhideall()" multiple>
+    <div class="col12 fldtype_of_school_discipline qtype_of_school_discipline"><span class="qtype_of_school_discipline required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_of_school_discipline required-field-label"><label class="label-top">Type of School Discipline<br>(Hold Down Ctrl To Select Multiple)</label></span><span class="qtype_of_school_discipline"><select size="8" name="type_of_school_discipline" id="yere_type_of_school_discipline" onchange="updateReportFields(['yere_type_of_school_discipline']);checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_type_of_school_discipline] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE type_of_school_discipline^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_type_of_school_discipline||
 
@@ -1056,32 +1056,32 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 flddetention_number qdetention_number">
-    <div class="col12 flddetention_number qdetention_number"><span class="qdetention_number"><label class="label-top">||FIELDTAG detention_number||Number of Detentions||ENDFIELDTAG||</label></span><span class="qdetention_number"><input type="text" name="detention_number" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 flddetention_number qdetention_number"><span class="qdetention_number"><label class="label-top">||FIELDTAG detention_number||Number Of Detentions||ENDFIELDTAG||</label></span><span class="qdetention_number"><input type="text" name="detention_number" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
   <div class="entire">
     <div class="col12 flddetention_duration qdetention_duration">
-    <div class="col12 flddetention_duration qdetention_duration"><span class="qdetention_duration"><label class="label-top">||FIELDTAG detention_duration||Duration of Detentions (in hours)||ENDFIELDTAG||</label></span><span class="qdetention_duration"><input type="text" name="detention_duration" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 flddetention_duration qdetention_duration"><span class="qdetention_duration"><label class="label-top">||FIELDTAG detention_duration||Duration Of Detentions (In Hours)||ENDFIELDTAG||</label></span><span class="qdetention_duration"><input type="text" name="detention_duration" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldiss_number qiss_number">
-    <div class="col12 fldiss_number qiss_number"><span class="qiss_number"><label class="label-top">||FIELDTAG iss_number||Number of In-School Suspensions||ENDFIELDTAG||</label></span><span class="qiss_number"><input type="text" name="iss_number" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldiss_number qiss_number"><span class="qiss_number"><label class="label-top">||FIELDTAG iss_number||Number Of In-School Suspensions||ENDFIELDTAG||</label></span><span class="qiss_number"><input type="text" name="iss_number" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldiss_number qiss_duration">
-    <div class="col12 fldiss_number qiss_duration"><span class="qiss_duration"><label class="label-top">||FIELDTAG iss_duration||Duration of In-School Suspensions (in days)||ENDFIELDTAG||</label></span><span class="qiss_duration"><input type="text" name="iss_duration" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldiss_number qiss_duration"><span class="qiss_duration"><label class="label-top">||FIELDTAG iss_duration||Duration Of In-School Suspensions (In Days)||ENDFIELDTAG||</label></span><span class="qiss_duration"><input type="text" name="iss_duration" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12 fldoss_number qoss_number">
-    <div class="col12 fldoss_number qoss_number"><span class="qoss_number"><label class="label-top">||FIELDTAG oss_number||Number of Out of School Suspensions||ENDFIELDTAG||</label></span><span class="qoss_number"><input type="text" name="oss_number" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldoss_number qoss_number"><span class="qoss_number"><label class="label-top">||FIELDTAG oss_number||Number Of Out of School Suspensions||ENDFIELDTAG||</label></span><span class="qoss_number"><input type="text" name="oss_number" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
   <div class="entire">
     <div class="col12 fldoss_duration qoss_duration">
-    <div class="col12 fldoss_duration qoss_duration"><span class="qoss_duration"><label class="label-top">||FIELDTAG oss_duration||Duration of Out of School Suspensions (in days)||ENDFIELDTAG||</label></span><span class="qoss_duration"><input type="text" name="oss_duration" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldoss_duration qoss_duration"><span class="qoss_duration"><label class="label-top">||FIELDTAG oss_duration||Duration Of Out of School Suspensions (In Days)||ENDFIELDTAG||</label></span><span class="qoss_duration"><input type="text" name="oss_duration" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
@@ -1105,7 +1105,7 @@ function updatesignatures(){
     <div class="col6 fldspecify_physical_health_concern qspecify_physical_health_concern"><span class="qspecify_physical_health_concern"><label class="label-top">||FIELDTAG specify_physical_health_concern||Specify Physical Health Concern||ENDFIELDTAG||</label></span><span class="qspecify_physical_health_concern"><textarea name="specify_physical_health_concern" class="autoexpand"></textarea></span></div>
      </div>
     <div class="col6 qtype_trauma_reported">
-    <div class="col6 fldtype_trauma_reported qtype_trauma_reported"><span class="qtype_trauma_reported required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_trauma_reported required-field-label"><label class="label-top">Type of Trauma Reported<br>(Hold down Ctrl to select multiple)</label></span><span class="qtype_trauma_reported"><select size="15" name="type_trauma_reported" id="yere_type_trauma_reported" onchange="updateReportFields(['yere_type_trauma_reported']);checkhideall()" multiple>
+    <div class="col6 fldtype_trauma_reported qtype_trauma_reported"><span class="qtype_trauma_reported required-label">||PWRequiredFieldRequiredText||</span><span class="qtype_trauma_reported required-field-label"><label class="label-top">Type Of Trauma Reported<br>(Hold Down Ctrl To Select Multiple)</label></span><span class="qtype_trauma_reported"><select size="15" name="type_trauma_reported" id="yere_type_trauma_reported" onchange="updateReportFields(['yere_type_trauma_reported']);checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_type_trauma_reported] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE type_trauma_reported^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_type_trauma_reported||
 
@@ -1182,7 +1182,7 @@ function updatesignatures(){
     </div>
  <div class="entire">
     <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia">
-    <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia"><span class="qmh_concern_referral_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ia required-field-label"><label class="label-top">Mental Health Concern at Referral<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_concern_referral_ia"><select size="15" name="mh_concern_referral_ia" id="yere_mh_concerns" onchange="checkhideall()" multiple>
+    <div class="col12 fldmh_concern_referral_ia qmh_concern_referral_ia"><span class="qmh_concern_referral_ia required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_concern_referral_ia required-field-label"><label class="label-top">Mental Health Concern At Referral<br>(Hold Down Ctrl To Select Multiple)</label></span><span class="qmh_concern_referral_ia"><select size="15" name="mh_concern_referral_ia" id="yere_mh_concerns" onchange="checkhideall()" multiple>
 <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [yere_mh_concerns] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_concern_referral_ia^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 </select>||CONFIGURE yere_mh_concerns||
 
@@ -1283,23 +1283,14 @@ function updatesignatures(){
         </div>
      </div>
 <div class="entire">
-<div class="col12 term">Youth Program Needs</div>
+<div class="col12 term">Youth / Family Program Needs</div>
 </div>
 <div class="entire">
-    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
+    <div class="col12"><label class="label-top"><i>Click "Add" below to enter the client and family's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
   </div>
  <div class="entire">
-    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientNonBehavioralNeedsSum||</div>
+    <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYEREClientFamilyNeeds||</div> 
   </div>
-  <div class="entire">
-    <div class="col12 term">Caregiver Program Needs</div>
-    </div>
-    <div class="entire">
-        <div class="col12"><label class="label-top"><i>Click "Add" below to enter the caregiver's program needs. Click "View/Edit" to update needs and statuses as necessary.</i></label></div>
-      </div>
-     <div class="entire">
-        <div class="col12">||INCLUDESUMMATION SummationFLBodyPWYERECaregiverProgramNeeds||</div>
-      </div>
 <div class="entire">
 </div>
  <div class="entire">

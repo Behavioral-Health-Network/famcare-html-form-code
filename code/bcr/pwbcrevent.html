@@ -545,22 +545,20 @@ function updatesignatures(){
     <div class="col12 fldevent_name qevent_name"><span class="qevent_name"><label class="label-top">||FIELDTAG event_name||Event Name ||ENDFIELDTAG||</label></span><span class="qevent_name"><input type="text" name="event_name" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
- <div class="entire">
+<div class="entire">
     <div class="col12 fldevent_topic qevent_topic">
-    <div class="col12 fldevent_topic qevent_topic"><span class="qevent_topic required-label">||PWRequiredFieldRequiredText||</span><span class="qevent_topic required-field-label"><label class="label-top">||FIELDTAG event_topic||Event Topic||ENDFIELDTAG||</label></span><span class="qevent_topic"><select size="1"  name="event_topic" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Medicaid">Medicaid</option>
-<option value="Adult Mental Health First Aid (MHFA)">Adult Mental Health First Aid (MHFA)</option>
-<option value="Youth Mental Health First Aid (MHFA)">Youth Mental Health First Aid (MHFA)</option>
-<option value="Question; Persuade; Refer (QPR) for Youth">Question; Persuade; Refer (QPR) for Youth</option>
-<option value="Question; Persuade; Refer (QPR) for Adults">Question; Persuade; Refer (QPR) for Adults</option>
-<option value="Sharing Hope">Sharing Hope</option>
-<option value="Trauma Awareness">Trauma Awareness</option>
-<option value="Other">Other</option>
-
-</select></span></div>
+            <span class="qevent_topic required-label">||PWRequiredFieldRequiredText||</span>
+            <span class="qevent_topic required-field-label">
+                <label class="label-top">||FIELDTAG event_topic||Event Topic||ENDFIELDTAG||</label>
+            </span>
+            <span class="qevent_topic">
+                <select size="1" name="event_topic" onchange="checkhideall()">
+                    <option value="||SELECT CODE, Description AS DESCRIP FROM bcr_event_topic WHERE Status='Active' OR CODE='^^FIELDVALUE event_topic^^' ORDER BY CODE||">||CHOICETABLESQLD||</option>
+                </select>
+                ||CONFIGURE bcr_event_topic||
+            </span>
     </div>
-  </div>
+</div>
  <div class="entire">
     <div class="col12 fldif_other_explain qif_other_explain">
     <div class="col12 fldif_other_explain qif_other_explain"><span class="qif_other_explain"><label class="label-top">||FIELDTAG if_other_explain||If "Other", Explain ||ENDFIELDTAG||</label></span><span class="qif_other_explain"><textarea name="if_other_explain" class="autoexpand"></textarea></span></div>

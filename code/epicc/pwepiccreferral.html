@@ -45,7 +45,9 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('ems_fire_district_place_referral_in_transit');
     setrequire('client_age_14_17');
     setrequire('ems_involved_ref');
+    // setrequire('law_enforcement_involved_ref'); // will make required on Oct 1
     setrequire('ems_fire_district');
+    // setrequire('law_enforcement_agency'); // will make required on Oct 1
     // setrequire('leo_involved_referral');
     setrequire('epicc_program_participation_referral');
     setrequire('housing_status_referral');
@@ -55,7 +57,9 @@ $("#gvttimetime_call_received").timepicker({  'step':1, 'scrollDefault': 'now'})
     setrequire('who_administered_suboxone');
     setrequire('milligrams_suboxone');
     setrequire('ems_transport_to_hospital');
+    setrequire('law_enforcement_transport_to_hospital');
     setrequire('other_ems_fire_district');
+    // setrequire('law_enforcement_agency_other'); // will make required on Oct 1
     setrequire('TiedEnrollment');
     setrequire('ineligible_reason');
     setrequire('ineligible_referral');
@@ -75,6 +79,7 @@ function checkhideall() {
    checkhide(f.community_referral_source,"specify_other_referring_agency","020");
    checkhide(f.community_referral_source,"shelter","030");
    checkhide(f.ems_involved_ref,"ems_fire_district","Yes");
+   checkhide(f.law_enforcement_involved_ref,"law_enforcement_agency","Yes");
    checkhide(f.epicc_referring_agency,"ems_fire_district_place_referral_in_transit","015,073");
    checkhide(f.epicc_referring_agency,"emergency_response_call","015,073");
    checkhide(f.epicc_referring_agency,"suboxone_ems","015,073");
@@ -82,9 +87,11 @@ function checkhideall() {
    checkhide(f.suboxone_ems,"who_administered_suboxone","Yes");
    checkhide(f.suboxone_ems,"milligrams_suboxone","Yes");
    checkhide(f.epicc_referring_agency,"ems_transport_to_hospital","073");
+   checkhide(f.epicc_referring_agency,"law_enforcement_transport_to_hospital","076");
    checkhide(f.client_age_14_17,"parent_caregiver_present_ref_or_notified","Yes");
    checkhide(f.client_enrolled_su_before,"list_all_ada","Yes");
    checkhide(f.ems_fire_district,"other_ems_fire_district","019");
+   checkhide(f.law_enforcement_agency,"law_enforcement_agency_other","103");
   checkhide(f.epicc_program_participation_referral,"ineligible_referral","025");
   checkhide(f.ineligible_referral,"ineligible_reason","Doesn't Meet Program Criteria");
 
@@ -325,6 +332,7 @@ function validateform(scope='all') {
   if (!hiddenfield('ems_fire_district_place_referral_in_transit') && gvtfieldvalue('ems_fire_district_place_referral_in_transit')=='') {edesc=edesc+`Must specify a value for Did EMS/Fire District place referral while in transit? \n`; seterror("ems_fire_district_place_referral_in_transit");}
   if (!hiddenfield('client_age_14_17') && gvtfieldvalue('client_age_14_17')=='') {edesc=edesc+`Must specify a value for Is client age 14-17?\n`; seterror("client_age_14_17");}
   if (!hiddenfield('ems_involved_ref') && gvtfieldvalue('ems_involved_ref')=='') {edesc=edesc+`Must specify a value for Was EMS involved with this referral?\n`; seterror("ems_involved_ref");}
+  // if (!hiddenfield('law_enforcement_involved_ref') && gvtfieldvalue('law_enforcement_involved_ref')=='') {edesc=edesc+`Must specify a value for Was Law Enforcement involved with this referral?\n`; seterror("law_enforcement_involved_ref");} // will make required on Oct 1
   // if (!hiddenfield('leo_involved_referral') && gvtfieldvalue('leo_involved_referral')=='') {edesc=edesc+`Must specify a value for Was law enforcement involved with this referral? \n`; seterror("leo_involved_referral");}
   if (!hiddenfield('epicc_program_participation_referral') && gvtfieldvalue('epicc_program_participation_referral')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("epicc_program_participation_referral");}
   // Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly.
@@ -333,8 +341,11 @@ function validateform(scope='all') {
   if (!hiddenfield('who_administered_suboxone') && gvtfieldvalue('who_administered_suboxone')=='') {edesc=edesc+`Must specify a value for Who Administered Suboxone?\n`; seterror("who_administered_suboxone");}
   if (!hiddenfield('milligrams_suboxone') && gvtfieldvalue('milligrams_suboxone')=='') {edesc=edesc+`Must specify a value for Milligrams of Suboxone?\n`; seterror("milligrams_suboxone");}
   if (!hiddenfield('ems_transport_to_hospital') && gvtfieldvalue('ems_transport_to_hospital')=='') {edesc=edesc+`Must specify a value for What hospital are they being transported to?\n`; seterror("ems_transport_to_hospital");}
+  if (!hiddenfield('law_enforcement_transport_to_hospital') && gvtfieldvalue('law_enforcement_transport_to_hospital')=='') {edesc=edesc+`Must specify a value for What hospital are they being transported to?\n`; seterror("law_enforcement_transport_to_hospital");}
   if (!hiddenfield('ems_fire_district') && gvtfieldvalue('ems_fire_district')=='') {edesc=edesc+`Must specify a value for EMS/Fire District\n`; seterror("ems_fire_district");}
   if (!hiddenfield('other_ems_fire_district') && gvtfieldvalue('other_ems_fire_district')=='') {edesc=edesc+`Must specify a value for Other EMS/Fire District\n`; seterror("other_ems_fire_district");}
+  // if (!hiddenfield('law_enforcement_agency') && gvtfieldvalue('law_enforcement_agency')=='') {edesc=edesc+`Must specify a value for Law Enforcement Agency\n`; seterror("law_enforcement_agency");} // will make required on Oct 1
+  // if (!hiddenfield('law_enforcement_agency_other') && gvtfieldvalue('law_enforcement_agency_other')=='') {edesc=edesc+`Must specify a value for Other Law Enforcement Agency\n`; seterror("law_enforcement_agency_other");} // will make required on Oct 1
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
 }
@@ -698,16 +709,22 @@ function updatesignatures(){
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
-  <!-- Added by K. Dairaghi on 2025-07-10 - Adds EMS questions (emergency_response_call, suboxone_ems, who_administered_suboxone, milligrams_suboxone, ems_transport_to_hospital) that were asked by AnswerFirst and EPICC reports out on monthly. -->
   <div class="entire">
-<div class="col12 term">EMS/Fire District</div>
+<div class="col12 term">First Responders</div>
 </div>
    <div class="entire">
     <div class="col4"><label class="label-top"></label></div>
   </div>
  <div class="entire">
     <div class="col4 qems_involved_ref">
-    <div class="col4 fldems_involved_ref qems_involved_ref"><span class="qems_involved_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qems_involved_ref required-field-label"><label class="label-top">||FIELDTAG ems_involved_ref||Was EMS involved with this referral?||ENDFIELDTAG||</label></span><span class="qems_involved_ref"><input type="radio" name="ems_involved_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="ems_involved_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col4 fldems_involved_ref qems_involved_ref"><span class="qems_involved_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qems_involved_ref required-field-label"><label class="label-top">||FIELDTAG ems_involved_ref||Was EMS involved with this referral?||ENDFIELDTAG||</label></span><span class="qems_involved_ref">
+      <input type="radio" name="ems_involved_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;
+      <input type="radio" name="ems_involved_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+     </div>
+   <div class="col5 qlaw_enforcement_involved_ref">
+    <div class="col5 fldlaw_enforcement_involved_ref qlaw_enforcement_involved_ref"><span class="qlaw_enforcement_involved_ref required-label">||PWRequiredFieldRequiredText||</span><span class="qlaw_enforcement_involved_ref required-field-label"><label class="label-top">||FIELDTAG law_enforcement_involved_ref||Was Law Enforcement involved with this referral?||ENDFIELDTAG||</label></span><span class="qlaw_enforcement_involved_ref">
+      <input type="radio" name="law_enforcement_involved_ref" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;
+      <input type="radio" name="law_enforcement_involved_ref" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
     <div class="entire">
@@ -717,12 +734,20 @@ function updatesignatures(){
 </select>||CONFIGURE epicc_ems_fire_district||
 </span></div>
      </div>
+    <div class="col5 qlaw_enforcement_agency">
+    <div class="col5 fldlaw_enforcement_agency qlaw_enforcement_agency"><span class="qlaw_enforcement_agency required-label">||PWRequiredFieldRequiredText||</span><span class="qlaw_enforcement_agency required-field-label"><label class="label-top">Which Law Enforcement Agency?</label></span><span class="qlaw_enforcement_agency"><select size="1" name="law_enforcement_agency" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [law_enforcement_agencies] WHERE (STATUS='Active' OR CODE='^^FIELDVALUE law_enforcement_agencies^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE epicc_law_enforcement_agency||
+</span></div>
+     </div>
     </div>
  <div class="entire">
     <div class="col4 qother_ems_fire_district">
     <div class="col4 fldother_ems_fire_district qother_ems_fire_district"><span class="qother_ems_fire_district required-label">||PWRequiredFieldRequiredText||</span><span class="qother_ems_fire_district required-field-label"><label class="label-top">||FIELDTAG other_ems_fire_district||Other EMS/Fire District||ENDFIELDTAG||</label></span><span class="qother_ems_fire_district"><input type="text" name="other_ems_fire_district" size="20" onchange="checkhideall()"></span></div>
      </div>
-    <div class="col4"><label class="label-top"></label></div>
+    <div class="col5 qlaw_enforcement_agency_other">
+    <div class="col5 fldlaw_enforcement_agency_other qlaw_enforcement_agency_other"><span class="qlaw_enforcement_agency_other required-label">||PWRequiredFieldRequiredText||</span><span class="qlaw_enforcement_agency_other required-field-label"><label class="label-top">||FIELDTAG law_enforcement_agency_other||Other Law Enforcement Agency||ENDFIELDTAG||</label></span><span class="qlaw_enforcement_agency_other"><input type="text" name="law_enforcement_agency_other" size="20" onchange="checkhideall()"></span></div>
+     </div>
   </div>    
  <div class="entire">
     <div class="col6 qems_fire_district_place_referral_in_transit">
@@ -786,12 +811,18 @@ function updatesignatures(){
    <div class="entire">
     <div class="col6 qems_transport_to_hospital">
     <div class="col6 fldems_transport_to_hospital qems_transport_to_hospital"><span class="qems_transport_to_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qems_transport_to_hospital required-field-label"><label class="label-top">What hospital are they being transported to?</label></span><span class="qems_transport_to_hospital"><select size="1" name="ems_transport_to_hospital" onchange="checkhideall()">
-<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_referral_sources^^') AND bhn_program='EPICC' AND CODE NOT IN ('014','073','015') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_referral_sources^^') AND bhn_program='EPICC' AND CODE NOT IN ('014','073','015','076','077') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
 <option value="Other">Other</option>
 </select>||CONFIGURE program_referral_sources||
 </span></div>
      </div>
-    <div class="col4"><label class="label-top"></label></div>
+     <div class="col6 qlaw_enforcement_transport_to_hospital">
+    <div class="col6 fldlaw_enforcement_transport_to_hospital qlaw_enforcement_transport_to_hospital"><span class="qlaw_enforcement_transport_to_hospital required-label">||PWRequiredFieldRequiredText||</span><span class="qlaw_enforcement_transport_to_hospital required-field-label"><label class="label-top">What hospital are they being transported to?</label></span><span class="qlaw_enforcement_transport_to_hospital"><select size="1" name="law_enforcement_transport_to_hospital" onchange="checkhideall()">
+<option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [program_referral_sources] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE program_referral_sources^^') AND bhn_program='EPICC' AND CODE NOT IN ('014','073','015','076','077') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+<option value="Other">Other</option>
+</select>||CONFIGURE program_referral_sources||
+</span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col4"><label class="label-top"></label></div>

@@ -1,0 +1,806 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>Case Note Detail - Group Note</title>
+<meta name="Microsoft Border" content="none">
+
+<script type="text/javascript" src="script/jquery.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="script/jquery.timepicker.css" /> 
+
+</head>
+
+||INCLUDE FUNCTIONVALIDDATE.HTM||
+
+<PREADD SET PROGNOTETYPE="PROGNOTEUNIT|">
+<POSTADD SET PROGNOTETYPE="||||">
+<PREADD SET PROGNOTEDOCSERNO="||PREGENDOCSERNO||">
+
+<script language="JavaScript">
+
+    function DisplayOrHide(criteriaField, displayField) {
+        //alert(document.getelementbyid(criteriaField).value);
+        //alert(document.getelementbyid(criteriaField).checked);
+        if (document.getElementById(criteriaField).checked == true) {
+            document.getElementById(displayField).style.display = "";
+        } else  {
+        document.getElementById(displayField).style.display = "none";
+        }
+    }
+    
+    function StartTimeblur() {
+        // in case user enters e.g. "12" instead of "12:00"
+        if (lenjis(document.forms[0].CONTACTTIME.value) < 3 && document.forms[0].CONTACTTIME.value != "") {
+            document.forms[0].CONTACTTIME.value = document.forms[0].CONTACTTIME.value + ":00";
+        }
+        setqty();
+        return;
+    }
+
+    function setqty() {
+        n1 = parseFloat(NumsOnly(document.forms[0].CONTACTTIME.value));
+        n2 = parseFloat(NumsOnly(document.forms[0].EndTime.value));
+        if (isNaN(n1)) { return; }
+        if (isNaN(n2)) { return; }
+        // for 12:xx times, subtract 1200 so that the PM adjustment below will work correctly (i.e. 12:01 AM is 00:01)
+        if (n1 >= 1200 && n1 < 1300) {
+            n1 = n1 - 1200;
+        }
+        if (n2 >= 1200 && n2 < 1300) {
+            n2 = n2 - 1200;
+        }
+
+        // add 1200 to PM times, to effectively convert to military time, so that we can do simple math time calculation
+        if (rightjis(ucasejis(document.forms[0].CONTACTTIME.value),2) == 'PM') {
+            n1 = n1 + 1200;
+        }
+        if (rightjis(ucasejis(document.forms[0].EndTime.value),2) == 'PM') {
+            n2 = n2 + 1200;
+        }
+        // handle situation in which timespan > 12 hours and both values are AM or both PM (e.g. from 5PM until 1PM the next day)
+        if (n1 > n2) {
+            n2 = n2 + 2400;
+        }
+
+        n3 = Math.floor(n1 / 100);
+        min1 = n1 - n3 * 100 + n3 * 60;
+        n3 = Math.floor(n2 / 100);
+        min2 = n2 - n3 * 100 + n3 * 60;
+
+        qty = (min2 - min1);
+        if (qty==0) {qty=1}
+        document.forms[0].TotMinutes.value = qty.toString();
+        document.forms[0]._durationHours.value = (qty / 60).toString();
+        return;
+    }
+
+
+    function EndTimeblur() {
+        if (lenjis(document.forms[0].EndTime.value) < 3 && document.forms[0].EndTime.value != "") {
+            document.forms[0].EndTime.value = document.forms[0].EndTime.value + ":00";
+        }
+        setqty();
+        return;
+    }
+
+    function NumsOnly(TheTime) {
+        functionreturnvalue = null;
+        if (lenjis(TheTime) == 0) {
+            var functionreturnvalue = "";
+            return functionreturnvalue;
+        }
+        var ReturnTime = "";
+        for (var x = 1; x <= lenjis(TheTime); x++) {
+            if (numericjis(midjis(TheTime, x, 1))) {
+                ReturnTime = ReturnTime + midjis(TheTime, x, 1);
+            }
+        }
+        functionreturnvalue = ReturnTime;
+        return functionreturnvalue;
+    }
+
+function submitit() {
+        functionreturnvalue=null;
+        var f=document.forms[0];
+	clearInterval(timerID);
+        if (f.ContactDate.value == "") {
+             alert("You Must Enter A Session Date.");
+             return functionreturnvalue;
+        }
+        if(f.CLIENTNUMBERMULTI.value == "") {
+             alert("Please Select At Least One Client.");
+             return;
+        }
+
+	buildhtmlclean();
+
+	var t = new String(f._RENDEREDHTML.value);
+	var tts = t.indexOf("BEGINOFPRINT")+15;
+	var tte = t.indexOf("ENDOFPRINT")-5;
+
+	t = t.substr(tts,tte-tts);
+
+	var tUP = new String(t);
+	tUP = tUP.toUpperCase();
+	tts = tUP.indexOf("(UserID of Person responsible for this communication)");
+	if(tts >= 0){
+		t = t.substr(0,tts) + t.substr(tts+53);
+	}
+
+	tUP = String(t.toUpperCase());
+	tts = tUP.indexOf("STARTOFCLIENTSELECT");
+	tte = tUP.indexOf("ENDOFCLIENTSELECT");
+	if(tts >= 0 && tte > tts){
+		t = t.substr(0,tts-4) + t.substr(tte+20);
+	}
+
+	f._RENDEREDHTMLTemp.value = t;
+
+        QuickSubmitReturn();
+        f._B1.style.display="none";
+        return functionreturnvalue;
+}
+
+var DOCSERNONUM = 1;
+
+function QuickSubmitReturn() {
+	functionreturnvalue=null;
+	var f=document.forms[0];
+	clearInterval(timerID);
+	var Ctrl = f.elements["CLIENTNUMBERMULTI"];
+	for (var x  =  0; x  <= Ctrl.length-1; x ++) {
+		if (Ctrl.options[x].selected) {
+			f.CLIENTNUMBER.value = Ctrl.options[x].value;
+			f.CONTACTNAME.value = Ctrl.options[x].value;
+			f.CONTACTNAMES.value = Ctrl.options[x].text + " (Sel)";
+			f.DOCSERNO.value = "||PROGNOTEDOCSERNO||" + cstrjis(DOCSERNONUM);
+
+			t = f._RENDEREDHTMLTemp.value;
+			f._RENDEREDHTML.value = "";
+
+			var tx="<ht"+"ml>\n\n<he"+"ad>\n\n";
+			tx=tx+"<style media=\"all\" type=\"text/css\">@import \"../css/allprint.css\";</style>\n";
+
+			tx=tx+"<style type=\"text/css\">  .NotForPrint  {    display: none;  }";
+			tx=tx+"  .ForPrint  {    display: ;  font-size: large; }";
+			tx=tx+"  .ForPrintsm  {    display: ;  }";
+			tx=tx+"  .HideDisplayTarget  {    display: none;  }  .bullet:before{        content:\"• \";}</style>";
+
+			tx=tx+"</head>\n<bo"+"dy>\n";
+			tx=tx+"<form> <h2 align=\"center\">Case Note</h2><h3 align=\"center\">" + Ctrl.options[x].text + "</h3>" + t + "</form>\n</bo"+"dy>\n";
+			tx=tx+"</ht"+"ml>\n";
+
+			f._RENDEREDHTML.value = tx;
+
+                        DOCSERNONUM = DOCSERNONUM + 1;
+                        Ctrl.options[x].selected = false;
+                        break;
+                }
+        }
+        var AllDone = true;
+        for (var yz  =  1; yz  <= Ctrl.length-1; yz ++) {
+                if (Ctrl.options[yz].selected) {
+                        AllDone = false;
+                }
+        }
+        if (AllDone) {
+                f.target="";
+                f.CONFIRMSCREEN.value = "SaveConfirmMultiCaseNoteDetail";
+        } else {
+		f.target = "fvalidate";
+		f.CONFIRMSCREEN.value = "SAVECONFIRMQUICK";
+	}
+	f.submit();
+	return functionreturnvalue;
+}
+
+function StartUp() {
+	var functionreturnvalue = null;
+	var f = document.forms[0];
+	$(".jtimepicker").timepicker({ 'scrollDefault': 'now', 'step': 15 }); 
+	try{
+	if ("||LOADFIELDS Select EmployeeNumber, LastName, FirstName From Q_HRFORM Where FamCareUserID = '^^USERID^^' or UserIDLink = '^^USERID^^'||||LOADCURRENTVALUE (0)||" != "") {
+		var Ctrl = document.getElementById("Server");
+		Ctrl.length = 2;
+		Ctrl.options[0].value = "||LOADCURRENTVALUE (0)||";
+		Ctrl.options[0].text = "||LOADCURRENTVALUE (1)||, ||LOADCURRENTVALUE (2)||";
+		Ctrl.selectedIndex = 0;
+		Ctrl.options[1].value = "";
+		Ctrl.options[1].text = "(type and press enter)";
+	}
+	} catch(e) {}
+	try {
+		f.Server.value = "||LOADCURRENTVALUE (0)||";
+		f._Serverajax.value = "||LOADCURRENTVALUE (1)||, ||LOADCURRENTVALUE (2)||";
+	} catch(e) {}
+	return functionreturnvalue;
+}
+
+function HideOrDisplayField(valueFieldID, displayIfValue, displayFieldID) {
+        if (document.forms[0].elements[valueFieldID].value == displayIfValue) {
+            document.forms[0].elements[displayFieldID].style.display = "";
+        }
+        else {
+            document.forms[0].elements[displayFieldID].style.display = "none";
+        }
+}
+
+var waitsecond = 0;
+var timerID = 1;
+
+function updateTime() {
+	var functionreturnvalue = null;
+	waitsecond = waitsecond + 1;
+	if (waitsecond != 50) {return}
+	alert("It appears there may not be any clients that meet that criteria.");
+	document.getElementById("activecount").innerHTML = "";
+	resetsave();
+	return functionreturnvalue;
+}
+
+function resetsave(){
+	var f = document.forms[0];
+	clearInterval(timerID);
+	f._B1.style.display = "";
+	return;
+}
+
+var NumFound = 0;
+
+function ajax_CLIENTNUMBERMULTIcallbackactive(p,r) {
+//1-'' As TheBlank, 2-ClientNumber, 3-LastName, 4-FirstName, 5-Suffix, 6-Street,7-City, 8-State, 9-Zip
+	clearInterval(timerID);
+	NumFound = 0;
+	var TheName = "";
+	var TheLName = "";
+	if(p > 0) {
+		NumFound = p;
+		var t="<br><br><font size=3><b>Click on the Name to Select</b></font><table border=1 cellspacing=0 cellpadding=2 width=50% bgcolor=#FFFFFF class='summary'><thead><tr>";
+		var bgcolor = "#f4f9f5";
+		t=t+"<th width=\"40%\"><b>Name</b></th>";
+		t=t+"<th><b>Client Number</b></th>";
+		t=t+"<th><b>Address</b></th></tr></thead><tbody>";
+		t=t+"<tr>";
+		for (x=1; x <= p; x++) {
+			if(r[x][2] != undefined){
+				if(bgcolor == "#f4f9f5") {
+					bgcolor = "ffffff";
+				} else {
+					bgcolor = "#f4f9f5";
+				}
+				if(r[x][5] != ""){
+					TheName = r[x][4] + " " + r[x][3] + " " + r[x][5];
+					TheLName = r[x][3] + " " + r[x][5];
+				} else {
+					TheName = r[x][4] + " " + r[x][3];
+					TheLName = r[x][3];
+				}
+				t=t+"<tr><td width=\"40%\" bgcolor="+bgcolor+"><a href=\"javascript:void selectclient('"+r[x][2] +"','"+ TheLName +"','"+ r[x][4] + "')\">"+ TheName +"</a></td>";
+				t=t+"<td bgcolor="+bgcolor+">"+r[x][2]+"</td>";
+				t=t+"<td bgcolor="+bgcolor+">"+r[x][6];
+				if(r[x][7] != ""){
+					t = t + "<br>" + r[x][7];
+				}
+				if(r[x][8] != ""){
+					t = t + ", " + r[x][8];
+				}
+				if(r[x][9] != ""){
+					t = t + "&nbsp;&nbsp;" + r[x][9];
+				}
+				t = t +"</td></tr>";
+			}
+		}
+		t=t+"</tbody></table>";
+		document.getElementById("activecount").innerHTML=t;
+	} else {
+		document.getElementById("activecount").innerHTML="";
+	}
+}
+
+function SetAjax() {
+	document.getElementById("activecount").innerHTML = "<p align=center><img src='images/PleaseWait.gif'></p>";
+	waitsecond = 0;
+	clearInterval(timerID);
+	timerID = setInterval("updateTime()",1000);
+}
+
+function selectclient(TheCLNum, LName, FName) {
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	var f1 = f.elements["CLIENTNUMBERMULTI"];
+	f1.options[0].text = "(Please Select)";
+	f1.options[0].selected = false;
+	var InsertHere = 0;
+	var Inserted = false;
+	if(f1.length == 1){
+		f1.length = f1.length + 1;
+		f1.options[f1.length - 1].value = TheCLNum;
+		f1.options[f1.length - 1].text = LName + ", " + FName;
+		f1.options[f1.length - 1].selected = true;
+	} else {
+		for(var z = 1; z <= f1.length - 1; z++){
+			if(TheCLNum == f1.options[z].value){
+				alert("That Client Has Been Previously Selected.");
+				resetsave();
+				return functionreturnvalue;
+			}
+		}
+		for(var x = 1; x <= f1.length - 1; x++){
+			if(LName + ", " + FName < f1.options[x].text){
+				InsertHere = x;
+				f1.length = f1.length + 1;
+				for(var y = f1.length - 1; y > x; y--){
+					f1.options[y].value = f1.options[y-1].value;
+					f1.options[y].text = f1.options[y-1].text;
+				}
+				f1.options[x].value = TheCLNum;
+				f1.options[x].text = LName + ", " + FName;
+				f1.options[x].selected = true;
+				Inserted = true;
+				break;
+			}
+		}
+		if(!Inserted){
+			f1.length = f1.length + 1;
+			f1.options[f1.length - 1].value = TheCLNum;
+			f1.options[f1.length - 1].text = LName + ", " + FName;
+			f1.options[f1.length - 1].selected = true;
+		}
+	}
+	if(NumFound == 1){
+		document.getElementById("activecount").innerHTML = "";
+		f._CLIENTNUMBERMULTI.value = "";
+	}
+	SetClientList();
+	return functionreturnvalue;
+}
+
+
+function SetClientList(){
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	var f1 = f.elements["CLIENTNUMBERMULTI"];
+	var ClientList = "<div align=\"center\"><font size=\"2\"><b>(Click to Remove From List)</b></font></div>";
+	if(f1.length == 1){
+		document.getElementById("ClientListing").innerHTML = "";
+		return functionreturnvalue;
+	}
+	for(var x = 1; x <= f1.length - 1; x++){
+		ClientList = ClientList + "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+		ClientList = ClientList + "<a href=\"javascript:void RemoveClient('" + f1.options[x].value +"')\">" + f1.options[x].text + " (" + f1.options[x].value + ")</a>";
+		f1.options[x].selected = true;
+	}
+	document.getElementById("ClientListing").innerHTML = ClientList + "<br><br>";
+	return functionreturnvalue;
+
+}
+
+function RemoveClient(CNum){
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	var f1 = f.elements["CLIENTNUMBERMULTI"];
+	f1.options[0].text = "(Please  Select)";
+	var InsertHere = 0;
+	var Inserted = false;
+	if(f1.length == 2){
+		f1.length = 1
+	} else {
+		for(var x = 1; x <= f1.length - 1; x++){
+			if(CNum == f1.options[x].value){
+				for(var y = x; y <= f1.length - 2; y++){
+					f1.options[y].value = f1.options[y+1].value;
+					f1.options[y].text = f1.options[y+1].text;
+				}
+				f1.length = f1.length - 1;
+				break;
+			}
+		}
+	}
+	SetClientList();
+	return functionreturnvalue;
+}
+
+function SetSelectType(){
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	if(f._ClientSelectOption[0].checked){
+	document.getElementById("ByProvider").style.display = "";
+	document.getElementById("ByClientName").style.display = "none";
+	document.getElementById("ProviderSelectList").style.display = "";
+        document.getElementById("ClientGroupList").style.display = "none";
+	document.getElementById("activecount").innerHTML = "";
+        document.getElementById("ClientTimeGroupList").style.display = "none";
+	f._CLIENTNUMBERMULTI.value = "";
+	waitsecond = 0;
+	clearInterval(timerID);
+	if(f.PROVIDERSERVICE.value != ""){
+	GetClientList();
+	}
+	}
+    if(f._ClientSelectOption[1].checked){
+	document.getElementById("ByProvider").style.display = "none";
+	document.getElementById("ByClientName").style.display = "";
+	document.getElementById("ProviderSelectList").style.display = "none";
+        document.getElementById("ClientGroupList").style.display = "none";
+        document.getElementById("ClientTimeGroupList").style.display = "none";
+	f.PROVIDERSERVICE.value = "";
+	f._CLIENTNUMBERMULTISel.length = 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Institution)";
+	f._CLIENTNUMBERMULTI.focus();
+	}
+  if(f._ClientSelectOption[2].checked){
+	document.getElementById("ByProvider").style.display = "";
+	document.getElementById("ByClientName").style.display = "none";
+	document.getElementById("ProviderSelectList").style.display = "none";
+        document.getElementById("ClientGroupList").style.display = "";
+        document.getElementById("ClientTimeGroupList").style.display = "none";
+	f.ClientGroupList.value = "";
+	f._CLIENTNUMBERMULTISel.length = 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Group)";
+	f._CLIENTNUMBERMULTI.focus();
+	}
+	return functionreturnvalue;
+}
+
+var NumFound = 0;
+
+function selectclientProv(){
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	var f1 = f.elements["_CLIENTNUMBERMULTISel"];
+	var TheCLNum = "";
+	var LName = "";
+	var FName = "";
+	if(f1.value != ""){
+	TheCLNum = f1.value;
+	var TheName = new String(f1.options[f1.selectedIndex].text);
+	var ff = TheName.indexOf(",");
+	LName = TheName.substr(0,ff);
+	FName = TheName.substr(ff+1);
+	selectclient(TheCLNum, LName, FName);
+	NumFound = 2;
+	}
+	return functionreturnvalue;
+}
+
+function GetClientList(){
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	var WingWhere = "";
+	f._CLIENTNUMBERMULTISel.length = 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Wait)";
+	var sql = "SELECT DISTINCT Q_Client.ClientNumber, Q_Client.ClientName, [LASTNAME], [FIRSTNAME], '' As [RAW] FROM Q_CLIENT INNER JOIN Q_ProviderPlacement on Q_ProviderPlacement.CLIENTNUMBER = Q_CLIENT.CLIENTNUMBER WHERE (IsNull(EndingDate,GetDate()) >= DateAdd(d,-10,GetDate())) And Q_ProviderPlacement.PrimaryProviderCode = '"+f.PROVIDERSERVICE.value+"' "+WingWhere+" ORDER BY [LASTNAME],[FIRSTNAME]";
+//f.BriefDescription.value = sql;//Steve
+	sql = escape(sql);
+	var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopClientList)|SUBMITTIME(||DATE|| ||TIME||)^";
+	parent.fvalidate.location = fullhlink;
+	return functionreturnvalue;
+}
+
+function PopClientList(numelementsper, totalelements, identifier, results) {
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	if(totalelements > 0){
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Provider)";
+	f._CLIENTNUMBERMULTISel.length = totalelements + 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select)";
+	for(var x = 1; x <= totalelements; x++){
+	f._CLIENTNUMBERMULTISel.options[x].value = results[x][1];
+	f._CLIENTNUMBERMULTISel.options[x].text = results[x][3] + ", " + results[x][4];
+	}
+	} else {
+	alert("There are no Clients for this Provider.");
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Institution)";
+	}
+	return functionreturnvalue;
+}
+
+function GetTimeGroupList()  {
+    functionreturnvalue = null;
+	var f = document.forms[0];
+	var WingWhere = "";
+    var testytest = new String(f.ClientGroupList.value);
+	f._CLIENTNUMBERMULTISel.length = 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Wait)";
+	var sql = "SELECT code, description, MondayDaysTimes, TuesdayDaysTimes, WednesdayDaysTimes, ThursdayDaysTimes, FridayDaysTimes from Group_base where (StatusDesc='active' or StatusDesc='') and docrevno=' 0 ' and code = '" + f.ClientGroupList.value + "' order by description";
+//f.BriefDescription.value = sql;//Steve
+	sql = escape(sql);
+	var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopGetClientTimeList)|SUBMITTIME(||DATE|| ||TIME||)^";
+	parent.fvalidate.location = fullhlink;
+	return functionreturnvalue;
+  }
+  //for(var y=1; y<=totalelements - 1; y++)
+  function PopGetClientTimeList(numelementsper, totalelements, identifier, results) {
+    functionreturnvalue = null;
+	var f = document.forms[0];
+    $('#ClientTimeGroupListDD').empty();
+	if(totalelements > 0){
+	$('#ClientTimeGroupListDD').append($('<option>', {
+            value: '||||',
+            text: 'Please Select'
+                }));
+  if(results[1][3] != '') {
+    var MonTimesArray = results[1][3].replace(/\'/g,'');
+    var MonTimes = MonTimesArray.split(",");
+    for(var a=0; a<=MonTimes.length - 1; a++) {
+      var TheValue = results[1][1] + 'Monday' + MonTimes[a];
+      var TheDescription = 'Monday - ' + MonTimes[a];
+      
+  $('#ClientTimeGroupListDD').append($('<option>', {
+            value: TheValue,
+            text: TheDescription
+                }));
+    }
+  }
+      
+      if(results[1][4] != '') {
+    var TuesTimesArray = results[1][4].replace(/\'/g,'');
+    var TuesTimes = TuesTimesArray.split(",");
+    for(var b=0; b<=TuesTimes.length - 1; b++) {
+      var TheValue = results[1][1] + 'Tuesday' + TuesTimes[b];
+      var TheDescription = 'Tuesday - ' + TuesTimes[b];
+      
+  $('#ClientTimeGroupListDD').append($('<option>', {
+            value: TheValue,
+            text: TheDescription
+                }));
+    }
+  }
+      
+      if(results[1][5] != '') {
+    var WedTimesArray = results[1][5].replace(/\'/g,'');
+    var WedTimes = WedTimesArray.split(",");
+    for(var b=0; b<=WedTimes.length - 1; b++) {
+      var TheValue = results[1][1] + 'Wednesday' + WedTimes[b];
+      var TheDescription = 'Wednesday - ' + WedTimes[b];
+      
+  $('#ClientTimeGroupListDD').append($('<option>', {
+            value: TheValue,
+            text: TheDescription
+                }));
+    }
+  }
+      
+      if(results[1][6] != '') {
+    var ThurTimesArray = results[1][6].replace(/\'/g,'');
+    var ThurTimes = ThurTimesArray.split(",");
+    for(var b=0; b<=ThurTimes.length - 1; b++) {
+      var TheValue = results[1][1] + 'Thursday' + ThurTimes[b];
+      var TheDescription = 'Thursday - ' + ThurTimes[b];
+      
+  $('#ClientTimeGroupListDD').append($('<option>', {
+            value: TheValue,
+            text: TheDescription
+                }));
+    }
+  }
+      
+      if(results[1][7] != '') {
+    var FriTimesArray = results[1][7].replace(/\'/g,'');
+    var FriTimes = FriTimesArray.split(",");
+    for(var a=0; a<=FriTimes.length - 1; a++) {
+      var TheValue = results[1][1] + 'Friday' + FriTimes[a];
+      var TheDescription = 'Friday - ' + FriTimes[a];
+      
+  $('#ClientTimeGroupListDD').append($('<option>', {
+            value: TheValue,
+            text: TheDescription
+                }));
+    }
+  }
+      
+	} else {
+	alert("There are no Clients for this Group.");
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Group)";
+	}
+    document.getElementById('ClientTimeGroupList').style.display = '';
+	return functionreturnvalue;
+  }
+  
+  function GetClientGroupList(){
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	var WingWhere = "";
+    var testytest = new String(f.ClientGroupList.value);
+	f._CLIENTNUMBERMULTISel.length = 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Wait)";
+	var sql = "SELECT DISTINCT Q_Client.ClientNumber, Q_Client.ClientName, Q_Client.[LASTNAME], Q_Client.[FIRSTNAME] FROM GroupListingForm left join Q_Client on GroupListingForm.clientnumber = Q_client.clientnumber WHERE GroupListingForm.docrevno=' 0 ' and GroupListingForm.CheckboxInfoStorageReport LIKE " + "'*" + f.ClientTimeGroupList.value + "*'" + " ORDER BY Q_Client.[LASTNAME], Q_Client.[FIRSTNAME]";
+//f.BriefDescription.value = sql;//Steve
+	sql = escape(sql);
+	var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(P)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopGetClientGroupList)|SUBMITTIME(||DATE|| ||TIME||)^";
+	parent.fvalidate.location = fullhlink;
+	return functionreturnvalue;
+}
+
+function PopGetClientGroupList(numelementsper, totalelements, identifier, results) {
+	functionreturnvalue = null;
+	var f = document.forms[0];
+	if(totalelements > 0){
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Group)";
+	f._CLIENTNUMBERMULTISel.length = totalelements + 1;
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select)";
+	for(var x = 1; x <= totalelements; x++){
+	f._CLIENTNUMBERMULTISel.options[x].value = results[x][1];
+	f._CLIENTNUMBERMULTISel.options[x].text = results[x][3] + ", " + results[x][4];
+	}
+	} else {
+	alert("There are no Clients for this Group.");
+	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Group)";
+	}
+	return functionreturnvalue;
+}
+
+
+  
+</script>
+<body onload="StartUp()">
+
+<form enctype="multipart/form-data" method="post" action="genfunc.exe">
+    <input type="hidden" name="FUNCTION" value="SAVE" /> 
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||" /> 
+    <input type="hidden" name="DOCSERNO" value="||DOCSERNO||" /> 
+    <input type="hidden" name="PREGENDOCSERNO" value="||PREGENDOCSERNO||" /> 
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="TABLENAME" value="CaseNoteDetail" /> 
+    <input type="hidden" name="VISITDT" value="||DATE||" /> 
+    <input type="hidden" name="VISITTM" value="||TIME||" /> 
+    <input type="hidden" name="CONFIRMSCREEN" value="SaveConfirmProg" /> 
+    <input type="hidden" name="SUMMATION" value="||SCREENPARM SUMMATION||" /> 
+    <input type="hidden" name="AUTOCLOSE" value="YES" /> 
+    <input type="hidden" name="SIGNATURE" value="||||"/>
+    <input type="hidden" name="CONTACTNAME" value="||||"/>
+    <input type="hidden" name="CONTACTNAMES" value="||||"/>
+    <input type="hidden" name="_RENDEREDHTML" value="||||"/>
+
+    <h2 align="center">Group Case Notes</h2>
+<!--BEGINOFPRINT-->
+    <div class="extrawidecol">
+    <div class="deflist">
+    <div class="term">Case Note Information</div>
+    <div class="def">
+    <ul>
+        <li id="_gvtContactDate"><strong>||FIELDTAG ContactDate||Date of Service||ENDFIELDTAG|| : </strong><input type="text" name="ContactDate" size="8" onblur="validdatenoblankAny(this)" value="||DATE||" class="jdatepicker"></li>
+        <li id="_gvtCONTACTTIME"><strong>||FIELDTAG CONTACTTIME||Start Time||ENDFIELDTAG|| : </strong><input type="text" name="CONTACTTIME" id="CONTACTTIME" size="6" onChange="StartTimeblur()" class="jtimepicker" >
+           &nbsp;&nbsp;&nbsp; 
+           <b>||FIELDTAG EndTime||Stop Time||ENDFIELDTAG|| :</b><input type="text" name="EndTime" size="6" onChange="EndTimeblur()" id="EndTime" class="jtimepicker">
+           &nbsp;&nbsp;&nbsp;
+            <b>||FIELDTAG TotMinutes||Duration||ENDFIELDTAG|| :</b> <input type="text" name="TotMinutes" size="2" readonly="readonly"> min&nbsp;&nbsp;&nbsp;
+            <input type="text" name="_durationHours" size="2" readonly="readonly"> hours</li>
+    </ul>
+    </div>
+    <div id="_gvtCaseNoteInformationHeader" class="term">||FIELDTAG CaseNoteInformationHeader||Case Note Information||ENDFIELDTAG||</div>
+    <div class="def highlighted">
+    <ul>
+        <li>&nbsp;</li>
+        <li id="_gvtBriefDescription"><strong>||FIELDTAG BriefDescription||Remarks||ENDFIELDTAG|| : </strong><textarea name="BriefDescription" style="width: 550px; height: 45px" id="BriefDescription" class="autoexpand"></textarea></li>
+        <li id="_gvtServerType"><strong>||FIELDTAG ServerType||Professional Level of Service||ENDFIELDTAG|| : </strong><select size="1" name="ServerType">
+            <option value="||SELECT CODE, Description FROM SERVERTYPE Order By Code||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>&nbsp;||CONFIGURE SERVERTYPE||</li>
+        <li id="_gvtServer"><strong>||FIELDTAG Server||Service Provided By||ENDFIELDTAG|| : </strong>
+            <select size="1" name="Server" id="Server" onchange="setrate();GetOverlapData()">
+            <option value="||SELECT TOP 50 EMPLOYEENUMBER, [EmployeeName] FROM Q_HRFORM WHERE (LASTNAME LIKE '^^TYPEVALUE^^*' or FirstName LIKE '^^TYPEVALUE^^*') and privateprovider='^^PRIVATEPROVIDER^^' and EmpStatus='Active' ORDER BY [LASTNAME],[FIRSTNAME]|Select EMPLOYEENUMBER, [EmployeeName] FROM Q_HRFORM WHERE EMPLOYEENUMBER='^^FIELDVALUE Server^^'||" selected="selected">||CHOICETABLESEARCH||</option>
+            </select>
+        </li>
+              <li id="_gvtTypeofService"><strong>||FIELDTAG TypeofService||Type of Service||ENDFIELDTAG|| : </strong><select size="1" name="Service">
+                <option value="||SELECT CODE, DESCRIPTION FROM SERVICEFORMSERVICES WHERE (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE Service^^') and privateprovider='^^PRIVATEPROVIDER^^' ORDER BY Description||" selected="selected">||CHOICETABLESQLD||</option>
+                </select>&nbsp;||CONFIGURE SERVICEFORMSERVICES||</li>
+        <li id="_gvtContactType"><strong>||FIELDTAG ContactType||Type of Contact||ENDFIELDTAG|| : </strong><select size="1" name="ContactType">
+            <option value="||Select Code, Description From ContactType Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE CONTACTTYPE^^') and privateprovider='^^PRIVATEPROVIDER^^' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+            </select>||CONFIGURE ContactType||</li>
+        <li id="_gvtProcedureCode"><strong>||FIELDTAG ProcedureCode||Procedure Code||ENDFIELDTAG|| : </strong><select size="1" name="ProcedureCode">
+        <option value="||SELECT CODE,DESCRIPTION&amp;' ('&amp;Code&amp;')' FROM MEDICALDENTALBILLINGCODES Where MedicalDental='M' And (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE ProcedureCode^^') and privateprovider='^^PRIVATEPROVIDER^^' ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+        </select>||CONFIGURE MEDICALDENTALBILLINGCODES||</li>
+        <li id="_gvtServiceSite"><strong>||FIELDTAG ServiceSite||Location||ENDFIELDTAG|| : </strong><select size="1" name="ServiceSite" onchange="HideOrDisplayField('ServiceSite',' Other','ServiceSiteOther')">
+          <option value="||Select Code, Description From SERVICESITE Where (Status='Active' or Status='' or Status='1' or Code='^^FIELDVALUE SERVICESITE^^') and privateprovider='^^PRIVATEPROVIDER^^' UNION SELECT ' Other',' Other' Order By Description||" selected="selected">||CHOICETABLESQLD||</option>
+          </select>||CONFIGURE SERVICESITE||
+          <input type="text" size="20" name="ServiceSiteOther" style="display:none"></li>
+        <li id="_gvtEnteredBy"><strong>||FIELDTAG EnteredBy||Entered By||ENDFIELDTAG|| : </strong><input type="text" name="EnteredBy" size="25" onfocus="document.forms(0).SIGNATURE.focus()" value="||USERID||" /> ||STARTSTRIP||(UserID of Person responsible for this communication)||ENDSTRIP||</li>
+        <li id="_gvtEnteredTime"><strong>||FIELDTAG EnteredTime||Date/Time||ENDFIELDTAG|| : </strong><input type="text" name="EnteredTime" size="25" onfocus="document.forms(0).SIGNATURE.focus()" value="||DATE|| ||TIME||" /></li>
+    </ul>
+    </div>
+    </div>
+<!--STARTOFCLIENTSELECT-->
+    <div class="deflist">
+    <div class="term">Select Clients</div>
+    <div class="def">
+       <ul>
+         <li><strong>Client Select Option : </strong><input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectProvider" /><label for="ClientSelectProvider">By Provider</label>  <input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectByClient" /><label for="ClientSelectByClient">By Client Name</label>  <input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectByGroup" /><label for="ClientSelectByGroup">By Client Group</label></li>
+         <li id="ProviderSelectList" style="display:none"><strong>||FIELDTAG ProviderService||Provider||ENDFIELDTAG|| : </strong><select size="1" name="PROVIDERSERVICE" onChange="GetClientList()">
+           <option value="||Select Distinct Q_Provider.ProviderCode, Q_Provider.Providername + Case When IsNull(ProgramCategory,'') = '' Then '' else ' (' + ProgramCategory + ')' End As [RAW], Q_Provider.ProviderName From Q_Provider Inner Join ProviderHeirarchy on Q_Provider.ProviderCode=ProviderHeirarchy.ProviderCode Inner Join Q_ProviderPlacement on Q_Provider.ProviderCode = Q_ProviderPlacement.PrimaryProviderCode Inner Join Q_Client c on c.ClientNumber = Q_ProviderPlacement.ClientNumber where AllowableProvider = '^^PROVIDERCODE^^' And (IsNull(EndingDate,GetDate()) >= DateAdd(d,-10,GetDate())) Order By Q_Provider.ProviderName||">||CHOICETABLESQLD||</option>
+           </select>
+         </li>
+         
+         <li id="ClientGroupList" style="display:none"><strong>||FIELDTAG GroupList||Group List||ENDFIELDTAG|| : </strong><select size="1" name="ClientGroupList" onChange="GetTimeGroupList()">
+           <option value="||select code, description from Group_base where (StatusDesc='active' or StatusDesc='') and docrevno=' 0 ' order by description||">||CHOICETABLESQLD||</option>
+           </select>
+         </li>
+        <li id="ClientTimeGroupList" style="display:none"><strong>||FIELDTAG TimeList||Time List||ENDFIELDTAG|| : </strong>
+          <select size="1" name="ClientTimeGroupList" id="ClientTimeGroupListDD" onchange="GetClientGroupList()">
+            <option value="||||"></option>
+           </select>
+         </li>
+       </ul>
+      
+      
+    </div>
+    <div class="leftcol">
+    <div class="term">Client Select List</div>
+    <div class="def">
+    <ul id="ByProvider" style="display:none">
+        <li><b>&nbsp;</b><select multiple="multiple" size="10" name="_CLIENTNUMBERMULTISel" onClick="selectclientProv()">
+        <option value="||||">(Please Select Institution)</option>
+        </select></li>
+    </ul>
+    <ul id="ByClientName" style="display:none">
+        <li><b>(Please Type the first few letters of the Clients First or Last Name or<br>Use the Format FirstName then LastName separated by a space):</b>&nbsp;</li>
+        <li><strong>&nbsp;</strong>&nbsp;</li>
+        <li><strong>&nbsp;</strong><input type="text" size="30" name="_CLIENTNUMBERMULTI" onKeyDown="SetAjax()">||AJAX Select Distinct TOP 30 '' As Blank, c.ClientNumber, c.LastName, c.FirstName + ' ' + IsNull(c.MiddleInitial,'') as firstname, c.NameSuffix, c.Street, c.city, c.State, c.Zip, c.birthdate  From Q_Client_Simple c inner join q_client qc on c.clientnumber = qc.clientnumber Where c.ClientNumber != '' And c.ClientName != '' And c.ClientStatus != 'Inactive Client' And '' != '[RAW]' And ((c.LastName Like '%^^TYPEVALUE^^%' or c.FirstName Like '%^^TYPEVALUE^^%' or c.LastName Like '^^TYPEVALUE^^%' or c.FirstName Like '^^TYPEVALUE^^%') Or (Case When CharIndex(' ','^^TYPEVALUE^^') > 0 Then Case When CharIndex(RTrim(LTrim(SubString('^^TYPEVALUE^^',1,CharIndex(' ','^^TYPEVALUE^^')))),c.FirstName) > 0 And CharIndex(SUBSTRING('^^TYPEVALUE^^',CharIndex(' ','^^TYPEVALUE^^')+1,1000),c.LastName) > 0 Then 1 Else 0 End Else 0 End) > 0) Order By LastName, FirstName||<input type="hidden" name="_CLIENTNUMBERMULTI_hidden" id="_CLIENTNUMBERMULTI_hidden"></li>
+        <div><span id="activecount">&nbsp;</span></div>
+    </ul>
+
+    </div>
+    </div>
+    <div class="rightcol">
+    <div class="term">Persons Present, Contact With or Contact Regarding</div>
+    <div class="def">
+    <ul>
+        <li><b><span id="ClientListing">&nbsp;</span></b>&nbsp;</li>
+    </ul>   
+    </div>
+    </div>
+    </div>
+
+<span style="display:none">
+    <div class="term">Select Clients List</div>
+    <div class="def">
+       <ul>
+         <li><strong>&nbsp;</strong><select name="CLIENTNUMBERMULTI" size="8" multiple>
+             <option value="||||">Client Listing</option>
+             </select>
+         </li>
+       </ul>
+    </div>
+</span>
+<!--ENDOFCLIENTSELECT-->
+    <div class="deflist" id="_gvtInformationDomains">
+    <div class="term">||FIELDTAG InformationDomains||Information Domains||ENDFIELDTAG||</div>
+    <div class="def highlighted">
+    <ul>
+        <li id="_gvtChildFunctioning"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ChildFunctioning||a. Child Functioning||ENDFIELDTAG||</b><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="ChildFunctioning" style="width: 550px; height: 45px" id="ChildFunctioning" class="autoexpand"></textarea></li>
+        <li id="_gvtAdultFunctioning"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG AdultFunctioning||b. Adult Functioning||ENDFIELDTAG||</b><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="AdultFunctioning" style="width: 550px; height: 45px" id="AdultFunctioning" class="autoexpand"></textarea></li>
+        <li id="_gvtParentingPractices"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ParentingPractices||c. Parent/Caregiver Parenting Practices (exclude disciplinary practices)||ENDFIELDTAG||</b><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="ParentingPractices" style="width: 550px; height: 45px" id="ParentingPractices" class="autoexpand"></textarea></li>
+        <li id="_gvtParentingDiscPractices"><b>&nbsp;&nbsp;&nbsp;&nbsp;||FIELDTAG ParentingDiscPractices||d. Parent/Caregiver Disciplinary Practices||ENDFIELDTAG||</b><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="ParentingDiscPractices" style="width: 550px; height: 45px" id="ParentingDiscPractices" class="autoexpand"></textarea></li>
+    </ul>
+    </div>
+    </div>
+    <div class="deflist" id="_gvtWellbeingConcerns">
+    <div class="term" id="_gvtWellbeingConcernsBanner">||FIELDTAG Wellbeing||Wellbeing Concerns||ENDFIELDTAG||</div>
+    <div class="def">
+    <ul>
+        <li><b>||FIELDTAG DecisionsResources||Document any child wellbeing concerns that became apparent during this visit.||ENDFIELDTAG||</b><br />
+        &nbsp;&nbsp;&nbsp;<textarea name="WellbeingConcerns" style="width: 550px; height: 45px" id="WellbeingConcerns" class="autoexpand"></textarea></li>
+    </ul>
+    </div>
+    </div>
+    <div class="deflist" id="_gvtDecisionsResources">
+    <div class="term" id="_gvtDecisionsResourcesBanner">Decisions and Resources</div>
+    <div class="def highlighted">
+    <ul>
+        <li><b>What decisions were made/actions occurred and why? What resources were identified/engaged?</b><br />
+        &nbsp;&nbsp;&nbsp;<textarea name="DecisionsAndResources" style="width: 550px; height: 45px" id="DecisionsAndResources" class="autoexpand"></textarea></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+<!--ENDOFPRINT-->
+    ||STARTSTRIP||
+    <div align="center"><input type="button" name="_B1" onclick="submitit()" value="Save and Continue" /></div>
+    ||ENDSTRIP||
+<textarea name="_RENDEREDHTMLTemp" style="display:none"></textarea>
+</form>
+</body>
+</html>

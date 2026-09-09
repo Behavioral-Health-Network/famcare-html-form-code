@@ -11,7 +11,7 @@
 
 <body>
 <div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
-<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWBHNChangeRequestForm].[Pathway_Date] ,JTBL1.LASTNAME+', '+JTBL1.FIRSTNAME AS JDESC1 ,JTBL2.PROVIDERNAME AS JDESC2 ,JTBL3.DESCRIPTION AS JDESC3 ,[PWBHNChangeRequestForm].[priority_level] ,[PWBHNChangeRequestForm].[is_request_external]  FROM ^^SP FORMNAME^^  LEFT JOIN [HRFORM] as JTBL1 ON JTBL1.EMPLOYEENUMBER=[PWBHNChangeRequestForm].[HR_Dropdown] AND JTBL1.DOCREVNO=' 0 '  LEFT JOIN [PROVIDER] as JTBL2 ON JTBL2.PROVIDERCODE=[PWBHNChangeRequestForm].[program] AND JTBL2.DOCREVNO=' 0 '  LEFT JOIN [bhn_change_request_category] as JTBL3 ON JTBL3.CODE=[PWBHNChangeRequestForm].[bhn_change_request_category] WHERE ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWBHNChangeRequestForm].[Pathway_Date] ,JTBL1.LASTNAME+', '+JTBL1.FIRSTNAME AS JDESC1 ,CASE WHEN JTBL2.PROVIDERNAME = 'Behavioral Health Network of Greater St. Louis' THEN 'BHN' WHEN JTBL2.PROVIDERNAME = 'Complex Care' THEN 'Complex Care' WHEN CHARINDEX(' - ', JTBL2.PROVIDERNAME) > 0 THEN LEFT(JTBL2.PROVIDERNAME, CHARINDEX(' - ', JTBL2.PROVIDERNAME) - 1) ELSE JTBL2.PROVIDERNAME END AS JDESC2 ,JTBL3.DESCRIPTION AS JDESC3 ,[PWBHNChangeRequestForm].[priority_level] ,[PWBHNChangeRequestForm].[short_description], SCOPE.LIFE_DEVELOPMENT_STATUS AS [STATUS], SCOPE.BLOCKER_DESCRIPTION FROM ^^SP FORMNAME^^  LEFT JOIN [HRFORM] as JTBL1 ON JTBL1.EMPLOYEENUMBER=[PWBHNChangeRequestForm].[HR_Dropdown] AND JTBL1.DOCREVNO=' 0 '  LEFT JOIN [PROVIDER] as JTBL2 ON JTBL2.PROVIDERCODE=[PWBHNChangeRequestForm].[program] AND JTBL2.DOCREVNO=' 0 '  LEFT JOIN [bhn_change_request_category] as JTBL3 ON JTBL3.CODE=[PWBHNChangeRequestForm].[bhn_change_request_category] LEFT JOIN [PWBHNCHANGESCOPEFORM] AS [SCOPE] ON SCOPE.PARENTDOCSERNO = PWBHNCHANGEREQUESTFORM.DOCSERNO AND SCOPE.DOCREVNO = ' 0 ' WHERE ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
 <table cellspacing="0" class="summary">
     <thead>
         <tr>
@@ -20,8 +20,10 @@
             <th>Submitted By</th>
             <th>Program</th>
             <th>Request Category</th>
+            <th>Short Description</th>
             <th>Priority Level</th>
-            <th>External Request</th>
+            <th>Request Status</th>
+            <th>Blocker</th>
             <th>||SORTCOL|ID;descending||Edited On</th>
             <th>||SORTCOL|USERID;ascending||Edited By</th>
         </tr>
@@ -33,8 +35,10 @@
             <td>||SF JDESC1||</td>
             <td>||SF JDESC2||</td>
             <td>||SF JDESC3||</td>
+            <td>||SF short_description||</td>
             <td>||SF priority_level||</td>
-            <td>||SF is_request_external||</td>
+            <td>||SF STATUS||</td>
+            <td>||SF BLOCKER_DESCRIPTION||</td>
             <td>||SF VISITDT|| ||SF VISITTM||</td>
             <td>||SF USERID||</td>
         </tr>

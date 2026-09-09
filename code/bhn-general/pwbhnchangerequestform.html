@@ -651,23 +651,52 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top">Use the prompts below to guide your response. You don’t need to answer every question, but more detail helps us scope your request.</label></div>
   </div>
- <div class="entire">
+<div class="entire">
     <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Short Description:</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top">Please limit character amount to 500.</label></div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
+</div>
+<div class="entire">
     <div class="col12 fldrequested_change qrequested_change">
-    <div class="col12 fldrequested_change qrequested_change"><span class="qrequested_change"><label class="label-top">||FIELDTAG requested_change||What needs to change?||ENDFIELDTAG||</label></span><span class="qrequested_change"><textarea rows="3" name="requested_change" class="autoexpand"></textarea></span></div>
-     </div>
-  </div>
+        <div class="col12 fldrequested_change qrequested_change">
+            <span class="qrequested_change">
+                <label class="label-top">
+                    ||FIELDTAG requested_change||Description||ENDFIELDTAG||
+                </label>
+            </span>
+
+            <!-- Inserted note -->
+            <div class="qrequested_change" style="margin-bottom:4px;">
+                <small>Please limit character amount to 500.</small>
+            </div>
+
+            <span class="qrequested_change">
+                <textarea rows="3" name="requested_change" class="autoexpand" maxlength="500"></textarea>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+</div>
+<div class="entire">
+    <div class="col12 fldshort_description qshort_description">
+        <div class="col12 fldshort_description qshort_description">
+            <span class="qshort_description">
+                <label class="label-top">
+                    ||FIELDTAG short_description||Short Description||ENDFIELDTAG||
+                </label>
+            </span>
+
+            <!-- Inserted note -->
+            <div class="qshort_description" style="margin-bottom:4px;">
+                <small>Please limit character amount to 60.</small>
+            </div>
+
+            <span class="qshort_description">
+                <input type="text" name="short_description" maxlength="60">
+            </span>
+        </div>
+    </div>
+</div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
@@ -708,10 +737,11 @@ function updatesignatures(){
   </div>
 <div class="entire">
 <div class="col12 term">Priority and Timing</div>
+<div class="col12"><label class="label-top">High priority implies urgent operational impact, Medium suggests that the request is important but not urgent, and low indicates a task that could be batched or deferred if needed.</label></div>
 </div>
  <div class="entire">
     <div class="col12 fldpriority_level qpriority_level">
-    <div class="col12 fldpriority_level qpriority_level"><span class="qpriority_level required-label">||PWRequiredFieldRequiredText||</span><span class="qpriority_level required-field-label"><label class="label-top">||FIELDTAG priority_level||Priority Level:||ENDFIELDTAG||</label></span><span class="qpriority_level"><input type="radio" name="priority_level" value="High (Urgent Operational Impact)" onclick="checkhideall()" >High (Urgent Operational Impact)&nbsp;&nbsp;<input type="radio" name="priority_level" value="Medium (Important But Not Urgent)" onclick="checkhideall()" >Medium (Important But Not Urgent)&nbsp;&nbsp;<input type="radio" name="priority_level" value="Low (Can Be Batched Or Deferred)" onclick="checkhideall()" >Low (Can Be Batched Or Deferred)&nbsp;&nbsp;</span></div>
+    <div class="col12 fldpriority_level qpriority_level"><span class="qpriority_level required-label">||PWRequiredFieldRequiredText||</span><span class="qpriority_level required-field-label"><label class="label-top">||FIELDTAG priority_level||Priority Level:||ENDFIELDTAG||</label></span><span class="qpriority_level"><input type="radio" name="priority_level" value="High" onclick="checkhideall()" >High&nbsp;&nbsp;<input type="radio" name="priority_level" value="Medium" onclick="checkhideall()" >Medium&nbsp;&nbsp;<input type="radio" name="priority_level" value="Low" onclick="checkhideall()" >Low&nbsp;&nbsp;</span></div>
      </div>
   </div>
  <div class="entire">
@@ -733,7 +763,7 @@ function updatesignatures(){
 </div>
  <div class="entire">
     <div class="col12 fldis_request_external qis_request_external">
-    <div class="col12 fldis_request_external qis_request_external"><span class="qis_request_external required-label">||PWRequiredFieldRequiredText||</span><span class="qis_request_external required-field-label"><label class="label-top">||FIELDTAG is_request_external||Is this an external request?||ENDFIELDTAG||</label></span><span class="qis_request_external"><input type="radio" name="is_request_external" value="Yes (Request Originates Outside BHN)" onclick="checkhideall()" >Yes (Request Originates Outside BHN)&nbsp;&nbsp;<input type="radio" name="is_request_external" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
+    <div class="col12 fldis_request_external qis_request_external"><span class="qis_request_external required-label">||PWRequiredFieldRequiredText||</span><span class="qis_request_external required-field-label"><label class="label-top">||FIELDTAG is_request_external||Is this an external request?||ENDFIELDTAG||</label></span><span class="qis_request_external"><input type="radio" name="is_request_external" value="Yes" onclick="checkhideall()" >Yes&nbsp;&nbsp;<input type="radio" name="is_request_external" value="No" onclick="checkhideall()" >No&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">

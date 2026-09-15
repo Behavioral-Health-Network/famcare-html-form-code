@@ -12,9 +12,7 @@
 
 ||INCLUDE FUNCTIONVALIDDATE.HTM||
 
-<PREADD SET PROGNOTETYPE="PROGNOTEUNIT|">
-<POSTADD SET PROGNOTETYPE="||||">
-<PREADD SET PROGNOTEDOCSERNO="||PREGENDOCSERNO||">
+<PREADD SETPARM CURRENTSERIAL="||PREGENDOCSERNO||"></PREADD>
 
 <script language="JavaScript">
 
@@ -103,45 +101,27 @@ function submitit() {
         functionreturnvalue=null;
         var f=document.forms[0];
 	clearInterval(timerID);
-        if (f.ContactDate.value == "") {
+        if (f.workshop_date.value == "") {
              alert("You Must Enter A Session Date.");
              return functionreturnvalue;
         }
-        if(f.CLIENTNUMBERMULTI.value == "") {
+        var clientSelected = false;
+        for (var i = 0; i < f.CLIENTNUMBERMULTI.options.length; i++) {
+            if (f.CLIENTNUMBERMULTI.options[i].selected) {
+                clientSelected = true;
+                break;
+            }
+        }
+        if (!clientSelected) {
              alert("Please Select At Least One Client.");
-             return;
+             resetsave();
+             return functionreturnvalue;
         }
 
-	buildhtmlclean();
-
-	var t = new String(f._RENDEREDHTML.value);
-	var tts = t.indexOf("BEGINOFPRINT")+15;
-	var tte = t.indexOf("ENDOFPRINT")-5;
-
-	t = t.substr(tts,tte-tts);
-
-	var tUP = new String(t);
-	tUP = tUP.toUpperCase();
-	tts = tUP.indexOf("(UserID of Person responsible for this communication)");
-	if(tts >= 0){
-		t = t.substr(0,tts) + t.substr(tts+53);
-	}
-
-	tUP = String(t.toUpperCase());
-	tts = tUP.indexOf("STARTOFCLIENTSELECT");
-	tte = tUP.indexOf("ENDOFCLIENTSELECT");
-	if(tts >= 0 && tte > tts){
-		t = t.substr(0,tts-4) + t.substr(tte+20);
-	}
-
-	f._RENDEREDHTMLTemp.value = t;
-
-        QuickSubmitReturn();
         f._B1.style.display="none";
+        QuickSubmitReturn();
         return functionreturnvalue;
 }
-
-var DOCSERNONUM = 1;
 
 // function QuickSubmitReturn() {
 // 	functionreturnvalue=null;
@@ -197,34 +177,33 @@ var DOCSERNONUM = 1;
 function QuickSubmitReturn() {
 
     var f = document.forms[0];
+    var Ctrl = f.elements["CLIENTNUMBERMULTI"];
+    clearInterval(timerID);
 
-    // Build clean HTML
-    buildhtmlclean();
+    // Loop through ALL selected clients
+    for (var x = 0; x < Ctrl.length; x++) {
 
-    // Extract the hidden multi-select list
-    var list = f.CLIENTNUMBERMULTI.options;
+        if (Ctrl.options[x].selected) {
 
-    // Hide the Save button to prevent double-clicks
-    f._B1.style.display = "none";
+            // Set client for this iteration
+            f.CLIENTNUMBER.value = Ctrl.options[x].value;
+            f.CONTACTNAME.value = Ctrl.options[x].value;
+            f.CONTACTNAMES.value = Ctrl.options[x].text + " (Sel)";
 
-    // Loop through each selected client (skip index 0 placeholder)
-    for (var i = 1; i < list.length; i++) {
+            // Let genfunc.exe generate a fresh DOCSERNO when new record
+            if (f.DOCSERNO.value == "") {
+                // new record → let genfunc assign
+                f.DOCSERNO.value = "";
+            }
+            // else: existing record → leave DOCSERNO alone
 
-        var client = list[i].value;
 
-        // Skip placeholder or empty values
-        if (client === "" || client === "||||") {
-            continue;
+            // *** critical: populate rendered HTML ***
+            f._RENDEREDHTML.value = f._RENDEREDHTMLTemp.value;
+
+            // Submit one row
+            f.submit();
         }
-
-        // Assign the current client to CLIENTNUMBER
-        f.CLIENTNUMBER.value = client;
-
-        // Ensure correct table name
-        f.TABLENAME.value = "PWBCRWORKSHOPATTENDANCE";
-
-        // Submit one row per client
-        f.submit();
     }
 
     return null;
@@ -249,6 +228,34 @@ function StartUp() {
 		f.Server.value = "||LOADCURRENTVALUE (0)||";
 		f._Serverajax.value = "||LOADCURRENTVALUE (1)||, ||LOADCURRENTVALUE (2)||";
 	} catch(e) {}
+
+    // --- Restore saved CLIENTNUMBERMULTI with names ---
+    try {
+        var saved = f._CLIENTNUMBERMULTI_SAVED ? f._CLIENTNUMBERMULTI_SAVED.value : "";
+
+        if (saved != "") {
+
+            // Build SQL IN clause
+            var nums = saved.split(",");
+            var inList = "";
+            for (var i = 0; i < nums.length; i++) {
+                var c = nums[i].trim();
+                if (c != "") {
+                    if (inList != "") inList += ",";
+                    inList += "'" + c + "'";
+                }
+            }
+
+            // SQL to pull names
+            var sql = "SELECT ClientNumber, LastName, FirstName FROM Q_Client WHERE ClientNumber IN (" + inList + ") ORDER BY LastName, FirstName";
+            sql = escape(sql);
+
+            var fullhlink = "genfunc.exe?FULLFUNCTION^PULLDATA|JAVASCRIPT(MULTIARRAY)|IDENTIFIER(R)|ERROR(SUPPRESS)|SQL(" + sql + ")|SESSIONID(||SESSIONID||)|POPULATEFUNCTION(PopSavedClientList)|SUBMITTIME(||DATE|| ||TIME||)^";
+
+            parent.fvalidate.location = fullhlink;
+        }
+    } catch(e) {}
+
 	return functionreturnvalue;
 }
 
@@ -403,7 +410,7 @@ function SetClientList(){
 	}
 	for(var x = 1; x <= f1.length - 1; x++){
 		ClientList = ClientList + "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-		ClientList = ClientList + "<a href=\"javascript:void RemoveClient('" + f1.options[x].value +"')\">" + f1.options[x].text + " (" + f1.options[x].value + ")</a>";
+		ClientList = ClientList + "<a href=\"javascript:void RemoveClient('" + f1.options[x].value +"')\">" + f1.options[x].text + "</a>";
 		f1.options[x].selected = true;
 	}
 	document.getElementById("ClientListing").innerHTML = ClientList + "<br><br>";
@@ -529,6 +536,33 @@ function PopClientList(numelementsper, totalelements, identifier, results) {
 	f._CLIENTNUMBERMULTISel.options[0].text = "(Please Select Institution)";
 	}
 	return functionreturnvalue;
+}
+
+function PopSavedClientList(numelementsper, totalelements, identifier, results) {
+    var f = document.forms[0];
+    var ctrl = f.elements["CLIENTNUMBERMULTI"];
+
+    // Reset list
+    ctrl.length = 1;
+    ctrl.options[0].text  = "(Please Select)";
+    ctrl.options[0].value = "";
+
+    // Populate from SQL results
+    for (var x = 1; x <= totalelements; x++) {
+        var cnum = results[x][1];
+        var lname = results[x][2];
+        var fname = results[x][3];
+
+        var idx = ctrl.length;
+        ctrl.length = idx + 1;
+
+        ctrl.options[idx].value    = cnum;
+        ctrl.options[idx].text     = lname + ", " + fname + " (" + cnum + ")";
+        ctrl.options[idx].selected = true;
+    }
+
+    // Rebuild clickable list UI
+    SetClientList();
 }
 
 function GetTimeGroupList()  {
@@ -680,52 +714,56 @@ function PopGetClientGroupList(numelementsper, totalelements, identifier, result
     <input type="hidden" name="TABLENAME" value="PWBCRWORKSHOPATTENDANCE" /> 
     <input type="hidden" name="VISITDT" value="||DATE||" /> 
     <input type="hidden" name="VISITTM" value="||TIME||" /> 
-    <input type="hidden" name="CONFIRMSCREEN" value="SaveConfirmProg" /> 
+    <input type="hidden" name="CONFIRMSCREEN" value="" /> 
     <input type="hidden" name="SUMMATION" value="||SCREENPARM SUMMATION||" /> 
     <input type="hidden" name="AUTOCLOSE" value="YES" /> 
     <input type="hidden" name="SIGNATURE" value="||||"/>
     <input type="hidden" name="CONTACTNAME" value="||||"/>
     <input type="hidden" name="CONTACTNAMES" value="||||"/>
     <input type="hidden" name="_RENDEREDHTML" value="||||"/>
+    <input type="hidden" name="_CLIENTNUMBERMULTI_SAVED" value="||FIELDVALUE CLIENTNUMBERMULTI||">
 
     <h2 align="center">BCR Workshop Attendance</h2>
 <!--BEGINOFPRINT-->
-    <div class="extrawidecol">
+<div class="extrawidecol">
     <div class="deflist">
-    <div class="term">Workshop Information</div>
+        <div class="term">Workshop Information</div>
     <div class="def">
     <ul>
-        <li id="_gvtworkshop_date"><strong>||FIELDTAG workshop_date||Date of Workshop||ENDFIELDTAG|| : </strong><input type="text" name="workshop_date" size="8" onblur="validdatenoblankAny(this)" value="||DATE||" class="jdatepicker"></li>
-        <li id="_gvtworkshop_name"><strong>||FIELDTAG workshop_name||Workshop Name||ENDFIELDTAG|| : </strong><input type="text" name="workshop_name" size="50" value="||WORKSHOPNAME||"></li>
+        <li id="_gvtworkshop_date"><strong>||FIELDTAG workshop_date||Date of Workshop||ENDFIELDTAG|| : </strong><input type="text" name="workshop_date" size="8" onblur="validdatenoblankAny(this)" value="||DATE||" class="jdatepicker">
+        </li>
+        <li id="_gvtworkshop_name"><strong>||FIELDTAG workshop_name||Workshop Name||ENDFIELDTAG|| : </strong><select size="1" name="workshop_name" onchange="checkhideall()">
+            <option value="||SELECT CODE, DESCRIPTION FROM bcr_workshop_titles WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE workshop_name^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+            </select>||CONFIGURE bcr_workshop_titles||
+        </li>
     </ul>
     </div>
     </div>
+</div>
 <!--STARTOFCLIENTSELECT-->
-    <div class="deflist">
-    <div class="term">Select Clients</div>
+<div class="deflist">
+        <div class="term">Select Clients</div>
     <div class="def">
-       <ul>
-         <li><strong>Client Select Option : </strong><input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectProvider" /><label for="ClientSelectProvider">By Provider</label>  <input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectByClient" /><label for="ClientSelectByClient">By Client Name</label>  <input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectByGroup" /><label for="ClientSelectByGroup">By Client Group</label></li>
-         <li id="ProviderSelectList" style="display:none"><strong>||FIELDTAG ProviderService||Provider||ENDFIELDTAG|| : </strong><select size="1" name="PROVIDERSERVICE" onChange="GetClientList()">
-           <option value="||Select Distinct Q_Provider.ProviderCode, Q_Provider.Providername + Case When IsNull(ProgramCategory,'') = '' Then '' else ' (' + ProgramCategory + ')' End As [RAW], Q_Provider.ProviderName From Q_Provider Inner Join ProviderHeirarchy on Q_Provider.ProviderCode=ProviderHeirarchy.ProviderCode Inner Join Q_ProviderPlacement on Q_Provider.ProviderCode = Q_ProviderPlacement.PrimaryProviderCode Inner Join Q_Client c on c.ClientNumber = Q_ProviderPlacement.ClientNumber where AllowableProvider = '^^PROVIDERCODE^^' And (IsNull(EndingDate,GetDate()) >= DateAdd(d,-10,GetDate())) Order By Q_Provider.ProviderName||">||CHOICETABLESQLD||</option>
-           </select>
-         </li>
-         
-         <li id="ClientGroupList" style="display:none"><strong>||FIELDTAG GroupList||Group List||ENDFIELDTAG|| : </strong><select size="1" name="ClientGroupList" onChange="GetTimeGroupList()">
-           <option value="||select code, description from Group_base where (StatusDesc='active' or StatusDesc='') and docrevno=' 0 ' order by description||">||CHOICETABLESQLD||</option>
-           </select>
-         </li>
+    <ul>
+        <li><strong>Client Select Option : </strong><input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectProvider" /><label for="ClientSelectProvider">By Provider</label>  <input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectByClient" /><label for="ClientSelectByClient">By Client Name</label>  <input type="radio" name="_ClientSelectOption" value="Provider" onClick="SetSelectType()" id="ClientSelectByGroup" /><label for="ClientSelectByGroup">By Client Group</label></li>
+        <li id="ProviderSelectList" style="display:none"><strong>||FIELDTAG ProviderService||Provider||ENDFIELDTAG|| : </strong><select size="1" name="PROVIDERSERVICE" onChange="GetClientList()">
+        <option value="||Select Distinct Q_Provider.ProviderCode, Q_Provider.Providername + Case When IsNull(ProgramCategory,'') = '' Then '' else ' (' + ProgramCategory + ')' End As [RAW], Q_Provider.ProviderName From Q_Provider Inner Join ProviderHeirarchy on Q_Provider.ProviderCode=ProviderHeirarchy.ProviderCode Inner Join Q_ProviderPlacement on Q_Provider.ProviderCode = Q_ProviderPlacement.PrimaryProviderCode Inner Join Q_Client c on c.ClientNumber = Q_ProviderPlacement.ClientNumber where AllowableProvider = '^^PROVIDERCODE^^' And (IsNull(EndingDate,GetDate()) >= DateAdd(d,-10,GetDate())) Order By Q_Provider.ProviderName||">||CHOICETABLESQLD||</option>
+        </select>
+        </li>
+        
+        <li id="ClientGroupList" style="display:none"><strong>||FIELDTAG GroupList||Group List||ENDFIELDTAG|| : </strong><select size="1" name="ClientGroupList" onChange="GetTimeGroupList()">
+        <option value="||select code, description from Group_base where (StatusDesc='active' or StatusDesc='') and docrevno=' 0 ' order by description||">||CHOICETABLESQLD||</option>
+        </select>
+        </li>
         <li id="ClientTimeGroupList" style="display:none"><strong>||FIELDTAG TimeList||Time List||ENDFIELDTAG|| : </strong>
-          <select size="1" name="ClientTimeGroupList" id="ClientTimeGroupListDD" onchange="GetClientGroupList()">
-            <option value="||||"></option>
-           </select>
-         </li>
-       </ul>
-      
-      
+        <select size="1" name="ClientTimeGroupList" id="ClientTimeGroupListDD" onchange="GetClientGroupList()">
+        <option value="||||"></option>
+        </select>
+        </li>
+    </ul>     
     </div>
-    <div class="leftcol">
-    <div class="term">Client Select List</div>
+        <div class="leftcol">
+            <div class="term">Client Select List</div>
     <div class="def">
     <ul id="ByProvider" style="display:none">
         <li><b>&nbsp;</b><select multiple="multiple" size="10" name="_CLIENTNUMBERMULTISel" onClick="selectclientProv()">
@@ -738,18 +776,17 @@ function PopGetClientGroupList(numelementsper, totalelements, identifier, result
         <li><strong>&nbsp;</strong><input type="text" size="30" name="_CLIENTNUMBERMULTI" onKeyDown="SetAjax()">||AJAX Select Distinct TOP 30 '' As Blank, c.ClientNumber, c.LastName, c.FirstName + ' ' + IsNull(c.MiddleInitial,'') as firstname, c.NameSuffix, c.Street, c.city, c.State, c.Zip, c.birthdate  From Q_Client_Simple c inner join q_client qc on c.clientnumber = qc.clientnumber Where c.ClientNumber != '' And c.ClientName != '' And c.ClientStatus != 'Inactive Client' And '' != '[RAW]' And ((c.LastName Like '%^^TYPEVALUE^^%' or c.FirstName Like '%^^TYPEVALUE^^%' or c.LastName Like '^^TYPEVALUE^^%' or c.FirstName Like '^^TYPEVALUE^^%') Or (Case When CharIndex(' ','^^TYPEVALUE^^') > 0 Then Case When CharIndex(RTrim(LTrim(SubString('^^TYPEVALUE^^',1,CharIndex(' ','^^TYPEVALUE^^')))),c.FirstName) > 0 And CharIndex(SUBSTRING('^^TYPEVALUE^^',CharIndex(' ','^^TYPEVALUE^^')+1,1000),c.LastName) > 0 Then 1 Else 0 End Else 0 End) > 0) Order By LastName, FirstName||<input type="hidden" name="_CLIENTNUMBERMULTI_hidden" id="_CLIENTNUMBERMULTI_hidden"></li>
         <div><span id="activecount">&nbsp;</span></div>
     </ul>
-
     </div>
-    </div>
+        </div>
     <div class="rightcol">
     <div class="term">Persons Present, Contact With or Contact Regarding</div>
-    <div class="def">
+        <div class="def">
     <ul>
         <li><b><span id="ClientListing">&nbsp;</span></b>&nbsp;</li>
     </ul>   
+        </div>
     </div>
-    </div>
-    </div>
+</div>
 
 <span style="display:none">
     <div class="term">Select Clients List</div>

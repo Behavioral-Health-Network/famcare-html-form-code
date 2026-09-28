@@ -42,6 +42,7 @@ function startup() {
     // setrequire('client_attend_intake_appt_two_week');
     // setrequire('intake_appt_date_two_week');
     setrequire('intake_conducted_appt_date_two_week');
+    setrequire('intake_update_ic_to_twow');
     setrequire('mat_prescribed_physician_appt_two_week');
     setrequire('what_mat_physician_appt_two_week');
     setrequire('program_participation_two_week');
@@ -330,6 +331,7 @@ function validateform(scope='all') {
 //   if (!hiddenfield('client_attend_intake_appt_two_week') && gvtfieldvalue('client_attend_intake_appt_two_week')=='') {edesc=edesc+`Must specify a value for Did client attend an intake appointment? (NOTE: Regardless of if intake was actually conducted.)\n`; seterror("client_attend_intake_appt_two_week");}
 //   if (!hiddenfield('intake_appt_date_two_week') && gvtfieldvalue('intake_appt_date_two_week')=='') {edesc=edesc+`Must specify a value for Date of Intake Appointment\n`; seterror("intake_appt_date_two_week");}
   if (!hiddenfield('intake_conducted_appt_date_two_week') && gvtfieldvalue('intake_conducted_appt_date_two_week')=='') {edesc=edesc+`Must specify a value for Is client actively attending treatment at a SUD agency at this time?\n`; seterror("intake_conducted_appt_date_two_week");}
+  if (!hiddenfield('intake_update_ic_to_twow') && gvtfieldvalue('intake_update_ic_to_twow')=='') {edesc=edesc+`Must specify a value for if there was a change in intake?\n`; seterror("intake_update_ic_to_twow");}
   if (!hiddenfield('mat_prescribed_physician_appt_two_week') && gvtfieldvalue('mat_prescribed_physician_appt_two_week')=='') {edesc=edesc+`Must specify a value for Was MAT prescribed?\n`; seterror("mat_prescribed_physician_appt_two_week");}
   if (!hiddenfield('what_mat_physician_appt_two_week') && gvtfieldvalue('what_mat_physician_appt_two_week')=='') {edesc=edesc+`Must specify a value for Type of MAT\n`; seterror("what_mat_physician_appt_two_week");}
   if (!hiddenfield('program_participation_two_week') && gvtfieldvalue('program_participation_two_week')=='') {edesc=edesc+`Must specify a value for Program Participation\n`; seterror("program_participation_two_week");}
@@ -719,6 +721,16 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldintake_update_ic_to_twow qintake_update_ic_to_twow">
+    <div class="col12 fldintake_update_ic_to_twow qintake_update_ic_to_twow"><span class="qintake_update_ic_to_twow required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_update_ic_to_twow required-field-label"><label class="label-top">||FIELDTAG intake_update_ic_to_twow||Since the Initial Contact Form was filled out, has there been a new or update to Treatment?||ENDFIELDTAG||</label></span><span class="qintake_update_ic_to_twow">
+      <input type="radio" name="intake_update_ic_to_twow" value="Intake Attended" onclick="checkhideall()" >Intake Attended&nbsp;&nbsp;
+      <input type="radio" name="intake_update_ic_to_twow" value="Intake Completed" onclick="checkhideall()" >Intake Completed&nbsp;&nbsp;
+      <input type="radio" name="intake_update_ic_to_twow" value="Intake Attended And Completed" onclick="checkhideall()" >Intake Attended And Completed&nbsp;&nbsp;
+      <input type="radio" name="intake_update_ic_to_twow" value="None" onclick="checkhideall()" >None&nbsp;&nbsp;
+    </span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12 fldmat_prescribed_physician_appt_two_week qmat_prescribed_physician_appt_two_week">

@@ -216,6 +216,7 @@ $("#gvttimetime_recovery_coach_arrival").timepicker({  'step':1, 'scrollDefault'
 function checkhideall() {
    f=document.forms[0];
       checkhide(f.epicc_pro_or_core_ic,"how_client_found_out_about_program","CORE");
+   checkhide(f.epicc_pro_or_core_ic,"how_client_found_out_about_program_pro","PRO");
    checkhide(f.program_participation_ic,"transfer_type_ic","022");
    checkhide(f.transfer_type_ic,"if_transfer_what_region_ic","Regional Transfer");
    checkhide(f.transfer_type_ic,"if_transfer_contact_transfer_region_success_ic","Regional Transfer");
@@ -872,7 +873,26 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12 fldhow_client_found_out_about_program qhow_client_found_out_about_program">
-    <div class="col12 fldhow_client_found_out_about_program qhow_client_found_out_about_program"><span class="qhow_client_found_out_about_program"><label class="label-top">||FIELDTAG how_client_found_out_about_program||How did client hear about EPICC?||ENDFIELDTAG||</label></span><span class="qhow_client_found_out_about_program"><input type="checkbox" name="heard_about_from_friend_family" value="ON" onclick="checkhideall()">Friend or Family Member&nbsp;&nbsp;<input type="checkbox" name="heard_about_from_community_center" value="ON" onclick="checkhideall()">Community Center&nbsp;&nbsp;<input type="checkbox" name="heard_about_from_outreach_worker" value="ON" onclick="checkhideall()">Outreach Worker&nbsp;&nbsp;<input type="checkbox" name="heard_about_from_hospital_staff" value="ON" onclick="checkhideall()">Hospital Staff&nbsp;&nbsp;<input type="checkbox" name="heard_about_from_flyer" value="ON" onclick="checkhideall()">Flyer&nbsp;&nbsp;<input type="checkbox" name="heard_about_from_church" value="ON" onclick="checkhideall()">Church&nbsp;&nbsp;<input type="checkbox" name="heard_about_from_other" value="ON" onclick="checkhideall()">Other&nbsp;&nbsp;</span></div>
+    <div class="col12 fldhow_client_found_out_about_program qhow_client_found_out_about_program"><span class="qhow_client_found_out_about_program"><label class="label-top">||FIELDTAG how_client_found_out_about_program||How Did Client Hear About EPICC?||ENDFIELDTAG||</label></span><span class="qhow_client_found_out_about_program">
+      <input type="checkbox" name="heard_about_from_friend_family" value="ON" onclick="checkhideall()">Friend or Family Member&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_community_center" value="ON" onclick="checkhideall()">Community Center&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_outreach_worker" value="ON" onclick="checkhideall()">Outreach Worker&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_hospital_staff" value="ON" onclick="checkhideall()">Hospital Staff&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_flyer" value="ON" onclick="checkhideall()">Flyer&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_church" value="ON" onclick="checkhideall()">Church&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_naloxone_box" value="ON" onclick="checkhideall()">Naloxone Box&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_other" value="ON" onclick="checkhideall()">Other&nbsp;&nbsp;</span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldhow_client_found_out_about_program_pro qhow_client_found_out_about_program_pro">
+    <div class="col12 fldhow_client_found_out_about_program_pro qhow_client_found_out_about_program_pro"><span class="qhow_client_found_out_about_program_pro"><label class="label-top">||FIELDTAG how_client_found_out_about_program_pro||How Did Client Hear About EPICC?||ENDFIELDTAG||</label></span><span class="qhow_client_found_out_about_program_pro">
+      <input type="checkbox" name="heard_about_from_pro_epicc_staff" value="ON" onclick="checkhideall()">EPICC Staff&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_pro_colleague_supervisor" value="ON" onclick="checkhideall()">Colleague Or Supervisor&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_pro_flyer_brochure" value="ON" onclick="checkhideall()">Flyer Or Brochure&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_pro_community_partner" value="ON" onclick="checkhideall()">Community Partner&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_pro_linkedin_google" value="ON" onclick="checkhideall()">LinkedIn Or Google&nbsp;&nbsp;
+      <input type="checkbox" name="heard_about_from_pro_other" value="ON" onclick="checkhideall()">Other&nbsp;&nbsp;</span></div>
      </div>
   </div>
 <div class="entire">

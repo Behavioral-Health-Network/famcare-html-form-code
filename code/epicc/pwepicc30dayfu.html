@@ -40,6 +40,7 @@ function startup() {
     // setrequire('client_attend_intake_appt_thirty_day');
     // setrequire('intake_appt_date_thirty_day');
     setrequire('intake_conducted_appt_date_thirty_day');
+    setrequire('intake_update_twow_to_thirtyd');
     setrequire('rc_only_client_attend_first_appt_coach_thirty_day');
     setrequire('mat_prescribed_physician_thirty_day');
     setrequire('what_mat_physician_appt_thirty_day');
@@ -330,6 +331,7 @@ function validateform(scope='all') {
   if (!hiddenfield('if_transfer_what_region_thirty_day') && gvtfieldvalue('if_transfer_what_region_thirty_day')=='') {edesc=edesc+`Must specify a value for What Region?\n`; seterror("if_transfer_what_region_thirty_day");}
   if (!hiddenfield('if_transfer_contact_transfer_region_success_thirty_day') && gvtfieldvalue('if_transfer_contact_transfer_region_success_thirty_day')=='') {edesc=edesc+`Must specify a value for Was contact with transferring region successful?\n`; seterror("if_transfer_contact_transfer_region_success_thirty_day");}
   if (!hiddenfield('client_status_thirty_day') && gvtfieldvalue('client_status_thirty_day')=='') {edesc=edesc+`Must specify a value for Status\n`; seterror("client_status_thirty_day");}
+  if (!hiddenfield('intake_update_twow_to_thirtyd') && gvtfieldvalue('intake_update_twow_to_thirtyd')=='') {edesc=edesc+`Must specify a value for if there was a change in intake?\n`; seterror("intake_update_twow_to_thirtyd");}
   if (!hiddenfield('date_transferred_reengagement_specialist_thirty_day') && gvtfieldvalue('date_transferred_reengagement_specialist_thirty_day')=='') {edesc=edesc+`Must specify a value for Date of Transfer to Re-Engagement Specialist\n`; seterror("date_transferred_reengagement_specialist_thirty_day");}
   if (!hiddenfield('why_not_meet_prog_eligibility_thirty_day') && gvtfieldvalue('why_not_meet_prog_eligibility_thirty_day')=='') {edesc=edesc+`Must specify a value for Why does the client not meet program eligibility?\n`; seterror("why_not_meet_prog_eligibility_thirty_day");}
   if (!hiddenfield('intake_conducted_appt_date_thirty_day') && gvtfieldvalue('intake_conducted_appt_date_thirty_day')=='') {edesc=edesc+`Must specify a value for Date of Intake Conducted\n`; seterror("intake_conducted_appt_date_thirty_day");}
@@ -731,6 +733,16 @@ function updatesignatures(){
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldintake_update_twow_to_thirtyd qintake_update_twow_to_thirtyd">
+    <div class="col12 fldintake_update_twow_to_thirtyd qintake_update_twow_to_thirtyd"><span class="qintake_update_twow_to_thirtyd required-label">||PWRequiredFieldRequiredText||</span><span class="qintake_update_twow_to_thirtyd required-field-label"><label class="label-top">||FIELDTAG intake_update_twow_to_thirtyd||Since the 2-Week Form was filled out, has there been a new or update to Treatment?||ENDFIELDTAG||</label></span><span class="qintake_update_twow_to_thirtyd">
+      <input type="radio" name="intake_update_twow_to_thirtyd" value="Intake Attended" onclick="checkhideall()" >Intake Attended&nbsp;&nbsp;
+      <input type="radio" name="intake_update_twow_to_thirtyd" value="Intake Completed" onclick="checkhideall()" >Intake Completed&nbsp;&nbsp;
+      <input type="radio" name="intake_update_twow_to_thirtyd" value="Intake Attended And Completed" onclick="checkhideall()" >Intake Attended And Completed&nbsp;&nbsp;
+      <input type="radio" name="intake_update_twow_to_thirtyd" value="None" onclick="checkhideall()" >None&nbsp;&nbsp;
+    </span></div>
+     </div>
   </div>
  <div class="entire">
     <div class="col12 fldmat_prescribed_physician_thirty_day qmat_prescribed_physician_thirty_day">

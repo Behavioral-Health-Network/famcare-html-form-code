@@ -1,0 +1,66 @@
+<html>
+
+<head>
+<title>Case Worker Change</title>
+</head>
+<PREADD SETPARM TYPEOFFUNCTION="SAVEDATARAW">
+<PREEDIT SETPARM TYPEOFFUNCTION="UPDATE">
+
+
+<script language="JavaScript">
+
+function submitit() {
+   var f=document.forms[0];
+   f.target="";
+//   f.CONFIRMSCREEN.value="SaveConfirmRefreshsummaryUserId";
+   if(f.ENDDATE.value=="") {f.ENDTIME.value=""};
+   f.submit();
+   return;
+}
+
+function StartUp() {
+   var f=document.forms[0];
+   f.CLIENTNUMBER.value = "||CLIENTNUMBER||";
+}
+
+</script>
+
+<body onLoad="StartUp()">
+
+<form action="genfunc.exe" method="post">
+    <input type="hidden" name="FUNCTION" value="||SCREENPARM TYPEOFFUNCTION||" />
+    <input type="hidden" name="RECORDIDENTIFIER" value="||FIELDVALUE ID||" />
+    <input type="hidden" name="SESSIONID" value="||SESSIONID||" /> 
+    <input type="hidden" name="TABLENAME" value="USERCASELOAD" /> 
+    <input type="hidden" name="AUTOCLOSE" value="YES" />
+    <input type="hidden" name="CLIENTNUMBER" value="||CLIENTNUMBER||">
+    <input type="hidden" name="CONFIRMSCREEN" value="SAVECONFIRMREFRESHSUMMARY" />
+    <input type="hidden" name="_PRESERVE" value="YES" /> 
+    <input type="hidden" name="_NOEDITBUTTON" value="Yes" /> 
+    <input type="hidden" name="_NOPRINTBUTTON" value="Yes" />
+    <input type="hidden" name="_NOSPELLCHECK" value="YES">
+    <input type="hidden" name="BEGINTIME" value="||FIELDVALUE BEGINTIME||">
+    <input type="hidden" name="ENDTIME" value="||FIELDVALUE ENDTIME||">
+    <h1 align="center">Case Worker Change</h1>
+    <table cellspacing="0" cellpadding="0" width="100%" border="1">
+        <tbody>
+            <tr>
+                <td align="right" width="25%">Case Worker&nbsp;:</td>
+                <td width="75%"><select size="1" name="USERID">
+        <option value="||SELECT UserID.UserID, UserID.UserName FROM Q_HRFORM Left Join UserId on Q_HRFORM.FamCareUserID=UserID.UserID WHERE (AccountStatus='Active' Or UserID.UserID='^^FIELDVALUE USERID^^') ORDER BY UserID.UserName, UserID.[FIRSTNAME]||" selected="selected">||CHOICETABLESQLD||</option>
+        </select></td>
+            </tr>
+            <tr>
+                <td align="right" width="25%">Start Date</td>
+                <td width="75%"><input type="text" name="BEGINDATE" size="8" value="||FIELDVALUE BEGINDATE||" class="jdatepicker"></td>
+            </tr>
+            <tr>
+                <td align="right" width="25%">End Date</td>
+                <td width="75%"><input type="text" name="ENDDATE" size="8" value="||FIELDVALUE ENDDATE||" class="jdatepicker"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div align="center"><input type="button" name="_B1" onclick="submitit()" value="SAVE" /></div>
+</form>
+</body>
+</html>

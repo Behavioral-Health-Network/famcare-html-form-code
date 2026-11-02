@@ -11,7 +11,7 @@
 
 <body>
 <div class="tableAction"><a href="javascript:void refreshsummation('||SP SUMMATION||','0','||SP CURRENTSERIAL||')"><img alt="Refresh List" src="images/refresh.gif" /> Refresh</a>||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')"><img alt="Add New" src="images/add.gif" /> Add</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchilduselast('||SP SUMMATION||','||SP FORMNAME||','||SP CURRENTSERIAL||')">||ENDSTRIP||</a></div>
-<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWBHNChangeRequestForm].[Pathway_Date] ,JTBL1.LASTNAME+', '+JTBL1.FIRSTNAME AS JDESC1 ,CASE WHEN JTBL2.PROVIDERNAME = 'Behavioral Health Network of Greater St. Louis' THEN 'BHN' WHEN JTBL2.PROVIDERNAME = 'Complex Care' THEN 'Complex Care' WHEN CHARINDEX(' - ', JTBL2.PROVIDERNAME) > 0 THEN LEFT(JTBL2.PROVIDERNAME, CHARINDEX(' - ', JTBL2.PROVIDERNAME) - 1) ELSE JTBL2.PROVIDERNAME END AS JDESC2 ,JTBL3.DESCRIPTION AS JDESC3 ,[PWBHNChangeRequestForm].[priority_level] ,[PWBHNChangeRequestForm].[short_description], SCOPE.LIFE_DEVELOPMENT_STATUS AS [STATUS], SCOPE.BLOCKER_DESCRIPTION, SCOPE.BLOCKER_STATUS FROM ^^SP FORMNAME^^ LEFT JOIN [HRFORM] as JTBL1 ON JTBL1.EMPLOYEENUMBER=[PWBHNChangeRequestForm].[HR_Dropdown] AND JTBL1.DOCREVNO=' 0 '  LEFT JOIN [PROVIDER] as JTBL2 ON JTBL2.PROVIDERCODE=[PWBHNChangeRequestForm].[program] AND JTBL2.DOCREVNO=' 0 '  LEFT JOIN [bhn_change_request_category] as JTBL3 ON JTBL3.CODE=[PWBHNChangeRequestForm].[bhn_change_request_category] LEFT JOIN [PWBHNCHANGESCOPEFORM] AS [SCOPE] ON SCOPE.PARENTDOCSERNO = PWBHNCHANGEREQUESTFORM.DOCSERNO AND SCOPE.DOCREVNO = ' 0 ' WHERE ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
+<!--_AUTONAVIGATION-->||SQC SELECT TOP 200 '' DUMMY1,^^SP FORMNAME^^.ID, ^^SP FORMNAME^^.DOCSERNO, ^^SP FORMNAME^^.VISITTM, ^^SP FORMNAME^^.VISITDT, ^^SP FORMNAME^^.USERID ,[PWBHNChangeRequestForm].[Pathway_Date] ,JTBL1.LASTNAME+', '+JTBL1.FIRSTNAME AS JDESC1 ,CASE WHEN JTBL2.PROVIDERNAME = 'Behavioral Health Network of Greater St. Louis' THEN 'BHN' WHEN JTBL2.PROVIDERNAME = 'Complex Care' THEN 'Complex Care' WHEN CHARINDEX(' - ', JTBL2.PROVIDERNAME) > 0 THEN LEFT(JTBL2.PROVIDERNAME, CHARINDEX(' - ', JTBL2.PROVIDERNAME) - 1) ELSE JTBL2.PROVIDERNAME END AS JDESC2 ,JTBL3.DESCRIPTION AS JDESC3 ,[PWBHNChangeRequestForm].[priority_level], CASE WHEN priority_level = 'High' THEN 1 WHEN priority_level = 'Medium' THEN 2 WHEN priority_level = 'Low' THEN 3 ELSE 99 END AS [PRIORITY_SORT], [PWBHNChangeRequestForm].[short_description], CASE WHEN SCOPE.LIFE_DEVELOPMENT_STATUS IS NULL THEN 'Scope Required' ELSE SCOPE.LIFE_DEVELOPMENT_STATUS END AS [STATUS], CASE WHEN SCOPE.LIFE_DEVELOPMENT_STATUS IS NULL THEN 0 WHEN SCOPE.LIFE_DEVELOPMENT_STATUS = 'Not Started' THEN 1 WHEN SCOPE.LIFE_DEVELOPMENT_STATUS = 'In Progress' THEN 2 WHEN SCOPE.LIFE_DEVELOPMENT_STATUS = 'In Review' THEN 3 WHEN SCOPE.LIFE_DEVELOPMENT_STATUS = 'Blocked' THEN 4 WHEN SCOPE.LIFE_DEVELOPMENT_STATUS = 'Completed' THEN 5 WHEN SCOPE.LIFE_DEVELOPMENT_STATUS = 'Cancelled' THEN 6 ELSE 99 END AS [STATUS_SORT], SCOPE.BLOCKER_DESCRIPTION, SCOPE.BLOCKER_STATUS FROM ^^SP FORMNAME^^ LEFT JOIN [HRFORM] as JTBL1 ON JTBL1.EMPLOYEENUMBER=[PWBHNChangeRequestForm].[HR_Dropdown] AND JTBL1.DOCREVNO=' 0 '  LEFT JOIN [PROVIDER] as JTBL2 ON JTBL2.PROVIDERCODE=[PWBHNChangeRequestForm].[program] AND JTBL2.DOCREVNO=' 0 '  LEFT JOIN [bhn_change_request_category] as JTBL3 ON JTBL3.CODE=[PWBHNChangeRequestForm].[bhn_change_request_category] LEFT JOIN [PWBHNCHANGESCOPEFORM] AS [SCOPE] ON SCOPE.PARENTDOCSERNO = PWBHNCHANGEREQUESTFORM.DOCSERNO AND SCOPE.DOCREVNO = ' 0 ' WHERE ^^SP FORMNAME^^.DOCREVNO=' 0 ' ^^SP EXTRASQL^^ ORDER BY ^^SP FORMNAME^^.DOCSERNO DESC|| ||TSSTART||
 <table cellspacing="0" class="summary">
     <thead>
         <tr>
@@ -19,11 +19,11 @@
             <th>Pathway Date</th>
             <th>Request ID</th>
             <th>Submitted By</th>
-            <th>Program</th>
+            <th>||SORTCOL|JDESC2;ascending||Program</th>
             <th>Request Category</th>
             <th>Short Description</th>
-            <th>Priority Level</th>
-            <th>Request Status</th>
+            <th>||SORTCOL|PRIORITY_SORT;ascending||Priority Level</th>
+            <th>||SORTCOL|STATUS_SORT;ascending||Request Status</th>
             <th>Blocker</th>
             <th>Blocker Status</th>
             <th>||SORTCOL|ID;descending||Edited On</th>
@@ -34,7 +34,7 @@
         <tr class="||ALTERNATE |altrow||">
             <td class="colAction"><a href="javascript:void editsummationrecordchild('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">||SP VIEWEDITTEXT||</a> <a href="javascript:void NewPDFPrint('||SF DOCSERNO||')">PDF</a><br> ||STARTSTRIP|ALWAYS|X^^SP DELETESTYLE^^X|XnoneX||<a href="javascript:void deletesummationrecord('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||')">Delete</a> ||ENDSTRIP||||STARTSTRIP|ALWAYS|X^^SP ADDSTYLE^^X|XnoneX||<a href="javascript:void addsummationrecordchildselectlast('||SP SUMMATION||','||SP FORMNAME||','||SF DOCSERNO||','||SP CURRENTSERIAL||')">Copy</a>||ENDSTRIP||</td>
             <td>||SF Pathway_Date||</td>
-            <td>||DOCSERNO||</td>
+            <td>||SF DOCSERNO||</td>
             <td>||SF JDESC1||</td>
             <td>||SF JDESC2||</td>
             <td>||SF JDESC3||</td>

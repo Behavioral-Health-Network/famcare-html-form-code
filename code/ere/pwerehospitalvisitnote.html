@@ -39,7 +39,7 @@ function startup() {
     setrequire('ere_visit_hosp');
     setrequire('visit_hosp_outcome');
     setrequire('visit_hosp_outcome_other');
-    setrequire('visit_hosp_no_outcome');
+    setrequire('hosp_visit_no_reason');
     setrequire('visit_hosp_no_outcome_other');
     setrequire('TiedEnrollment');
 
@@ -53,8 +53,8 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.ere_visit_hosp,"visit_hosp_outcome","Yes");
    checkhide(f.visit_hosp_outcome,"visit_hosp_outcome_other","Other");
-   checkhide(f.ere_visit_hosp,"visit_hosp_no_outcome","No");
-   checkhide(f.visit_hosp_no_outcome,"visit_hosp_no_outcome_other","Other");
+   checkhide(f.ere_visit_hosp,"hosp_visit_no_reason","No");
+   checkhide(f.hosp_visit_no_reason,"visit_hosp_no_outcome_other","004");
 
 }
 
@@ -288,7 +288,7 @@ function validateform(scope='all') {
   if (!hiddenfield('ere_visit_hosp') && gvtfieldvalue('ere_visit_hosp')=='') {edesc=edesc+`Must specify a value for Did ERE meet with the client in the hospital?\n`; seterror("ere_visit_hosp");}
   if (!hiddenfield('visit_hosp_outcome') && gvtfieldvalue('visit_hosp_outcome')=='') {edesc=edesc+`Must specify a value for What was the outcome of this meeting?\n`; seterror("visit_hosp_outcome");}
   if (!hiddenfield('visit_hosp_outcome_other') && gvtfieldvalue('visit_hosp_outcome_other')=='') {edesc=edesc+`Must specify a value for Explain Other Outcome\n`; seterror("visit_hosp_outcome_other");}
-  if (!hiddenfield('visit_hosp_no_outcome') && gvtfieldvalue('visit_hosp_no_outcome')=='') {edesc=edesc+`Must specify a value for Why not?\n`; seterror("visit_hosp_no_outcome");}
+  if (!hiddenfield('hosp_visit_no_reason') && gvtfieldvalue('hosp_visit_no_reason')=='') {edesc=edesc+`Must specify a value for Why not?\n`; seterror("hosp_visit_no_reason");}
   if (!hiddenfield('visit_hosp_no_outcome_other') && gvtfieldvalue('visit_hosp_no_outcome_other')=='') {edesc=edesc+`Must specify a value for Explain other reason ERE wasn't able to meet with client at the hospital.\n`; seterror("visit_hosp_no_outcome_other");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
 
@@ -587,21 +587,16 @@ function updatesignatures(){
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldvisit_hosp_no_outcome qvisit_hosp_no_outcome">
-    <div class="col12 fldvisit_hosp_no_outcome qvisit_hosp_no_outcome"><span class="qvisit_hosp_no_outcome required-label">||PWRequiredFieldRequiredText||</span><span class="qvisit_hosp_no_outcome required-field-label"><label class="label-top">||FIELDTAG visit_hosp_no_outcome||Why not?||ENDFIELDTAG||</label></span><span class="qvisit_hosp_no_outcome"><select size="1"  name="visit_hosp_no_outcome" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Referral Received Within 30 Minutes Of Discharge">Referral Received Within 30 Minutes Of Discharge</option>
-<option value="Referral Received Outside Of Program Business Hours">Referral Received Outside Of Program Business Hours</option>
-<option value="OW Went To The Hospital, But Client Had Already Been Discharged">OW Went To The Hospital, But Client Had Already Been Discharged</option>
-<option value="Tried To Meet With Client, But They Were Unable To Engage (Medicated, Psychosis, Unavailable)">Tried To Meet With Client, But They Were Unable To Engage (Medicated, Psychosis, Unavailable)</option>
-<option value="Referral Originally Considered Ineligible">Referral Originally Considered Ineligible</option>
-<option value="Hospital Staff Indicated A Visit Was Not Recommended">Hospital Staff Indicated A Visit Was Not Recommended</option>
-<option value="OW On PTO/Leave">OW On PTO/Leave</option>
-<option value="Outreaching Another Client">Outreaching Another Client</option>
-<option value="OW Unable To Respond To Referral In-Person, But Scheduled To Meet With Client In-Person Within 48 hours Of Referral">OW Unable To Respond To Referral In-Person, But Scheduled To Meet With Client In-Person Within 48 hours Of Referral</option>
-<option value="Other">Other</option>
-
-</select></span></div>
+    <div class="col12 fldhosp_visit_no_reason qhosp_visit_no_reason">
+    <div class="col12 fldhosp_visit_no_reason qhosp_visit_no_reason">
+      <span class="qhosp_visit_no_reason required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qhosp_visit_no_reason required-field-label">
+        <label class="label-top">Why not?</label></span>
+        <span class="qhosp_visit_no_reason"><select size="1" name="hosp_visit_no_reason" onchange="checkhideall()">
+<!-- this logic is not using security groups, just filtering based on program -->
+<option value="||Select bvnr.Code, bvnr.Description From hosp_visit_no_reasons_BASE as [bvnr] INNER JOIN PROVIDER AS [P] ON P.DOCREVNO = ' 0 ' AND bvnr.STATUSDESC = 'Active' AND bvnr.DOCREVNO = ' 0 ' AND (bvnr.PROVIDERLIST LIKE '%|' + P.PROVIDERCODE+ '|%' or bvnr.Code='^^FIELDVALUE hosp_visit_no_reason^^')  WHERE P.PROVIDERNAME= 'ERE - Adult Emergency Room Enhancement' ORDER BY bvnr.DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE hosp_visit_no_reasons||
+</span></div>
      </div>
   </div>
  <div class="entire">

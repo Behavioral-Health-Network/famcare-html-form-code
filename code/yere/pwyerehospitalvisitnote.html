@@ -133,7 +133,7 @@ function startup() {
     setrequire('yere_visit_hosp');
     setrequire('hosp_ftf');
     setrequire('other_ftf');
-    setrequire('no_hosp_visit_reason');
+    setrequire('hosp_visit_no_reason');
     setrequire('other_reason_not_ftf');
     setrequire('TiedEnrollment');
 
@@ -168,8 +168,8 @@ function checkhideall() {
    f=document.forms[0];
       checkhide(f.yere_visit_hosp,"hosp_ftf","Yes");
    checkhide(f.hosp_ftf,"other_ftf","004");
-   checkhide(f.yere_visit_hosp,"no_hosp_visit_reason","No");
-   checkhide(f.no_hosp_visit_reason,"other_reason_not_ftf","Other ");
+   checkhide(f.yere_visit_hosp,"hosp_visit_no_reason","No");
+   checkhide(f.hosp_visit_no_reason,"other_reason_not_ftf","004");
 
 }
 
@@ -403,7 +403,7 @@ function validateform(scope='all') {
   if (!hiddenfield('yere_visit_hosp') && gvtfieldvalue('yere_visit_hosp')=='') {edesc=edesc+`Must specify a value for Did YERE visit the hospital?\n`; seterror("yere_visit_hosp");}
   if (!hiddenfield('hosp_ftf') && gvtfieldvalue('hosp_ftf')=='') {edesc=edesc+`Must specify a value for Who did staff meet face-to-face with?\n`; seterror("hosp_ftf");}
   if (!hiddenfield('other_ftf') && gvtfieldvalue('other_ftf')=='') {edesc=edesc+`Must specify a value for Other\n`; seterror("other_ftf");}
-  if (!hiddenfield('no_hosp_visit_reason') && gvtfieldvalue('no_hosp_visit_reason')=='') {edesc=edesc+`Must specify a value for Why not?\n`; seterror("no_hosp_visit_reason");}
+  if (!hiddenfield('hosp_visit_no_reason') && gvtfieldvalue('hosp_visit_no_reason')=='') {edesc=edesc+`Must specify a value for Why not?\n`; seterror("hosp_visit_no_reason");}
   if (!hiddenfield('other_reason_not_ftf') && gvtfieldvalue('other_reason_not_ftf')=='') {edesc=edesc+`Must specify a value for Other\n`; seterror("other_reason_not_ftf");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
     return edesc;
@@ -746,22 +746,15 @@ function updatesignatures(){
      </div>
   </div>
  <div class="entire">
-    <div class="col12 fldno_hosp_visit_reason qno_hosp_visit_reason">
-    <div class="col12 fldno_hosp_visit_reason qno_hosp_visit_reason"><span class="qno_hosp_visit_reason required-label">||PWRequiredFieldRequiredText||</span><span class="qno_hosp_visit_reason required-field-label"><label class="label-top">||FIELDTAG no_hosp_visit_reason||Why not?||ENDFIELDTAG||</label></span><span class="qno_hosp_visit_reason"><select size="1"  name="no_hosp_visit_reason" onchange="checkhideall()" >
-<option value="">(please select)</option>
-<option value="Referral Received Within 30 Minutes Of Discharge">Referral Received Within 30 Minutes Of Discharge</option>
-<option value="Referral Received Outside Of Program Business Hours">Referral Received Outside Of Program Business Hours</option>
-<option value="OW Went To The Hospital, But Youth Had Already Been Discharged">OW Went To The Hospital, But Youth Had Already Been Discharged</option>
-<option value="Tried To Meet With Youth, But They Were Unable To Engage (Medicated, Psychosis, Unavailable)">Tried To Meet With Youth, But They Were Unable To Engage (Medicated, Psychosis, Unavailable)</option>
-<option value="Referral Originally Considered Ineligible">Referral Originally Considered Ineligible</option>
-<option value="Hospital Staff Indicated A Visit Was Not Recommended">Hospital Staff Indicated A Visit Was Not Recommended</option>
-<option value="OW On PTO/Leave">OW On PTO/Leave</option>
-<option value="Outreaching Another Youth">Outreaching Another Youth</option>
-<option value="OW Unable To Respond To Referral In-Person, But Scheduled To Meet With Youth In-Person Within 48 hours Of Referral">OW Unable To Respond To Referral In-Person, But Scheduled To Meet With Youth In-Person Within 48 hours Of Referral</option>
-<option value="Other ">Other </option>
-
-</select>
-<!-- FIELDOVERRIDE(no_hosp_visit_reason,10,108) -->
+    <div class="col12 fldhosp_visit_no_reason qhosp_visit_no_reason">
+    <div class="col12 fldhosp_visit_no_reason qhosp_visit_no_reason">
+      <span class="qhosp_visit_no_reason required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qhosp_visit_no_reason required-field-label">
+        <label class="label-top">Why not?</label></span>
+        <span class="qhosp_visit_no_reason"><select size="1" name="hosp_visit_no_reason" onchange="checkhideall()">
+<!-- this logic is not using security groups, just filtering based on program -->
+<option value="||Select bvnr.Code, bvnr.Description From hosp_visit_no_reasons_BASE as [bvnr] INNER JOIN PROVIDER AS [P] ON P.DOCREVNO = ' 0 ' AND bvnr.STATUSDESC = 'Active' AND bvnr.DOCREVNO = ' 0 ' AND (bvnr.PROVIDERLIST LIKE '%|' + P.PROVIDERCODE+ '|%' or bvnr.Code='^^FIELDVALUE hosp_visit_no_reason^^')  WHERE P.PROVIDERNAME= 'YERE - Youth Emergency Room Enhancement' ORDER BY bvnr.DESCRIPTION||">||CHOICETABLESQLD||</option>
+</select>||CONFIGURE hosp_visit_no_reasons||
 </span></div>
      </div>
   </div>

@@ -683,8 +683,6 @@ function ResetBHSAgencyList() {
           <select size="1" name="closing_reason" onchange="checkhideall()">
 <!-- logic not using security groups, just filtering based on program -->
 <option value="||Select CR.Code, CR.Description From ClosingReasons_Base  as [CR] INNER JOIN PROVIDER AS [P] ON P.DOCREVNO = ' 0 ' AND CR.STATUSDESC = 'Active' AND CR.DOCREVNO = ' 0 ' AND (CR.PROVIDERLIST LIKE '%|' + P.PROVIDERCODE+ '|%' or CR.Code='^^FIELDVALUE closing_reason^^')  WHERE P.PROVIDERNAME= 'ERE - Adult Emergency Room Enhancement' ORDER BY CR.DESCRIPTION||">||CHOICETABLESQLD||</option>
-<!-- logic using security groups, won't work in form preview -->
-<!-- <option value="||Select Code, [Description] From ClosingReasons_Base Where DocRevNo = ' 0 ' And ((CharIndex('^^FIELDVALUE REGION^^',PROVIDERLIST) > 0 or Code='^^FIELDVALUE closing_reason^^') And [Statusdesc] = 'Active') Order by [Description]||">||CHOICETABLESQLD||</option> -->
 </select>||CONFIGURE CLOSINGREASONS||
 </span></div>
      </div>

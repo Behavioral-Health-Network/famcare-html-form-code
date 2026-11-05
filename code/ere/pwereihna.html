@@ -191,9 +191,10 @@ function startup() {
     setrequire('mh_history');
     setrequire('su_history');
     setrequire('phy_health_history');
-    setrequire('num_er_visits_past_three_months_ihna');
-    setrequire('num_hosp_past_three_months_ihna');
-    setrequire('num_leo_contacts_past_three_months_ihna');
+    setrequire('dd_id_history');
+    setrequire('num_er_visits_past_thirty_days_ihna');
+    setrequire('num_hosp_past_thirty_days_ihna');
+    setrequire('num_leo_contacts_past_thirty_days_ihna');
     setrequire('TiedEnrollment');
     setrequire('specify_probation_parole_ihna');
 
@@ -474,9 +475,10 @@ function validateform(scope='all') {
   if (!hiddenfield('mh_history') && gvtfieldvalue('mh_history')=='') {edesc=edesc+`Must specify a value for Mental Health History\n`; seterror("mh_history");}
   if (!hiddenfield('su_history') && gvtfieldvalue('su_history')=='') {edesc=edesc+`Must specify a value for Substance Use History\n`; seterror("su_history");}
   if (!hiddenfield('phy_health_history') && gvtfieldvalue('phy_health_history')=='') {edesc=edesc+`Must specify a value for Physical Health History\n`; seterror("phy_health_history");}
-  if (!hiddenfield('num_er_visits_past_three_months_ihna') && gvtfieldvalue('num_er_visits_past_three_months_ihna')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Three Months\n`; seterror("num_er_visits_past_three_months_ihna");}
-  if (!hiddenfield('num_hosp_past_three_months_ihna') && gvtfieldvalue('num_hosp_past_three_months_ihna')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Three Months\n`; seterror("num_hosp_past_three_months_ihna");}
-  if (!hiddenfield('num_leo_contacts_past_three_months_ihna') && gvtfieldvalue('num_leo_contacts_past_three_months_ihna')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Three Months\n`; seterror("num_leo_contacts_past_three_months_ihna");}
+  if (!hiddenfield('dd_id_history') && gvtfieldvalue('dd_id_history')=='') {edesc=edesc+`Must specify a value for Developmental / Intellectual Disability History\n`; seterror("dd_id_history");}
+  if (!hiddenfield('num_er_visits_past_thirty_days_ihna') && gvtfieldvalue('num_er_visits_past_thirty_days_ihna')=='') {edesc=edesc+`Must specify a value for Emergency Dept Visits in Past Thirty Days\n`; seterror("num_er_visits_past_thirty_days_ihna");}
+  if (!hiddenfield('num_hosp_past_thirty_days_ihna') && gvtfieldvalue('num_hosp_past_thirty_days_ihna')=='') {edesc=edesc+`Must specify a value for Hospitalizations in Past Thirty Days\n`; seterror("num_hosp_past_thirty_days_ihna");}
+  if (!hiddenfield('num_leo_contacts_past_thirty_days_ihna') && gvtfieldvalue('num_leo_contacts_past_thirty_days_ihna')=='') {edesc=edesc+`Must specify a value for Law Enforcement Contacts in Past Thirty Days\n`; seterror("num_leo_contacts_past_thirty_days_ihna");}
   if (!hiddenfield('TiedEnrollment') && gvtfieldvalue('TiedEnrollment')=='') {edesc=edesc+`Must select an enrollment\n`; seterror("TiedEnrollment");}
   if (!hiddenfield('specify_probation_parole_ihna') && gvtfieldvalue('specify_probation_parole_ihna')=='') {edesc=edesc+`Must specify a value for If yes, please specify:\n`; seterror("specify_probation_parole_ihna");}
     return edesc;
@@ -810,6 +812,17 @@ function updatesignatures(){
     <input type="hidden" name="phy_hx_tobacco_use" value="||FIELDVALUE phy_hx_tobacco_use||" class="report-field value-009" data-source="ere_physical_health_history">
     <input type="hidden" name="phy_hx_other" value="||FIELDVALUE phy_hx_other||" class="report-field value-010" data-source="ere_physical_health_history">
     <input type="hidden" name="phy_hx_no_physical_health_history" value="||FIELDVALUE phy_hx_no_physical_health_history||" class="report-field value-011" data-source="ere_physical_health_history">
+    <input type="hidden" name="dd_id_hx_autism" value="||FIELDVALUE dd_id_hx_autism||" class="report-field value-001" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_cerebral_palsy" value="||FIELDVALUE dd_id_hx_cerebral_palsy||" class="report-field value-002" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_epilepsy" value="||FIELDVALUE dd_id_hx_epilepsy||" class="report-field value-003" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_fetal_alcohol_syndrome" value="||FIELDVALUE dd_id_hx_fetal_alcohol_syndrome||" class="report-field value-004" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_fragile_x_syndrome" value="||FIELDVALUE dd_id_hx_fragile_x_syndrome||" class="report-field value-005" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_intellectual_disability" value="||FIELDVALUE dd_id_hx_intellectual_disability||" class="report-field value-006" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_learning_disability" value="||FIELDVALUE dd_id_hx_learning_disability||" class="report-field value-007" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_traumatic_brain_injury" value="||FIELDVALUE dd_id_hx_traumatic_brain_injury||" class="report-field value-008" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_other" value="||FIELDVALUE dd_id_hx_other||" class="report-field value-009" data-source="ere_dd_id_history">
+    <input type="hidden" name="dd_id_hx_no_dd_id_history" value="||FIELDVALUE dd_id_hx_no_dd_id_history||" class="report-field value-010" data-source="ere_dd_id_history">
+
 
 <!--STARTOFPROVIDERFORM -->
     <h1><span>ERE IHNA</span> ||CLIENTNAME|| (||CLIENTNUMBER||)</h1>
@@ -964,53 +977,83 @@ function updatesignatures(){
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
-<div class="entire row three-col-row">
-<div class="col4 qmh_history">
-  <div class="col4 fldmh_history qmh_history"><span class ="qmh_history required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_history required-field-label"><label class="label-top">Mental Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_history"><select size="21" name="mh_history" id="ere_mental_health_history" onchange="updateReportFields(['ere_mental_health_history']);checkhideall()" multiple>
+<div class="entire row two-col-row">
+<div class="col6 qmh_history">
+  <div class="col6 fldmh_history qmh_history"><span class ="qmh_history required-label">||PWRequiredFieldRequiredText||</span><span class="qmh_history required-field-label"><label class="label-top">Mental Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qmh_history"><select size="21" name="mh_history" id="ere_mental_health_history" onchange="updateReportFields(['ere_mental_health_history']);checkhideall()" multiple>
     <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_mental_health_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE mh_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
   </select>||CONFIGURE ere_mental_health_history||
 
   <!-- FIELDOVERRIDE(mh_history,10,250) -->
   </span></div>
 </div>
-<div class="col4 qsu_history">
-  <div class="col4 flsu_history qsu_history"><span class ="qsu_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsu_history"><select size="16" name="su_history" id="ere_substance_use_history" onchange="updateReportFields(['ere_substance_use_history']);checkhideall()" multiple>
+<div class="col6 qsu_history">
+  <div class="col6 flsu_history qsu_history"><span class ="qsu_history required-label">||PWRequiredFieldRequiredText||</span><span class="qsu_history required-field-label"><label class="label-top">Substance Use History<br>(Hold down Ctrl to select multiple)</label></span><span class="qsu_history"><select size="16" name="su_history" id="ere_substance_use_history" onchange="updateReportFields(['ere_substance_use_history']);checkhideall()" multiple>
     <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_substance_use_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE su_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
   </select>||CONFIGURE ere_substance_use_history||
 
   <!-- FIELDOVERRIDE(su_history,10,250) -->
   </span></div>
 </div>
-<div class="col4 qphy_health_history">
-  <div class="col4 flphy_health_history qphy_health_history"><span class ="qphy_health_history required-label">||PWRequiredFieldRequiredText||</span><span class="qphy_health_history required-field-label"><label class="label-top">Physical Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qphy_health_history"><select size="12" name="phy_health_history" id="ere_physical_health_history" onchange="updateReportFields(['ere_physical_health_history']);checkhideall()" multiple>
+</div>
+<div class="entire row two-col-row">
+<div class="col6 qphy_health_history">
+  <div class="col6 flphy_health_history qphy_health_history"><span class ="qphy_health_history required-label">||PWRequiredFieldRequiredText||</span><span class="qphy_health_history required-field-label"><label class="label-top">Physical Health History<br>(Hold down Ctrl to select multiple)</label></span><span class="qphy_health_history"><select size="12" name="phy_health_history" id="ere_physical_health_history" onchange="updateReportFields(['ere_physical_health_history']);checkhideall()" multiple>
     <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_physical_health_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE phy_health_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
   </select>||CONFIGURE ere_physical_health_history||
 
   <!-- FIELDOVERRIDE(phy_health_history,10,250) -->
   </span></div>
 </div>
+<div class="col6 qdd_id_history">
+  <div class="col6 flddd_id_history qdd_id_history">
+    <span class ="qdd_id_history required-label">||PWRequiredFieldRequiredText||</span>
+    <span class="qdd_id_history required-field-label">
+      <label class="label-top">Developmental / Intellectual Disability History<br>(Hold down Ctrl to select multiple)</label></span>
+    <span class="qdd_id_history"><select size="12" name="dd_id_history" id="ere_dd_id_history" onchange="updateReportFields(['ere_dd_id_history']);checkhideall()" multiple>
+    <option value="||SELECT CODE,DESCRIPTION+' ('+CODE+')' AS DESCRIP FROM [ere_dd_id_history] WHERE PRIVATEPROVIDER='^^PRIVATEPROVIDER^^' AND (STATUS='Active' OR CODE='^^FIELDVALUE dd_id_history^^') ORDER BY DESCRIPTION||">||CHOICETABLESQLD||</option>
+  </select>||CONFIGURE ere_dd_id_history||
+
+  <!-- FIELDOVERRIDE(dd_id_history,10,250) -->
+  </span></div>
+</div>
+
 </div>
 <div class="entire">
 </div>
  <div class="entire">
-    <div class="col12 fldnum_er_visits_past_three_months_ihna qnum_er_visits_past_three_months_ihna">
-    <div class="col12 fldnum_er_visits_past_three_months_ihna qnum_er_visits_past_three_months_ihna"><span class="qnum_er_visits_past_three_months_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_er_visits_past_three_months_ihna required-field-label"><label class="label-top">||FIELDTAG num_er_visits_past_three_months_ihna||Number of Emergency Dept Visits in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_er_visits_past_three_months_ihna"><input type="text" name="num_er_visits_past_three_months_ihna" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_er_visits_past_thirty_days_ihna qnum_er_visits_past_thirty_days_ihna">
+    <div class="col12 fldnum_er_visits_past_thirty_days_ihna qnum_er_visits_past_thirty_days_ihna">
+      <span class="qnum_er_visits_past_thirty_days_ihna required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qnum_er_visits_past_thirty_days_ihna required-field-label">
+        <label class="label-top">||FIELDTAG num_er_visits_past_thirty_days_ihna||Number of Emergency Dept Visits in Past Thirty Days||ENDFIELDTAG||</label></span>
+        <span class="qnum_er_visits_past_thirty_days_ihna">
+          <input type="text" name="num_er_visits_past_thirty_days_ihna" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldnum_hosp_past_three_months_ihna qnum_hosp_past_three_months_ihna">
-    <div class="col12 fldnum_hosp_past_three_months_ihna qnum_hosp_past_three_months_ihna"><span class="qnum_hosp_past_three_months_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_hosp_past_three_months_ihna required-field-label"><label class="label-top">||FIELDTAG num_hosp_past_three_months_ihna||Number of Hospitalizations in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_hosp_past_three_months_ihna"><input type="text" name="num_hosp_past_three_months_ihna" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_hosp_past_thirty_days_ihna qnum_hosp_past_thirty_days_ihna">
+    <div class="col12 fldnum_hosp_past_thirty_days_ihna qnum_hosp_past_thirty_days_ihna">
+      <span class="qnum_hosp_past_thirty_days_ihna required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qnum_hosp_past_thirty_days_ihna required-field-label">
+        <label class="label-top">||FIELDTAG num_hosp_past_thirty_days_ihna||Number of Hospitalizations in Past Thirty Days||ENDFIELDTAG||</label></span>
+      <span class="qnum_hosp_past_thirty_days_ihna">
+        <input type="text" name="num_hosp_past_thirty_days_ihna" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
  <div class="entire">
     <div class="col12"><label class="label-top"></label></div>
   </div>
  <div class="entire">
-    <div class="col12 fldnum_leo_contacts_past_three_months_ihna qnum_leo_contacts_past_three_months_ihna">
-    <div class="col12 fldnum_leo_contacts_past_three_months_ihna qnum_leo_contacts_past_three_months_ihna"><span class="qnum_leo_contacts_past_three_months_ihna required-label">||PWRequiredFieldRequiredText||</span><span class="qnum_leo_contacts_past_three_months_ihna required-field-label"><label class="label-top">||FIELDTAG num_leo_contacts_past_three_months_ihna||Number of Law Enforcement Contacts in Past Three Months||ENDFIELDTAG||</label></span><span class="qnum_leo_contacts_past_three_months_ihna"><input type="text" name="num_leo_contacts_past_three_months_ihna" size="20" onchange="checkhideall()"></span></div>
+    <div class="col12 fldnum_leo_contacts_past_thirty_days_ihna qnum_leo_contacts_past_thirty_days_ihna">
+    <div class="col12 fldnum_leo_contacts_past_thirty_days_ihna qnum_leo_contacts_past_thirty_days_ihna">
+      <span class="qnum_leo_contacts_past_thirty_days_ihna required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qnum_leo_contacts_past_thirty_days_ihna required-field-label">
+        <label class="label-top">||FIELDTAG num_leo_contacts_past_thirty_days_ihna||Number of Law Enforcement Contacts in Past Thirty Days||ENDFIELDTAG||</label></span>
+      <span class="qnum_leo_contacts_past_thirty_days_ihna">
+        <input type="text" name="num_leo_contacts_past_thirty_days_ihna" size="20" onchange="checkhideall()"></span></div>
      </div>
   </div>
 <div class="entire">

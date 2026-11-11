@@ -59,6 +59,10 @@ function checkhideall() {
   checkhide(f.closing_reason,"bhs_model","049");
   checkhide(f.closing_reason,"bhs_admission_agency","049");
   checkhide(f.closing_reason,"bhs_admission_date","049");
+  checkhide(f.closing_reason,"employment_status_closure","049,050,011");
+  checkhide(f.closing_reason,"num_er_visits_past_thirty_days_closure","049,050,011");
+  checkhide(f.closing_reason,"num_hosp_past_thirty_days_closure","049,050,011");
+  checkhide(f.closing_reason,"num_leo_contacts_past_thirty_days_closure","049,050,011");
   checkhide(f.bhs_admission_agency,"other_bhs_admission_agency","014");
 
   ResetBHSAgencyList();
@@ -837,7 +841,7 @@ function ResetBHSAgencyList() {
 <div class="col12 term">Client Needs</div>
 </div>
  <div class="entire">
-    <div class="col12"><label class="label-top">If needs are now met or considered stable at six months, select View/Edit and update the status questions to reflect any changes.</label></div>
+    <div class="col12"><label class="label-top">If needs are now met or considered stable, select View/Edit and update the status questions to reflect any changes.</label></div>
   </div>
  <div class="entire">
     <div class="col12">||INCLUDESUMMATION SummationFLBodyPWEREClientNeeds||</div>

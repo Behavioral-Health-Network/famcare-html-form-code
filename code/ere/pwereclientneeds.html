@@ -185,7 +185,6 @@ function checkhideall() {
    checkhide(f.client_needs,"community_based_assist_status","004");
    checkhide(f.client_needs,"crisis_services_status","005");
    checkhide(f.client_needs,"dental_care_status","006");
-   checkhide(f.client_needs,"dd_services_status","007");
    checkhide(f.client_needs,"employment_services_status","008");
    checkhide(f.client_needs,"food_assist_status","009");
    checkhide(f.client_needs,"housing_status","010");
@@ -712,7 +711,6 @@ function updatesignatures(){
 <input type="hidden" name="need_community_based_assistance" value="||FIELDVALUE need_community_based_assistance||" class="report-field value-004" data-source="ere_client_needs">
 <input type="hidden" name="need_crisis_services" value="||FIELDVALUE need_crisis_services||" class="report-field value-005" data-source="ere_client_needs">
 <input type="hidden" name="need_dental_care" value="||FIELDVALUE need_dental_care||" class="report-field value-006" data-source="ere_client_needs">
-<input type="hidden" name="need_developmental_disabilities_services" value="||FIELDVALUE need_developmental_disabilities_services||" class="report-field value-007" data-source="ere_client_needs">
 <input type="hidden" name="need_employment_services" value="||FIELDVALUE need_employment_services||" class="report-field value-008" data-source="ere_client_needs">
 <input type="hidden" name="need_food_assistance" value="||FIELDVALUE need_food_assistance||" class="report-field value-009" data-source="ere_client_needs">
 <input type="hidden" name="need_housing" value="||FIELDVALUE need_housing||" class="report-field value-010" data-source="ere_client_needs">
@@ -820,17 +818,6 @@ function updatesignatures(){
     <div class="col12 flddental_care_status qdental_care_status"><span class="qdental_care_status"><label class="label-top">||FIELDTAG dental_care_status||Dental Care Status||ENDFIELDTAG||</label></span><span class="qdental_care_status">
       <input type="checkbox" name="dental_care_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;
       <input type="checkbox" name="dental_care_status_closure" value="ON" onclick="checkhideall()">Need Met Or Stable At Closure&nbsp;&nbsp;
-    </span></div>
-     </div>
-  </div>
- <div class="entire">
-    <div class="col12"><label class="label-top"></label></div>
-  </div>
- <div class="entire">
-    <div class="col12 flddd_services_status qdd_services_status">
-    <div class="col12 flddd_services_status qdd_services_status"><span class="qdd_services_status"><label class="label-top">||FIELDTAG dd_services_status||Developmental Disabilities Services Status||ENDFIELDTAG||</label></span><span class="qdd_services_status">
-      <input type="checkbox" name="dd_services_referred_engaged" value="ON" onclick="checkhideall()">Referred To Or Engaged With Resources&nbsp;&nbsp;
-      <input type="checkbox" name="dd_services_status_closure" value="ON" onclick="checkhideall()">Need Met Or Stable At Closure&nbsp;&nbsp;
     </span></div>
      </div>
   </div>

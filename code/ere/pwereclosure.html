@@ -38,6 +38,9 @@ function startup() {
             setrequire('Pathway_Date');
     setrequire('last_contact_date');
     setrequire('closing_reason');
+    setrequire('warm_handoff');
+    setrequire('method_of_warm_handoff');
+    setrequire('method_of_warm_handoff_other');
     setrequire('bhs_model');
     setrequire('bhs_admission_agency');
     setrequire('other_bhs_admission_agency');
@@ -56,9 +59,12 @@ function startup() {
 
 function checkhideall() {
   f=document.forms[0];
-  checkhide(f.closing_reason,"bhs_model","049");
-  checkhide(f.closing_reason,"bhs_admission_agency","049");
-  checkhide(f.closing_reason,"bhs_admission_date","049");
+  checkhide(f.closing_reason,"warm_handoff","020");
+  checkhide(f.warm_handoff,"method_of_warm_handoff","Yes");
+  checkhide(f.method_of_warm_handoff,"method_of_warm_handoff_other","Other");
+  checkhide(f.closing_reason,"bhs_model","049,020");
+  checkhide(f.closing_reason,"bhs_admission_agency","049,020");
+  checkhide(f.closing_reason,"bhs_admission_date","049,020");
   checkhide(f.closing_reason,"employment_status_closure","049,050");
   checkhide(f.closing_reason,"num_er_visits_past_thirty_days_closure","049,050");
   checkhide(f.closing_reason,"num_hosp_past_thirty_days_closure","049,050");
@@ -297,6 +303,9 @@ function validateform(scope='all') {
      if (!hiddenfield('Pathway_Date') && gvtfieldvalue('Pathway_Date')=='') {edesc=edesc+`Must specify a value for Pathway Date\n`; seterror("Pathway_Date");}
   if (!hiddenfield('last_contact_date') && gvtfieldvalue('last_contact_date')=='') {edesc=edesc+`Must specify a value for Date Of Last Contact\n`; seterror("last_contact_date");}
   if (!hiddenfield('closing_reason') && gvtfieldvalue('closing_reason')=='') {edesc=edesc+`Must specify a value for Closing Reason\n`; seterror("closing_reason");}
+  if (!hiddenfield('warm_handoff') && gvtfieldvalue('warm_handoff')=='') {edesc=edesc+`Must specify a value for If there was a warm handoff or not\n`; seterror("warm_handoff");}
+  if (!hiddenfield('method_of_warm_handoff') && gvtfieldvalue('method_of_warm_handoff')=='') {edesc=edesc+`Must specify a value for Method Of Warm Handoff\n`; seterror("method_of_warm_handoff");}
+  if (!hiddenfield('method_of_warm_handoff_other') && gvtfieldvalue('method_of_warm_handoff_other')=='') {edesc=edesc+`Must specify a value for Other Method Of Warm Handoff\n`; seterror("method_of_warm_handoff_other");}
   if (!hiddenfield('bhs_model') && gvtfieldvalue('bhs_model')=='') {edesc=edesc+`Must specify a value for Behavioral Health Services Agency Model\n`; seterror("bhs_model");}
   if (!hiddenfield('bhs_admission_agency') && gvtfieldvalue('bhs_admission_agency')=='') {edesc=edesc+`Must specify a value for Where did admission take place??\n`; seterror("bhs_admission_agency");}
   if (!hiddenfield('other_bhs_admission_agency') && gvtfieldvalue('other_bhs_admission_agency')=='') {edesc=edesc+`Must specify a value for Other Agency\n`; seterror("other_bhs_admission_agency");}
@@ -691,6 +700,48 @@ function ResetBHSAgencyList() {
 </span></div>
      </div>
   </div>
+ <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+ <div class="entire">
+    <div class="col12 fldwarm_handoff qwarm_handoff">
+    <div class="col12 fldwarm_handoff qwarm_handoff">
+      <span class="qwarm_handoff required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qwarm_handoff required-field-label">
+        <label class="label-top">||FIELDTAG warm_handoff||Was there a warm handoff with the Behavioral Health Services agency?||ENDFIELDTAG||</label></span>
+        <span class="qwarm_handoff">
+          <input type="radio" name="warm_handoff" value="Yes" onclick="GetBHSAgencyList(); checkhideall()" >Yes<br>
+          <input type="radio" name="warm_handoff" value="No" onclick="GetBHSAgencyList(); checkhideall()" >No<br>
+        </span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="entire">
+    <div class="col12 fldmethod_of_warm_handoff qmethod_of_warm_handoff">
+    <div class="col12 fldmethod_of_warm_handoff qmethod_of_warm_handoff">
+      <span class="qmethod_of_warm_handoff required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qmethod_of_warm_handoff required-field-label"><label class="label-top">||FIELDTAG method_of_warm_handoff||Method Of Warm Handoff||ENDFIELDTAG||</label></span>
+      <span class="qmethod_of_warm_handoff">
+      <input type="radio" name="method_of_warm_handoff" value="Face-To-Face" onclick="checkhideall()" >Face-To-Face<br>
+      <input type="radio" name="method_of_warm_handoff" value="By Phone" onclick="checkhideall()" >By Phone<br>
+      <input type="radio" name="method_of_warm_handoff" value="By Email" onclick="checkhideall()" >By Email<br>
+      <input type="radio" name="method_of_warm_handoff" value="Other" onclick="checkhideall()" >Other<br>
+    </span></div>
+     </div>
+  </div>
+  <div class="entire">
+    <div class="col12"><label class="label-top"></label></div>
+  </div>
+  <div class="col6 qmethod_of_warm_handoff_other">
+    <div class="col6 fldmethod_of_warm_handoff_other qmethod_of_warm_handoff_other">
+      <span class="qmethod_of_warm_handoff_other required-label">||PWRequiredFieldRequiredText||</span>
+      <span class="qmethod_of_warm_handoff_other required-field-label">
+        <label class="label-top">||FIELDTAG method_of_contact_ihna||Other Method Of Warm Handoff||ENDFIELDTAG||</label></span>
+        <span class="qmethod_of_warm_handoff_other">
+          <input type="text" name="method_of_warm_handoff_other" size="50" onchange="checkhideall()"></span></div>
+     </div>
 
 <div class="entire">
 <div class="col12 term">Behavioral Health Services</div>
